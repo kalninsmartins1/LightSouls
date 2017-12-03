@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<Actor>
+	<Animation>
+		<SpriteSheetSoruce>Graphics/Player/Run/running.png</SpriteSheetSoruce>
+		<SpriteSheetPlistSource>Graphics/Player/Run/runSpriteSheetData.plist</SpriteSheetPlistSource>
+		<SpriteFrameName>running%d.png</SpriteFrameName>
+		<SpriteFrameCount>6</SpriteFrameCount>
+	</Animation>
+</Actor>

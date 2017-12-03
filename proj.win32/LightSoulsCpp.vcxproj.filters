@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Camera">
+      <UniqueIdentifier>{97f7c6a2-f4cf-48d4-9287-69d85fe9c783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utils">
+      <UniqueIdentifier>{d11e09d1-c309-492f-b1ec-5a357bfed652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rdPartyLibs">
+      <UniqueIdentifier>{4a4475ae-d98b-4a6f-a218-59145a30a6ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Entity">
+      <UniqueIdentifier>{b5115797-b4a1-4833-a8be-056db0fd956c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Entity\Player">
+      <UniqueIdentifier>{734dc60e-62e7-4257-b899-ece5e08871a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Entity\Enemy">
+      <UniqueIdentifier>{ce9f1082-867a-4d50-a314-887ef0f9efa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Entity\Skills">
+      <UniqueIdentifier>{f97625a9-2431-42db-a101-3af291bb7f67}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Utils\Utils.cpp">
+      <Filter>src\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\3rdPartyLibs\tinyxml2.cpp">
+      <Filter>src\3rdPartyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Camera\CameraController.cpp">
+      <Filter>src\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Entity\Enemy\Enemy.cpp">
+      <Filter>src\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Entity\Player\Player.cpp">
+      <Filter>src\Entity\Player</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\HelloWorldScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Utils\Utils.h">
+      <Filter>src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\3rdPartyLibs\tinyxml2.h">
+      <Filter>src\3rdPartyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Camera\CameraController.h">
+      <Filter>src\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameConsts.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Enemy\Enemy.h">
+      <Filter>src\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Skills\AttackStyle.h">
+      <Filter>src\Entity\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Player\Player.h">
+      <Filter>src\Entity\Player</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
