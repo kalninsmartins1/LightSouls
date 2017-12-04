@@ -19,6 +19,11 @@ public:
 	static std::string appendFullPathToAssetsPath(const char* pathWithinAssets);
 	static std::string appendFullPathToAssetsPath(std::string pathWithinAssets);
 	static std::string getFirstChildText(tinyxml2::XMLNode* pNode);
+	static bool initFromXML(cocos2d::Sprite& pSprite, const char* pathToXML);
+
+private:
+	// Extracts Vec3 x,y,z value from XMLNode attributes
+	static cocos2d::Vec3 getVec3FromAttributes(tinyxml2::XMLNode* pNode);
 
 
 private:

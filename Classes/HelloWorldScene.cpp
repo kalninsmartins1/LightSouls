@@ -1,7 +1,6 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "Entity/Player/Player.h"
-#include "Controlls/InputManager.h"
 
 USING_NS_CC;
 
@@ -28,8 +27,7 @@ bool HelloWorld::init()
     }
 	Node* pRootNode = Node::create();
 
-	// Set input manager context
-	InputManager::getInstance()->setInputContext(this);
+	// Set input manager context	
 	m_pPlayer = Player::create("Configs/Player/Player.xml");	
 	pRootNode->addChild(m_pPlayer);
 	addChild(pRootNode);	

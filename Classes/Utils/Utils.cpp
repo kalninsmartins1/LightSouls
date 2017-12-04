@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include "3rdPartyLibs/tinyxml2.h"
 #include "GameConsts.h"
+#include "Entity/Components/PlayerAnimComponent.h"
 
 using namespace cocos2d;
 
@@ -96,4 +97,58 @@ std::vector<std::string> Utils::splitStringByDelimiter(std::string str, const ch
 std::string Utils::getFirstChildText(tinyxml2::XMLNode* pNode)
 {
 	return pNode->FirstChild()->ToText()->Value();
+}
+
+bool Utils::initFromXML(Sprite& pSprite, const char* pathToXML)
+{
+	// Load the file
+	tinyxml2::XMLDocument doc;
+	tinyxml2::XMLError err = doc.LoadFile(Utils::appendFullPathToAssetsPath(pathToXML)
+		.c_str());
+	
+	bool isInitSuccessful = true;
+	if (err)
+	{
+		cocos2d::log("Utils: [initFromXML] XML file not found: %s", pathToXML);
+		isInitSuccessful = false;
+	}
+	else
+	{
+		// Parse the file
+		tinyxml2::XMLNode* pData = doc.RootElement();
+
+		for (tinyxml2::XMLNode* pNode = pData->FirstChildElement(); pNode;
+			pNode = pNode->NextSibling())
+		{
+			// Check all actor components
+			std::string nodeValue(pNode->ToElement()->Attribute("type"));
+			if (nodeValue.compare(XML_TRANSFORM_COMPONENT) == 0)
+			{
+				// Trasform component has data types in specific order
+				tinyxml2::XMLNode* pPositionNode = pNode->FirstChild();
+				tinyxml2::XMLNode* pRotationNode = pPositionNode->NextSibling();
+
+				pSprite.setPosition3D(getVec3FromAttributes(pPositionNode));							
+				pSprite.setRotation3D(getVec3FromAttributes(pRotationNode));
+			}
+			else if (nodeValue.compare(XML_PLAYER_ANIM_COMPONENT) == 0)
+			{
+				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create();
+				pPlayerAnim->setName(XML_PLAYER_ANIM_COMPONENT);
+				pSprite.addComponent(pPlayerAnim);
+				pPlayerAnim->loadConfig(pNode);
+			}
+		}		
+	}	
+	return isInitSuccessful;
+}
+
+Vec3 Utils::getVec3FromAttributes(tinyxml2::XMLNode* pNode)
+{
+	Vec3 result;
+	result.x = pNode->ToElement()->FloatAttribute("x");
+	result.y = pNode->ToElement()->FloatAttribute("y");
+	result.z = pNode->ToElement()->FloatAttribute("z");
+
+	return result;
 }

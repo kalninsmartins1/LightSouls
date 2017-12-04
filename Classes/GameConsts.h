@@ -6,5 +6,6 @@ static const int ACTION_MOVE_TAG = 0;
 static const int ACTION_ANIM_TAG = 1;
 
 // Animation stuff
-static const char* XML_ANIMATION_KEY = "Animation";
+static const char* XML_PLAYER_ANIM_COMPONENT = "PlayerAnimComponent";
+static const char* XML_TRANSFORM_COMPONENT = "TransformComponent";
 static const char* XML_SPRITE_FRAME_KEY = "SpriteFrame";

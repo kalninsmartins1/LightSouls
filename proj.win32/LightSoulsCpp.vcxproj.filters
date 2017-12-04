@@ -31,6 +31,9 @@
     <Filter Include="src\Entity\Skills">
       <UniqueIdentifier>{f97625a9-2431-42db-a101-3af291bb7f67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Entity\Components">
+      <UniqueIdentifier>{c5bc50c9-245f-457f-ba25-1ec257431706}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -56,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Entity\Player\Player.cpp">
       <Filter>src\Entity\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Entity\Components\PlayerAnimComponent.cpp">
+      <Filter>src\Entity\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Entity\Player\Player.h">
       <Filter>src\Entity\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Components\PlayerAnimComponent.h">
+      <Filter>src\Entity\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,16 @@
 <?xml version="1.0" ?>
-<Actor>
-	<Animation>
-		<SpriteSheetSoruce>Graphics/Player/Run/running.png</SpriteSheetSoruce>
-		<SpriteSheetPlistSource>Graphics/Player/Run/runSpriteSheetData.plist</SpriteSheetPlistSource>
-		<SpriteFrameName>running%d.png</SpriteFrameName>
-		<SpriteFrameCount>6</SpriteFrameCount>
-	</Animation>
+<Actor type="Player">
+	<Component type="TransformComponent">
+		<Position x="2" y="1" z="0" />
+		<Rotation x="" y="" z="" />
+	</Component>
+	
+	<Component type="PlayerAnimComponent">
+		<SpriteSheet
+			path="Graphics/Player/Run/running.png" 
+			plistPath="Graphics/Player/Run/runSpriteSheetData.plist"
+			frameNamePattern="running%d.png"
+			frameCount="6"
+		/>		
+	</Component>
 </Actor>
