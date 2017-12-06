@@ -99,7 +99,7 @@ std::string Utils::getFirstChildText(tinyxml2::XMLNode* pNode)
 	return pNode->FirstChild()->ToText()->Value();
 }
 
-bool Utils::initFromXML(Sprite& pSprite, const char* pathToXML)
+bool Utils::initFromXML(Sprite& sprite, const char* pathToXML)
 {
 	// Load the file
 	tinyxml2::XMLDocument doc;
@@ -128,22 +128,27 @@ bool Utils::initFromXML(Sprite& pSprite, const char* pathToXML)
 				tinyxml2::XMLNode* pPositionNode = pNode->FirstChild();
 				tinyxml2::XMLNode* pRotationNode = pPositionNode->NextSibling();
 
-				pSprite.setPosition3D(getVec3FromAttributes(pPositionNode));							
-				pSprite.setRotation3D(getVec3FromAttributes(pRotationNode));
+				sprite.setPosition3D(getVec3FromAttributes(pPositionNode));							
+				sprite.setRotation3D(getVec3FromAttributes(pRotationNode));
 			}
 			else if (nodeValue.compare(XML_PLAYER_ANIM_COMPONENT) == 0)
 			{
 				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create();
 				pPlayerAnim->setName(XML_PLAYER_ANIM_COMPONENT);
-				pSprite.addComponent(pPlayerAnim);
+				sprite.addComponent(pPlayerAnim);
 				pPlayerAnim->loadConfig(pNode);
+			}
+			else if(nodeValue.compare(XML_RIGID_BODY_COMPONENT) == 0)
+			{
+				PhysicsBody* pPhysicsBody = getPhysicsBodyFromAttributes(pNode);
+				sprite.addComponent(pPhysicsBody);				
 			}
 		}		
 	}	
 	return isInitSuccessful;
 }
 
-Vec3 Utils::getVec3FromAttributes(tinyxml2::XMLNode* pNode)
+Vec3 Utils::getVec3FromAttributes(const tinyxml2::XMLNode* pNode)
 {
 	Vec3 result;
 	result.x = pNode->ToElement()->FloatAttribute("x");
@@ -151,4 +156,36 @@ Vec3 Utils::getVec3FromAttributes(tinyxml2::XMLNode* pNode)
 	result.z = pNode->ToElement()->FloatAttribute("z");
 
 	return result;
+}
+PhysicsMaterial Utils::getPhysicsMaterialFromAttributes(const tinyxml2::XMLNode* pNode)
+{
+	const tinyxml2::XMLElement* pPhysicsMaterialElem = pNode->
+										FirstChildElement(XML_PHYSICS_MATERIAL);
+	float density = pPhysicsMaterialElem->FloatAttribute("density");
+	float restitution = pPhysicsMaterialElem->FloatAttribute("restitution");
+	float friction = pPhysicsMaterialElem->FloatAttribute("friction");
+
+	return PhysicsMaterial(density, restitution, friction);
+}
+PhysicsBody* Utils::getPhysicsBodyFromAttributes(const tinyxml2::XMLNode* pNode)
+{
+	const tinyxml2::XMLElement* pPhysicsBodyElem = 
+		pNode->FirstChildElement(XML_PHYSICS_BODY);
+	std::string bodyType = pPhysicsBodyElem->Attribute("shape");
+	Size bodySize = Size(pPhysicsBodyElem->FloatAttribute("width"), 
+		pPhysicsBodyElem->FloatAttribute("height"));
+	bool isGravityEnabled = pPhysicsBodyElem->BoolAttribute("isGravityEnabled");
+	bool isBodyDynamic = pPhysicsBodyElem->BoolAttribute("isDynamic");
+	int collisionBitMask = pPhysicsBodyElem->IntAttribute("collisionBitMask");
+
+	PhysicsBody* pPhysicsBody = nullptr;	
+	if(bodyType.compare("box") == 0)
+	{
+		pPhysicsBody = PhysicsBody::createBox(bodySize, 
+			getPhysicsMaterialFromAttributes(pNode));
+		pPhysicsBody->setDynamic(isBodyDynamic);
+		pPhysicsBody->setGravityEnable(isGravityEnabled);
+		pPhysicsBody->setCollisionBitmask(collisionBitMask);
+	}
+	return pPhysicsBody;
 }

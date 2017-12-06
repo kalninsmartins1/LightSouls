@@ -22,8 +22,10 @@ public:
 	static bool initFromXML(cocos2d::Sprite& pSprite, const char* pathToXML);
 
 private:
-	// Extracts Vec3 x,y,z value from XMLNode attributes
-	static cocos2d::Vec3 getVec3FromAttributes(tinyxml2::XMLNode* pNode);
+	// Extracts values from XMLNode attributes
+	static cocos2d::Vec3 getVec3FromAttributes(const tinyxml2::XMLNode* pNode);
+	static cocos2d::PhysicsMaterial getPhysicsMaterialFromAttributes(const tinyxml2::XMLNode* pNode);
+	static cocos2d::PhysicsBody* getPhysicsBodyFromAttributes(const tinyxml2::XMLNode* pNode);
 
 
 private:

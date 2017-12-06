@@ -1,11 +1,19 @@
+#pragma once
 
-static const float PI = 3.14159265359f;	
-static const int MAX_SPRITE_NAME_LENGTH = 100;
+static constexpr float PI = 3.14159265359f;
+static constexpr int MAX_SPRITE_NAME_LENGTH = 100;
 
-static const int ACTION_MOVE_TAG = 0;
-static const int ACTION_ANIM_TAG = 1;
+static constexpr int ACTION_MOVE_TAG = 0;
+static constexpr int ACTION_ANIM_TAG = 1;
 
-// Animation stuff
-static const char* XML_PLAYER_ANIM_COMPONENT = "PlayerAnimComponent";
-static const char* XML_TRANSFORM_COMPONENT = "TransformComponent";
-static const char* XML_SPRITE_FRAME_KEY = "SpriteFrame";
+// XML components
+static constexpr char* XML_PLAYER_ANIM_COMPONENT = "PlayerAnimComponent";
+static constexpr char* XML_TRANSFORM_COMPONENT = "TransformComponent";
+static constexpr char* XML_RIGID_BODY_COMPONENT = "RigidBodyComponent";
+
+// XML animation component specifics
+static constexpr char* XML_SPRITE_FRAME = "SpriteFrame";
+
+// XML rigid body specifics
+static constexpr char* XML_PHYSICS_MATERIAL = "PhysicsMaterial";
+static constexpr char* XML_PHYSICS_BODY = "PhysicsBody";

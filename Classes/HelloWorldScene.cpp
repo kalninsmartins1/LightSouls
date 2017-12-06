@@ -6,7 +6,13 @@ USING_NS_CC;
 
 Scene* HelloWorld::createScene()
 {
-    return HelloWorld::create();
+	// create the scene with physics enabled
+	auto scene = Scene::createWithPhysics();
+
+	auto layer = HelloWorld::create();
+	scene->addChild(layer);
+
+	return scene;    
 }
 
 // Print useful error message instead of segfaulting when files are not there.
@@ -39,4 +45,7 @@ bool HelloWorld::init()
 void HelloWorld::update(float deltaTime)
 {
 	m_pPlayer->update(deltaTime);
+
+	Director::getInstance()->getRunningScene()->getPhysicsWorld()->
+		setDebugDrawMask(0xFFFFFF);
 }
