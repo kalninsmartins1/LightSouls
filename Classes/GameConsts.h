@@ -10,6 +10,7 @@ static constexpr int ACTION_ANIM_TAG = 1;
 static constexpr char* XML_PLAYER_ANIM_COMPONENT = "PlayerAnimComponent";
 static constexpr char* XML_TRANSFORM_COMPONENT = "TransformComponent";
 static constexpr char* XML_RIGID_BODY_COMPONENT = "RigidBodyComponent";
+static constexpr char* XML_PLAYER_CONTROLLER_COMPONENT = "PlayerControllerComponent";
 
 // XML animation component specifics
 static constexpr char* XML_SPRITE_FRAME = "SpriteFrame";

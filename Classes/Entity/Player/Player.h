@@ -10,6 +10,8 @@ public:
 	bool init(const char* pathToXML);	
 	void update(float deltaTime);
 
+	void setMoveSpeed(float moveSpeed);
+
 private:	
 	void onKeyboardKeyUp(cocos2d::EventKeyboard::KeyCode keyCode, 
 		cocos2d::Event* pEvent);

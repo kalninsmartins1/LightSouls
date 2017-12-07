@@ -2,6 +2,7 @@
 #include "3rdPartyLibs/tinyxml2.h"
 #include "GameConsts.h"
 #include "Entity/Components/PlayerAnimComponent.h"
+#include "Entity/Player/Player.h"
 
 using namespace cocos2d;
 
@@ -122,7 +123,7 @@ bool Utils::initFromXML(Sprite& sprite, const char* pathToXML)
 		{
 			// Check all actor components
 			std::string nodeValue(pNode->ToElement()->Attribute("type"));
-			if (nodeValue.compare(XML_TRANSFORM_COMPONENT) == 0)
+			if (isEqual(nodeValue, XML_TRANSFORM_COMPONENT))
 			{
 				// Trasform component has data types in specific order
 				tinyxml2::XMLNode* pPositionNode = pNode->FirstChild();
@@ -131,14 +132,20 @@ bool Utils::initFromXML(Sprite& sprite, const char* pathToXML)
 				sprite.setPosition3D(getVec3FromAttributes(pPositionNode));							
 				sprite.setRotation3D(getVec3FromAttributes(pRotationNode));
 			}
-			else if (nodeValue.compare(XML_PLAYER_ANIM_COMPONENT) == 0)
+			else if(isEqual(nodeValue, XML_PLAYER_CONTROLLER_COMPONENT))
+			{
+				Player* pPlayer = (Player*)&sprite;
+				float moveSpeed = pNode->ToElement()->FloatAttribute("moveSpeed");
+				pPlayer->setMoveSpeed(moveSpeed);
+			}
+			else if (isEqual(nodeValue, XML_PLAYER_ANIM_COMPONENT))
 			{
 				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create();
 				pPlayerAnim->setName(XML_PLAYER_ANIM_COMPONENT);
 				sprite.addComponent(pPlayerAnim);
 				pPlayerAnim->loadConfig(pNode);
 			}
-			else if(nodeValue.compare(XML_RIGID_BODY_COMPONENT) == 0)
+			else if(isEqual(nodeValue, XML_RIGID_BODY_COMPONENT))
 			{
 				PhysicsBody* pPhysicsBody = getPhysicsBodyFromAttributes(pNode);
 				sprite.addComponent(pPhysicsBody);				
@@ -157,6 +164,7 @@ Vec3 Utils::getVec3FromAttributes(const tinyxml2::XMLNode* pNode)
 
 	return result;
 }
+
 PhysicsMaterial Utils::getPhysicsMaterialFromAttributes(const tinyxml2::XMLNode* pNode)
 {
 	const tinyxml2::XMLElement* pPhysicsMaterialElem = pNode->
@@ -167,6 +175,12 @@ PhysicsMaterial Utils::getPhysicsMaterialFromAttributes(const tinyxml2::XMLNode*
 
 	return PhysicsMaterial(density, restitution, friction);
 }
+
+bool Utils::isEqual(const std::string& a, const std::string& b)
+{
+	return a.compare(b) == 0;
+}
+
 PhysicsBody* Utils::getPhysicsBodyFromAttributes(const tinyxml2::XMLNode* pNode)
 {
 	const tinyxml2::XMLElement* pPhysicsBodyElem = 
@@ -188,4 +202,9 @@ PhysicsBody* Utils::getPhysicsBodyFromAttributes(const tinyxml2::XMLNode* pNode)
 		pPhysicsBody->setCollisionBitmask(collisionBitMask);
 	}
 	return pPhysicsBody;
+}
+
+void Utils::logVec2(const cocos2d::Vec2& v)
+{
+	cocos2d::log("(X: %f, Y: %f)", v.x, v.y);
 }
