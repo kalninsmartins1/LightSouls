@@ -91,7 +91,17 @@ void PlayerAnimComponent::startDodgeAnimation()
 
 void PlayerAnimComponent::startIdleAnimation()
 {
-	
+//	// Start character animation
+//	auto animation = Animation::createWithSpriteFrames(m_idle, 0.1f);
+//	auto animate = Animate::create(animation);
+//	auto repeatAction = RepeatForever::create(animate);
+//	repeatAction->setTag(ACTION_ANIM_TAG);
+//
+//	// remove any old anim action
+//	m_pParent->stopActionByTag(ACTION_ANIM_TAG);
+//
+//	// start new anim
+//	m_pParent->runAction(repeatAction);
 }
 
 void PlayerAnimComponent::startAttackAnimation()

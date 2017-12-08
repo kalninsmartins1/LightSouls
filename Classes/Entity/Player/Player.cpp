@@ -2,6 +2,7 @@
 #include "3rdPartyLibs\tinyxml2.h"
 #include "Utils/Utils.h"
 #include "GameConsts.h"
+#include "Entity/Components/PlayerAnimComponent.h"
 
 using namespace cocos2d;
 
@@ -47,6 +48,9 @@ bool Player::init(const char* pathToXML)
 	pEventDispatcher->addEventListenerWithFixedPriority(pKeyboardListener, 1);
 	pEventDispatcher->addEventListenerWithFixedPriority(pMouseListener, 1);
 
+	m_pPlayerAnimComponent = 
+		(PlayerAnimComponent*)getComponent(XML_PLAYER_ANIM_COMPONENT);
+
 	return true;
 }
 
@@ -61,7 +65,7 @@ void Player::setMoveSpeed(float moveSpeed)
 }
 
 void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
-{	
+{		
 	switch (keyCode)
 	{
 	case EventKeyboard::KeyCode::KEY_W:		
@@ -80,6 +84,13 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 		// Perform dodge
 		m_bHasDodgeInput = true;
 		break;
+	}
+
+	// If we dont have move direction then we must be standing
+	if(m_moveDirection.lengthSquared() == 0)
+	{
+		m_pPlayerAnimComponent->stopRunAnimation();
+		m_pPlayerAnimComponent->startIdleAnimation();
 	}
 }
 
@@ -110,6 +121,10 @@ void Player::onKeyboardKeyDown(EventKeyboard::KeyCode keyCode, Event* pEvent)
 
 	// Make sure we are not moving faster diagonally
 	m_moveDirection.normalize();	
+
+	// When keyboard is down we are always moving
+	m_pPlayerAnimComponent->startRunAnimation();
+	m_pPlayerAnimComponent->stopIdleAnimation();
 }
 
 void Player::onMouseButtonUp(EventMouse* pEvent)

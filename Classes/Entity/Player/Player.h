@@ -2,6 +2,9 @@
 
 #include "cocos2d.h"
 
+
+class PlayerAnimComponent;
+
 class Player: public cocos2d::Sprite
 {
 
@@ -20,6 +23,7 @@ private:
 	void onMouseButtonUp(cocos2d::EventMouse* pEvent);
 
 private:		
+	PlayerAnimComponent* m_pPlayerAnimComponent;
 	bool m_bHasDodgeInput;
 	cocos2d::Vec2 m_moveDirection;
 	float m_moveSpeed;

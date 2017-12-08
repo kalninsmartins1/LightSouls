@@ -13,10 +13,10 @@ class PlayerAnimComponent: public cocos2d::Component
 {
 public:
 	static PlayerAnimComponent* create();
+	
 	virtual void setOwner(cocos2d::Node *owner) override;
 	void loadConfig(tinyxml2::XMLNode* pNode);
 
-private:
 	void startRunAnimation();
 	void startDodgeAnimation();
 	void startIdleAnimation();
