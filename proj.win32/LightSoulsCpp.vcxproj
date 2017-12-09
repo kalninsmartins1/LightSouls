@@ -150,6 +150,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Camera\CameraController.cpp" />
+    <ClCompile Include="..\Classes\Entity\Components\MirrorSpriteComponent.cpp" />
     <ClCompile Include="..\Classes\Entity\Components\PlayerAnimComponent.cpp" />
     <ClCompile Include="..\Classes\Entity\Enemy\Enemy.cpp" />
     <ClCompile Include="..\Classes\Entity\Player\Player.cpp" />
@@ -162,6 +163,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Camera\CameraController.h" />
+    <ClInclude Include="..\Classes\Entity\Components\MirrorSpriteComponent.h" />
     <ClInclude Include="..\Classes\Entity\Components\PlayerAnimComponent.h" />
     <ClInclude Include="..\Classes\Entity\Enemy\Enemy.h" />
     <ClInclude Include="..\Classes\Entity\Player\Player.h" />

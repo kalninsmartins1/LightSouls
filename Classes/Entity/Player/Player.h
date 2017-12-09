@@ -14,6 +14,7 @@ public:
 	virtual void update(float deltaTime) override;
 
 	void setMoveSpeed(float moveSpeed);
+	cocos2d::Vec2 getHeading();
 
 private:	
 	void onKeyboardKeyUp(cocos2d::EventKeyboard::KeyCode keyCode, 

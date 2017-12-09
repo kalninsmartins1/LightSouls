@@ -63,6 +63,9 @@
     <ClCompile Include="..\Classes\Utils\XMLLoader.cpp">
       <Filter>src\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Entity\Components\MirrorSpriteComponent.cpp">
+      <Filter>src\Entity\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Utils\XMLLoader.h">
       <Filter>src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Components\MirrorSpriteComponent.h">
+      <Filter>src\Entity\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

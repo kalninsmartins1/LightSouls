@@ -15,9 +15,6 @@ public:
 
     virtual bool init();    
 	virtual void update(float deltaTime) override;
-
-private:
-	Player* m_pPlayer;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

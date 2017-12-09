@@ -31,9 +31,12 @@ bool Player::init(const char* pathToXML)
 
 	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);	
 
+	// Position physics body at the bottom of sprite
+	getPhysicsBody()->setPositionOffset(Vec2(0, -getContentSize().height/2));
+
 	// Force position player in middle of screen
 	Size size = Director::getInstance()->getWinSize();	
-	setPosition(size.width / 2, size.height / 2);
+	setPosition(size.width / 2 , size.height / 2);
 
 	// Register for input events	
 	EventListenerKeyboard* pKeyboardListener = EventListenerKeyboard::create();
@@ -57,12 +60,20 @@ bool Player::init(const char* pathToXML)
 
 void Player::update(float deltaTime)
 {
-	setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);
+	// Call base update
+	Sprite::update(deltaTime);
+
+	setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);	
 }
 
 void Player::setMoveSpeed(float moveSpeed)
 {
 	m_moveSpeed = moveSpeed;
+}
+
+Vec2 Player::getHeading()
+{
+	return m_moveDirection;
 }
 
 void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)

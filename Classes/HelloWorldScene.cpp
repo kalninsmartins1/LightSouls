@@ -34,8 +34,8 @@ bool HelloWorld::init()
 	Node* pRootNode = Node::create();
 
 	// Set input manager context	
-	m_pPlayer = Player::create("res/Configs/Player/Player.xml");	
-	pRootNode->addChild(m_pPlayer);
+	Player* pPlayer = Player::create("res/Configs/Player/Player.xml");	
+	pRootNode->addChild(pPlayer);
 	addChild(pRootNode);	
 	scheduleUpdate();
     
@@ -44,8 +44,6 @@ bool HelloWorld::init()
 
 void HelloWorld::update(float deltaTime)
 {
-	m_pPlayer->update(deltaTime);
-
 	Director::getInstance()->getRunningScene()->getPhysicsWorld()->
 		setDebugDrawMask(0xFFFFFF);
 }

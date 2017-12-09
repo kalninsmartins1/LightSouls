@@ -4,6 +4,7 @@
 #include "Entity/Player/Player.h"
 #include "Utils.h"
 #include "Entity/Components/PlayerAnimComponent.h"
+#include "Entity/Components/MirrorSpriteComponent.h"
 
 
 using namespace cocos2d;
@@ -21,7 +22,7 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToX
 	bool isInitSuccessful = true;
 	if (err)
 	{
-		cocos2d::log("Utils: [initFromXML] XML file not found: %s", pathToXML);
+		cocos2d::log("XMLLoader: [initializeSpriteUsingXMLFile] XML file not found: %s", pathToXML);
 		isInitSuccessful = false;
 	}
 	else
@@ -59,7 +60,14 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToX
 			else if (Utils::isStrEqual(nodeValue, XML_RIGID_BODY_COMPONENT))
 			{
 				PhysicsBody* pPhysicsBody = loadPhysicsBodyFromAttributes(pNode);
+				pPhysicsBody->setName(XML_RIGID_BODY_COMPONENT);
 				sprite.addComponent(pPhysicsBody);
+			}
+			else if(Utils::isStrEqual(nodeValue, XML_MIRROR_SPRITE_COMPONENT))
+			{
+				MirrorSpriteComponent* pMirrorSprite = MirrorSpriteComponent::create();
+				pMirrorSprite->setName(XML_MIRROR_SPRITE_COMPONENT);
+				sprite.addComponent(pMirrorSprite);
 			}
 		}
 	}

@@ -8,13 +8,6 @@ Utils::Utils()
 
 }
 
-Vec2 Utils::getSpriteHeading(const Sprite* sprite)
-{
-	Vec2 playerPos = sprite->getPosition();
-	float rotationRad = sprite->getRotation() * PI / 180;
-	return Vec2(playerPos.x + (rotationRad), playerPos.y + (rotationRad));
-}
-
 bool Utils::isStrEqual(const std::string& a, const std::string& b)
 {
 	return a.compare(b) == 0;

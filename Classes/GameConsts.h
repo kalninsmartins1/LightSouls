@@ -11,6 +11,7 @@ static constexpr char* XML_PLAYER_ANIM_COMPONENT = "PlayerAnimComponent";
 static constexpr char* XML_TRANSFORM_COMPONENT = "TransformComponent";
 static constexpr char* XML_RIGID_BODY_COMPONENT = "RigidBodyComponent";
 static constexpr char* XML_PLAYER_CONTROLLER_COMPONENT = "PlayerControllerComponent";
+static constexpr char* XML_MIRROR_SPRITE_COMPONENT = "MirrorSpriteComponent";
 
 // XML animation component specifics
 static constexpr char* XML_SPRITE_FRAME = "SpriteFrame";
