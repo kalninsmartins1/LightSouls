@@ -9,13 +9,12 @@ class HelloWorld : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
+	
+	// implement the "static create()" method manually
+	CREATE_FUNC(HelloWorld);
 
     virtual bool init();    
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(HelloWorld);
-
-	void update(float deltaTime);
+	virtual void update(float deltaTime) override;
 
 private:
 	Player* m_pPlayer;

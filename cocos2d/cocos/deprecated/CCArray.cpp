@@ -241,7 +241,7 @@ bool __Array::isEqualToArray(__Array* otherArray)
 {
     for (ssize_t i = 0; i < this->count(); ++i)
     {
-        if (!this->getObjectAtIndex(i)->isEqual(otherArray->getObjectAtIndex(i)))
+        if (!this->getObjectAtIndex(i)->isStrEqual(otherArray->getObjectAtIndex(i)))
         {
             return false;
         }

@@ -2,131 +2,80 @@
 #include "GameConsts.h"
 #include "Utils/Utils.h"
 #include "3rdPartyLibs/tinyxml2.h"
+#include "Utils/AnimationUtils.h"
 
 using namespace cocos2d;
-
-PlayerAnimComponent * PlayerAnimComponent::create()
-{
-	PlayerAnimComponent* ret = new (std::nothrow) PlayerAnimComponent();
-	if (ret && ret->init())
-	{
-		ret->autorelease();
-	}
-	else
-	{
-		CC_SAFE_DELETE(ret);
-	}
-	return ret;
-}
 
 void PlayerAnimComponent::setOwner(cocos2d::Node *owner)
 {
 	Component::setOwner(owner);
 	m_pParent = (Sprite*)owner;
-		
-	if(m_pParent == nullptr)
-	{	
+
+	if (m_pParent == nullptr)
+	{
 		cocos2d::log("Error: PlayerAimation component is not attached to Sprite !");
 	}
 }
 
 void PlayerAnimComponent::loadConfig(tinyxml2::XMLNode* pNode)
 {
-	tinyxml2::XMLElement* pSpriteSheetElem = pNode->FirstChildElement();	
-
-	// Need to use full path to assets, because all configs are Assets folder relative
-	m_walkSpriteBatch = SpriteBatchNode::create(
-		Utils::appendFullPathToAssetsPath(pSpriteSheetElem->Attribute("path")));
-	auto spriteCache = SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile(Utils::appendFullPathToAssetsPath(
-		pSpriteSheetElem->Attribute("plistPath")));
-
-	// Get template frame name
-	const char* spriteFrameName = pSpriteSheetElem->Attribute("frameNamePattern");
-
-	// Get total frame count
-	int frameCount = pSpriteSheetElem->IntAttribute("frameCount");	 
-
-	// Load all the frame for the animation
-	char curSpriteFrameName[MAX_SPRITE_NAME_LENGTH] = { 0 };
-	for (int i = 0; i < frameCount; i++)
+	for (tinyxml2::XMLElement* pElem = pNode->FirstChildElement();
+		pElem->NextSiblingElement() != nullptr; pElem = pElem->NextSiblingElement())
 	{
-		sprintf(curSpriteFrameName, spriteFrameName, i);
-		SpriteFrame* frame = spriteCache->getSpriteFrameByName(curSpriteFrameName);
-		m_runFrames.pushBack(frame);
+		const char* animType = pElem->Attribute("type");
 
-		// Save first frame name of walk animation to use as Idle state
-		if (i == 0)
+		// Load specific animation based on its type
+		if (Utils::isStrEqual(animType, "Running"))
 		{
-			m_baseSpriteFrameName = curSpriteFrameName;
+			AnimationUtils::loadAnimationFrames(pElem, m_runFrames, 
+				m_timeBetweenRunFrames);
+		}
+		else if (Utils::isStrEqual(animType, "Idle"))
+		{
+			AnimationUtils::loadAnimationFrames(pElem, m_idleFrames, 
+				m_timeBetweenIdleFrames);
+		}
+		else if (Utils::isStrEqual(animType, "Hurt"))
+		{
+			AnimationUtils::loadAnimationFrames(pElem, m_hurtFrames, 
+				m_timeBetweenIdleFrames);
+		}
+		else if (Utils::isStrEqual(animType, "Dodge"))
+		{
+			AnimationUtils::loadAnimationFrames(pElem, m_dodgeFrames, 
+				m_timeBetweenDodgeFrames);
+		}
+		else if (Utils::isStrEqual(animType, "Attack"))
+		{
+			AnimationUtils::loadAnimationFrames(pElem, m_attackFrames, 
+				m_timeBetweenAttackFrames);
 		}
 	}
 
-	// init Sprite
-	if (!m_pParent->initWithSpriteFrameName(m_baseSpriteFrameName))
-	{
-		cocos2d::log("Player: %s", "Sprite failed to initialize");
-	}
+	// Init parent sprite
+	m_pParent->initWithSpriteFrame(m_idleFrames.at(0));
 }
 
 void PlayerAnimComponent::startRunAnimation()
 {
-	// Start character animation
-	auto animation = Animation::createWithSpriteFrames(m_runFrames, 0.1f);
-	auto animate = Animate::create(animation);
-	auto repeatAction = RepeatForever::create(animate);
-	repeatAction->setTag(ACTION_ANIM_TAG);
-
-	// remove any old anim action
-	m_pParent->stopActionByTag(ACTION_ANIM_TAG);
-
-	// start new anim
-	m_pParent->runAction(repeatAction);
+	AnimationUtils::startSpriteFrameAnimation(m_pParent, m_runFrames,
+		m_timeBetweenRunFrames);
 }
 
 void PlayerAnimComponent::startDodgeAnimation()
-{
-	
+{	
+	AnimationUtils::startSpriteFrameAnimation(m_pParent, m_dodgeFrames, 
+		m_timeBetweenDodgeFrames);
 }
 
 void PlayerAnimComponent::startIdleAnimation()
-{
-//	// Start character animation
-//	auto animation = Animation::createWithSpriteFrames(m_idle, 0.1f);
-//	auto animate = Animate::create(animation);
-//	auto repeatAction = RepeatForever::create(animate);
-//	repeatAction->setTag(ACTION_ANIM_TAG);
-//
-//	// remove any old anim action
-//	m_pParent->stopActionByTag(ACTION_ANIM_TAG);
-//
-//	// start new anim
-//	m_pParent->runAction(repeatAction);
+{		
+	AnimationUtils::startSpriteFrameAnimation(m_pParent, m_idleFrames, 
+		m_timeBetweenIdleFrames);
 }
 
 void PlayerAnimComponent::startAttackAnimation()
-{
-	
-}
-
-void PlayerAnimComponent::stopAttackAnimation()
-{
-	
-}
-
-void PlayerAnimComponent::stopIdleAnimation()
-{
-	
-}
-
-void PlayerAnimComponent::stopDodgeAnimation()
-{
-	
-}
-
-void PlayerAnimComponent::stopRunAnimation()
-{
-	m_pParent->stopActionByTag(ACTION_ANIM_TAG);
-	m_pParent->setSpriteFrame(SpriteFrameCache::getInstance()->
-		getSpriteFrameByName(m_baseSpriteFrameName));
+{	
+	AnimationUtils::startSpriteFrameAnimation(m_pParent, m_attackFrames, 
+		m_timeBetweenAttackFrames);
 }

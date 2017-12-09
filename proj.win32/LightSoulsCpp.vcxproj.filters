@@ -16,9 +16,6 @@
     <Filter Include="src\Utils">
       <UniqueIdentifier>{d11e09d1-c309-492f-b1ec-5a357bfed652}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\3rdPartyLibs">
-      <UniqueIdentifier>{4a4475ae-d98b-4a6f-a218-59145a30a6ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Entity">
       <UniqueIdentifier>{b5115797-b4a1-4833-a8be-056db0fd956c}</UniqueIdentifier>
     </Filter>
@@ -48,9 +45,6 @@
     <ClCompile Include="..\Classes\Utils\Utils.cpp">
       <Filter>src\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\3rdPartyLibs\tinyxml2.cpp">
-      <Filter>src\3rdPartyLibs</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Camera\CameraController.cpp">
       <Filter>src\Camera</Filter>
     </ClCompile>
@@ -62,6 +56,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Entity\Components\PlayerAnimComponent.cpp">
       <Filter>src\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Utils\AnimationUtils.cpp">
+      <Filter>src\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Utils\XMLLoader.cpp">
+      <Filter>src\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -76,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Utils\Utils.h">
       <Filter>src\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\3rdPartyLibs\tinyxml2.h">
-      <Filter>src\3rdPartyLibs</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Camera\CameraController.h">
       <Filter>src\Camera</Filter>
@@ -97,6 +94,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Entity\Components\PlayerAnimComponent.h">
       <Filter>src\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Utils\AnimationUtils.h">
+      <Filter>src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Utils\XMLLoader.h">
+      <Filter>src\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

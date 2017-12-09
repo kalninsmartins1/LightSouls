@@ -3,12 +3,13 @@
 #include "Utils/Utils.h"
 #include "GameConsts.h"
 #include "Entity/Components/PlayerAnimComponent.h"
+#include "Utils/XMLLoader.h"
 
 using namespace cocos2d;
 
 Player* Player::create(const char* pathToXML)
 {
-	Player *pPlayer = new (std::nothrow) Player();
+	Player* pPlayer = new (std::nothrow) Player();
 	if (pPlayer && pPlayer->init(pathToXML))
 	{
 		pPlayer->autorelease();
@@ -23,17 +24,15 @@ Player* Player::create(const char* pathToXML)
 
 bool Player::init(const char* pathToXML)
 {	
-	// Default values
+	// Set default values
 	m_moveSpeed = 0;
 	m_dodgeSpeed = 0;
 	m_moveDirection = Vec2::ZERO;
 
-	Utils::initFromXML(*this, pathToXML);
-	setAnchorPoint(Vec2(0.5, 0.5));
+	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);	
 
-	Size size = Director::getInstance()->getWinSize();
-
-	// Position player in middle of the sceen
+	// Force position player in middle of screen
+	Size size = Director::getInstance()->getWinSize();	
 	setPosition(size.width / 2, size.height / 2);
 
 	// Register for input events	
@@ -48,8 +47,10 @@ bool Player::init(const char* pathToXML)
 	pEventDispatcher->addEventListenerWithFixedPriority(pKeyboardListener, 1);
 	pEventDispatcher->addEventListenerWithFixedPriority(pMouseListener, 1);
 
+	// Get animation component to trigger animations when that is necessary
 	m_pPlayerAnimComponent = 
 		(PlayerAnimComponent*)getComponent(XML_PLAYER_ANIM_COMPONENT);
+	m_pPlayerAnimComponent->startIdleAnimation();
 
 	return true;
 }
@@ -89,7 +90,6 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 	// If we dont have move direction then we must be standing
 	if(m_moveDirection.lengthSquared() == 0)
 	{
-		m_pPlayerAnimComponent->stopRunAnimation();
 		m_pPlayerAnimComponent->startIdleAnimation();
 	}
 }
@@ -124,7 +124,6 @@ void Player::onKeyboardKeyDown(EventKeyboard::KeyCode keyCode, Event* pEvent)
 
 	// When keyboard is down we are always moving
 	m_pPlayerAnimComponent->startRunAnimation();
-	m_pPlayerAnimComponent->stopIdleAnimation();
 }
 
 void Player::onMouseButtonUp(EventMouse* pEvent)

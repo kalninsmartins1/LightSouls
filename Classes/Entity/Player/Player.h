@@ -11,7 +11,7 @@ class Player: public cocos2d::Sprite
 public:
 	static Player* create(const char* pPathToXML);
 	bool init(const char* pathToXML);	
-	void update(float deltaTime);
+	virtual void update(float deltaTime) override;
 
 	void setMoveSpeed(float moveSpeed);
 
@@ -22,7 +22,7 @@ private:
 		cocos2d::Event* pEvent);
 	void onMouseButtonUp(cocos2d::EventMouse* pEvent);
 
-private:		
+	
 	PlayerAnimComponent* m_pPlayerAnimComponent;
 	bool m_bHasDodgeInput;
 	cocos2d::Vec2 m_moveDirection;

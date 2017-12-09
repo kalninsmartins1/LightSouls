@@ -10,13 +10,42 @@
 	</Component>
 	
 	<Component type="PlayerAnimComponent">
-		<SpriteSheet
-			path="Graphics/Player/Run/running.png" 
-			plistPath="Graphics/Player/Run/runSpriteSheetData.plist"
+		<SpriteSheet type="Running"
+			path="res/Graphics/Player/Run/runSpriteSheet.png" 
+			plistPath="res/Graphics/Player/Run/runData.plist"
 			frameNamePattern="running%d.png"
 			frameCount="6"
-		/>		
+			timeBetweenFrames="0.1"
+		/>
+		<SpriteSheet type="Idle"
+			path="res/Graphics/Player/Idle/idleSpriteSheet.png" 
+			plistPath="res/Graphics/Player/Idle/idleData.plist"
+			frameNamePattern="idle%d.png"
+			frameCount="6"
+		/>
+		<SpriteSheet type="Hurt"
+			path="res/Graphics/Player/Hurt/hurtSpriteSheet.png" 
+			plistPath="res/Graphics/Player/Hurt/hurtData.plist"
+			frameNamePattern="hurt%d.png"
+			frameCount="7"
+			timeBetweenFrames="0.1"
+		/>
+		<SpriteSheet type="Dodge"
+			path="res/Graphics/Player/Dodge/dodgeSpriteSheet.png" 
+			plistPath="res/Graphics/Player/Dodge/dodgeData.plist"
+			frameNamePattern="dodge%d.png"
+			frameCount="6"
+			timeBetweenFrames="0.1"
+		/>
+		<SpriteSheet type="Attack"
+			path="res/Graphics/Player/Run/attackSpriteSheet.png" 
+			plistPath="res/Graphics/Player/Run/attackData.plist"
+			frameNamePattern="attack%d.png"
+			frameCount="10"
+			timeBetweenFrames="0.1"
+		/>
 	</Component>
+	
 	<Component type="RigidBodyComponent">
 		<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
 		<PhysicsBody

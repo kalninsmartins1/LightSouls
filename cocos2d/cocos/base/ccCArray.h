@@ -33,7 +33,7 @@ THE SOFTWARE.
  - it uses a plain C interface so it doesn't incur Objective-c messaging overhead
  - it assumes you know what you're doing, so it doesn't spend time on safety checks
  (index out of bounds, required capacity etc.)
- - comparisons are done using pointer equality instead of isEqual
+ - comparisons are done using pointer equality instead of isStrEqual
 
  There are 2 kind of functions:
  - ccArray functions that manipulates objective-c objects (retain and release are performed)

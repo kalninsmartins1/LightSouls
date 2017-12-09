@@ -34,7 +34,7 @@ bool HelloWorld::init()
 	Node* pRootNode = Node::create();
 
 	// Set input manager context	
-	m_pPlayer = Player::create("Configs/Player/Player.xml");	
+	m_pPlayer = Player::create("res/Configs/Player/Player.xml");	
 	pRootNode->addChild(m_pPlayer);
 	addChild(pRootNode);	
 	scheduleUpdate();
