@@ -14,6 +14,9 @@ public:
 	virtual void update(float deltaTime) override;
 
 	void setMoveSpeed(float moveSpeed);
+	void setDodgeSpeed(float dodgeSpeed);
+	void setDodgeTime(float dodgeTime);
+
 	cocos2d::Vec2 getHeading();
 
 private:	
@@ -22,11 +25,16 @@ private:
 	void onKeyboardKeyDown(cocos2d::EventKeyboard::KeyCode keyCode, 
 		cocos2d::Event* pEvent);
 	void onMouseButtonUp(cocos2d::EventMouse* pEvent);
-
+	void onDodgeFinished();
+	
+	void PerformDodge();
 	
 	PlayerAnimComponent* m_pPlayerAnimComponent;
-	bool m_bHasDodgeInput;
+	bool m_bIsMoving;
+	bool m_bIsDodging;
 	cocos2d::Vec2 m_moveDirection;
+	float m_baseMoveSpeed;
 	float m_moveSpeed;
 	float m_dodgeSpeed;
+	float m_dodgeTime;	
 };

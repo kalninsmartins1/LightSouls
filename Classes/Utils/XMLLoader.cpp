@@ -47,8 +47,15 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToX
 			else if (Utils::isStrEqual(nodeValue, XML_PLAYER_CONTROLLER_COMPONENT))
 			{
 				Player* pPlayer = (Player*)&sprite;
-				float moveSpeed = pNode->ToElement()->FloatAttribute("moveSpeed");
+				tinyxml2::XMLElement* pMovementElement = pNode->FirstChildElement();
+				
+				float moveSpeed = pMovementElement->FloatAttribute("moveSpeed");
+				float dodgeSpeed = pMovementElement->FloatAttribute("dodgeSpeed");
+				float dodgeTime = pMovementElement->FloatAttribute("dodgeTime");
+
 				pPlayer->setMoveSpeed(moveSpeed);
+				pPlayer->setDodgeSpeed(dodgeSpeed);
+				pPlayer->setDodgeTime(dodgeTime);
 			}
 			else if (Utils::isStrEqual(nodeValue, XML_PLAYER_ANIM_COMPONENT))
 			{

@@ -25,9 +25,11 @@ Player* Player::create(const char* pathToXML)
 bool Player::init(const char* pathToXML)
 {	
 	// Set default values
+	m_moveDirection = Vec2::ZERO;
+	m_baseMoveSpeed = 0;
 	m_moveSpeed = 0;
 	m_dodgeSpeed = 0;
-	m_moveDirection = Vec2::ZERO;
+	m_dodgeTime = 0;
 
 	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);	
 
@@ -55,6 +57,9 @@ bool Player::init(const char* pathToXML)
 		(PlayerAnimComponent*)getComponent(XML_PLAYER_ANIM_COMPONENT);
 	m_pPlayerAnimComponent->startIdleAnimation();
 
+	// Set move speed at begining
+	m_moveSpeed = m_baseMoveSpeed;
+
 	return true;
 }
 
@@ -68,7 +73,17 @@ void Player::update(float deltaTime)
 
 void Player::setMoveSpeed(float moveSpeed)
 {
-	m_moveSpeed = moveSpeed;
+	m_baseMoveSpeed = moveSpeed;
+}
+
+void Player::setDodgeSpeed(float dodgeSpeed)
+{
+	m_dodgeSpeed = dodgeSpeed;
+}
+
+void Player::setDodgeTime(float dodgeTime)
+{
+	m_dodgeTime = dodgeTime;
 }
 
 Vec2 Player::getHeading()
@@ -81,20 +96,43 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 	switch (keyCode)
 	{
 	case EventKeyboard::KeyCode::KEY_W:		
+		// Stop moving up
+		if(m_moveDirection.y > 0)
+		{
+			m_moveDirection = Vec2(m_moveDirection.x, 0);
+		}		
+		break;
+
 	case EventKeyboard::KeyCode::KEY_S:
-		// Stop moving vertically
-		m_moveDirection = Vec2(m_moveDirection.x, 0);
+		// Stop moving down
+		if(m_moveDirection.y < 0)
+		{
+			m_moveDirection = Vec2(m_moveDirection.x, 0);
+		}		
 		break;
 
 	case EventKeyboard::KeyCode::KEY_D:
+		// Stop moving right
+		if(m_moveDirection.x > 0)
+		{
+			m_moveDirection = Vec2(0, m_moveDirection.y);
+		}		
+		break;
+
 	case EventKeyboard::KeyCode::KEY_A:
-		// Stop moving horizontally
-		m_moveDirection = Vec2(0, m_moveDirection.y);
+		// Stop moving left
+		if(m_moveDirection.x < 0)
+		{
+			m_moveDirection = Vec2(0, m_moveDirection.y);
+		}		
 		break;
 
 	case EventKeyboard::KeyCode::KEY_SPACE:
-		// Perform dodge
-		m_bHasDodgeInput = true;
+		// Dodge if currently not dodging
+		if(!m_bIsDodging)
+		{
+			PerformDodge();
+		}		
 		break;
 	}
 
@@ -102,6 +140,11 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 	if(m_moveDirection.lengthSquared() == 0)
 	{
 		m_pPlayerAnimComponent->startIdleAnimation();
+		m_bIsMoving = false;
+	}
+	else
+	{
+		m_bIsMoving = true;
 	}
 }
 
@@ -133,8 +176,11 @@ void Player::onKeyboardKeyDown(EventKeyboard::KeyCode keyCode, Event* pEvent)
 	// Make sure we are not moving faster diagonally
 	m_moveDirection.normalize();	
 
-	// When keyboard is down we are always moving
-	m_pPlayerAnimComponent->startRunAnimation();
+	if(!m_bIsDodging)
+	{
+		// When keyboard is down we are always moving
+		m_pPlayerAnimComponent->startRunAnimation();
+	}	
 }
 
 void Player::onMouseButtonUp(EventMouse* pEvent)
@@ -148,4 +194,27 @@ void Player::onMouseButtonUp(EventMouse* pEvent)
 	{
 		// Perform strong attack
 	}
+}
+
+void Player::onDodgeFinished()
+{
+	m_bIsDodging = false;
+
+	// Set back regular speed
+	m_moveSpeed = m_baseMoveSpeed;	
+
+	if(m_bIsMoving)
+	{
+		// Go back to regular running
+		m_pPlayerAnimComponent->startRunAnimation();
+	}
+}
+
+void Player::PerformDodge()
+{
+	m_bIsDodging = true;
+	m_moveSpeed = m_dodgeSpeed;
+	m_pPlayerAnimComponent->startDodgeAnimation();
+	Utils::startTimerWithCallback(this,
+		CC_CALLBACK_0(Player::onDodgeFinished, this), m_dodgeTime);
 }

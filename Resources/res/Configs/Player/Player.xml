@@ -5,7 +5,12 @@
 		<Rotation x="" y="" z="" />		
 	</Component>
 	
-	<Component type="PlayerControllerComponent" moveSpeed="50">
+	<Component type="PlayerControllerComponent">
+		<MovementParams
+				moveSpeed="50"
+				dodgeSpeed="100"
+				dodgeTime="0.8"
+		/>				
 	</Component>
 	
 	<Component type="PlayerAnimComponent">
