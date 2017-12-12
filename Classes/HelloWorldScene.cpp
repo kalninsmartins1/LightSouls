@@ -1,6 +1,6 @@
 #include "HelloWorldScene.h"
-#include "SimpleAudioEngine.h"
 #include "Entity/Player/Player.h"
+#include "Camera/CameraController.h"
 
 USING_NS_CC;
 
@@ -33,10 +33,16 @@ bool HelloWorld::init()
     }
 	Node* pRootNode = Node::create();
 
-	// Set input manager context	
-	Player* pPlayer = Player::create("res/Configs/Player/Player.xml");	
-	pRootNode->addChild(pPlayer);
+	// Init player	
+	m_pPlayer = Player::create("res/Configs/Player/Player.xml");	
+	pRootNode->addChild(m_pPlayer);
 	addChild(pRootNode);	
+
+	m_pCameraController = CameraController::create();
+	if(!m_pCameraController->init())
+	{
+		cocos2d::log("HelloWorldScene: Failed to initialize camera controller !");
+	}
 	scheduleUpdate();
     
     return true;
@@ -46,4 +52,7 @@ void HelloWorld::update(float deltaTime)
 {
 	Director::getInstance()->getRunningScene()->getPhysicsWorld()->
 		setDebugDrawMask(0xFFFFFF);
+
+	m_pCameraController->moveCameraTo(convertToWorldSpace(
+		m_pPlayer->getPosition()), 2);
 }

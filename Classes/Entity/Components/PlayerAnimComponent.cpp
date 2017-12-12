@@ -1,7 +1,6 @@
 #include "PlayerAnimComponent.h"
 #include "GameConsts.h"
 #include "Utils/Utils.h"
-#include "3rdPartyLibs/tinyxml2.h"
 #include "Utils/AnimationUtils.h"
 
 using namespace cocos2d;
@@ -20,7 +19,7 @@ void PlayerAnimComponent::setOwner(cocos2d::Node *owner)
 void PlayerAnimComponent::loadConfig(tinyxml2::XMLNode* pNode)
 {
 	for (tinyxml2::XMLElement* pElem = pNode->FirstChildElement();
-		pElem->NextSiblingElement() != nullptr; pElem = pElem->NextSiblingElement())
+		pElem != nullptr; pElem = pElem->NextSiblingElement())
 	{
 		const char* animType = pElem->Attribute("type");
 
@@ -56,26 +55,62 @@ void PlayerAnimComponent::loadConfig(tinyxml2::XMLNode* pNode)
 	m_pParent->initWithSpriteFrame(m_idleFrames.at(0));
 }
 
-void PlayerAnimComponent::startRunAnimation()
+void PlayerAnimComponent::startAnimation(PlayerAnimationType type)
 {
-	AnimationUtils::startSpriteFrameAnimation(m_pParent, m_runFrames,
-		m_timeBetweenRunFrames);
+	switch (type)
+	{
+		case Idle:
+			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_idleFrames,
+				m_timeBetweenIdleFrames);
+			break;
+
+		case Run: 
+			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_runFrames,
+				m_timeBetweenRunFrames);
+			break;
+
+		case Dodge:
+			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_dodgeFrames,
+				m_timeBetweenDodgeFrames);
+			break;
+
+		case Hurt: 
+			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_hurtFrames,
+				m_timeBetweenHurtFrames);
+			break;
+
+		case Attack: 
+			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_attackFrames,
+				m_timeBetweenAttackFrames);
+			break;	
+	}
 }
 
-void PlayerAnimComponent::startDodgeAnimation()
-{	
-	AnimationUtils::startSpriteFrameAnimation(m_pParent, m_dodgeFrames, 
-		m_timeBetweenDodgeFrames);
-}
+float PlayerAnimComponent::getAnimationLengthInSeconds(PlayerAnimationType type) const
+{
+	float length = 0;
+	switch (type)
+	{
+		case Idle: 
+			length = m_idleFrames.size() * m_timeBetweenIdleFrames;
+			break;
 
-void PlayerAnimComponent::startIdleAnimation()
-{		
-	AnimationUtils::startSpriteFrameAnimation(m_pParent, m_idleFrames, 
-		m_timeBetweenIdleFrames);
-}
+		case Run: 
+			length = m_runFrames.size() * m_timeBetweenRunFrames;
+			break;
 
-void PlayerAnimComponent::startAttackAnimation()
-{	
-	AnimationUtils::startSpriteFrameAnimation(m_pParent, m_attackFrames, 
-		m_timeBetweenAttackFrames);
+		case Dodge:
+			length = m_dodgeFrames.size() * m_timeBetweenDodgeFrames;
+			break;
+
+		case Hurt: 
+			length = m_hurtFrames.size() * m_timeBetweenHurtFrames;
+			break;
+
+		case Attack:
+			length = m_attackFrames.size() * m_timeBetweenAttackFrames;
+			break;	
+	}
+
+	return length;
 }

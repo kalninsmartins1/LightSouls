@@ -7,7 +7,8 @@ bool CameraController::init()
 {
 	return true;
 }
-void CameraController::moveCameraTo(cocos2d::Vec2 worldPosition, float movementSpeed)
+void CameraController::moveCameraTo(cocos2d::Vec2 worldPosition,
+	float movementSpeed)
 {
 	// Move camera to input position
 	Camera* defaultCamera = Camera::getDefaultCamera();

@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "3rdPartyLibs\tinyxml2.h"
 #include "Utils/Utils.h"
 #include "GameConsts.h"
 #include "Entity/Components/PlayerAnimComponent.h"
@@ -30,6 +29,7 @@ bool Player::init(const char* pathToXML)
 	m_moveSpeed = 0;
 	m_dodgeSpeed = 0;
 	m_dodgeTime = 0;
+	m_bIsAttacking = false;
 
 	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);	
 
@@ -55,7 +55,7 @@ bool Player::init(const char* pathToXML)
 	// Get animation component to trigger animations when that is necessary
 	m_pPlayerAnimComponent = 
 		(PlayerAnimComponent*)getComponent(XML_PLAYER_ANIM_COMPONENT);
-	m_pPlayerAnimComponent->startIdleAnimation();
+	m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
 
 	// Set move speed at begining
 	m_moveSpeed = m_baseMoveSpeed;
@@ -68,7 +68,11 @@ void Player::update(float deltaTime)
 	// Call base update
 	Sprite::update(deltaTime);
 
-	setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);	
+	// We can move only when we are not attacking
+	if(!m_bIsAttacking)
+	{
+		setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);
+	}	
 }
 
 void Player::setMoveSpeed(float moveSpeed)
@@ -139,7 +143,7 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 	// If we dont have move direction then we must be standing
 	if(m_moveDirection.lengthSquared() == 0)
 	{
-		m_pPlayerAnimComponent->startIdleAnimation();
+		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
 		m_bIsMoving = false;
 	}
 	else
@@ -176,24 +180,36 @@ void Player::onKeyboardKeyDown(EventKeyboard::KeyCode keyCode, Event* pEvent)
 	// Make sure we are not moving faster diagonally
 	m_moveDirection.normalize();	
 
-	if(!m_bIsDodging)
+	if(!m_bIsDodging && m_moveDirection.lengthSquared() > 0 && !m_bIsAttacking)
 	{
 		// When keyboard is down we are always moving
-		m_pPlayerAnimComponent->startRunAnimation();
-	}	
+		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
+		m_bIsMoving = true;
+	}		
 }
 
 void Player::onMouseButtonUp(EventMouse* pEvent)
 {
-	EventMouse::MouseButton buttonUp = pEvent->getMouseButton();
+	/*EventMouse::MouseButton buttonUp = pEvent->getMouseButton();
 	if(buttonUp == EventMouse::MouseButton::BUTTON_LEFT)
+	{*/
+	if(!m_bIsAttacking && !m_bIsDodging)
 	{
 		// Perform light attack
+		m_bIsAttacking = true;
+		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
+		Utils::startTimerWithCallback(this,
+			CC_CALLBACK_0(Player::onAttackFinished, this),
+			m_pPlayerAnimComponent->
+			getAnimationLengthInSeconds(PlayerAnimationType::Attack));
 	}
+		
+	/*}
 	else if(buttonUp == EventMouse::MouseButton::BUTTON_RIGHT)
 	{
 		// Perform strong attack
-	}
+		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
+	}*/
 }
 
 void Player::onDodgeFinished()
@@ -206,7 +222,21 @@ void Player::onDodgeFinished()
 	if(m_bIsMoving)
 	{
 		// Go back to regular running
-		m_pPlayerAnimComponent->startRunAnimation();
+		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
+	}
+}
+
+void Player::onAttackFinished()
+{
+	m_bIsAttacking = false;
+
+	if(m_bIsMoving)
+	{
+		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
+	}
+	else
+	{
+		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
 	}
 }
 
@@ -214,7 +244,7 @@ void Player::PerformDodge()
 {
 	m_bIsDodging = true;
 	m_moveSpeed = m_dodgeSpeed;
-	m_pPlayerAnimComponent->startDodgeAnimation();
+	m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Dodge);
 	Utils::startTimerWithCallback(this,
 		CC_CALLBACK_0(Player::onDodgeFinished, this), m_dodgeTime);
 }

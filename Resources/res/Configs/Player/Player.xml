@@ -26,6 +26,7 @@
 			plistPath="res/Graphics/Player/Idle/idleData.plist"
 			frameNamePattern="idle%d.png"
 			frameCount="6"
+			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Hurt"
 			path="res/Graphics/Player/Hurt/hurtSpriteSheet.png" 
@@ -42,8 +43,8 @@
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Attack"
-			path="res/Graphics/Player/Run/attackSpriteSheet.png" 
-			plistPath="res/Graphics/Player/Run/attackData.plist"
+			path="res/Graphics/Player/Attack/attackSpriteSheet.png" 
+			plistPath="res/Graphics/Player/Attack/attackData.plist"
 			frameNamePattern="attack%d.png"
 			frameCount="10"
 			timeBetweenFrames="0.1"

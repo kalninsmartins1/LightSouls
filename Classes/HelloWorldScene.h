@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 
 class Player;
+class CameraController;
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -15,6 +16,10 @@ public:
 
     virtual bool init();    
 	virtual void update(float deltaTime) override;
+
+private:
+	Player* m_pPlayer;
+	CameraController* m_pCameraController;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

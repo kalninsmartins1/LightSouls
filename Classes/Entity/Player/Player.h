@@ -26,13 +26,17 @@ private:
 		cocos2d::Event* pEvent);
 	void onMouseButtonUp(cocos2d::EventMouse* pEvent);
 	void onDodgeFinished();
+	void onAttackFinished();
 	
 	void PerformDodge();
 	
 	PlayerAnimComponent* m_pPlayerAnimComponent;
+	cocos2d::Vec2 m_moveDirection;
+	
 	bool m_bIsMoving;
 	bool m_bIsDodging;
-	cocos2d::Vec2 m_moveDirection;
+	bool m_bIsAttacking;
+	
 	float m_baseMoveSpeed;
 	float m_moveSpeed;
 	float m_dodgeSpeed;

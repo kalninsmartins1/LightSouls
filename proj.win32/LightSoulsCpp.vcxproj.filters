@@ -31,6 +31,9 @@
     <Filter Include="src\Entity\Components">
       <UniqueIdentifier>{c5bc50c9-245f-457f-ba25-1ec257431706}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Input">
+      <UniqueIdentifier>{a0c45887-ca1e-4839-a421-3abca7ef2662}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Entity\Components\MirrorSpriteComponent.cpp">
       <Filter>src\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Input\GameInput.cpp">
+      <Filter>src\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Entity\Components\MirrorSpriteComponent.h">
       <Filter>src\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Input\GameInput.h">
+      <Filter>src\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

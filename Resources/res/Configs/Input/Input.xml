@@ -1,0 +1,47 @@
+<InputSettings>
+	<Axis type="MoveDirection">		
+		<Keyboard>
+			<Key type="W" minValue="0" maxValue="1"/>
+		</Keyboard>
+		
+		<Mouse>
+		</Mouse>
+		
+		<Joystick>
+		</Joystick>
+	</Axis>
+	
+	<Button type="AttackLight">
+		<Keyboard>
+		</Keyboard>
+		
+		<Mouse>
+		</Mouse>
+		
+		<Joystick>
+		</Joystick>
+	</Button>
+	
+	<Button type="AttackStrong">
+		<Keyboard>
+		</Keyboard>
+		
+		<Mouse>
+		</Mouse>
+		
+		<Joystick>
+		</Joystick>
+	</Button>
+	
+	<Button type="Dodge">
+		<Keyboard>
+		</Keyboard>
+		
+		<Mouse>
+		</Mouse>
+		
+		<Joystick>
+		</Joystick>
+	</Button>
+	
+</InputSettings>
