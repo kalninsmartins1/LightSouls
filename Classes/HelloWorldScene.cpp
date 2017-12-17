@@ -1,6 +1,7 @@
 #include "HelloWorldScene.h"
 #include "Entity/Player/Player.h"
 #include "Camera/CameraController.h"
+#include "Utils/XMLLoader.h"
 
 USING_NS_CC;
 
@@ -27,10 +28,11 @@ bool HelloWorld::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !Scene::init() )
-    {
-        return false;
-    }
+	if (!Scene::init())
+	{
+		return false;
+	}
+
 	Node* pRootNode = Node::create();
 
 	// Init player	
@@ -50,9 +52,6 @@ bool HelloWorld::init()
 
 void HelloWorld::update(float deltaTime)
 {
-	Director::getInstance()->getRunningScene()->getPhysicsWorld()->
-		setDebugDrawMask(0xFFFFFF);
-
 	m_pCameraController->moveCameraTo(convertToWorldSpace(
 		m_pPlayer->getPosition()), 2);
 }

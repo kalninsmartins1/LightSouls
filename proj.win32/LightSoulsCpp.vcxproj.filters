@@ -34,6 +34,18 @@
     <Filter Include="src\Input">
       <UniqueIdentifier>{a0c45887-ca1e-4839-a421-3abca7ef2662}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Input\InputTypes">
+      <UniqueIdentifier>{3ffbecca-548c-4f15-8b03-724a708e3d5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Input\InputTypes\Keyboard">
+      <UniqueIdentifier>{f75871d4-dcb6-4772-b853-1f05195785db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Input\InputTypes\Mouse">
+      <UniqueIdentifier>{206068aa-305c-447a-a764-099d3ec4119c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Input\InputTypes\Joystick">
+      <UniqueIdentifier>{8af7186f-c495-4f57-a175-eb64949651a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -71,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Input\GameInput.cpp">
       <Filter>src\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Input\InputTypes\Keyboard\KeyboardInput.cpp">
+      <Filter>src\Input\InputTypes\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Input\InputTypes\Mouse\MouseInput.cpp">
+      <Filter>src\Input\InputTypes\Mouse</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +133,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Input\GameInput.h">
       <Filter>src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Input\InputTypes\Keyboard\KeyboardInput.h">
+      <Filter>src\Input\InputTypes\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Input\InputTypes\Mouse\MouseInput.h">
+      <Filter>src\Input\InputTypes\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Input\InputTypes\Joystick\JoystickInput.h">
+      <Filter>src\Input\InputTypes\Joystick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

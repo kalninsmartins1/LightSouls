@@ -1,47 +1,29 @@
 <InputSettings>
-	<Axis type="MoveDirection">		
+	<Axis name="MoveInput">		
 		<Keyboard>
-			<Key type="W" minValue="0" maxValue="1"/>
+			<AxisKey keyCode="W" axisType="Y" minValue="0" maxValue="1"/>
+			<AxisKey keyCode="S" axisType="Y" minValue="-1" maxValue="0"/>
+			<AxisKey keyCode="A" axisType="X" minValue="-1" maxValue="0"/>
+			<AxisKey keyCode="D" axisType="X" minValue="0" maxValue="1"/>
 		</Keyboard>
-		
-		<Mouse>
-		</Mouse>
-		
-		<Joystick>
-		</Joystick>
 	</Axis>
 	
-	<Button type="AttackLight">
-		<Keyboard>
-		</Keyboard>
-		
+	<ActionButton name="LightAttackInput">
 		<Mouse>
+			<MouseButton buttonCode="LeftButton"/>
 		</Mouse>
-		
-		<Joystick>
-		</Joystick>
-	</Button>
+	</ActionButton>
 	
-	<Button type="AttackStrong">
-		<Keyboard>
-		</Keyboard>
-		
+	<ActionButton name="AttackStrong">		
 		<Mouse>
+			<MouseButton name="RightButton"/>
 		</Mouse>
-		
-		<Joystick>
-		</Joystick>
-	</Button>
+	</ActionButton>
 	
-	<Button type="Dodge">
+	<ActionButton name="Dodge">
 		<Keyboard>
-		</Keyboard>
-		
-		<Mouse>
-		</Mouse>
-		
-		<Joystick>
-		</Joystick>
-	</Button>
+			<ActionKey keyCode="Space"/>
+		</Keyboard>		
+	</ActionButton>
 	
 </InputSettings>

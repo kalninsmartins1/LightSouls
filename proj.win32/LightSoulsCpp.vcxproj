@@ -156,6 +156,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Entity\Player\Player.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\Input\GameInput.cpp" />
+    <ClCompile Include="..\Classes\Input\InputTypes\Keyboard\KeyboardInput.cpp" />
+    <ClCompile Include="..\Classes\Input\InputTypes\Mouse\MouseInput.cpp" />
     <ClCompile Include="..\Classes\Utils\AnimationUtils.cpp" />
     <ClCompile Include="..\Classes\Utils\Utils.cpp" />
     <ClCompile Include="..\Classes\Utils\XMLLoader.cpp" />
@@ -172,6 +174,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\GameConsts.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\Input\GameInput.h" />
+    <ClInclude Include="..\Classes\Input\InputTypes\Joystick\JoystickInput.h" />
+    <ClInclude Include="..\Classes\Input\InputTypes\Keyboard\KeyboardInput.h" />
+    <ClInclude Include="..\Classes\Input\InputTypes\Mouse\MouseInput.h" />
     <ClInclude Include="..\Classes\Utils\AnimationUtils.h" />
     <ClInclude Include="..\Classes\Utils\Utils.h" />
     <ClInclude Include="..\Classes\Utils\XMLLoader.h" />

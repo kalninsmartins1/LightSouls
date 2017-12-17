@@ -764,6 +764,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\external\openssl\prebuilt\win32\*.*" "$(OutDir)"
     <ClCompile Include="CCTweenFunction.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Classes\Input\InputTypes\IAxis.h" />
     <ClInclude Include="..\..\extensions\assets-manager\AssetsManager.h" />
     <ClInclude Include="..\..\extensions\assets-manager\AssetsManagerEx.h" />
     <ClInclude Include="..\..\extensions\assets-manager\CCEventAssetsManagerEx.h" />

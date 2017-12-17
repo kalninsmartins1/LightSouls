@@ -7,7 +7,7 @@
 	
 	<Component type="PlayerControllerComponent">
 		<MovementParams
-				moveSpeed="50"
+				moveSpeed="80"
 				dodgeSpeed="100"
 				dodgeTime="0.8"
 		/>				
@@ -15,24 +15,24 @@
 	
 	<Component type="PlayerAnimComponent">
 		<SpriteSheet type="Running"
-			path="res/Graphics/Player/Run/runSpriteSheet.png" 
-			plistPath="res/Graphics/Player/Run/runData.plist"
-			frameNamePattern="running%d.png"
-			frameCount="6"
+			path="res/Graphics/Player/Run/runAnim.png" 
+			plistPath="res/Graphics/Player/Run/runAnim.plist"
+			frameNamePattern="run%d.png"
+			frameCount="10"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Idle"
-			path="res/Graphics/Player/Idle/idleSpriteSheet.png" 
-			plistPath="res/Graphics/Player/Idle/idleData.plist"
+			path="res/Graphics/Player/Idle/idleAnim.png" 
+			plistPath="res/Graphics/Player/Idle/idleAnim.plist"
 			frameNamePattern="idle%d.png"
-			frameCount="6"
+			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Hurt"
-			path="res/Graphics/Player/Hurt/hurtSpriteSheet.png" 
-			plistPath="res/Graphics/Player/Hurt/hurtData.plist"
+			path="res/Graphics/Player/Hurt/hurtAnim.png" 
+			plistPath="res/Graphics/Player/Hurt/hurtAnim.plist"
 			frameNamePattern="hurt%d.png"
-			frameCount="7"
+			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Dodge"
@@ -43,10 +43,10 @@
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Attack"
-			path="res/Graphics/Player/Attack/attackSpriteSheet.png" 
-			plistPath="res/Graphics/Player/Attack/attackData.plist"
+			path="res/Graphics/Player/Attack/attackAnim.png" 
+			plistPath="res/Graphics/Player/Attack/attackAnim.plist"
 			frameNamePattern="attack%d.png"
-			frameCount="10"
+			frameCount="15"
 			timeBetweenFrames="0.1"
 		/>
 	</Component>

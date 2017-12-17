@@ -3,6 +3,7 @@
 #include "GameConsts.h"
 #include "Entity/Components/PlayerAnimComponent.h"
 #include "Utils/XMLLoader.h"
+#include "Input/GameInput.h"
 
 using namespace cocos2d;
 
@@ -73,6 +74,21 @@ void Player::update(float deltaTime)
 	{
 		setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);
 	}	
+
+	GameInput* pInput = GameInput::getInstance();
+	if(pInput->HasActionInput("LightAttackInput"))
+	{
+		
+	}
+	else if(pInput->HasActionInput("StrongAttackInput"))
+	{
+		
+	}
+	else if(pInput->HasActionInput("DodgeInput"))
+	{
+		
+	}
+
 }
 
 void Player::setMoveSpeed(float moveSpeed)

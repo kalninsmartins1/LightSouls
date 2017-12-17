@@ -19,3 +19,8 @@ static constexpr char* XML_SPRITE_FRAME = "SpriteFrame";
 // XML rigid body specifics
 static constexpr char* XML_PHYSICS_MATERIAL = "PhysicsMaterial";
 static constexpr char* XML_PHYSICS_BODY = "PhysicsBody";
+
+// XML attributes
+static constexpr char* XML_NAME_ATTRIBUTE = "name";
+static constexpr char* XML_TYPE_ATTRIBUTE = "type";
+static constexpr char* XML_KEYCODE_ATTRIBUTE = "keyCode";
