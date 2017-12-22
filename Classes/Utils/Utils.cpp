@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include "GameConsts.h"
+#include "Input/InputTypes/Keyboard/KeyboardInput.h"
 
 using namespace cocos2d;
 
@@ -27,4 +28,67 @@ void Utils::startTimerWithCallback(Node* pNode, std::function<void()> callback,
 	
 	// Start timer with callback
 	pNode->runAction(Sequence::create(callbackTimerActions));
+}
+
+MouseButtonCode Utils::convertStringToMouseButtonCode(const char* string)
+{
+	std::string standartString(string);
+	MouseButtonCode result = MouseButtonCode::BUTTON_UNSET;
+
+	if(isStrEqual(standartString, "LeftButton"))
+	{
+		result = MouseButtonCode::BUTTON_LEFT;
+	}
+	else if(isStrEqual(standartString, "RightButton"))
+	{
+		result = MouseButtonCode::BUTTON_RIGHT;
+	}
+
+	return result;
+}
+
+KeyCode Utils::convertStringToKeyCode(const char* string)
+{
+	std::string standartString(string);
+	KeyCode result = KeyCode();
+
+	if (isStrEqual(standartString, "W"))
+	{
+		result = KeyCode::KEY_W;
+	}
+	else if (isStrEqual(standartString, "S"))
+	{
+		result = KeyCode::KEY_S;
+	}
+	else if (isStrEqual(standartString, "A"))
+	{
+		result = KeyCode::KEY_A;
+	}
+	else if(isStrEqual(standartString, "D"))
+	{
+		result = KeyCode::KEY_D;
+	}
+	else if(isStrEqual(standartString, "Space"))
+	{
+		result = KeyCode::KEY_SPACE;
+	}
+
+	return result;
+}
+
+AxisType Utils::convertStringToAxisType(const char* string)
+{
+	std::string standartString(string);
+	AxisType result = AxisType::None;
+
+	if (isStrEqual(standartString, "X"))
+	{
+		result = AxisType::X;
+	}
+	else if (isStrEqual(standartString, "Y"))
+	{
+		result = AxisType::Y;
+	}
+
+	return result;
 }

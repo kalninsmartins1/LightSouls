@@ -6,6 +6,8 @@
 # Icon must end with two \r
 Icon
 
+# Visual studio
+.vs*
 
 # Thumbnails
 ._*
@@ -125,7 +127,6 @@ proj.win10/.vs*
 *cmake_install.cmake
 *Makefile
 lib/
-.vs*
 
 # Log files
 *.log

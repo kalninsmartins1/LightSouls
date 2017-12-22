@@ -23,8 +23,7 @@ private:
 	void onKeyboardKeyUp(cocos2d::EventKeyboard::KeyCode keyCode, 
 		cocos2d::Event* pEvent);
 	void onKeyboardKeyDown(cocos2d::EventKeyboard::KeyCode keyCode, 
-		cocos2d::Event* pEvent);
-	void onMouseButtonUp(cocos2d::EventMouse* pEvent);
+		cocos2d::Event* pEvent);	
 	void onDodgeFinished();
 	void onAttackFinished();
 	
