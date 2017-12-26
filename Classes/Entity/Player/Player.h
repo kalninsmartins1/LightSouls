@@ -4,12 +4,14 @@
 
 
 class PlayerAnimComponent;
+class GameInput;
 
 class Player: public cocos2d::Sprite
 {
 
 public:
 	static Player* create(const char* pPathToXML);
+	Player();
 	bool init(const char* pathToXML);	
 	virtual void update(float deltaTime) override;
 
@@ -29,6 +31,7 @@ private:
 	
 	void PerformDodge();
 	
+	GameInput& m_gameInput;
 	PlayerAnimComponent* m_pPlayerAnimComponent;
 	cocos2d::Vec2 m_moveDirection;
 	

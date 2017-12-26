@@ -21,6 +21,14 @@ static constexpr char* XML_PHYSICS_MATERIAL = "PhysicsMaterial";
 static constexpr char* XML_PHYSICS_BODY = "PhysicsBody";
 
 // XML attributes
-static constexpr char* XML_NAME_ATTRIBUTE = "name";
-static constexpr char* XML_TYPE_ATTRIBUTE = "type";
-static constexpr char* XML_KEYCODE_ATTRIBUTE = "keyCode";
+static constexpr char* XML_NAME_ATTR = "name";
+static constexpr char* XML_TYPE_ATTR = "type";
+static constexpr char* XML_KEYCODE_ATTR = "keyCode";
+static constexpr char* XML_AXIS_TYPE_ATTR = "axisType";
+static constexpr char* XML_MIN_VALUE_ATTR = "minValue";
+static constexpr char* XML_MAX_VALUE_ATTR = "maxValue";
+
+// Input types
+static constexpr char* KEYBOARD_INPUT = "Keyboard";
+static constexpr char* MOUSE_INPUT = "Mouse";
+static constexpr char* JOYSTICK_INPUT = "Joystick";

@@ -19,7 +19,7 @@ void XMLLoader::loadActionTriggers(GameInput& gameInput, const XMLElement* pElem
 {
 	// Get element action
 	const char* actionName = pElement->ToElement()->
-									Attribute(XML_NAME_ATTRIBUTE);
+									Attribute(XML_NAME_ATTR);
 
 	// Get element action triggers
 	for (const XMLElement* pChild = pElement->FirstChildElement();
@@ -54,11 +54,13 @@ void XMLLoader::loadAxisKeyButtons(GameInput& gameInput, const XMLElement* pElem
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* keyCode = pChild->Attribute(XML_KEYCODE_ATTRIBUTE);
-		const char* axisType = pChild->Attribute("axisType");
-		const float minValue = pChild->FloatAttribute("minValue");
-		const float maxValue = pChild->FloatAttribute("maxValue");
-		gameInput.addAxisInput(actionName, keyCode, axisType,
+		const char* keyCode = pChild->Attribute(XML_KEYCODE_ATTR);
+		const char* axisType = pChild->Attribute(XML_AXIS_TYPE_ATTR);
+		const float minValue = pChild->FloatAttribute(XML_MIN_VALUE_ATTR);
+		const float maxValue = pChild->FloatAttribute(XML_MAX_VALUE_ATTR);
+		const char* inputTypeStr = pChild->Value();
+		GameInputType inputType = strToGameInputType(inputTypeStr);
+		gameInput.addAxisInput(inputType, actionName, keyCode, axisType,
 			minValue, maxValue);
 	}
 }
@@ -70,8 +72,10 @@ void XMLLoader::loadMouseButton(GameInput& gameInput, const XMLElement* pElement
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* buttonCode = pChild->Attribute("buttonCode");		
-		gameInput.addActionInput(actionName, buttonCode);
+		const char* buttonCode = pChild->Attribute("buttonCode");
+		const char* inputTypeStr = pChild->Value();
+		GameInputType inputType = strToGameInputType(inputTypeStr);
+		gameInput.addActionInput(inputType, actionName, buttonCode);
 	}
 }
 
@@ -82,8 +86,10 @@ void XMLLoader::loadActionKeyButton(GameInput& gameInput, const XMLElement* pEle
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* keyCode = pChild->Attribute(XML_KEYCODE_ATTRIBUTE);
-		gameInput.addActionInput(actionName, keyCode);
+		const char* keyCode = pChild->Attribute(XML_KEYCODE_ATTR);
+		const char* inputTypeStr = pChild->Value();
+		GameInputType inputType = strToGameInputType(inputTypeStr);
+		gameInput.addActionInput(inputType, actionName, keyCode);
 	}
 }
 
@@ -101,7 +107,7 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToX
 		{
 			// Check all actor components
 			std::string nodeValue(pNode->ToElement()->
-									Attribute(XML_TYPE_ATTRIBUTE));
+									Attribute(XML_TYPE_ATTR));
 			if (Utils::isStrEqual(nodeValue, XML_TRANSFORM_COMPONENT))
 			{
 				// Trasform component has data types in specific order
@@ -214,6 +220,28 @@ PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* p
 		pPhysicsBody->setCollisionBitmask(collisionBitMask);
 	}
 	return pPhysicsBody;
+}
+
+GameInputType XMLLoader::strToGameInputType(const char * inputType)
+{
+	GameInputType type = GameInputType::None;
+	if (Utils::isStrEqual(inputType, KEYBOARD_INPUT))
+	{
+		type = GameInputType::Keyboard;
+	}
+	else if (Utils::isStrEqual(inputType, MOUSE_INPUT))
+	{
+		type = GameInputType::Mouse;
+	}
+	else if (Utils::isStrEqual(inputType, JOYSTICK_INPUT))
+	{
+		type = GameInputType::Joystick;
+	}
+	else
+	{
+		cocos2d::log("XMLLoader: [strToGameInpuType] invalid input type: %s", inputType);
+	}
+	return GameInputType();
 }
 
 PhysicsMaterial XMLLoader::loadPhysicsMaterialFromAttributes(

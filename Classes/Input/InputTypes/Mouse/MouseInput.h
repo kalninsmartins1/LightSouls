@@ -9,6 +9,12 @@ struct StateMouseButton
 	std::string action;
 	bool bIsPressed;
 
+	StateMouseButton()
+	{
+		this->action = "";
+		this->bIsPressed = false;
+	}
+
 	StateMouseButton(std::string action)
 	{
 		this->action = action;
@@ -21,6 +27,13 @@ struct ActionMouseButton
 	std::string action;
 	bool bIsActive;
 	bool bNeedsStateReset;
+
+	ActionMouseButton()
+	{
+		this->action = "";
+		this->bIsActive = false;
+		this->bNeedsStateReset = false;
+	}
 
 	ActionMouseButton(std::string action)
 	{
@@ -50,9 +63,11 @@ public:
 private:
 	void onMouseButtonDown(cocos2d::EventMouse* pEvent);
 	void onMouseButtonUp(cocos2d::EventMouse* pEvent);
-
-	template <typename T, typename K, typename L, typename P>
-	void switchButtonState(std::map<T,K>& stateMap, std::map<L, P>& codeMap,
+	void updateStateButtonState();
+	
+	void switchActionButtonState(ActionStateMap& stateMap, ActionButtonCodeMap& codeMap,
+		MouseButtonCode buttonCode, bool newState);
+	void switchStateButtonState(ActionStateMap& stateMap, StateButtonCodeMap& codeMap,
 		MouseButtonCode buttonCode, bool newState);
 
 	ActionStateMap m_stateButtons;
@@ -60,15 +75,3 @@ private:
 	StateButtonCodeMap m_buttonStates;
 	ActionButtonCodeMap m_buttonActions;
 };
-
-template <typename T, typename K, typename L, typename P>
-void MouseInput::switchButtonState(std::map<T, K>& stateMap,
-	std::map<L, P>& codeMap, MouseButtonCode buttonCode, bool newState)
-{
-	if (Utils::containsKey(codeMap, buttonCode))
-	{
-		StateMouseButton& button = codeMap[buttonCode];
-		button.bIsPressed = newState;
-		stateMap[button.action] = button.bIsPressed;
-	}
-}

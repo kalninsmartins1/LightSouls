@@ -22,6 +22,13 @@ Player* Player::create(const char* pathToXML)
 	return pPlayer;
 }
 
+Player::Player()
+	:
+	m_gameInput(*GameInput::getInstance())
+{
+	
+}
+
 bool Player::init(const char* pathToXML)
 {	
 	// Set default values
@@ -46,12 +53,8 @@ bool Player::init(const char* pathToXML)
 	pKeyboardListener->onKeyReleased = CC_CALLBACK_2(Player::onKeyboardKeyUp, this);
 	pKeyboardListener->onKeyPressed = CC_CALLBACK_2(Player::onKeyboardKeyDown, this);
 	
-	EventListenerMouse* pMouseListener = EventListenerMouse::create();
-	pMouseListener->onMouseUp = CC_CALLBACK_1(Player::onMouseButtonUp, this);	
-	
 	EventDispatcher* pEventDispatcher = getEventDispatcher();
-	pEventDispatcher->addEventListenerWithFixedPriority(pKeyboardListener, 1);
-	pEventDispatcher->addEventListenerWithFixedPriority(pMouseListener, 1);
+	pEventDispatcher->addEventListenerWithFixedPriority(pKeyboardListener, 1);	
 
 	// Get animation component to trigger animations when that is necessary
 	m_pPlayerAnimComponent = 
@@ -74,17 +77,34 @@ void Player::update(float deltaTime)
 	{
 		setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);
 	}	
-
-	GameInput* pInput = GameInput::getInstance();
-	if(pInput->HasActionInput("LightAttackInput"))
+	
+	if(m_gameInput.HasAction("LightAttackInput"))
 	{
-		
+		if (!m_bIsAttacking && !m_bIsDodging)
+		{
+			// Perform light attack
+			m_bIsAttacking = true;
+			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
+			Utils::startTimerWithCallback(this,
+				CC_CALLBACK_0(Player::onAttackFinished, this),
+				m_pPlayerAnimComponent->
+				getAnimationLengthInSeconds(PlayerAnimationType::Attack));
+		}		
 	}
-	else if(pInput->HasActionInput("StrongAttackInput"))
+	else if(m_gameInput.HasAction("StrongAttackInput"))
 	{
-		
+		if (!m_bIsAttacking && !m_bIsDodging)
+		{
+			// Perform light attack
+			m_bIsAttacking = true;
+			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
+			Utils::startTimerWithCallback(this,
+				CC_CALLBACK_0(Player::onAttackFinished, this),
+				m_pPlayerAnimComponent->
+				getAnimationLengthInSeconds(PlayerAnimationType::Attack));
+		}		
 	}
-	else if(pInput->HasActionInput("DodgeInput"))
+	else if(m_gameInput.HasAction("DodgeInput"))
 	{
 		
 	}
@@ -202,30 +222,6 @@ void Player::onKeyboardKeyDown(EventKeyboard::KeyCode keyCode, Event* pEvent)
 		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
 		m_bIsMoving = true;
 	}		
-}
-
-void Player::onMouseButtonUp(EventMouse* pEvent)
-{
-	/*EventMouse::MouseButton buttonUp = pEvent->getMouseButton();
-	if(buttonUp == EventMouse::MouseButton::BUTTON_LEFT)
-	{*/
-	if(!m_bIsAttacking && !m_bIsDodging)
-	{
-		// Perform light attack
-		m_bIsAttacking = true;
-		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
-		Utils::startTimerWithCallback(this,
-			CC_CALLBACK_0(Player::onAttackFinished, this),
-			m_pPlayerAnimComponent->
-			getAnimationLengthInSeconds(PlayerAnimationType::Attack));
-	}
-		
-	/*}
-	else if(buttonUp == EventMouse::MouseButton::BUTTON_RIGHT)
-	{
-		// Perform strong attack
-		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
-	}*/
 }
 
 void Player::onDodgeFinished()

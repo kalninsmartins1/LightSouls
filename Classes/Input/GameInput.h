@@ -38,6 +38,10 @@ public:
 
 private:
 	GameInput();
+	void addKeyboardActionKey(const char* actionName, const char* inputCode);
+	void addKeyboardStateKey(const char* actionName, const char* inputCode);
+
+	bool m_bIsJoystickConnected;
 	KeyboardInput* m_pKeyboard;
 	MouseInput* m_pMouseInput;
 	JoystickInput* m_pJoystickInput;

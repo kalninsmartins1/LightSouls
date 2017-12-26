@@ -11,6 +11,21 @@ GameInput::GameInput()
 	XMLLoader::loadInputSettings(*this, "res/Configs/Input/Input.xml");
 	m_pKeyboard = KeyboardInput::create();
 	m_pMouseInput = MouseInput::create();
+	
+	//m_pJoystickInput = JoystickInput::create();
+	m_bIsJoystickConnected = false;
+}
+
+void GameInput::addKeyboardActionKey(const char * actionName, const char * inputCode)
+{
+	KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
+	m_pKeyboard->addActionKey(actionName, keyCode);
+}
+
+void GameInput::addKeyboardStateKey(const char * actionName, const char * inputCode)
+{
+	KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
+	m_pKeyboard->addActionKey(actionName, keyCode);
 }
 
 GameInput* GameInput::getInstance()
@@ -24,9 +39,26 @@ Vec2 GameInput::getInputAxis(const char* axis) const
 	return Vec2::ZERO;
 }
 
-bool GameInput::HasActionInput(const char* action) const
+bool GameInput::HasAction(const char* action) const
 {
-	return true;
+	bool bHasAction = false;
+	if (!m_bIsJoystickConnected)
+	{
+		if (m_pMouseInput->HasAction(action))
+		{
+			bHasAction = true;
+		}
+		//else if (m_pKeyboard->HasAction(action))
+		{
+
+		}
+	}	
+	/*else if (m_pJoystickInput->HasAction(action))
+	{
+
+	}*/
+
+	return bHasAction;
 }
 
 void GameInput::addAxisInput(GameInputType inputType, const char* actionName, const char* keyCodeStr,
@@ -56,13 +88,13 @@ void GameInput::addAxisInput(GameInputType inputType, const char* actionName, co
 	}	
 }
 
-void GameInput::addActionInput(GameInputType inputType, const char* actionName, const char* inputCode)
+void GameInput::addActionInput(GameInputType inputType, const char* actionName,
+	const char* inputCode)
 {
 	switch (inputType)
 	{
 	case GameInputType::Keyboard:
-		KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
-		m_pKeyboard->addActionKey(actionName, keyCode);
+		addKeyboardActionKey(actionName, inputCode);
 		break;
 
 	case GameInputType::Mouse:
@@ -79,13 +111,13 @@ void GameInput::addActionInput(GameInputType inputType, const char* actionName, 
 	}
 }
 
-void GameInput::addStateInput(GameInputType inputType, const char* actionName, const char* inputCode)
+void GameInput::addStateInput(GameInputType inputType, const char* actionName,
+	const char* inputCode)
 {
 	switch (inputType)
 	{
 	case GameInputType::Keyboard:
-		KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
-		m_pKeyboard->addActionKey(actionName, keyCode);
+		addKeyboardStateKey(actionName, inputCode);
 		break;
 
 	case GameInputType::Mouse:

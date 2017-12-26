@@ -3,6 +3,7 @@
 #include "tinyxml2/tinyxml2.h"
 
 class GameInput;
+enum class GameInputType;
 
 namespace tinyxml2
 {
@@ -43,4 +44,6 @@ private:
 		const XMLNode* pNode);
 	static cocos2d::PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(
 		const XMLNode* pNode);
+
+	static GameInputType strToGameInputType(const char* inputType);
 };
