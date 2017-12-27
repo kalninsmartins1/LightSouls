@@ -46,14 +46,6 @@ bool Player::init(const char* pathToXML)
 	Size size = Director::getInstance()->getWinSize();	
 	setPosition(size.width / 2 , size.height / 2);
 
-	// Register for input events	
-	EventListenerKeyboard* pKeyboardListener = EventListenerKeyboard::create();
-	pKeyboardListener->onKeyReleased = CC_CALLBACK_2(Player::onKeyboardKeyUp, this);
-	pKeyboardListener->onKeyPressed = CC_CALLBACK_2(Player::onKeyboardKeyDown, this);
-	
-	EventDispatcher* pEventDispatcher = getEventDispatcher();
-	pEventDispatcher->addEventListenerWithFixedPriority(pKeyboardListener, 1);	
-
 	// Get animation component to trigger animations when that is necessary
 	m_pPlayerAnimComponent = 
 		(PlayerAnimComponent*)getComponent(XML_PLAYER_ANIM_COMPONENT);

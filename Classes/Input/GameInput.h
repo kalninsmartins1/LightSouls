@@ -24,7 +24,9 @@ public:
 
 	// Returns true while input for action is not released
 	bool hasActionState(const char* action) const;
-	cocos2d::Vec2 getInputAxis(const char* axis) const;
+
+	// Return current normalized axis value
+	float getInputAxis(const char* axis) const;
 	
 	bool loadInputConfiguration(const char* pathToConfigFile);
 	void update(float deltaTime);

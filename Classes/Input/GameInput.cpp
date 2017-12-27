@@ -45,17 +45,35 @@ void GameInput::addKeyboardActionKey(const char * actionName, const char * input
 void GameInput::addKeyboardStateKey(const char * actionName, const char * inputCode)
 {
 	KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
-	m_pKeyboard->addActionKey(actionName, keyCode);
+	m_pKeyboard->addStateKey(actionName, keyCode);
 }
 
 void GameInput::update(float deltaTime)
 {
 	m_pMouseInput->update(deltaTime);
+	m_pKeyboard->update(deltaTime);
 }
 
-Vec2 GameInput::getInputAxis(const char* axis) const
+float GameInput::getInputAxis(const char* axis) const
 {
-	return Vec2::ZERO;
+	float value = 0;
+	if (!m_bIsJoystickConnected)
+	{
+		if (m_pMouseInput->hasAxisInput(axis))
+		{
+			value = m_pMouseInput->getAxisInput(axis);
+		}
+		else if (m_pKeyboard->hasAxisInput(axis))
+		{
+			value = m_pKeyboard->getAxisInput(axis);
+		}
+	}
+	/*else if (m_pJoystickInput->hasAxisInput(axis))
+	{
+		value = m_pJoystickInput->getAxisInput(axis);
+	}*/
+
+	return value;
 }
 
 bool GameInput::loadInputConfiguration(const char* pathToConfigFile)

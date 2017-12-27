@@ -21,11 +21,7 @@ public:
 
 	cocos2d::Vec2 getHeading();
 
-private:	
-	void onKeyboardKeyUp(cocos2d::EventKeyboard::KeyCode keyCode, 
-		cocos2d::Event* pEvent);
-	void onKeyboardKeyDown(cocos2d::EventKeyboard::KeyCode keyCode, 
-		cocos2d::Event* pEvent);	
+private:		
 	void onDodgeFinished();
 	void onAttackFinished();
 	

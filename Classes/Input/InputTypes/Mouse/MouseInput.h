@@ -60,6 +60,9 @@ public:
 
 	virtual bool hasAction(const std::string& action) const override;
 	virtual bool hasActionState(const std::string& action) const override;
+	virtual float getAxisInput(const std::string& axisName) const override;
+	virtual bool hasAxisInput(const std::string& axisName) const override;
+
 private:
 	void onMouseButtonDown(cocos2d::EventMouse* pEvent);
 	void onMouseButtonUp(cocos2d::EventMouse* pEvent);

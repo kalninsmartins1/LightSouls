@@ -66,6 +66,16 @@ bool MouseInput::hasActionState(const std::string& action) const
 	return bIsActiveState;
 }
 
+float MouseInput::getAxisInput(const std::string& axisName) const
+{
+	return 0;
+}
+
+bool MouseInput::hasAxisInput(const std::string& axisName) const
+{
+	return false;
+}
+
 void MouseInput::onMouseButtonDown(EventMouse* pEvent)
 {
 	// Enable active state button
