@@ -4,6 +4,14 @@
 
 using namespace cocos2d;
 
+MouseInput::MouseInput()
+{
+	if(!init())
+	{
+		cocos2d::log("MouseInput: Failed to initialize !");
+	}
+}
+
 bool MouseInput::init()
 {	
 	EventListenerMouse* pMouseListener = EventListenerMouse::create();
@@ -14,29 +22,31 @@ bool MouseInput::init()
 
 	auto pEventDispatcher = Director::getInstance()->getEventDispatcher();
 	pEventDispatcher->addEventListenerWithFixedPriority(pMouseListener, 1);
-
+		
 	return pEventDispatcher != nullptr;
 }
 
 void MouseInput::update(float deltaTime)
 {
-	updateStateButtonState();
+	updateActionButtonState();
 }
 
-void MouseInput::addButtonAction(const char* buttonAction, const char* buttonCode)
+void MouseInput::addButtonAction(const char* buttonAction, const char* inputCode)
 {
-	addButtonState(buttonAction, buttonCode);
+	MouseButtonCode buttonCode = Utils::convertStringToMouseButtonCode(inputCode);
+	m_actionButtons[buttonAction] = false;
+	m_buttonActions[buttonCode] = ActionMouseButton(buttonAction);
 }
 
 void MouseInput::addButtonState(const char* buttonAction, const char* inputCode)
 {
 	MouseButtonCode buttonCode = Utils::convertStringToMouseButtonCode(inputCode);
 	StateMouseButton button = StateMouseButton(buttonAction);
-	m_stateButtons.insert(std::make_pair(std::string(buttonAction), false));
-	m_buttonStates.insert(std::make_pair(buttonCode, button));
+	m_stateButtons[buttonAction] = false;
+	m_buttonStates[buttonCode] = button;
 }
 
-bool MouseInput::HasAction(const std::string& action) const
+bool MouseInput::hasAction(const std::string& action) const
 {
 	bool bIsActive = false;
 	if(Utils::containsKey(m_actionButtons, action))
@@ -46,7 +56,7 @@ bool MouseInput::HasAction(const std::string& action) const
 	return bIsActive;
 }
 
-bool MouseInput::HasActionState(const std::string& action) const 
+bool MouseInput::hasActionState(const std::string& action) const 
 {
 	bool bIsActiveState = false;
 	if(Utils::containsKey(m_stateButtons, action))
@@ -60,7 +70,7 @@ void MouseInput::onMouseButtonDown(EventMouse* pEvent)
 {
 	// Enable active state button
 	switchStateButtonState(m_stateButtons, m_buttonStates, pEvent->getMouseButton(),
-		true);
+		true);	
 }
 
 void MouseInput::onMouseButtonUp(EventMouse* pEvent)
@@ -74,27 +84,30 @@ void MouseInput::onMouseButtonUp(EventMouse* pEvent)
 		true);
 }	
 
-void MouseInput::updateStateButtonState()
+void MouseInput::updateActionButtonState()
 {	
-	for (auto iterator = m_buttonActions.begin(); iterator != m_buttonActions.end();
-		++iterator)
+	if(!m_buttonActions.empty())
 	{
-		ActionMouseButton& button = iterator->second;
-		if (button.bIsActive && button.bNeedsStateReset)
+		for (auto& pair : m_buttonActions)
 		{
-			// Reset action buttons after being active for one frame
-			button.bIsActive = false;
-			button.bNeedsStateReset = false;
-			m_actionButtons[button.action] = button.bIsActive;
-		}
-		else if (button.bIsActive)
-		{
-			button.bNeedsStateReset = true;
+			ActionMouseButton& button = pair.second;
+			if (button.bIsActive && button.bNeedsStateReset)
+			{
+				// Reset action buttons after being active for one frame
+				button.bIsActive = false;
+				button.bNeedsStateReset = false;
+				m_actionButtons[button.action] = button.bIsActive;
+			}
+			else if (button.bIsActive)
+			{
+				button.bNeedsStateReset = true;
+			}
 		}
 	}
 }
 
-void MouseInput::switchActionButtonState(ActionStateMap & stateMap, ActionButtonCodeMap & codeMap, MouseButtonCode buttonCode, bool newState)
+void MouseInput::switchActionButtonState(ActionStateMap& stateMap,
+	ActionButtonCodeMap& codeMap, MouseButtonCode buttonCode, bool newState)
 {
 	if (Utils::containsKey(codeMap, buttonCode))
 	{
@@ -104,7 +117,8 @@ void MouseInput::switchActionButtonState(ActionStateMap & stateMap, ActionButton
 	}
 }
 
-void MouseInput::switchStateButtonState(ActionStateMap & stateMap, StateButtonCodeMap & codeMap, MouseButtonCode buttonCode, bool newState)
+void MouseInput::switchStateButtonState(ActionStateMap & stateMap,
+	StateButtonCodeMap& codeMap, MouseButtonCode buttonCode, bool newState)
 {
 	if (Utils::containsKey(codeMap, buttonCode))
 	{

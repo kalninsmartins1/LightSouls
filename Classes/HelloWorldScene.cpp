@@ -1,7 +1,7 @@
 #include "HelloWorldScene.h"
 #include "Entity/Player/Player.h"
 #include "Camera/CameraController.h"
-#include "Utils/XMLLoader.h"
+#include "Input/GameInput.h"
 
 USING_NS_CC;
 
@@ -41,10 +41,12 @@ bool HelloWorld::init()
 	addChild(pRootNode);	
 
 	m_pCameraController = CameraController::create();
-	if(!m_pCameraController->init())
+	if(GameInput::getInstance()->
+		loadInputConfiguration("res/Configs/Input/Input.xml"))
 	{
-		cocos2d::log("HelloWorldScene: Failed to initialize camera controller !");
+		cocos2d::log("HelloWorldScene: Failed to load input configuration !");
 	}
+
 	scheduleUpdate();
     
     return true;
@@ -54,4 +56,7 @@ void HelloWorld::update(float deltaTime)
 {
 	m_pCameraController->moveCameraTo(convertToWorldSpace(
 		m_pPlayer->getPosition()), 2);
+
+	// Keep input events up to date
+	GameInput::getInstance()->update(deltaTime);
 }

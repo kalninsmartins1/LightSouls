@@ -59,27 +59,27 @@ void PlayerAnimComponent::startAnimation(PlayerAnimationType type)
 {
 	switch (type)
 	{
-		case Idle:
+	case PlayerAnimationType::Idle:
 			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_idleFrames,
 				m_timeBetweenIdleFrames);
 			break;
 
-		case Run: 
+	case PlayerAnimationType::Run:
 			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_runFrames,
 				m_timeBetweenRunFrames);
 			break;
 
-		case Dodge:
+	case PlayerAnimationType::Dodge:
 			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_dodgeFrames,
 				m_timeBetweenDodgeFrames);
 			break;
 
-		case Hurt: 
+	case PlayerAnimationType::Hurt:
 			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_hurtFrames,
 				m_timeBetweenHurtFrames);
 			break;
 
-		case Attack: 
+	case PlayerAnimationType::Attack:
 			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_attackFrames,
 				m_timeBetweenAttackFrames);
 			break;	
@@ -91,23 +91,23 @@ float PlayerAnimComponent::getAnimationLengthInSeconds(PlayerAnimationType type)
 	float length = 0;
 	switch (type)
 	{
-		case Idle: 
+	case PlayerAnimationType::Idle:
 			length = m_idleFrames.size() * m_timeBetweenIdleFrames;
 			break;
 
-		case Run: 
+	case PlayerAnimationType::Run:
 			length = m_runFrames.size() * m_timeBetweenRunFrames;
 			break;
 
-		case Dodge:
+	case PlayerAnimationType::Dodge:
 			length = m_dodgeFrames.size() * m_timeBetweenDodgeFrames;
 			break;
 
-		case Hurt: 
+	case PlayerAnimationType::Hurt:
 			length = m_hurtFrames.size() * m_timeBetweenHurtFrames;
 			break;
 
-		case Attack:
+	case PlayerAnimationType::Attack:
 			length = m_attackFrames.size() * m_timeBetweenAttackFrames;
 			break;	
 	}

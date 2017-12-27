@@ -48,22 +48,22 @@ typedef std::map<std::string, bool> ActionStateMap;
 typedef std::map<MouseButtonCode, StateMouseButton> StateButtonCodeMap;
 typedef std::map<MouseButtonCode, ActionMouseButton> ActionButtonCodeMap;
 
-class MouseInput: cocos2d::Ref, IInputDevice
+class MouseInput: IInputDevice
 {
-public:	
-	CREATE_FUNC(MouseInput);
+public:		
+	MouseInput();
 
 	bool init();
 	void update(float deltaTime);
 	void addButtonAction(const char* buttonAction, const char* buttonCode);
 	void addButtonState(const char* buttonAction, const char* buttonCode);
 
-	virtual bool HasAction(const std::string& action) const override;
-	virtual bool HasActionState(const std::string& action) const override;
+	virtual bool hasAction(const std::string& action) const override;
+	virtual bool hasActionState(const std::string& action) const override;
 private:
 	void onMouseButtonDown(cocos2d::EventMouse* pEvent);
 	void onMouseButtonUp(cocos2d::EventMouse* pEvent);
-	void updateStateButtonState();
+	void updateActionButtonState();
 	
 	void switchActionButtonState(ActionStateMap& stateMap, ActionButtonCodeMap& codeMap,
 		MouseButtonCode buttonCode, bool newState);

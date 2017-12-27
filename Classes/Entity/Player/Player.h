@@ -29,9 +29,9 @@ private:
 	void onDodgeFinished();
 	void onAttackFinished();
 	
-	void PerformDodge();
+	void lightAttack();
+	void performDodge();
 	
-	GameInput& m_gameInput;
 	PlayerAnimComponent* m_pPlayerAnimComponent;
 	cocos2d::Vec2 m_moveDirection;
 	

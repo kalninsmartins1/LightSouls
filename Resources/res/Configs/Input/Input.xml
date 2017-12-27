@@ -14,9 +14,9 @@
 		</Mouse>
 	</ActionButton>
 	
-	<ActionButton name="AttackStrong">		
+	<ActionButton name="StrongAttackInput">		
 		<Mouse>
-			<MouseButton name="RightButton"/>
+			<MouseButton buttonCode="RightButton"/>
 		</Mouse>
 	</ActionButton>
 	

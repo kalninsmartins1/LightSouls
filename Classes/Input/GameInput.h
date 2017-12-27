@@ -1,11 +1,7 @@
 #pragma once
-#include "base/CCRef.h"
+#include "cocos2d.h"
+#include <memory>
 
-
-namespace cocos2d
-{
-	class Vec2;
-}
 class KeyboardInput;
 class MouseInput;
 class JoystickInput;
@@ -18,19 +14,20 @@ enum class GameInputType
 	Joystick
 };
 
-class GameInput
+class GameInput: cocos2d::Ref
 {
 public:
 	static GameInput* getInstance();	
-
-	cocos2d::Vec2 getInputAxis(const char* axis) const;
-	
+	~GameInput();
 	// Returns true for action once when input is released
-	bool HasAction(const char* action) const;	
+	bool hasAction(const char* action) const;	
 
 	// Returns true while input for action is not released
-	bool HasActionState(const char* action) const;
+	bool hasActionState(const char* action) const;
+	cocos2d::Vec2 getInputAxis(const char* axis) const;
 	
+	bool loadInputConfiguration(const char* pathToConfigFile);
+	void update(float deltaTime);
 	void addAxisInput(GameInputType inputType, const char* actionName, const char* keyCode,
 		const char* axisType, float minValue, float maxValue);
 	void addActionInput(GameInputType inputType, const char* actionName, const char* buttonCode);
@@ -38,11 +35,13 @@ public:
 
 private:
 	GameInput();
+	
+	bool init();
 	void addKeyboardActionKey(const char* actionName, const char* inputCode);
 	void addKeyboardStateKey(const char* actionName, const char* inputCode);
 
 	bool m_bIsJoystickConnected;
-	KeyboardInput* m_pKeyboard;
-	MouseInput* m_pMouseInput;
-	JoystickInput* m_pJoystickInput;
+	std::unique_ptr<KeyboardInput> m_pKeyboard;
+	std::unique_ptr<MouseInput> m_pMouseInput;
+	//std::unique_ptr<JoystickInput> m_pJoystickInput;
 };

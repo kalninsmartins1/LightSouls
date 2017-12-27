@@ -33,12 +33,9 @@ struct StateKey
 	bool isCurrentlyPressed;
 };
 
-class KeyboardInput : cocos2d::Ref
+class KeyboardInput
 {
 public:
-	CREATE_FUNC(KeyboardInput);
-
-	bool init();
 
 	void addAxisKey(const char* actionName, const AxisKey& key);
 	void addActionKey(const char* actionName, const KeyCode& key);

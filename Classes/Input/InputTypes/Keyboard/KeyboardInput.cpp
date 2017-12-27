@@ -1,11 +1,6 @@
 #include "KeyboardInput.h"
 
 
-bool KeyboardInput::init()
-{
-	return true;
-}
-
 void KeyboardInput::addAxisKey(const char* actionName, const AxisKey& key)
 {	
 	m_axisKeys.insert(std::pair<std::string,

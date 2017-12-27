@@ -23,14 +23,7 @@ Player* Player::create(const char* pathToXML)
 }
 
 Player::Player()
-	:
-	m_gameInput(*GameInput::getInstance())
 {
-	
-}
-
-bool Player::init(const char* pathToXML)
-{	
 	// Set default values
 	m_moveDirection = Vec2::ZERO;
 	m_baseMoveSpeed = 0;
@@ -38,7 +31,12 @@ bool Player::init(const char* pathToXML)
 	m_dodgeSpeed = 0;
 	m_dodgeTime = 0;
 	m_bIsAttacking = false;
+	m_bIsDodging = false;
+	m_bIsMoving = false;	
+}
 
+bool Player::init(const char* pathToXML)
+{	
 	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);	
 
 	// Position physics body at the bottom of sprite
@@ -78,37 +76,19 @@ void Player::update(float deltaTime)
 		setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);
 	}	
 	
-	if(m_gameInput.HasAction("LightAttackInput"))
+	GameInput* pInput = GameInput::getInstance();
+	if(pInput->hasAction("LightAttackInput"))
 	{
-		if (!m_bIsAttacking && !m_bIsDodging)
-		{
-			// Perform light attack
-			m_bIsAttacking = true;
-			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
-			Utils::startTimerWithCallback(this,
-				CC_CALLBACK_0(Player::onAttackFinished, this),
-				m_pPlayerAnimComponent->
-				getAnimationLengthInSeconds(PlayerAnimationType::Attack));
-		}		
+		lightAttack();
 	}
-	else if(m_gameInput.HasAction("StrongAttackInput"))
+	else if(pInput->hasAction("StrongAttackInput"))
 	{
-		if (!m_bIsAttacking && !m_bIsDodging)
-		{
-			// Perform light attack
-			m_bIsAttacking = true;
-			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
-			Utils::startTimerWithCallback(this,
-				CC_CALLBACK_0(Player::onAttackFinished, this),
-				m_pPlayerAnimComponent->
-				getAnimationLengthInSeconds(PlayerAnimationType::Attack));
-		}		
+		lightAttack();
 	}
-	else if(m_gameInput.HasAction("DodgeInput"))
+	else if(pInput->hasAction("DodgeInput"))
 	{
 		
 	}
-
 }
 
 void Player::setMoveSpeed(float moveSpeed)
@@ -135,7 +115,7 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 {		
 	switch (keyCode)
 	{
-	case EventKeyboard::KeyCode::KEY_W:		
+	case KeyCode::KEY_W:		
 		// Stop moving up
 		if(m_moveDirection.y > 0)
 		{
@@ -143,7 +123,7 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 		}		
 		break;
 
-	case EventKeyboard::KeyCode::KEY_S:
+	case KeyCode::KEY_S:
 		// Stop moving down
 		if(m_moveDirection.y < 0)
 		{
@@ -151,7 +131,7 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 		}		
 		break;
 
-	case EventKeyboard::KeyCode::KEY_D:
+	case KeyCode::KEY_D:
 		// Stop moving right
 		if(m_moveDirection.x > 0)
 		{
@@ -159,7 +139,7 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 		}		
 		break;
 
-	case EventKeyboard::KeyCode::KEY_A:
+	case KeyCode::KEY_A:
 		// Stop moving left
 		if(m_moveDirection.x < 0)
 		{
@@ -167,22 +147,22 @@ void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
 		}		
 		break;
 
-	case EventKeyboard::KeyCode::KEY_SPACE:
+	case KeyCode::KEY_SPACE:
 		// Dodge if currently not dodging
 		if(!m_bIsDodging)
 		{
-			PerformDodge();
+			performDodge();
 		}		
 		break;
 	}
 
 	// If we dont have move direction then we must be standing
-	if(m_moveDirection.lengthSquared() == 0)
+	if(m_moveDirection.lengthSquared() == 0 && !m_bIsAttacking)
 	{
 		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
 		m_bIsMoving = false;
 	}
-	else
+	else if(!m_bIsAttacking)
 	{
 		m_bIsMoving = true;
 	}
@@ -221,7 +201,11 @@ void Player::onKeyboardKeyDown(EventKeyboard::KeyCode keyCode, Event* pEvent)
 		// When keyboard is down we are always moving
 		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
 		m_bIsMoving = true;
-	}		
+	}	
+	else
+	{
+		m_moveDirection = Vec2::ZERO;
+	}
 }
 
 void Player::onDodgeFinished()
@@ -252,7 +236,21 @@ void Player::onAttackFinished()
 	}
 }
 
-void Player::PerformDodge()
+void Player::lightAttack()
+{
+	if (!m_bIsAttacking && !m_bIsDodging)
+	{
+		// Perform light attack
+		m_bIsAttacking = true;
+		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
+		Utils::startTimerWithCallback(this,
+			CC_CALLBACK_0(Player::onAttackFinished, this),
+			m_pPlayerAnimComponent->
+			getAnimationLengthInSeconds(PlayerAnimationType::Attack));
+	}
+}
+
+void Player::performDodge()
 {
 	m_bIsDodging = true;
 	m_moveSpeed = m_dodgeSpeed;

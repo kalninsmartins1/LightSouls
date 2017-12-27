@@ -6,14 +6,34 @@
 
 using namespace cocos2d;
 
-GameInput::GameInput()
+GameInput::GameInput():
+	m_bIsJoystickConnected(false)
 {
-	XMLLoader::loadInputSettings(*this, "res/Configs/Input/Input.xml");
-	m_pKeyboard = KeyboardInput::create();
-	m_pMouseInput = MouseInput::create();
+	if(!init())
+	{
+		cocos2d::log("GameInput: Failed to initilize !");
+	}
+}
+GameInput* GameInput::getInstance()
+{
+	static GameInput instance;
+	return &instance;
+}
+
+GameInput::~GameInput()
+{
+	m_pMouseInput.release();
+	m_pKeyboard.release();
+}
+
+bool GameInput::init()
+{
+	// Create input generators
+	m_pKeyboard.reset(new (std::nothrow) KeyboardInput());
+	m_pMouseInput.reset(new (std::nothrow) MouseInput());
+	//m_pJoystickInput = JoystickInput::create();	
 	
-	//m_pJoystickInput = JoystickInput::create();
-	m_bIsJoystickConnected = false;
+	return m_pKeyboard != nullptr && m_pMouseInput != nullptr;
 }
 
 void GameInput::addKeyboardActionKey(const char * actionName, const char * inputCode)
@@ -28,10 +48,9 @@ void GameInput::addKeyboardStateKey(const char * actionName, const char * inputC
 	m_pKeyboard->addActionKey(actionName, keyCode);
 }
 
-GameInput* GameInput::getInstance()
+void GameInput::update(float deltaTime)
 {
-	static GameInput instance;
-	return &instance;
+	m_pMouseInput->update(deltaTime);
 }
 
 Vec2 GameInput::getInputAxis(const char* axis) const
@@ -39,26 +58,53 @@ Vec2 GameInput::getInputAxis(const char* axis) const
 	return Vec2::ZERO;
 }
 
-bool GameInput::HasAction(const char* action) const
+bool GameInput::loadInputConfiguration(const char* pathToConfigFile)
+{
+	return XMLLoader::loadInputSettings(*this, pathToConfigFile);
+}
+
+bool GameInput::hasAction(const char* action) const
 {
 	bool bHasAction = false;
 	if (!m_bIsJoystickConnected)
 	{
-		if (m_pMouseInput->HasAction(action))
+		if (m_pMouseInput->hasAction(action))
 		{
 			bHasAction = true;
 		}
-		//else if (m_pKeyboard->HasAction(action))
+		//else if (m_pKeyboard->hasAction(action))
 		{
 
 		}
 	}	
-	/*else if (m_pJoystickInput->HasAction(action))
+	/*else if (m_pJoystickInput->hasAction(action))
 	{
 
 	}*/
 
 	return bHasAction;
+}
+
+bool GameInput::hasActionState(const char* action) const
+{
+	bool bHasActionState = false;
+	if (!m_bIsJoystickConnected)
+	{
+		if (m_pMouseInput->hasActionState(action))
+		{
+			bHasActionState = true;
+		}
+		//else if (m_pKeyboard->hasAction(action))
+		{
+
+		}
+	}
+	/*else if (m_pJoystickInput->hasAction(action))
+	{
+
+	}*/
+
+	return bHasActionState;
 }
 
 void GameInput::addAxisInput(GameInputType inputType, const char* actionName, const char* keyCodeStr,

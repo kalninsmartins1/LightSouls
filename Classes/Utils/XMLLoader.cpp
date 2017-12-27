@@ -54,7 +54,7 @@ void XMLLoader::loadAxisKeyButtons(GameInput& gameInput, const XMLElement* pElem
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* keyCode = pChild->Attribute(XML_KEYCODE_ATTR);
+		const char* keyCode = pChild->Attribute(XML_KEY_CODE_ATTR);
 		const char* axisType = pChild->Attribute(XML_AXIS_TYPE_ATTR);
 		const float minValue = pChild->FloatAttribute(XML_MIN_VALUE_ATTR);
 		const float maxValue = pChild->FloatAttribute(XML_MAX_VALUE_ATTR);
@@ -68,28 +68,44 @@ void XMLLoader::loadAxisKeyButtons(GameInput& gameInput, const XMLElement* pElem
 void XMLLoader::loadMouseButton(GameInput& gameInput, const XMLElement* pElement,
 	const char* actionName)
 {
+	const char* inputTypeStr = pElement->Value();
+	GameInputType inputType = strToGameInputType(inputTypeStr);
+
 	// Go trough all keys that involve this action
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* buttonCode = pChild->Attribute("buttonCode");
-		const char* inputTypeStr = pChild->Value();
-		GameInputType inputType = strToGameInputType(inputTypeStr);
-		gameInput.addActionInput(inputType, actionName, buttonCode);
+		const char* buttonCode = pChild->Attribute(XML_BUTTON_CODE_ATTR);
+		if(buttonCode != nullptr)
+		{
+			gameInput.addActionInput(inputType, actionName, buttonCode);
+		}
+		else
+		{
+			cocos2d::log("XMLLoader: [loadMouseButton] button code does not exist !");
+		}
 	}
 }
 
 void XMLLoader::loadActionKeyButton(GameInput& gameInput, const XMLElement* pElement,
 	const char* actionName)
 {
+	const char* inputTypeStr = pElement->Value();
+	GameInputType inputType = strToGameInputType(inputTypeStr);
+
 	// Go trough all keys that involve this action
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* keyCode = pChild->Attribute(XML_KEYCODE_ATTR);
-		const char* inputTypeStr = pChild->Value();
-		GameInputType inputType = strToGameInputType(inputTypeStr);
-		gameInput.addActionInput(inputType, actionName, keyCode);
+		const char* keyCode = pChild->Attribute(XML_KEY_CODE_ATTR);
+		if(keyCode != nullptr)
+		{
+			gameInput.addActionInput(inputType, actionName, keyCode);
+		}
+		else
+		{
+			cocos2d::log("XMLLoader: [loadActionKeyButton] key code does not exist !");
+		}
 	}
 }
 
@@ -241,7 +257,7 @@ GameInputType XMLLoader::strToGameInputType(const char * inputType)
 	{
 		cocos2d::log("XMLLoader: [strToGameInpuType] invalid input type: %s", inputType);
 	}
-	return GameInputType();
+	return type;
 }
 
 PhysicsMaterial XMLLoader::loadPhysicsMaterialFromAttributes(

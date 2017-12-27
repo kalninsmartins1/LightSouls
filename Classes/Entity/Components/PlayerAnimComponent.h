@@ -6,7 +6,7 @@ namespace tinyxml2 {
 	class XMLNode;
 }
 
-enum PlayerAnimationType
+enum class PlayerAnimationType
 {
 	Idle,
 	Run,
