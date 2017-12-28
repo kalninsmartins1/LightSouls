@@ -23,7 +23,7 @@ public:
 	bool hasAction(const char* action) const;	
 
 	// Returns true while input for action is not released
-	bool hasActionState(const char* action) const;
+	bool hasActionState(const char* action) const;	
 
 	// Return current normalized axis value
 	float getInputAxis(const char* axis) const;
@@ -31,7 +31,7 @@ public:
 	bool loadInputConfiguration(const char* pathToConfigFile);
 	void update(float deltaTime);
 	void addAxisInput(GameInputType inputType, const char* actionName, const char* keyCode,
-		const char* axisType, float minValue, float maxValue);
+		 float minValue, float maxValue);
 	void addActionInput(GameInputType inputType, const char* actionName, const char* buttonCode);
 	void addStateInput(GameInputType inputType, const char* actionName, const char* buttonCode);
 

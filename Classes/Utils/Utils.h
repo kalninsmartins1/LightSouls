@@ -22,6 +22,9 @@ public:
 	template <typename T, typename K>
 	static bool containsKey(const std::map<T, K>& map, const T& key);
 
+	template <typename T>
+	static void clampValue(T& value, const T& minValue, const T& maxValue);
+
 private:
 	Utils();
 };
@@ -37,4 +40,19 @@ bool Utils::containsKey(const std::map<T, K>& map, const T& key)
 	}
 
 	return bDoesContainKey;
+}
+
+template <typename T>
+void Utils::clampValue(T& value, const T& minValue, const T& maxValue)
+{
+	if(value > maxValue)
+	{
+		value = maxValue;
+	}
+	else if(value < minValue)
+	{
+		value = minValue;
+	}
+
+	return value;
 }

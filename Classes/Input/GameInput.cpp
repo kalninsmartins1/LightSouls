@@ -39,13 +39,13 @@ bool GameInput::init()
 void GameInput::addKeyboardActionKey(const char * actionName, const char * inputCode)
 {
 	KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
-	m_pKeyboard->addActionKey(actionName, keyCode);
+	m_pKeyboard->addActionKey(actionName, ActionKey(keyCode));
 }
 
 void GameInput::addKeyboardStateKey(const char * actionName, const char * inputCode)
 {
 	KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
-	m_pKeyboard->addStateKey(actionName, keyCode);
+	m_pKeyboard->addStateKey(actionName, StateKey(keyCode));
 }
 
 void GameInput::update(float deltaTime)
@@ -54,23 +54,27 @@ void GameInput::update(float deltaTime)
 	m_pKeyboard->update(deltaTime);
 }
 
-float GameInput::getInputAxis(const char* axis) const
+float GameInput::getInputAxis(const char* axisAction) const
 {
 	float value = 0;
 	if (!m_bIsJoystickConnected)
 	{
-		if (m_pMouseInput->hasAxisInput(axis))
+		if (m_pMouseInput->hasAxisInput(axisAction))
 		{
-			value = m_pMouseInput->getAxisInput(axis);
+			value = m_pMouseInput->getAxisInput(axisAction);
 		}
-		else if (m_pKeyboard->hasAxisInput(axis))
+		else if (m_pKeyboard->hasAxisInput(axisAction))
 		{
-			value = m_pKeyboard->getAxisInput(axis);
+			value = m_pKeyboard->getAxisInput(axisAction);
+		}
+		else
+		{
+			cocos2d::log("GameInput: Axis action %s not found !", axisAction);
 		}
 	}
-	/*else if (m_pJoystickInput->hasAxisInput(axis))
+	/*else if (m_pJoystickInput->hasAxisInput(axisAction))
 	{
-		value = m_pJoystickInput->getAxisInput(axis);
+		value = m_pJoystickInput->getAxisInput(axisAction);
 	}*/
 
 	return value;
@@ -126,11 +130,10 @@ bool GameInput::hasActionState(const char* action) const
 }
 
 void GameInput::addAxisInput(GameInputType inputType, const char* actionName, const char* keyCodeStr,
-	const char* axisTypeStr, float minValue, float maxValue)
+	float minValue, float maxValue)
 {
-	KeyCode keyCode = Utils::convertStringToKeyCode(keyCodeStr);
-	AxisType axisType = Utils::convertStringToAxisType(axisTypeStr);
-	AxisKey key = AxisKey(keyCode, axisType, minValue, maxValue);
+	KeyCode keyCode = Utils::convertStringToKeyCode(keyCodeStr);	
+	AxisKey key = AxisKey(keyCode, minValue, maxValue);
 
 	switch(inputType)
 	{

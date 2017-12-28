@@ -62,25 +62,15 @@ void Player::update(float deltaTime)
 	// Call base update
 	Sprite::update(deltaTime);
 
+	manageInput();
+
 	// We can move only when we are not attacking
 	if(!m_bIsAttacking)
 	{
 		setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);
-	}	
+	}
 	
-	GameInput* pInput = GameInput::getInstance();
-	if(pInput->hasAction("LightAttackInput"))
-	{
-		lightAttack();
-	}
-	else if(pInput->hasAction("StrongAttackInput"))
-	{
-		lightAttack();
-	}
-	else if(pInput->hasAction("DodgeInput"))
-	{
-		
-	}
+	playAnimations();
 }
 
 void Player::setMoveSpeed(float moveSpeed)
@@ -101,103 +91,6 @@ void Player::setDodgeTime(float dodgeTime)
 Vec2 Player::getHeading()
 {
 	return m_moveDirection;
-}
-
-void Player::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode, Event* pEvent)
-{		
-	switch (keyCode)
-	{
-	case KeyCode::KEY_W:		
-		// Stop moving up
-		if(m_moveDirection.y > 0)
-		{
-			m_moveDirection = Vec2(m_moveDirection.x, 0);
-		}		
-		break;
-
-	case KeyCode::KEY_S:
-		// Stop moving down
-		if(m_moveDirection.y < 0)
-		{
-			m_moveDirection = Vec2(m_moveDirection.x, 0);
-		}		
-		break;
-
-	case KeyCode::KEY_D:
-		// Stop moving right
-		if(m_moveDirection.x > 0)
-		{
-			m_moveDirection = Vec2(0, m_moveDirection.y);
-		}		
-		break;
-
-	case KeyCode::KEY_A:
-		// Stop moving left
-		if(m_moveDirection.x < 0)
-		{
-			m_moveDirection = Vec2(0, m_moveDirection.y);
-		}		
-		break;
-
-	case KeyCode::KEY_SPACE:
-		// Dodge if currently not dodging
-		if(!m_bIsDodging)
-		{
-			performDodge();
-		}		
-		break;
-	}
-
-	// If we dont have move direction then we must be standing
-	if(m_moveDirection.lengthSquared() == 0 && !m_bIsAttacking)
-	{
-		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
-		m_bIsMoving = false;
-	}
-	else if(!m_bIsAttacking)
-	{
-		m_bIsMoving = true;
-	}
-}
-
-void Player::onKeyboardKeyDown(EventKeyboard::KeyCode keyCode, Event* pEvent)
-{
-	switch (keyCode)
-	{
-	case EventKeyboard::KeyCode::KEY_W:
-		// Move up
-		m_moveDirection = Vec2(m_moveDirection.x, 1);
-		break;
-
-	case EventKeyboard::KeyCode::KEY_S:
-		// Move down
-		m_moveDirection = Vec2(m_moveDirection.x, -1);
-		break;
-
-	case EventKeyboard::KeyCode::KEY_A:
-		// Move left
-		m_moveDirection = Vec2(-1, m_moveDirection.y);
-		break;
-
-	case EventKeyboard::KeyCode::KEY_D:
-		// Move right
-		m_moveDirection = Vec2(1, m_moveDirection.y);
-		break;
-	}
-
-	// Make sure we are not moving faster diagonally
-	m_moveDirection.normalize();	
-
-	if(!m_bIsDodging && m_moveDirection.lengthSquared() > 0 && !m_bIsAttacking)
-	{
-		// When keyboard is down we are always moving
-		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
-		m_bIsMoving = true;
-	}	
-	else
-	{
-		m_moveDirection = Vec2::ZERO;
-	}
 }
 
 void Player::onDodgeFinished()
@@ -228,6 +121,31 @@ void Player::onAttackFinished()
 	}
 }
 
+void Player::manageInput()
+{
+	GameInput* pInput = GameInput::getInstance();
+	if(pInput->hasAction("LightAttackInput"))
+	{
+		lightAttack();
+	}
+	else if(pInput->hasAction("StrongAttackInput"))
+	{
+		lightAttack();
+	}
+	else if(pInput->hasAction("DodgeInput"))
+	{
+		performDodge();
+	}
+	
+	// Player movement
+	float horizontalValue = pInput->getInputAxis("HorizontalMovement");
+	float vertiacalValue = pInput->getInputAxis("VerticalMovement");
+	m_moveDirection = Vec2(horizontalValue, vertiacalValue);	
+
+	// Make sure we are not moving faster diagonally
+	m_moveDirection.normalize();	
+}
+
 void Player::lightAttack()
 {
 	if (!m_bIsAttacking && !m_bIsDodging)
@@ -249,4 +167,22 @@ void Player::performDodge()
 	m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Dodge);
 	Utils::startTimerWithCallback(this,
 		CC_CALLBACK_0(Player::onDodgeFinished, this), m_dodgeTime);
+}
+
+void Player::playAnimations()
+{
+	if(!m_bIsAttacking)
+	{
+		if(!m_bIsDodging && m_moveDirection.lengthSquared() > 0)
+		{
+			// When keyboard is down we are always moving
+			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
+			m_bIsMoving = true;
+		}	
+		else if(!m_bIsDodging)
+		{
+			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
+			m_bIsMoving = false;		
+		}
+	}
 }
