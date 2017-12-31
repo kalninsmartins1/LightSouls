@@ -36,18 +36,6 @@ bool GameInput::init()
 	return m_pKeyboard != nullptr && m_pMouseInput != nullptr;
 }
 
-void GameInput::addKeyboardActionKey(const char * actionName, const char * inputCode)
-{
-	KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
-	m_pKeyboard->addActionKey(actionName, ActionKey(keyCode));
-}
-
-void GameInput::addKeyboardStateKey(const char * actionName, const char * inputCode)
-{
-	KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
-	m_pKeyboard->addStateKey(actionName, StateKey(keyCode));
-}
-
 void GameInput::update(float deltaTime)
 {
 	m_pMouseInput->update(deltaTime);
@@ -94,9 +82,9 @@ bool GameInput::hasAction(const char* action) const
 		{
 			bHasAction = true;
 		}
-		//else if (m_pKeyboard->hasAction(action))
+		else if (m_pKeyboard->hasAction(action))
 		{
-
+			bHasAction = true;
 		}
 	}	
 	/*else if (m_pJoystickInput->hasAction(action))
@@ -116,9 +104,9 @@ bool GameInput::hasActionState(const char* action) const
 		{
 			bHasActionState = true;
 		}
-		//else if (m_pKeyboard->hasAction(action))
+		else if (m_pKeyboard->hasAction(action))
 		{
-
+			bHasActionState = true;
 		}
 	}
 	/*else if (m_pJoystickInput->hasAction(action))
@@ -129,16 +117,13 @@ bool GameInput::hasActionState(const char* action) const
 	return bHasActionState;
 }
 
-void GameInput::addAxisInput(GameInputType inputType, const char* actionName, const char* keyCodeStr,
-	float minValue, float maxValue)
+void GameInput::addAxisActionInput(GameInputType inputType, const char* actionName, const char* keyCodeFromStr,
+	const char* keyCodeToStr, float valueFrom, float valueTo)
 {
-	KeyCode keyCode = Utils::convertStringToKeyCode(keyCodeStr);	
-	AxisKey key = AxisKey(keyCode, minValue, maxValue);
-
 	switch(inputType)
 	{
 	case GameInputType::Keyboard: 
-		m_pKeyboard->addAxisKey(actionName, key);
+		addKeyboardAxis(actionName, keyCodeFromStr, keyCodeToStr, valueFrom, valueTo);
 		break;
 
 	case GameInputType::Mouse: 
@@ -165,7 +150,7 @@ void GameInput::addActionInput(GameInputType inputType, const char* actionName,
 		break;
 
 	case GameInputType::Mouse:
-		m_pMouseInput->addButtonAction(actionName, inputCode);
+		addMouseActionButton(actionName, inputCode);
 		break;
 
 	case GameInputType::Joystick:
@@ -188,7 +173,7 @@ void GameInput::addStateInput(GameInputType inputType, const char* actionName,
 		break;
 
 	case GameInputType::Mouse:
-		m_pMouseInput->addButtonAction(actionName, inputCode);
+		addMouseStateButton(actionName, inputCode);
 		break;
 
 	case GameInputType::Joystick:
@@ -199,4 +184,36 @@ void GameInput::addStateInput(GameInputType inputType, const char* actionName,
 		cocos2d::log("GameInput: [addActionInput] unsupported input type !");
 		break;
 	}
+}
+
+void GameInput::addKeyboardActionKey(const char * actionName, const char * inputCode)
+{
+	KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
+	m_pKeyboard->addActionKey(actionName, ActionKey(keyCode));
+}
+
+void GameInput::addKeyboardStateKey(const char * actionName, const char * inputCode)
+{
+	KeyCode keyCode = Utils::convertStringToKeyCode(inputCode);
+	m_pKeyboard->addStateKey(actionName, StateKey(keyCode));
+}
+
+void GameInput::addKeyboardAxis(const char * actionName, const char * keyCodeFromStr, const char * keyCodeToStr, float valueFrom, float valueTo)
+{
+	const KeyCode keyCodeFrom = Utils::convertStringToKeyCode(keyCodeFromStr);
+	const KeyCode keyCodeTo = Utils::convertStringToKeyCode(keyCodeToStr);
+	const KeyboardAxis key = KeyboardAxis(keyCodeFrom, keyCodeTo, valueFrom, valueTo);
+	m_pKeyboard->addAxisKey(actionName, key);
+}
+
+void GameInput::addMouseActionButton(const char* actionName, const char* inputCode)
+{
+	MouseButtonCode buttonCode = Utils::convertStringToMouseButtonCode(inputCode);
+	m_pMouseInput->addButtonAction(actionName, buttonCode);
+}
+
+void GameInput::addMouseStateButton(const char* actionName, const char* inputCode)
+{
+	MouseButtonCode buttonCode = Utils::convertStringToMouseButtonCode(inputCode);
+	m_pMouseInput->addButtonState(actionName, buttonCode);
 }

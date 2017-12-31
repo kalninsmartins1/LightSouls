@@ -30,8 +30,8 @@ public:
 	
 	bool loadInputConfiguration(const char* pathToConfigFile);
 	void update(float deltaTime);
-	void addAxisInput(GameInputType inputType, const char* actionName, const char* keyCode,
-		 float minValue, float maxValue);
+	void addAxisActionInput(GameInputType inputType, const char* actionName, const char* keyCodeFromStr,
+		const char* keyCodeToStr, float valueFrom, float valueTo);	
 	void addActionInput(GameInputType inputType, const char* actionName, const char* buttonCode);
 	void addStateInput(GameInputType inputType, const char* actionName, const char* buttonCode);
 
@@ -41,6 +41,10 @@ private:
 	bool init();
 	void addKeyboardActionKey(const char* actionName, const char* inputCode);
 	void addKeyboardStateKey(const char* actionName, const char* inputCode);
+	void addKeyboardAxis(const char* actionName, const char* keyCodeFromStr,
+		const char* keyCodeToStr, float valueFrom, float valueTo);
+	void addMouseActionButton(const char* actionName, const char* inputCode);
+	void addMouseStateButton(const char* actionName, const char* inputCode);
 
 	bool m_bIsJoystickConnected;
 	std::unique_ptr<KeyboardInput> m_pKeyboard;

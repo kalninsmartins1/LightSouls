@@ -25,7 +25,7 @@ class PlayerAnimComponent: public cocos2d::Component
 public:
 	CREATE_FUNC(PlayerAnimComponent);
 	
-	virtual void setOwner(cocos2d::Node *owner) override;
+	void setSprite(cocos2d::Sprite* pSprite);
 
 	// Load animation configuration from xml file
 	void loadConfig(tinyxml2::XMLNode* pNode);

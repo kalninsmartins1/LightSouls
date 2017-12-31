@@ -8,7 +8,8 @@ class MirrorSpriteComponent: public cocos2d::Component
 {
 public:
 	CREATE_FUNC(MirrorSpriteComponent);
-	virtual void setOwner(cocos2d::Node* owner) override;
+
+	void setPlayer(Player* owner);	
 	virtual void update(float delta) override;
 
 private:

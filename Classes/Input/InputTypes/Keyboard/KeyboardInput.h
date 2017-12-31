@@ -6,46 +6,77 @@
 
 typedef cocos2d::EventKeyboard::KeyCode KeyCode;
 
-struct AxisKey
+struct KeyboardAxis
 {
-	KeyCode keyCode;
-	float minValue;
-	float maxValue;
+	KeyCode keyCodeFrom;
+	KeyCode keyCodeTo;
+
+	float fromValue;
+	float toValue;
 	float currentValue;
-	bool isPressed;
+
+	bool bFromIsPressed;
+	bool bToIsPressed;
 	
-	AxisKey(KeyCode keyCode, float minValue, float maxValue)
+	KeyboardAxis()
 	{
-		this->keyCode = keyCode;		
-		this->minValue = minValue;
-		this->maxValue = maxValue;
+		this->keyCodeFrom = KeyCode::KEY_NONE;
+		this->keyCodeTo = KeyCode::KEY_NONE;
+		this->fromValue = 0;
+		this->toValue = 0;
 		this->currentValue = 0;
+		this->bFromIsPressed = false;
+		this->bToIsPressed = false;
+	}
+
+	KeyboardAxis(KeyCode keyCodeFrom, KeyCode keyCodeTo, float fromValue, float toValue)
+	{
+		this->keyCodeFrom = keyCodeFrom;
+		this->keyCodeTo = keyCodeTo;
+		this->fromValue = fromValue;
+ 		this->toValue = toValue;
+		this->currentValue = 0;
+		this->bFromIsPressed = false;
+		this->bToIsPressed = false;
 	}
 };
 
 struct StateKey
 {
 	KeyCode keyCode;
-	bool isCurrentlyPressed;
+	bool bIsCurrentlyPressed;
+
+	StateKey()
+	{
+		this->keyCode = KeyCode::KEY_NONE;
+		this->bIsCurrentlyPressed = false;
+	}
 
 	StateKey(KeyCode keyCode)
 	{
 		this->keyCode = keyCode;
-		this->isCurrentlyPressed = false;
+		this->bIsCurrentlyPressed = false;
 	}
 };
 
 struct ActionKey
 {
 	KeyCode keyCode;
-	bool isActive;
-	bool needsStateReset;
+	bool bIsActive;
+	bool bNeedsStateReset;
+
+	ActionKey()
+	{
+		this->keyCode = KeyCode::KEY_NONE;
+		this->bIsActive = false;
+		this->bNeedsStateReset = false;
+	}
 
 	ActionKey(KeyCode keyCode)
 	{
 		this->keyCode = keyCode;
-		this->isActive = false;
-		this->needsStateReset = false;
+		this->bIsActive = false;
+		this->bNeedsStateReset = false;
 	}
 };
 
@@ -60,7 +91,7 @@ public:
 	virtual float getAxisInput(const std::string& axisName) const override;
 	virtual bool hasAxisInput(const std::string& axisName) const override;
 
-	void addAxisKey(const char* actionName, const AxisKey& axisKey);
+	void addAxisKey(const char* actionName, const KeyboardAxis& axisKey);
 	void addActionKey(const char* actionName, const ActionKey& actionKey);
 	void addStateKey(const char* actionName, const StateKey& stateKey);
 
@@ -71,19 +102,20 @@ private:
 		cocos2d::Event* pEvent);
 	void onKeyboardKeyDown(cocos2d::EventKeyboard::KeyCode keyCode, 
 		cocos2d::Event* pEvent);
-
+	
 	void updateActionKeyState();
 	void updateAxisKeyState(float deltaTime);
+	void increaseAxisCurValue(KeyboardAxis& keyboardAxis, float value, float deltaTime);
 
-	void setActionKeyState(bool isActive, KeyCode keyCode);
-	void setStateKeyState(bool isPressed, KeyCode keyCode);
-	void setAxisKeyValue(bool isPressed, KeyCode keyCode);
+	void setActionKeyState(bool bIsActive, KeyCode keyCode);
+	void setStateKeyState(bool bIsPressed, KeyCode keyCode);
+	void setKeyboardAxisState(bool bIsPressed, KeyCode keyCode);
 
-	std::map<std::string, AxisKey> m_axisKeys;
+	std::map<std::string, KeyboardAxis> m_keyboardAxis;
 	std::map<std::string, StateKey> m_stateKeys;
 	std::map<std::string, ActionKey> m_actionKeys;
 	
 	std::map<KeyCode, std::string> m_keyCodeToAction;	
-	std::map<KeyCode, std::string> m_keyCodeToState;	
-	std::map<KeyCode, std::string> m_keyCodeToAxis;	
+	std::map<KeyCode, std::string> m_keyCodeToStateAction;	
+	std::map<KeyCode, std::string> m_keyCodeToAxisAction;	
 };

@@ -24,9 +24,10 @@ static constexpr char* XML_PHYSICS_BODY = "PhysicsBody";
 static constexpr char* XML_NAME_ATTR = "name";
 static constexpr char* XML_TYPE_ATTR = "type";
 static constexpr char* XML_KEY_CODE_ATTR = "keyCode";
-static constexpr char* XML_AXIS_TYPE_ATTR = "axisType";
-static constexpr char* XML_MIN_VALUE_ATTR = "minValue";
-static constexpr char* XML_MAX_VALUE_ATTR = "maxValue";
+static constexpr char* XML_KEY_CODE_FROM_ATTR = "keyCodeFrom";
+static constexpr char* XML_KEY_CODE_TO_ATTR = "keyCodeTo";
+static constexpr char* XML_VALUE_FROM_ATTR = "valueFrom";
+static constexpr char* XML_VALUE_TO_ATTR = "valueTo";
 static constexpr char* XML_BUTTON_CODE_ATTR = "buttonCode";
 
 // Input types

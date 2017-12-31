@@ -5,15 +5,9 @@
 
 using namespace cocos2d;
 
-void PlayerAnimComponent::setOwner(cocos2d::Node *owner)
-{
-	Component::setOwner(owner);
-	m_pParent = (Sprite*)owner;
-
-	if (m_pParent == nullptr)
-	{
-		cocos2d::log("Error: PlayerAimation component is not attached to Sprite !");
-	}
+void PlayerAnimComponent::setSprite(cocos2d::Sprite* pSprite)
+{	
+	m_pParent = pSprite;
 }
 
 void PlayerAnimComponent::loadConfig(tinyxml2::XMLNode* pNode)

@@ -19,6 +19,9 @@ public:
 	static KeyCode convertStringToKeyCode(const char* string);
 	static AxisType convertStringToAxisType(const char* string);
 
+	// Returns -1 if value is negative, else returns 1
+	static int getSign(const float& value);
+
 	template <typename T, typename K>
 	static bool containsKey(const std::map<T, K>& map, const T& key);
 
@@ -52,7 +55,5 @@ void Utils::clampValue(T& value, const T& minValue, const T& maxValue)
 	else if(value < minValue)
 	{
 		value = minValue;
-	}
-
-	return value;
+	}	
 }

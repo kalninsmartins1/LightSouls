@@ -6,18 +6,18 @@
 
 struct StateMouseButton
 {
-	std::string action;
+	std::string actionName;
 	bool bIsPressed;
 
 	StateMouseButton()
 	{
-		this->action = "";
+		this->actionName = "";
 		this->bIsPressed = false;
 	}
 
 	StateMouseButton(std::string action)
 	{
-		this->action = action;
+		this->actionName = action;
 		this->bIsPressed = false;
 	}
 };
@@ -55,8 +55,8 @@ public:
 
 	bool init();
 	void update(float deltaTime);
-	void addButtonAction(const char* buttonAction, const char* buttonCode);
-	void addButtonState(const char* buttonAction, const char* buttonCode);
+	void addButtonAction(const char* buttonAction, const MouseButtonCode& buttonCode);
+	void addButtonState(const char* buttonAction, const MouseButtonCode& buttonCode);
 
 	virtual bool hasAction(const std::string& action) const override;
 	virtual bool hasActionState(const std::string& action) const override;
@@ -69,9 +69,9 @@ private:
 	void updateActionButtonState();
 	
 	void switchActionButtonState(ActionStateMap& stateMap, ActionButtonCodeMap& codeMap,
-		MouseButtonCode buttonCode, bool newState);
+		MouseButtonCode buttonCode, bool bIsActive);
 	void switchStateButtonState(ActionStateMap& stateMap, StateButtonCodeMap& codeMap,
-		MouseButtonCode buttonCode, bool newState);
+		MouseButtonCode buttonCode, bool bIsPressed);
 
 	ActionStateMap m_stateButtons;
 	ActionStateMap m_actionButtons;

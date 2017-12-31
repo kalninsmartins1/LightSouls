@@ -31,16 +31,14 @@ void MouseInput::update(float deltaTime)
 	updateActionButtonState();
 }
 
-void MouseInput::addButtonAction(const char* buttonAction, const char* inputCode)
-{
-	MouseButtonCode buttonCode = Utils::convertStringToMouseButtonCode(inputCode);
+void MouseInput::addButtonAction(const char* buttonAction, const MouseButtonCode& buttonCode)
+{	
 	m_actionButtons[buttonAction] = false;
 	m_buttonActions[buttonCode] = ActionMouseButton(buttonAction);
 }
 
-void MouseInput::addButtonState(const char* buttonAction, const char* inputCode)
-{
-	MouseButtonCode buttonCode = Utils::convertStringToMouseButtonCode(inputCode);
+void MouseInput::addButtonState(const char* buttonAction, const MouseButtonCode& buttonCode)
+{	
 	StateMouseButton button = StateMouseButton(buttonAction);
 	m_stateButtons[buttonAction] = false;
 	m_buttonStates[buttonCode] = button;
@@ -117,23 +115,23 @@ void MouseInput::updateActionButtonState()
 }
 
 void MouseInput::switchActionButtonState(ActionStateMap& stateMap,
-	ActionButtonCodeMap& codeMap, MouseButtonCode buttonCode, bool newState)
+	ActionButtonCodeMap& codeMap, MouseButtonCode buttonCode, bool bIsActive)
 {
 	if (Utils::containsKey(codeMap, buttonCode))
 	{
 		ActionMouseButton& button = codeMap[buttonCode];
-		button.bIsActive = newState;
+		button.bIsActive = bIsActive;
 		stateMap[button.action] = button.bIsActive;
 	}
 }
 
 void MouseInput::switchStateButtonState(ActionStateMap & stateMap,
-	StateButtonCodeMap& codeMap, MouseButtonCode buttonCode, bool newState)
+	StateButtonCodeMap& codeMap, MouseButtonCode buttonCode, bool bIsPressed)
 {
 	if (Utils::containsKey(codeMap, buttonCode))
 	{
 		StateMouseButton& button = codeMap[buttonCode];
-		button.bIsPressed = newState;
-		stateMap[button.action] = button.bIsPressed;
+		button.bIsPressed = bIsPressed;
+		stateMap[button.actionName] = button.bIsPressed;
 	}
 }

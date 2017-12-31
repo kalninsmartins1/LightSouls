@@ -41,7 +41,7 @@ bool HelloWorld::init()
 	addChild(pRootNode);	
 
 	m_pCameraController = CameraController::create();
-	if(GameInput::getInstance()->
+	if(!GameInput::getInstance()->
 		loadInputConfiguration("res/Configs/Input/Input.xml"))
 	{
 		cocos2d::log("HelloWorldScene: Failed to load input configuration !");

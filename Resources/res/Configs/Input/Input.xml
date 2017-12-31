@@ -1,10 +1,12 @@
 <InputSettings>
-	<Axis name="MoveInput">		
-		<Keyboard>
-			<AxisKey keyCode="W" axisType="Y" minValue="0" maxValue="1"/>
-			<AxisKey keyCode="S" axisType="Y" minValue="-1" maxValue="0"/>
-			<AxisKey keyCode="A" axisType="X" minValue="-1" maxValue="0"/>
-			<AxisKey keyCode="D" axisType="X" minValue="0" maxValue="1"/>
+	<Axis name="VerticalMovement">		
+		<Keyboard>		
+			<KeyboardAxis keyCodeFrom="W" keyCodeTo="S" valueFrom="1" valueTo="-1"/>			
+		</Keyboard>
+	</Axis>
+	<Axis name="HorizontalMovement">		
+		<Keyboard>		
+			<KeyboardAxis keyCodeFrom="A" keyCodeTo="D" valueFrom="-1" valueTo="1"/>						
 		</Keyboard>
 	</Axis>
 	
@@ -20,7 +22,7 @@
 		</Mouse>
 	</ActionButton>
 	
-	<ActionButton name="Dodge">
+	<ActionButton name="DodgeInput">
 		<Keyboard>
 			<ActionKey keyCode="Space"/>
 		</Keyboard>		

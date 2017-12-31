@@ -47,21 +47,24 @@ void XMLLoader::loadActionTriggers(GameInput& gameInput, const XMLElement* pElem
 	}
 }
 
-void XMLLoader::loadAxisKeyButtons(GameInput& gameInput, const XMLElement* pElement,
+void XMLLoader::loadKeyboardAxis(GameInput& gameInput, const XMLElement* pElement,
 	const char* actionName)
 {
+	const char* inputTypeStr = pElement->Value();
+	GameInputType inputType = strToGameInputType(inputTypeStr);
+
 	// Go trough all keys that involve this action
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* keyCode = pChild->Attribute(XML_KEY_CODE_ATTR);
-		const char* axisType = pChild->Attribute(XML_AXIS_TYPE_ATTR);
-		const float minValue = pChild->FloatAttribute(XML_MIN_VALUE_ATTR);
-		const float maxValue = pChild->FloatAttribute(XML_MAX_VALUE_ATTR);
-		const char* inputTypeStr = pChild->Value();
-		GameInputType inputType = strToGameInputType(inputTypeStr);
-		gameInput.addAxisInput(inputType, actionName, keyCode, axisType,
-			minValue, maxValue);
+		const char* keyCodeFrom = pChild->Attribute(XML_KEY_CODE_FROM_ATTR);
+		const char* keyCodeTo = pChild->Attribute(XML_KEY_CODE_TO_ATTR);
+		
+		const float valueFrom = pChild->FloatAttribute(XML_VALUE_FROM_ATTR);
+		const float valueTo = pChild->FloatAttribute(XML_VALUE_TO_ATTR);
+
+		gameInput.addAxisActionInput(inputType, actionName, keyCodeFrom, keyCodeTo,
+			valueFrom, valueTo);
 	}
 }
 
@@ -150,6 +153,7 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToX
 			{
 				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create();
 				pPlayerAnim->setName(XML_PLAYER_ANIM_COMPONENT);
+				pPlayerAnim->setSprite(&sprite);
 				sprite.addComponent(pPlayerAnim);
 				pPlayerAnim->loadConfig(pNode);
 			}
@@ -163,6 +167,7 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToX
 			{
 				MirrorSpriteComponent* pMirrorSprite = MirrorSpriteComponent::create();
 				pMirrorSprite->setName(XML_MIRROR_SPRITE_COMPONENT);
+				pMirrorSprite->setPlayer((Player*)&sprite);
 				sprite.addComponent(pMirrorSprite);
 			}
 		}		
@@ -190,7 +195,7 @@ bool XMLLoader::loadInputSettings(GameInput& gameInput, const char* pathToConfig
 				loadActionTriggers(gameInput, pElem,
 					[](GameInput& gameInput, const XMLElement* pElem, const char* actionName)
 					{
-						loadAxisKeyButtons(gameInput, pElem, actionName);
+						loadKeyboardAxis(gameInput, pElem, actionName);
 					},
 					nullptr); // Currently not handling Mouse axis input
 			}

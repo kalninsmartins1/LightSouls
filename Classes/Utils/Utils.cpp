@@ -76,19 +76,12 @@ KeyCode Utils::convertStringToKeyCode(const char* string)
 	return result;
 }
 
-AxisType Utils::convertStringToAxisType(const char* string)
+int Utils::getSign(const float & value)
 {
-	std::string standartString(string);
-	AxisType result = AxisType::None;
-
-	if (isStrEqual(standartString, "X"))
+	int sign = 1;
+	if (value < 0)
 	{
-		result = AxisType::X;
+		sign = -1;
 	}
-	else if (isStrEqual(standartString, "Y"))
-	{
-		result = AxisType::Y;
-	}
-
-	return result;
+	return sign;
 }

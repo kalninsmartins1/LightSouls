@@ -31,7 +31,7 @@ private:
 		const XMLElement* pElement, LoadInputCallback onKeyboardInput,
 		LoadInputCallback onMouseInput);
 
-	static void loadAxisKeyButtons(GameInput& gameInput,
+	static void loadKeyboardAxis(GameInput& gameInput,
 		const XMLElement* pElement, const char* actionName);
 	static void loadMouseButton(GameInput& gameInput,
 		const XMLElement* pElement, const char* actionName);

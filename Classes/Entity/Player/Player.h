@@ -33,7 +33,7 @@ private:
 	PlayerAnimComponent* m_pPlayerAnimComponent;
 	cocos2d::Vec2 m_moveDirection;
 	
-	bool m_bIsMoving;
+	bool m_bIsRunAnimPlaying;
 	bool m_bIsDodging;
 	bool m_bIsAttacking;
 	

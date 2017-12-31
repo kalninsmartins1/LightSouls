@@ -32,7 +32,7 @@ Player::Player()
 	m_dodgeTime = 0;
 	m_bIsAttacking = false;
 	m_bIsDodging = false;
-	m_bIsMoving = false;	
+	m_bIsRunAnimPlaying = false;	
 }
 
 bool Player::init(const char* pathToXML)
@@ -100,7 +100,7 @@ void Player::onDodgeFinished()
 	// Set back regular speed
 	m_moveSpeed = m_baseMoveSpeed;	
 
-	if(m_bIsMoving)
+	if(m_bIsRunAnimPlaying)
 	{
 		// Go back to regular running
 		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
@@ -111,7 +111,7 @@ void Player::onAttackFinished()
 {
 	m_bIsAttacking = false;
 
-	if(m_bIsMoving)
+	if(m_bIsRunAnimPlaying)
 	{
 		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
 	}
@@ -173,16 +173,17 @@ void Player::playAnimations()
 {
 	if(!m_bIsAttacking)
 	{
-		if(!m_bIsDodging && m_moveDirection.lengthSquared() > 0)
+		float moveDirectionSqrt = m_moveDirection.lengthSquared();
+		if(!m_bIsDodging && moveDirectionSqrt > 0 && !m_bIsRunAnimPlaying)
 		{
 			// When keyboard is down we are always moving
 			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
-			m_bIsMoving = true;
+			m_bIsRunAnimPlaying = true;
 		}	
-		else if(!m_bIsDodging)
+		else if(moveDirectionSqrt <= FLT_EPSILON && m_bIsRunAnimPlaying)
 		{
 			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
-			m_bIsMoving = false;		
+			m_bIsRunAnimPlaying = false;		
 		}
 	}
 }

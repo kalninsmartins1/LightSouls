@@ -4,13 +4,9 @@
 
 using namespace cocos2d;
 
-void MirrorSpriteComponent::setOwner(cocos2d::Node* owner)
+void MirrorSpriteComponent::setPlayer(Player* pPlayer)
 {
-	m_pPlayer = (Player*)owner;
-	if(m_pPlayer == nullptr)
-	{
-		cocos2d::log("MirrorSpriteComponent: Attached to [Node] that is not a [Sprite] !");
-	}
+	m_pPlayer = pPlayer;
 }
 
 void MirrorSpriteComponent::update(float delta)
