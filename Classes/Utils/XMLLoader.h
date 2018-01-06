@@ -29,14 +29,15 @@ private:
 
 	static void loadActionTriggers(GameInput& gameInput,
 		const XMLElement* pElement, LoadInputCallback onKeyboardInput,
-		LoadInputCallback onMouseInput);
+		LoadInputCallback onMouseInput, LoadInputCallback onGameControllerInput);
 
 	static void loadKeyboardAxis(GameInput& gameInput,
 		const XMLElement* pElement, const char* actionName);
-	static void loadMouseButton(GameInput& gameInput,
+	static void loadGameControllerAxis(GameInput& gameInput,
 		const XMLElement* pElement, const char* actionName);
-	static void loadActionKeyButton(GameInput& gameInput,
-		const XMLElement* pElement, const char* actionName);
+	
+	static void loadActionButton(GameInput& gameInput, GameInputType inputType,
+		const XMLElement* pElement, const char* actionName, const char* xmlAttributeName);
 
 	static cocos2d::PhysicsMaterial loadPhysicsMaterialFromAttributes(
 		const XMLNode* pNode);

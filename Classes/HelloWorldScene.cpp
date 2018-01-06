@@ -35,17 +35,17 @@ bool HelloWorld::init()
 
 	Node* pRootNode = Node::create();
 
-	// Init player	
-	m_pPlayer = Player::create("res/Configs/Player/Player.xml");	
+	// Init player
+	m_pPlayer = Player::create("res/Configs/Player/Player.xml");
 	pRootNode->addChild(m_pPlayer);
-	addChild(pRootNode);	
+	addChild(pRootNode);
 
 	m_pCameraController = CameraController::create();
-	if(!GameInput::getInstance()->
-		loadInputConfiguration("res/Configs/Input/Input.xml"))
+	if(!GameInput::getInstance()->loadInputConfiguration("res/Configs/Input/Input.xml"))
 	{
-		cocos2d::log("HelloWorldScene: Failed to load input configuration !");
-	}
+		// Halt the game when in debug mode
+		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
+	}	
 
 	scheduleUpdate();
     

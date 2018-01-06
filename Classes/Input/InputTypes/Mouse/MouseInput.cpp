@@ -26,22 +26,16 @@ bool MouseInput::init()
 	return pEventDispatcher != nullptr;
 }
 
-void MouseInput::update(float deltaTime)
+void MouseInput::addActionButton(const char* actionName, const ActionButton& actionButton)
 {
-	updateActionButtonState();
+	m_actionButtons.insert(std::make_pair(std::string(actionName), actionButton));
+	m_buttonCodeToAction[actionButton.buttonCode] = actionName; 
 }
 
-void MouseInput::addButtonAction(const char* buttonAction, const MouseButtonCode& buttonCode)
-{	
-	m_actionButtons[buttonAction] = false;
-	m_buttonActions[buttonCode] = ActionMouseButton(buttonAction);
-}
-
-void MouseInput::addButtonState(const char* buttonAction, const MouseButtonCode& buttonCode)
-{	
-	StateMouseButton button = StateMouseButton(buttonAction);
-	m_stateButtons[buttonAction] = false;
-	m_buttonStates[buttonCode] = button;
+void MouseInput::addStateButton(const char* actionName, const StateButton& stateButton)
+{
+	m_stateButtons.insert(std::make_pair(std::string(actionName), stateButton));
+	m_buttonCodeToStateAction[stateButton.buttonCode] = actionName;
 }
 
 bool MouseInput::hasAction(const std::string& action) const
@@ -49,7 +43,7 @@ bool MouseInput::hasAction(const std::string& action) const
 	bool bIsActive = false;
 	if(Utils::containsKey(m_actionButtons, action))
 	{
-		bIsActive = m_actionButtons.at(action);
+		bIsActive = m_actionButtons.at(action).bIsActive;
 	}
 	return bIsActive;
 }
@@ -59,7 +53,7 @@ bool MouseInput::hasActionState(const std::string& action) const
 	bool bIsActiveState = false;
 	if(Utils::containsKey(m_stateButtons, action))
 	{
-		bIsActiveState = m_stateButtons.at(std::string(action));
+		bIsActiveState = m_stateButtons.at(action).bIsPressed;
 	}
 	return bIsActiveState;
 }
@@ -77,61 +71,34 @@ bool MouseInput::hasAxisInput(const std::string& axisName) const
 void MouseInput::onMouseButtonDown(EventMouse* pEvent)
 {
 	// Enable active state button
-	switchStateButtonState(m_stateButtons, m_buttonStates, pEvent->getMouseButton(),
-		true);	
+	setStateButtonState(true, pEvent->getMouseButton());
 }
 
 void MouseInput::onMouseButtonUp(EventMouse* pEvent)
 {
 	// Disable active state button
-	switchStateButtonState(m_stateButtons, m_buttonStates, pEvent->getMouseButton(),
-		false);	
+	setStateButtonState(false, pEvent->getMouseButton());
 
 	// Enable active action button
-	switchActionButtonState(m_actionButtons, m_buttonActions, pEvent->getMouseButton(),
-		true);
-}	
-
-void MouseInput::updateActionButtonState()
-{	
-	if(!m_buttonActions.empty())
-	{
-		for (auto& pair : m_buttonActions)
-		{
-			ActionMouseButton& button = pair.second;
-			if (button.bIsActive && button.bNeedsStateReset)
-			{
-				// Reset action buttons after being active for one frame
-				button.bIsActive = false;
-				button.bNeedsStateReset = false;
-				m_actionButtons[button.action] = button.bIsActive;
-			}
-			else if (button.bIsActive)
-			{
-				button.bNeedsStateReset = true;
-			}
-		}
-	}
+	setActionButtonState(true, pEvent->getMouseButton());
 }
 
-void MouseInput::switchActionButtonState(ActionStateMap& stateMap,
-	ActionButtonCodeMap& codeMap, MouseButtonCode buttonCode, bool bIsActive)
+void MouseInput::setActionButtonState(bool bIsActive, const MouseButtonCode& inputCode)	
 {
-	if (Utils::containsKey(codeMap, buttonCode))
+	const int buttonCode = static_cast<int>(inputCode);
+	if (Utils::containsKey(m_buttonCodeToAction, buttonCode))
 	{
-		ActionMouseButton& button = codeMap[buttonCode];
-		button.bIsActive = bIsActive;
-		stateMap[button.action] = button.bIsActive;
-	}
+		std::string& actionName = m_buttonCodeToAction[buttonCode];
+		m_actionButtons[actionName].bIsActive = bIsActive;		
+	}	
 }
 
-void MouseInput::switchStateButtonState(ActionStateMap & stateMap,
-	StateButtonCodeMap& codeMap, MouseButtonCode buttonCode, bool bIsPressed)
+void MouseInput::setStateButtonState(bool bIsPressed, const MouseButtonCode& inputCode)
 {
-	if (Utils::containsKey(codeMap, buttonCode))
+	int buttonCode = static_cast<int>(inputCode);
+	if (Utils::containsKey(m_buttonCodeToStateAction, buttonCode))
 	{
-		StateMouseButton& button = codeMap[buttonCode];
-		button.bIsPressed = bIsPressed;
-		stateMap[button.actionName] = button.bIsPressed;
+		std::string& actionName = m_buttonCodeToStateAction[buttonCode];
+		m_stateButtons[actionName].bIsPressed = bIsPressed;
 	}
 }

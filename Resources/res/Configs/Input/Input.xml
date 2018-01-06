@@ -1,31 +1,45 @@
 <InputSettings>
-	<Axis name="VerticalMovement">		
-		<Keyboard>		
-			<KeyboardAxis keyCodeFrom="W" keyCodeTo="S" valueFrom="1" valueTo="-1"/>			
+	<Axis name="VerticalMovement">
+		<Keyboard>
+			<KeyboardAxis keyCodeFrom="W" keyCodeTo="S" valueFrom="1" valueTo="-1"/>
 		</Keyboard>
+		<GameController>
+			<ControllerAxis axisCode="LEFT_STICK_Y" valueFrom="-1" valueTo="1"/>
+		</GameController>
 	</Axis>
-	<Axis name="HorizontalMovement">		
-		<Keyboard>		
-			<KeyboardAxis keyCodeFrom="A" keyCodeTo="D" valueFrom="-1" valueTo="1"/>						
+	<Axis name="HorizontalMovement">
+		<Keyboard>
+			<KeyboardAxis keyCodeFrom="A" keyCodeTo="D" valueFrom="-1" valueTo="1"/>
 		</Keyboard>
+		<GameController>
+			<ControllerAxis axisCode="LEFT_STICK_X" valueFrom="-1" valueTo="1"/>
+		</GameController>
 	</Axis>
 	
 	<ActionButton name="LightAttackInput">
 		<Mouse>
 			<MouseButton buttonCode="LeftButton"/>
 		</Mouse>
+		<GameController>
+			<ControllerButton buttonCode="A"/>
+		</GameController>
 	</ActionButton>
 	
-	<ActionButton name="StrongAttackInput">		
+	<ActionButton name="StrongAttackInput">
 		<Mouse>
 			<MouseButton buttonCode="RightButton"/>
 		</Mouse>
+		<GameController>
+			<ControllerButton buttonCode="B"/>
+		</GameController>
 	</ActionButton>
 	
 	<ActionButton name="DodgeInput">
 		<Keyboard>
 			<ActionKey keyCode="Space"/>
 		</Keyboard>		
-	</ActionButton>
-	
+		<GameController>
+			<ControllerButton buttonCode="X"/>
+		</GameController>
+	</ActionButton>	
 </InputSettings>

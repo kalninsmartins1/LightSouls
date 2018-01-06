@@ -24,30 +24,30 @@ bool KeyboardInput::init()
 	return pEventDispatcher != nullptr;
 }
 
-void KeyboardInput::addAxisKey(const char* actionName, const KeyboardAxis& axisKey)
+void KeyboardInput::addKeyboardAxis(const char* actionName, const KeyboardAxis& axisKey)
 {
-	m_keyboardAxis[actionName] = axisKey;
+	m_keyboardAxis.insert(std::make_pair(actionName, axisKey));
 
 	// Both keycodes manipulate this action
 	m_keyCodeToAxisAction[axisKey.keyCodeFrom] = actionName;
 	m_keyCodeToAxisAction[axisKey.keyCodeTo] = actionName;
 }
 
-void KeyboardInput::addActionKey(const char* actionName, const ActionKey& actionKey)
+void KeyboardInput::addActionButton(const char* actionName, const ActionButton& actionKey)
 {
-	m_actionKeys[actionName] = actionKey;
-	m_keyCodeToAction[actionKey.keyCode] = actionName;
+	m_actionButtons.insert(std::make_pair(actionName, actionKey));
+	m_buttonCodeToAction[actionKey.buttonCode] = actionName;
 }
 
-void KeyboardInput::addStateKey(const char* actionName, const StateKey& stateKey)
+void KeyboardInput::addStateButton(const char* actionName, const StateButton& stateKey)
 {
-	m_stateKeys[actionName] = stateKey;
-	m_keyCodeToStateAction[stateKey.keyCode] = actionName;
+	m_stateButtons.insert(std::make_pair(actionName, stateKey));
+	m_buttonCodeToStateAction[stateKey.buttonCode] = actionName;
 }
 
 void KeyboardInput::update(float deltaTime)
 {
-	updateActionKeyState();
+	updateActionButtonState();
 	updateAxisKeyState(deltaTime);
 }
 
@@ -66,24 +66,6 @@ void KeyboardInput::onKeyboardKeyDown(EventKeyboard::KeyCode keyCode,
 {
 	setStateKeyState(true, keyCode);
 	setKeyboardAxisState(true, keyCode);
-}
-
-void KeyboardInput::updateActionKeyState()
-{
-	// Make sure action keys are only active for one frame
-	for (auto& pair : m_actionKeys)
-	{
-		ActionKey& key = pair.second;
-		if (key.bIsActive && !key.bNeedsStateReset)
-		{
-			key.bNeedsStateReset = true;
-		}
-		else if (key.bNeedsStateReset)
-		{
-			key.bIsActive = false;
-			key.bNeedsStateReset = false;
-		}
-	}
 }
 
 void KeyboardInput::updateAxisKeyState(float deltaTime)
@@ -110,10 +92,11 @@ void KeyboardInput::updateAxisKeyState(float deltaTime)
 
 void KeyboardInput::setActionKeyState(bool bIsActive, KeyCode keyCode)
 {
-	if (Utils::containsKey(m_keyCodeToAction, keyCode))
+	const int code = static_cast<int>(keyCode);
+	if (Utils::containsKey(m_buttonCodeToAction, code))
 	{
-		const std::string& action = m_keyCodeToAction[keyCode];
-		m_actionKeys[action].bIsActive = bIsActive;
+		const std::string& actionName = m_buttonCodeToAction[code];
+		m_actionButtons[actionName].bIsActive = bIsActive;
 	}
 }
 
@@ -123,10 +106,11 @@ void KeyboardInput::setStateKeyState(bool bIsPressed, KeyCode keyCode)
 	 * If the key is found then change its
 	 * state to specified on.
 	 */
-	if (Utils::containsKey(m_keyCodeToStateAction, keyCode))
+	const int code = static_cast<int>(keyCode);
+	if (Utils::containsKey(m_buttonCodeToStateAction, code))
 	{
-		const std::string& action = m_keyCodeToStateAction[keyCode];
-		m_stateKeys[action].bIsCurrentlyPressed = bIsPressed;
+		const std::string& actionName = m_buttonCodeToStateAction[code];
+		m_stateButtons[actionName].bIsPressed = bIsPressed;
 	}
 }
 
@@ -156,9 +140,9 @@ void KeyboardInput::setKeyboardAxisState(bool bIsPressed, KeyCode keyCode)
 bool KeyboardInput::hasAction(const std::string& action) const
 {
 	bool bHasAction = false;
-	if (Utils::containsKey(m_actionKeys, action))
+	if (Utils::containsKey(m_actionButtons, action))
 	{
-		bHasAction = m_actionKeys.at(action).bIsActive;
+		bHasAction = m_actionButtons.at(action).bIsActive;
 	}
 
 	return bHasAction;
@@ -167,9 +151,9 @@ bool KeyboardInput::hasAction(const std::string& action) const
 bool KeyboardInput::hasActionState(const std::string& action) const
 {
 	bool bHasActionState = false;
-	if (Utils::containsKey(m_stateKeys, action))
+	if (Utils::containsKey(m_stateButtons, action))
 	{
-		bHasActionState = m_stateKeys.at(action).bIsCurrentlyPressed;
+		bHasActionState = m_stateButtons.at(action).bIsPressed;
 	}
 	return bHasActionState;
 }
@@ -180,7 +164,7 @@ float KeyboardInput::getAxisInput(const std::string& axisName) const
 	if (Utils::containsKey(m_keyboardAxis, axisName))
 	{
 		// Return the sum of all axis key values
-		value = m_keyboardAxis.at(axisName).currentValue;				
+		value = m_keyboardAxis.at(axisName).currentValue;
 	}
 	return value;
 }
@@ -205,5 +189,4 @@ void KeyboardInput::increaseAxisCurValue(KeyboardAxis & keyboardAxis, float valu
 		Utils::clampValue(keyboardAxis.currentValue,
 			keyboardAxis.fromValue, keyboardAxis.toValue);
 	}
-	
 }

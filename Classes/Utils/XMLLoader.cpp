@@ -12,10 +12,12 @@ using namespace cocos2d;
 
 XMLLoader::XMLLoader()
 {
+	// Private constructor to prevent instance creation
 }
 
 void XMLLoader::loadActionTriggers(GameInput& gameInput, const XMLElement* pElement,
-	LoadInputCallback onKeyboardInput, LoadInputCallback onMouseInput)
+	LoadInputCallback onKeyboardInput, LoadInputCallback onMouseInput, 
+	LoadInputCallback onGameControllerInput)
 {
 	// Get element action
 	const char* actionName = pElement->ToElement()->
@@ -26,23 +28,26 @@ void XMLLoader::loadActionTriggers(GameInput& gameInput, const XMLElement* pElem
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
 		const char* childNodeName = pChild->Value();
-		if (Utils::isStrEqual(childNodeName, "Keyboard"))
+		if (Utils::isStrEqual(childNodeName, XML_INPUT_KEYBOARD))
 		{
 			if(onKeyboardInput != nullptr)
 			{
 				onKeyboardInput(gameInput, pChild, actionName);
-			}			
+			}
 		}
-		else if (Utils::isStrEqual(childNodeName, "Mouse"))
+		else if (Utils::isStrEqual(childNodeName, XML_INPUT_MOUSE))
 		{
-			if(onKeyboardInput != nullptr)
+			if(onMouseInput != nullptr)
 			{
 				onMouseInput(gameInput, pChild, actionName);
 			}
 		}
-		else if (Utils::isStrEqual(childNodeName, "Joystick"))
+		else if (Utils::isStrEqual(childNodeName, XML_INPUT_GAME_CONTROLLER))
 		{
-			// Currently not handling joystick input
+			if(onGameControllerInput != nullptr)
+			{
+				onGameControllerInput(gameInput, pChild, actionName);
+			}
 		}
 	}
 }
@@ -50,71 +55,57 @@ void XMLLoader::loadActionTriggers(GameInput& gameInput, const XMLElement* pElem
 void XMLLoader::loadKeyboardAxis(GameInput& gameInput, const XMLElement* pElement,
 	const char* actionName)
 {
-	const char* inputTypeStr = pElement->Value();
-	GameInputType inputType = strToGameInputType(inputTypeStr);
-
 	// Go trough all keys that involve this action
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* keyCodeFrom = pChild->Attribute(XML_KEY_CODE_FROM_ATTR);
-		const char* keyCodeTo = pChild->Attribute(XML_KEY_CODE_TO_ATTR);
+		const char* keyCodeFrom = pChild->Attribute(XML_INPUT_KEY_FROM_ATTR);
+		const char* keyCodeTo = pChild->Attribute(XML_INPUT_KEY_TO_ATTR);
 		
-		const float valueFrom = pChild->FloatAttribute(XML_VALUE_FROM_ATTR);
-		const float valueTo = pChild->FloatAttribute(XML_VALUE_TO_ATTR);
+		const float valueFrom = pChild->FloatAttribute(XML_INPUT_VALUE_FROM_ATTR);
+		const float valueTo = pChild->FloatAttribute(XML_INPUT_VALUE_TO_ATTR);
 
-		gameInput.addAxisActionInput(inputType, actionName, keyCodeFrom, keyCodeTo,
-			valueFrom, valueTo);
+		gameInput.addAxisActionInput(GameInputType::Keyboard,
+			actionName, keyCodeFrom, keyCodeTo, valueFrom, valueTo);
 	}
 }
 
-void XMLLoader::loadMouseButton(GameInput& gameInput, const XMLElement* pElement,
-	const char* actionName)
+void XMLLoader::loadGameControllerAxis(GameInput& gameInput, const XMLElement* pElement, const char* actionName)
 {
-	const char* inputTypeStr = pElement->Value();
-	GameInputType inputType = strToGameInputType(inputTypeStr);
-
-	// Go trough all keys that involve this action
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* buttonCode = pChild->Attribute(XML_BUTTON_CODE_ATTR);
-		if(buttonCode != nullptr)
+		const char* axisName = pChild->Attribute(XML_INPUT_AXIS_NAME);
+		const float valueFrom = pChild->FloatAttribute(XML_INPUT_VALUE_FROM_ATTR);
+		const float valueTo = pChild->FloatAttribute(XML_INPUT_VALUE_TO_ATTR);
+
+		gameInput.addAxisActionInput(GameInputType::GameController,
+			actionName, axisName, axisName, valueFrom, valueTo);
+	}
+}
+
+void XMLLoader::loadActionButton(GameInput& gameInput, GameInputType inputType, const XMLElement* pElement,
+	const char* actionName, const char* xmlAttributeName)
+{
+	// Go trough all buttons that involve this action
+	for (const XMLElement* pChild = pElement->FirstChildElement();
+		pChild != nullptr; pChild = pChild->NextSiblingElement())
+	{
+		const char* buttonCode = pChild->Attribute(xmlAttributeName);
+		if (buttonCode != nullptr)
 		{
 			gameInput.addActionInput(inputType, actionName, buttonCode);
 		}
 		else
 		{
-			cocos2d::log("XMLLoader: [loadMouseButton] button code does not exist !");
-		}
-	}
-}
-
-void XMLLoader::loadActionKeyButton(GameInput& gameInput, const XMLElement* pElement,
-	const char* actionName)
-{
-	const char* inputTypeStr = pElement->Value();
-	GameInputType inputType = strToGameInputType(inputTypeStr);
-
-	// Go trough all keys that involve this action
-	for (const XMLElement* pChild = pElement->FirstChildElement();
-		pChild != nullptr; pChild = pChild->NextSiblingElement())
-	{
-		const char* keyCode = pChild->Attribute(XML_KEY_CODE_ATTR);
-		if(keyCode != nullptr)
-		{
-			gameInput.addActionInput(inputType, actionName, keyCode);
-		}
-		else
-		{
-			cocos2d::log("XMLLoader: [loadActionKeyButton] key code does not exist !");
+			CCASSERT(false, "XMLLoader: [loadActionButton] missing button code !");
 		}
 	}
 }
 
 bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToXML)
 {
-	// Load the file	
+	// Load the file
 	XMLDoc doc;
 	XMLError err = doc.LoadFile(pathToXML);
 	
@@ -141,9 +132,9 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToX
 				Player* pPlayer = (Player*)&sprite;
 				const XMLElement* pMovementElement = pNode->FirstChildElement();
 
-				float moveSpeed = pMovementElement->FloatAttribute("moveSpeed");
-				float dodgeSpeed = pMovementElement->FloatAttribute("dodgeSpeed");
-				float dodgeTime = pMovementElement->FloatAttribute("dodgeTime");
+				const float moveSpeed = pMovementElement->FloatAttribute(XML_ENTITY_MOVE_SPEED);
+				const float dodgeSpeed = pMovementElement->FloatAttribute(XML_ENTITY_DODGE_SPEED);
+				const float dodgeTime = pMovementElement->FloatAttribute(XML_ENTITY_DODGE_TIME);
 
 				pPlayer->setMoveSpeed(moveSpeed);
 				pPlayer->setDodgeSpeed(dodgeSpeed);
@@ -170,19 +161,19 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToX
 				pMirrorSprite->setPlayer((Player*)&sprite);
 				sprite.addComponent(pMirrorSprite);
 			}
-		}		
+		}
 	}
 	return !err;
 }
 
 bool XMLLoader::loadInputSettings(GameInput& gameInput, const char* pathToConfigXml)
 {
-	// Load the file	
+	// Load the file
 	XMLDoc doc;
 	const XMLError err = doc.LoadFile(pathToConfigXml);
 	if(!err)
 	{
-		const XMLElement* pRootNode = doc.RootElement();		
+		const XMLElement* pRootNode = doc.RootElement();
 		const XMLElement* pFirstElement = pRootNode->FirstChildElement();
 
 		// Load all input configurations
@@ -190,25 +181,38 @@ bool XMLLoader::loadInputSettings(GameInput& gameInput, const char* pathToConfig
 			pElem = pElem->NextSiblingElement())
 		{
 			const char* nodeName = pElem->Value();
-			if (Utils::isStrEqual(nodeName, "Axis"))
+			if (Utils::isStrEqual(nodeName, XML_INPUT_AXIS))
 			{
 				loadActionTriggers(gameInput, pElem,
 					[](GameInput& gameInput, const XMLElement* pElem, const char* actionName)
 					{
 						loadKeyboardAxis(gameInput, pElem, actionName);
 					},
-					nullptr); // Currently not handling Mouse axis input
+
+					nullptr, // Currently not handling Mouse axis input
+					
+					[](GameInput& gameInput, const XMLElement* pElem, const char* actionName)
+					{
+						loadGameControllerAxis(gameInput, pElem, actionName);
+					});
 			}
-			else if (Utils::isStrEqual(nodeName, "ActionButton"))
+			else if (Utils::isStrEqual(nodeName, XML_INPUT_ACTION_BUTTON))
 			{
 				loadActionTriggers(gameInput, pElem,
 					[](GameInput& gameInput, const XMLElement* pElem, const char* actionName)
 					{
-						loadActionKeyButton(gameInput, pElem, actionName);
+						loadActionButton(gameInput, GameInputType::Keyboard, pElem, 
+							actionName, XML_INPUT_KEY_CODE_ATTR);
 					},
 					[](GameInput& gameInput, const XMLElement* pElem, const char* actionName)
 					{
-						loadMouseButton(gameInput, pElem, actionName);
+						loadActionButton(gameInput, GameInputType::Mouse, pElem,
+							actionName,  XML_INPUT_BUTTON_CODE_ATTR);
+					},
+					[](GameInput& gameInput, const XMLElement* pElem, const char* actionName)
+					{
+						loadActionButton(gameInput, GameInputType::GameController, pElem,
+							actionName, XML_INPUT_BUTTON_CODE_ATTR);
 					});
 			}
 		}
@@ -232,7 +236,7 @@ PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* p
 	const int collisionBitMask = pPhysicsBodyElem->IntAttribute("collisionBitMask");
 
 	PhysicsBody* pPhysicsBody = nullptr;
-	if (bodyType.compare("box") == 0)
+	if (Utils::isStrEqual(bodyType, "box"))
 	{
 		pPhysicsBody = PhysicsBody::createBox(bodySize,
 			loadPhysicsMaterialFromAttributes(pNode));
@@ -246,21 +250,23 @@ PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* p
 GameInputType XMLLoader::strToGameInputType(const char * inputType)
 {
 	GameInputType type = GameInputType::None;
-	if (Utils::isStrEqual(inputType, KEYBOARD_INPUT))
+	if (Utils::isStrEqual(inputType, XML_INPUT_KEYBOARD))
 	{
 		type = GameInputType::Keyboard;
 	}
-	else if (Utils::isStrEqual(inputType, MOUSE_INPUT))
+	else if (Utils::isStrEqual(inputType, XML_INPUT_MOUSE))
 	{
 		type = GameInputType::Mouse;
 	}
-	else if (Utils::isStrEqual(inputType, JOYSTICK_INPUT))
+	else if (Utils::isStrEqual(inputType, XML_INPUT_GAME_CONTROLLER))
 	{
-		type = GameInputType::Joystick;
+		type = GameInputType::GameController;
 	}
 	else
 	{
-		cocos2d::log("XMLLoader: [strToGameInpuType] invalid input type: %s", inputType);
+		Utils::assertWithStrFormat(false,
+			"XMLLoader: [strToGameInpuType] invalid input type: %s",
+			inputType);
 	}
 	return type;
 }

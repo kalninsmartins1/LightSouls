@@ -19,7 +19,7 @@ public:
 	void setDodgeSpeed(float dodgeSpeed);
 	void setDodgeTime(float dodgeTime);
 
-	cocos2d::Vec2 getHeading();
+	cocos2d::Vec2 getHeading() const;
 
 private:		
 	void onDodgeFinished();
@@ -33,12 +33,12 @@ private:
 	PlayerAnimComponent* m_pPlayerAnimComponent;
 	cocos2d::Vec2 m_moveDirection;
 	
-	bool m_bIsRunAnimPlaying;
+	bool m_isRuning;
 	bool m_bIsDodging;
 	bool m_bIsAttacking;
 	
 	float m_baseMoveSpeed;
 	float m_moveSpeed;
 	float m_dodgeSpeed;
-	float m_dodgeTime;	
+	float m_dodgeTime;
 };

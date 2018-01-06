@@ -32,22 +32,22 @@ Player::Player()
 	m_dodgeTime = 0;
 	m_bIsAttacking = false;
 	m_bIsDodging = false;
-	m_bIsRunAnimPlaying = false;	
+	m_isRuning = false;
 }
 
 bool Player::init(const char* pathToXML)
-{	
-	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);	
+{
+	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);
 
 	// Position physics body at the bottom of sprite
-	getPhysicsBody()->setPositionOffset(Vec2(0, -getContentSize().height/2));
+	getPhysicsBody()->setPositionOffset(Vec2(0, -getContentSize().height / 2));
 
 	// Force position player in middle of screen
-	Size size = Director::getInstance()->getWinSize();	
-	setPosition(size.width / 2 , size.height / 2);
+	Size size = Director::getInstance()->getWinSize();
+	setPosition(size.width / 2, size.height / 2);
 
 	// Get animation component to trigger animations when that is necessary
-	m_pPlayerAnimComponent = 
+	m_pPlayerAnimComponent =
 		(PlayerAnimComponent*)getComponent(XML_PLAYER_ANIM_COMPONENT);
 	m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
 
@@ -65,11 +65,11 @@ void Player::update(float deltaTime)
 	manageInput();
 
 	// We can move only when we are not attacking
-	if(!m_bIsAttacking)
+	if (!m_bIsAttacking)
 	{
 		setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);
 	}
-	
+
 	playAnimations();
 }
 
@@ -88,7 +88,7 @@ void Player::setDodgeTime(float dodgeTime)
 	m_dodgeTime = dodgeTime;
 }
 
-Vec2 Player::getHeading()
+Vec2 Player::getHeading() const
 {
 	return m_moveDirection;
 }
@@ -98,9 +98,9 @@ void Player::onDodgeFinished()
 	m_bIsDodging = false;
 
 	// Set back regular speed
-	m_moveSpeed = m_baseMoveSpeed;	
+	m_moveSpeed = m_baseMoveSpeed;
 
-	if(m_bIsRunAnimPlaying)
+	if (m_isRuning)
 	{
 		// Go back to regular running
 		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
@@ -111,7 +111,7 @@ void Player::onAttackFinished()
 {
 	m_bIsAttacking = false;
 
-	if(m_bIsRunAnimPlaying)
+	if (m_isRuning)
 	{
 		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
 	}
@@ -124,26 +124,26 @@ void Player::onAttackFinished()
 void Player::manageInput()
 {
 	GameInput* pInput = GameInput::getInstance();
-	if(pInput->hasAction("LightAttackInput"))
+	if (pInput->hasAction("LightAttackInput"))
 	{
 		lightAttack();
 	}
-	else if(pInput->hasAction("StrongAttackInput"))
+	else if (pInput->hasAction("StrongAttackInput"))
 	{
 		lightAttack();
 	}
-	else if(pInput->hasAction("DodgeInput"))
+	else if (pInput->hasAction("DodgeInput") && m_isRuning)
 	{
 		performDodge();
 	}
-	
+
 	// Player movement
-	float horizontalValue = pInput->getInputAxis("HorizontalMovement");
-	float vertiacalValue = pInput->getInputAxis("VerticalMovement");
-	m_moveDirection = Vec2(horizontalValue, vertiacalValue);	
+	const float horizontalValue = pInput->getInputAxis("HorizontalMovement");
+	const float vertiacalValue = pInput->getInputAxis("VerticalMovement");
+	m_moveDirection = Vec2(horizontalValue, vertiacalValue);
 
 	// Make sure we are not moving faster diagonally
-	m_moveDirection.normalize();	
+	m_moveDirection.normalize();
 }
 
 void Player::lightAttack()
@@ -171,19 +171,19 @@ void Player::performDodge()
 
 void Player::playAnimations()
 {
-	if(!m_bIsAttacking)
+	if (!m_bIsAttacking)
 	{
 		float moveDirectionSqrt = m_moveDirection.lengthSquared();
-		if(!m_bIsDodging && moveDirectionSqrt > 0 && !m_bIsRunAnimPlaying)
+		if (!m_bIsDodging && moveDirectionSqrt > 0 && !m_isRuning)
 		{
 			// When keyboard is down we are always moving
 			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
-			m_bIsRunAnimPlaying = true;
-		}	
-		else if(moveDirectionSqrt <= FLT_EPSILON && m_bIsRunAnimPlaying)
+			m_isRuning = true;
+		}
+		else if (moveDirectionSqrt <= FLT_EPSILON && m_isRuning)
 		{
 			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
-			m_bIsRunAnimPlaying = false;		
+			m_isRuning = false;
 		}
 	}
 }

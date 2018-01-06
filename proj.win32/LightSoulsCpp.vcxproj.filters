@@ -43,7 +43,7 @@
     <Filter Include="src\Input\InputTypes\Mouse">
       <UniqueIdentifier>{206068aa-305c-447a-a764-099d3ec4119c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Input\InputTypes\Joystick">
+    <Filter Include="src\Input\InputTypes\GameController">
       <UniqueIdentifier>{8af7186f-c495-4f57-a175-eb64949651a3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -89,6 +89,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Input\InputTypes\Mouse\MouseInput.cpp">
       <Filter>src\Input\InputTypes\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Input\InputTypes\AInputDevice.cpp">
+      <Filter>src\Input\InputTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Input\InputTypes\GameController\GameControllerInput.cpp">
+      <Filter>src\Input\InputTypes\GameController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,11 +146,11 @@
     <ClInclude Include="..\Classes\Input\InputTypes\Mouse\MouseInput.h">
       <Filter>src\Input\InputTypes\Mouse</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Input\InputTypes\Joystick\JoystickInput.h">
-      <Filter>src\Input\InputTypes\Joystick</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Input\InputTypes\IInputDevice.h">
+    <ClInclude Include="..\Classes\Input\InputTypes\AInputDevice.h">
       <Filter>src\Input\InputTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Input\InputTypes\GameController\GameControllerInput.h">
+      <Filter>src\Input\InputTypes\GameController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,80 +1,29 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "Input/InputTypes/IInputDevice.h"
+#include "Input/InputTypes/AInputDevice.h"
 #include "Utils/Utils.h"
 
-struct StateMouseButton
-{
-	std::string actionName;
-	bool bIsPressed;
-
-	StateMouseButton()
-	{
-		this->actionName = "";
-		this->bIsPressed = false;
-	}
-
-	StateMouseButton(std::string action)
-	{
-		this->actionName = action;
-		this->bIsPressed = false;
-	}
-};
-
-struct ActionMouseButton
-{
-	std::string action;
-	bool bIsActive;
-	bool bNeedsStateReset;
-
-	ActionMouseButton()
-	{
-		this->action = "";
-		this->bIsActive = false;
-		this->bNeedsStateReset = false;
-	}
-
-	ActionMouseButton(std::string action)
-	{
-		this->action = action;
-		this->bIsActive = false;
-		this->bNeedsStateReset = false;
-	}
-};
-
 typedef cocos2d::EventMouse::MouseButton MouseButtonCode;
-typedef std::map<std::string, bool> ActionStateMap;
-typedef std::map<MouseButtonCode, StateMouseButton> StateButtonCodeMap;
-typedef std::map<MouseButtonCode, ActionMouseButton> ActionButtonCodeMap;
 
-class MouseInput: IInputDevice
+class MouseInput: public AInputDevice
 {
-public:		
+public:
 	MouseInput();
-
 	bool init();
-	void update(float deltaTime);
-	void addButtonAction(const char* buttonAction, const MouseButtonCode& buttonCode);
-	void addButtonState(const char* buttonAction, const MouseButtonCode& buttonCode);
+
+	virtual void addActionButton(const char* actionName, const ActionButton& actionButton) override;
+	virtual void addStateButton(const char* actionName, const StateButton& stateButton) override;
 
 	virtual bool hasAction(const std::string& action) const override;
 	virtual bool hasActionState(const std::string& action) const override;
-	virtual float getAxisInput(const std::string& axisName) const override;
 	virtual bool hasAxisInput(const std::string& axisName) const override;
-
+	virtual float getAxisInput(const std::string& axisName) const override;
+	
 private:
 	void onMouseButtonDown(cocos2d::EventMouse* pEvent);
 	void onMouseButtonUp(cocos2d::EventMouse* pEvent);
-	void updateActionButtonState();
 	
-	void switchActionButtonState(ActionStateMap& stateMap, ActionButtonCodeMap& codeMap,
-		MouseButtonCode buttonCode, bool bIsActive);
-	void switchStateButtonState(ActionStateMap& stateMap, StateButtonCodeMap& codeMap,
-		MouseButtonCode buttonCode, bool bIsPressed);
-
-	ActionStateMap m_stateButtons;
-	ActionStateMap m_actionButtons;
-	StateButtonCodeMap m_buttonStates;
-	ActionButtonCodeMap m_buttonActions;
+	void setActionButtonState(bool bIsActive, const MouseButtonCode& keyCode);
+	void setStateButtonState(bool bIsPressed, const MouseButtonCode& keyCode);
 };
