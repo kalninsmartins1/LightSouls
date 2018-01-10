@@ -19,7 +19,9 @@ public:
 
 private:
 	Player* m_pPlayer;
-	CameraController* m_pCameraController;
+	
+	void initWolrdLayer();
+	void initUILayer();
 };
 
 #endif // __HELLOWORLD_SCENE_H__

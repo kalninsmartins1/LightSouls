@@ -18,9 +18,27 @@ void Utils::logVec2(const cocos2d::Vec2& v)
 	CCLOG("(X: %f, Y: %f)", v.x, v.y);
 }
 
+void Utils::logVec3(const cocos2d::Vec3& v)
+{
+	CCLOG("(X: %f, Y: %f, Z: %f)", v.x, v.y, v.z);
+}
+
 void Utils::assertWithStrFormat(bool condition, const char* msg, const char* param)
 {
 	CCASSERT(condition, StringUtils::format(msg, param).c_str());
+}
+
+Vec2 Utils::getScreenFillScale(const Size& curSize)
+{
+	Vec2 scale = Vec2::ZERO;
+	if(curSize.width > 0 && curSize.height > 0)
+	{
+		const Size& winSize = Director::getInstance()->getWinSize();
+		scale.x = winSize.width / curSize.width;
+		scale.y = winSize.height / curSize.height;
+	}
+	
+	return scale;
 }
 
 void Utils::startTimerWithCallback(Node* pNode, std::function<void()> callback,

@@ -1,8 +1,10 @@
 #pragma once
+
 #include "cocos2d.h"
 #include "tinyxml2/tinyxml2.h"
 
 class GameInput;
+class World;
 enum class GameInputType;
 
 namespace tinyxml2
@@ -23,9 +25,10 @@ public:
 	static bool initializeSpriteUsingXMLFile(cocos2d::Sprite& sprite,
 		const char* pathToXML);
 	static bool loadInputSettings(GameInput& gameInput, const char* pathToConfigXml);	
+	static bool loadWorld(World& world, const char* pathToXML);
 
 private:
-	XMLLoader();
+	XMLLoader();	
 
 	static void loadActionTriggers(GameInput& gameInput,
 		const XMLElement* pElement, LoadInputCallback onKeyboardInput,

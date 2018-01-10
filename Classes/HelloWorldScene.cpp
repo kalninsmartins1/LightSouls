@@ -1,7 +1,9 @@
 #include "HelloWorldScene.h"
 #include "Entity/Player/Player.h"
-#include "Camera/CameraController.h"
 #include "Input/GameInput.h"
+#include "World/World.h"
+#include "Entity/CustomActions/CameraFallow.h"
+#include "Utils/Utils.h"
 
 USING_NS_CC;
 
@@ -32,31 +34,67 @@ bool HelloWorld::init()
 	{
 		return false;
 	}
-
-	Node* pRootNode = Node::create();
-
-	// Init player
-	m_pPlayer = Player::create("res/Configs/Player/Player.xml");
-	pRootNode->addChild(m_pPlayer);
-	addChild(pRootNode);
-
-	m_pCameraController = CameraController::create();
+	
+	initWolrdLayer();
+	initUILayer();
+	
+	// Init Input
 	if(!GameInput::getInstance()->loadInputConfiguration("res/Configs/Input/Input.xml"))
 	{
 		// Halt the game when in debug mode
 		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
 	}	
 
+	// Call update for this scene
 	scheduleUpdate();
     
     return true;
 }
 
 void HelloWorld::update(float deltaTime)
-{
-	m_pCameraController->moveCameraTo(convertToWorldSpace(
-		m_pPlayer->getPosition()), 2);
-
+{	
 	// Keep input events up to date
 	GameInput::getInstance()->update(deltaTime);
+}
+
+void HelloWorld::initWolrdLayer()
+{
+	Node* pWorldLayer = Node::create();
+
+	// Init world
+	World* pWorld = World::create("res/Configs/World/WorldConfig.xml");
+	pWorldLayer->addChild(pWorld);
+
+	// Init player
+	m_pPlayer = Player::create("res/Configs/Player/Player.xml");
+	pWorldLayer->addChild(m_pPlayer);
+
+	// Set world camera mask
+	pWorldLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER1));
+	addChild(pWorldLayer);
+
+	// Create world camera and set it to follow player
+	Camera* pWorldCamera = Camera::create();
+	pWorldCamera->setCameraFlag(CameraFlag::USER1);
+	pWorldCamera->runAction(CameraFollow::create(m_pPlayer));
+	addChild(pWorldCamera);
+}
+
+void HelloWorld::initUILayer()
+{
+	// Init UI
+	Node* pUILayer = Node::create();
+	Sprite* pScreenOverlay = Sprite::create("res/Graphics/UI/screenOverlay.png");
+	const Vec2 scale = Utils::getScreenFillScale(pScreenOverlay->getContentSize());
+	pScreenOverlay->setScale(scale.x, scale.y);
+	pScreenOverlay->setAnchorPoint(Vec2::ZERO);
+
+	pUILayer->addChild(pScreenOverlay);
+	pUILayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));
+	addChild(pUILayer);
+
+	// Create UI camera
+	Camera* pUICamera = Camera::create();
+	pUICamera->setCameraFlag(CameraFlag::USER2);
+	addChild(pUICamera);
 }

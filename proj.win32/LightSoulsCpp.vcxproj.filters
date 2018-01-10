@@ -10,9 +10,6 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Camera">
-      <UniqueIdentifier>{97f7c6a2-f4cf-48d4-9287-69d85fe9c783}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Utils">
       <UniqueIdentifier>{d11e09d1-c309-492f-b1ec-5a357bfed652}</UniqueIdentifier>
     </Filter>
@@ -46,6 +43,12 @@
     <Filter Include="src\Input\InputTypes\GameController">
       <UniqueIdentifier>{8af7186f-c495-4f57-a175-eb64949651a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\World">
+      <UniqueIdentifier>{d88d87d9-71b5-432c-87b5-83bf700c89da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Entity\CustomActions">
+      <UniqueIdentifier>{5cd679f1-a500-4cda-bf56-26c7dc7244e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -59,9 +62,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Utils\Utils.cpp">
       <Filter>src\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Camera\CameraController.cpp">
-      <Filter>src\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Entity\Enemy\Enemy.cpp">
       <Filter>src\Entity\Enemy</Filter>
@@ -96,6 +96,12 @@
     <ClCompile Include="..\Classes\Input\InputTypes\GameController\GameControllerInput.cpp">
       <Filter>src\Input\InputTypes\GameController</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\World.cpp">
+      <Filter>src\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Entity\CustomActions\CameraFallow.cpp">
+      <Filter>src\Entity\CustomActions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -109,9 +115,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Utils\Utils.h">
       <Filter>src\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Camera\CameraController.h">
-      <Filter>src\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameConsts.h">
       <Filter>src</Filter>
@@ -151,6 +154,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Input\InputTypes\GameController\GameControllerInput.h">
       <Filter>src\Input\InputTypes\GameController</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\World.h">
+      <Filter>src\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\CustomActions\CameraFallow.h">
+      <Filter>src\Entity\CustomActions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

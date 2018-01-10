@@ -6,6 +6,7 @@
 #include "Entity/Components/PlayerAnimComponent.h"
 #include "Entity/Components/MirrorSpriteComponent.h"
 #include "Input/GameInput.h"
+#include "World/World.h"
 
 
 using namespace cocos2d;
@@ -216,10 +217,29 @@ bool XMLLoader::loadInputSettings(GameInput& gameInput, const char* pathToConfig
 					});
 			}
 		}
-	}
-	
+	}	
 
 	return !err;
+}
+
+bool XMLLoader::loadWorld(World& world, const char* pathToXML)
+{
+	XMLDoc doc;
+	const XMLError error = doc.LoadFile(pathToXML);
+	if (!error)
+	{
+		XMLElement* pRoot = doc.RootElement();
+		XMLElement* pChild = pRoot->FirstChildElement();
+		const char* pathToSprite = pChild->Attribute("path");
+		world.initWithFile(pathToSprite);		
+	}
+	else
+	{
+		Utils::assertWithStrFormat(false,
+			"XMLLoader: Failed to load .xml file at %s", pathToXML);
+	}
+
+	return !error;
 }
 
 PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* pNode)

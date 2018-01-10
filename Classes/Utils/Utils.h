@@ -13,7 +13,9 @@ public:
 	static void startTimerWithCallback(cocos2d::Node* pNode,
 		std::function<void()> callback, float time);
 	
+	static cocos2d::Vec2 getScreenFillScale(const cocos2d::Size& curSize);
 	static void logVec2(const cocos2d::Vec2& v);
+	static void logVec3(const cocos2d::Vec3& v);
 	static void assertWithStrFormat(bool condition, const char* msg, const char* param);
 
 	static MouseButtonCode convertStringToMouseButtonCode(const char* mouseButtonStr);
