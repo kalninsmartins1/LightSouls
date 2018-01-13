@@ -36,7 +36,7 @@ Player::Player() :
 	m_timeBetweenComboInput(0),
 	m_curTimeBetweenComboInput(0),
 	m_lastTimePerformedLightAttack(0),
-	m_curLightAttackAnimIdx(static_cast<unsigned short int>(LightAttackStage::ONE))
+	m_curLightAttackAnimIdx(0)
 {
 }
 
@@ -166,7 +166,6 @@ void Player::lightAttack()
 		const long currnentTime = Utils::getTimeStampInMilliseconds();
 		const float secondsSinceLastAttack = // Devide by 1000 to convert to seconds
 			(currnentTime - m_lastTimePerformedLightAttack) / 1000.f;
-		CCLOG("Time since last light attack %f", secondsSinceLastAttack);
 		const bool bIsComboActive = secondsSinceLastAttack < m_timeBetweenComboInput;
 		
 		if(bIsComboActive)
