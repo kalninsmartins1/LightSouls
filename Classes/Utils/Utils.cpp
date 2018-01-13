@@ -5,12 +5,19 @@ using namespace cocos2d;
 
 Utils::Utils()
 {
+	// Private constructor
+}
 
+long Utils::getTimeStampInMilliseconds()
+{
+	// Convert system ticks to milliseconds
+	return std::chrono::system_clock::now().time_since_epoch().count() / 10000;
 }
 
 bool Utils::isStrEqual(const std::string& a, const std::string& b)
 {
-	return a.compare(b) == 0;
+	// TODO: Do we really need a function for this ?
+	return a == b;
 }
 
 void Utils::logVec2(const cocos2d::Vec2& v)

@@ -1,13 +1,31 @@
 #include "PlayerAnimComponent.h"
-#include "GameConsts.h"
 #include "Utils/Utils.h"
 #include "Utils/AnimationUtils.h"
+#include "tinyxml2/tinyxml2.h"
+#include "Entity/Player/Player.h"
 
 using namespace cocos2d;
 
-void PlayerAnimComponent::setSprite(cocos2d::Sprite* pSprite)
-{	
-	m_pParent = pSprite;
+
+PlayerAnimComponent::PlayerAnimComponent(Sprite& player) :
+	m_playerSprite(player)
+{
+}
+
+PlayerAnimComponent* PlayerAnimComponent::create(Sprite& player)
+{
+	PlayerAnimComponent * ret = new (std::nothrow) PlayerAnimComponent(player);
+
+	if (ret && ret->init())
+	{
+		ret->autorelease();
+	}
+	else
+	{
+		CC_SAFE_DELETE(ret);
+	}
+
+	return ret;
 }
 
 void PlayerAnimComponent::loadConfig(tinyxml2::XMLNode* pNode)
@@ -20,91 +38,121 @@ void PlayerAnimComponent::loadConfig(tinyxml2::XMLNode* pNode)
 		// Load specific animation based on its type
 		if (Utils::isStrEqual(animType, "Running"))
 		{
-			AnimationUtils::loadAnimationFrames(pElem, m_runFrames, 
+			AnimationUtils::loadAnimationFrames(pElem, m_runFrames,
 				m_timeBetweenRunFrames);
 		}
 		else if (Utils::isStrEqual(animType, "Idle"))
 		{
-			AnimationUtils::loadAnimationFrames(pElem, m_idleFrames, 
+			AnimationUtils::loadAnimationFrames(pElem, m_idleFrames,
 				m_timeBetweenIdleFrames);
 		}
 		else if (Utils::isStrEqual(animType, "Hurt"))
 		{
-			AnimationUtils::loadAnimationFrames(pElem, m_hurtFrames, 
+			AnimationUtils::loadAnimationFrames(pElem, m_hurtFrames,
 				m_timeBetweenIdleFrames);
 		}
 		else if (Utils::isStrEqual(animType, "Dodge"))
 		{
-			AnimationUtils::loadAnimationFrames(pElem, m_dodgeFrames, 
+			AnimationUtils::loadAnimationFrames(pElem, m_dodgeFrames,
 				m_timeBetweenDodgeFrames);
 		}
-		else if (Utils::isStrEqual(animType, "Attack"))
+		else if (Utils::isStrEqual(animType, "LightAttackOne"))
 		{
-			AnimationUtils::loadAnimationFrames(pElem, m_attackFrames, 
-				m_timeBetweenAttackFrames);
+			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackOneFrames,
+				m_timeBetweenLightAttackOneFrames);
+		}
+		else if (Utils::isStrEqual(animType, "LightAttackTwo"))
+		{
+			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackTwoFrames,
+				m_timeBetweenLightAttackTwoFrames);
+		}
+		else if (Utils::isStrEqual(animType, "LightAttackThree"))
+		{
+			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackThreeFrames,
+				m_timeBetweenLightAttackThreeFrames);
+		}
+		else if (Utils::isStrEqual(animType, "LightAttackFour"))
+		{
+			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackFourFrames,
+				m_timeBetweenLightAttackFourFrames);
+		}
+		else if (Utils::isStrEqual(animType, "LightAttackFive"))
+		{
+			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackFiveFrames,
+				m_timeBetweenLightAttackFiveFrames);
 		}
 	}
 
 	// Init parent sprite
-	m_pParent->initWithSpriteFrame(m_idleFrames.at(0));
+	m_playerSprite.initWithSpriteFrame(m_idleFrames.at(0));
 }
 
-void PlayerAnimComponent::startAnimation(PlayerAnimationType type)
+void PlayerAnimComponent::playLightAttackAnimation(LightAttackStage stage,
+	const AnimationCallback& callback)
 {
-	switch (type)
+	switch (stage)
 	{
-	case PlayerAnimationType::Idle:
-			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_idleFrames,
-				m_timeBetweenIdleFrames);
-			break;
+	case LightAttackStage::ONE:
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
+			m_lightAttackOneFrames,
+			m_timeBetweenLightAttackOneFrames, 
+			callback);
+		break;
 
-	case PlayerAnimationType::Run:
-			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_runFrames,
-				m_timeBetweenRunFrames);
-			break;
+	case LightAttackStage::TWO:
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
+			m_lightAttackTwoFrames,
+			m_timeBetweenLightAttackTwoFrames,
+			callback);
+		break;
 
-	case PlayerAnimationType::Dodge:
-			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_dodgeFrames,
-				m_timeBetweenDodgeFrames);
-			break;
+	case LightAttackStage::THREE:
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
+			m_lightAttackThreeFrames,
+			m_timeBetweenLightAttackThreeFrames,
+			callback);
+		break;
 
-	case PlayerAnimationType::Hurt:
-			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_hurtFrames,
-				m_timeBetweenHurtFrames);
-			break;
+	case LightAttackStage::FOUR:
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
+			m_lightAttackFourFrames,
+			m_timeBetweenLightAttackFourFrames,
+			callback);
+		break;
 
-	case PlayerAnimationType::Attack:
-			AnimationUtils::startSpriteFrameAnimation(m_pParent, m_attackFrames,
-				m_timeBetweenAttackFrames);
-			break;	
+	case LightAttackStage::FIVE:
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
+			m_lightAttackFiveFrames,
+			m_timeBetweenLightAttackFiveFrames,
+			callback);
+		break;
+
+	default:
+		CCLOGERROR("PlayerAnimComponent: [playLightAttackAnimation] invalid light animation stage !");
+		break;
 	}
 }
 
-float PlayerAnimComponent::getAnimationLengthInSeconds(PlayerAnimationType type) const
+void PlayerAnimComponent::playRunAnimation()
 {
-	float length = 0;
-	switch (type)
-	{
-	case PlayerAnimationType::Idle:
-			length = m_idleFrames.size() * m_timeBetweenIdleFrames;
-			break;
+	AnimationUtils::startSpriteFrameAnimation(&m_playerSprite, m_runFrames,
+		m_timeBetweenRunFrames);
+}
 
-	case PlayerAnimationType::Run:
-			length = m_runFrames.size() * m_timeBetweenRunFrames;
-			break;
+void PlayerAnimComponent::playIdleAnimation()
+{
+	AnimationUtils::startSpriteFrameAnimation(&m_playerSprite, m_idleFrames,
+		m_timeBetweenIdleFrames);
+}
 
-	case PlayerAnimationType::Dodge:
-			length = m_dodgeFrames.size() * m_timeBetweenDodgeFrames;
-			break;
+void PlayerAnimComponent::playDodgeAnimation()
+{
+	AnimationUtils::startSpriteFrameAnimation(&m_playerSprite, m_dodgeFrames,
+		m_timeBetweenDodgeFrames);
+}
 
-	case PlayerAnimationType::Hurt:
-			length = m_hurtFrames.size() * m_timeBetweenHurtFrames;
-			break;
-
-	case PlayerAnimationType::Attack:
-			length = m_attackFrames.size() * m_timeBetweenAttackFrames;
-			break;	
-	}
-
-	return length;
+void PlayerAnimComponent::playHurtAnimation()
+{
+	AnimationUtils::startSpriteFrameAnimation(&m_playerSprite, m_hurtFrames,
+		m_timeBetweenHurtFrames);
 }

@@ -130,22 +130,24 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const char* pathToX
 			}
 			else if (Utils::isStrEqual(nodeValue, XML_PLAYER_CONTROLLER_COMPONENT))
 			{
-				Player* pPlayer = (Player*)&sprite;
+				Player* pPlayer = dynamic_cast<Player*>(&sprite);
 				const XMLElement* pMovementElement = pNode->FirstChildElement();
 
 				const float moveSpeed = pMovementElement->FloatAttribute(XML_ENTITY_MOVE_SPEED);
 				const float dodgeSpeed = pMovementElement->FloatAttribute(XML_ENTITY_DODGE_SPEED);
 				const float dodgeTime = pMovementElement->FloatAttribute(XML_ENTITY_DODGE_TIME);
+				const float timeBetweenComboInput =
+					pMovementElement->FloatAttribute("timeBetweenComboInput");
 
 				pPlayer->setMoveSpeed(moveSpeed);
 				pPlayer->setDodgeSpeed(dodgeSpeed);
 				pPlayer->setDodgeTime(dodgeTime);
+				pPlayer->setTimeBetweenComboInput(timeBetweenComboInput);
 			}
 			else if (Utils::isStrEqual(nodeValue, XML_PLAYER_ANIM_COMPONENT))
 			{
-				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create();
+				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create(sprite);
 				pPlayerAnim->setName(XML_PLAYER_ANIM_COMPONENT);
-				pPlayerAnim->setSprite(&sprite);
 				sprite.addComponent(pPlayerAnim);
 				pPlayerAnim->loadConfig(pNode);
 			}
@@ -231,7 +233,7 @@ bool XMLLoader::loadWorld(World& world, const char* pathToXML)
 		XMLElement* pRoot = doc.RootElement();
 		XMLElement* pChild = pRoot->FirstChildElement();
 		const char* pathToSprite = pChild->Attribute("path");
-		world.initWithFile(pathToSprite);		
+		world.initWithFile(pathToSprite);
 	}
 	else
 	{

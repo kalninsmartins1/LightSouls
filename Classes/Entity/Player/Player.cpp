@@ -22,17 +22,22 @@ Player* Player::create(const char* pathToXML)
 	return pPlayer;
 }
 
-Player::Player()
+Player::Player() :
+	
+	m_pPlayerAnimComponent(nullptr),
+	m_moveDirection(Vec2::ZERO),
+	m_isRuning(false),
+	m_bIsDodging(false),
+	m_bIsAttacking(false),
+	m_baseMoveSpeed(0),
+	m_moveSpeed(0),
+	m_dodgeSpeed(0),
+	m_dodgeTime(0),	
+	m_timeBetweenComboInput(0),
+	m_curTimeBetweenComboInput(0),
+	m_lastTimePerformedLightAttack(0),
+	m_curLightAttackAnimIdx(static_cast<unsigned short int>(LightAttackStage::ONE))
 {
-	// Set default values
-	m_moveDirection = Vec2::ZERO;
-	m_baseMoveSpeed = 0;
-	m_moveSpeed = 0;
-	m_dodgeSpeed = 0;
-	m_dodgeTime = 0;
-	m_bIsAttacking = false;
-	m_bIsDodging = false;
-	m_isRuning = false;
 }
 
 bool Player::init(const char* pathToXML)
@@ -48,8 +53,8 @@ bool Player::init(const char* pathToXML)
 
 	// Get animation component to trigger animations when that is necessary
 	m_pPlayerAnimComponent =
-		(PlayerAnimComponent*)getComponent(XML_PLAYER_ANIM_COMPONENT);
-	m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
+		dynamic_cast<PlayerAnimComponent*>(getComponent(XML_PLAYER_ANIM_COMPONENT));
+	m_pPlayerAnimComponent->playIdleAnimation();
 
 	// Set move speed at begining
 	m_moveSpeed = m_baseMoveSpeed;
@@ -93,6 +98,11 @@ Vec2 Player::getHeading() const
 	return m_moveDirection;
 }
 
+void Player::setTimeBetweenComboInput(float timeBetweenComboInput)
+{
+	m_timeBetweenComboInput = timeBetweenComboInput;
+}
+
 void Player::onDodgeFinished()
 {
 	m_bIsDodging = false;
@@ -103,7 +113,7 @@ void Player::onDodgeFinished()
 	if (m_isRuning)
 	{
 		// Go back to regular running
-		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
+		m_pPlayerAnimComponent->playRunAnimation();
 	}
 }
 
@@ -113,11 +123,11 @@ void Player::onAttackFinished()
 
 	if (m_isRuning)
 	{
-		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
+		m_pPlayerAnimComponent->playRunAnimation();
 	}
 	else
 	{
-		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
+		m_pPlayerAnimComponent->playIdleAnimation();
 	}
 }
 
@@ -130,7 +140,7 @@ void Player::manageInput()
 	}
 	else if (pInput->hasAction("StrongAttackInput"))
 	{
-		lightAttack();
+		//lightAttack();
 	}
 	else if (pInput->hasAction("DodgeInput") && m_isRuning)
 	{
@@ -150,13 +160,39 @@ void Player::lightAttack()
 {
 	if (!m_bIsAttacking && !m_bIsDodging)
 	{
-		// Perform light attack
+		// Activating attack
 		m_bIsAttacking = true;
-		m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Attack);
-		Utils::startTimerWithCallback(this,
-			CC_CALLBACK_0(Player::onAttackFinished, this),
-			m_pPlayerAnimComponent->
-			getAnimationLengthInSeconds(PlayerAnimationType::Attack));
+		
+		const long currnentTime = Utils::getTimeStampInMilliseconds();
+		const float secondsSinceLastAttack = // Devide by 1000 to convert to seconds
+			(currnentTime - m_lastTimePerformedLightAttack) / 1000.f;
+		CCLOG("Time since last light attack %f", secondsSinceLastAttack);
+		const bool bIsComboActive = secondsSinceLastAttack < m_timeBetweenComboInput;
+		
+		if(bIsComboActive)
+		{
+			// Go to next attack in combo
+			m_curLightAttackAnimIdx++;
+			
+			// Wrap the index within valid values
+			Utils::wrapValue(m_curLightAttackAnimIdx, 
+				static_cast<unsigned short int>(LightAttackStage::ONE),
+				static_cast<unsigned short int>(LightAttackStage::FIVE));
+		}
+		else
+		{
+			// Reset back to first attack
+			m_curLightAttackAnimIdx = 
+				static_cast<unsigned short int>(LightAttackStage::ONE);
+		}
+		
+		// Play the attack animation
+		m_pPlayerAnimComponent->playLightAttackAnimation(
+			static_cast<LightAttackStage>(m_curLightAttackAnimIdx),
+			CC_CALLBACK_0(Player::onAttackFinished, this));
+		
+		// Set the time last light attack was performed
+		m_lastTimePerformedLightAttack = Utils::getTimeStampInMilliseconds();
 	}
 }
 
@@ -164,7 +200,7 @@ void Player::performDodge()
 {
 	m_bIsDodging = true;
 	m_moveSpeed = m_dodgeSpeed;
-	m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Dodge);
+	m_pPlayerAnimComponent->playDodgeAnimation();
 	Utils::startTimerWithCallback(this,
 		CC_CALLBACK_0(Player::onDodgeFinished, this), m_dodgeTime);
 }
@@ -173,16 +209,16 @@ void Player::playAnimations()
 {
 	if (!m_bIsAttacking)
 	{
-		float moveDirectionSqrt = m_moveDirection.lengthSquared();
+		const float moveDirectionSqrt = m_moveDirection.lengthSquared();
 		if (!m_bIsDodging && moveDirectionSqrt > 0 && !m_isRuning)
 		{
 			// When keyboard is down we are always moving
-			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Run);
+			m_pPlayerAnimComponent->playRunAnimation();
 			m_isRuning = true;
 		}
 		else if (moveDirectionSqrt <= FLT_EPSILON && m_isRuning)
 		{
-			m_pPlayerAnimComponent->startAnimation(PlayerAnimationType::Idle);
+			m_pPlayerAnimComponent->playIdleAnimation();
 			m_isRuning = false;
 		}
 	}

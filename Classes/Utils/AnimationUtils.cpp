@@ -5,6 +5,27 @@
 
 using namespace cocos2d;
 
+void AnimationUtils::startSpriteFrameAnimationWithCallback(Sprite* pSprite,
+	Vector<SpriteFrame*>& spriteFrames, float timeBetweenFrames, const std::function<void()>& onFinished)
+{
+	// Stop any previously started animation
+	pSprite->stopActionByTag(ACTION_ANIM_TAG);
+
+	// Start character animation
+	const auto pAnimation = Animation::createWithSpriteFrames(spriteFrames, timeBetweenFrames);
+	const auto pAnimate = Animate::create(pAnimation);
+	const auto pCallback = CallFunc::create(onFinished);
+
+	/* By cocos2d documentation last parameter to Sequnce::create must be nullptr
+	 * http://www.cocos2d-x.org/docs/cocos2d-x/en/actions/sequences.html
+	*/
+	Sequence* pSequence = Sequence::create(pAnimate, pCallback, nullptr);
+	pSequence->setTag(ACTION_ANIM_TAG);
+
+	// Start new anim
+	pSprite->runAction(pSequence);
+}
+
 void AnimationUtils::startSpriteFrameAnimation(Sprite* pSprite, Vector<SpriteFrame*>& spriteFrames,
 	float timeBetweenFrames)
 {
@@ -12,16 +33,13 @@ void AnimationUtils::startSpriteFrameAnimation(Sprite* pSprite, Vector<SpriteFra
 	pSprite->stopActionByTag(ACTION_ANIM_TAG);
 
 	// Start character animation
-	auto animation = Animation::createWithSpriteFrames(spriteFrames, timeBetweenFrames);
-	auto animate = Animate::create(animation);
-	auto repeatAction = RepeatForever::create(animate);
-	repeatAction->setTag(ACTION_ANIM_TAG);
-
-	// Remove any old anim action
-	pSprite->stopActionByTag(ACTION_ANIM_TAG);
+	const auto pAnimation = Animation::createWithSpriteFrames(spriteFrames, timeBetweenFrames);
+	const auto pAnimate = Animate::create(pAnimation);
+	const auto pRepeatAction = RepeatForever::create(pAnimate);
+	pRepeatAction->setTag(ACTION_ANIM_TAG);
 
 	// Start new anim
-	pSprite->runAction(repeatAction);
+	pSprite->runAction(pRepeatAction);
 }
 
 void AnimationUtils::loadAnimationFrames(const tinyxml2::XMLElement* pElem,
@@ -35,7 +53,7 @@ void AnimationUtils::loadAnimationFrames(const tinyxml2::XMLElement* pElem,
 	const char* spriteFrameName = pElem->Attribute("frameNamePattern");
 
 	// Get total frame count
-	int frameCount = pElem->IntAttribute("frameCount");
+	const int frameCount = pElem->IntAttribute("frameCount");
 
 	// Load all the frame for the animation
 	char curSpriteFrameName[MAX_SPRITE_NAME_LENGTH] = { 0 };

@@ -9,6 +9,8 @@ typedef cocos2d::EventKeyboard::KeyCode KeyCode;
 class Utils
 {	
 public:
+
+	static long getTimeStampInMilliseconds();
 	static bool isStrEqual(const std::string& a, const std::string& b);
 	static void startTimerWithCallback(cocos2d::Node* pNode,
 		std::function<void()> callback, float time);
@@ -31,6 +33,9 @@ public:
 
 	template <typename T>
 	static void clampValue(T& value, const T& minValue, const T& maxValue);
+	
+	template <typename T>
+	static void wrapValue(T& value, const T& startValue, const T& endValue);
 
 private:
 	Utils();
@@ -60,4 +65,17 @@ void Utils::clampValue(T& value, const T& minValue, const T& maxValue)
 	{
 		value = minValue;
 	}	
+}
+
+template <typename T>
+void Utils::wrapValue(T& value, const T& startValue, const T& endValue)
+{
+	if(value > endValue)
+	{
+		value = startValue;
+	}
+	else if(value < startValue)
+	{
+		value = endValue;
+	}
 }

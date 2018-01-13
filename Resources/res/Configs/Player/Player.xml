@@ -2,15 +2,16 @@
 <Actor type="Player">
 	<Component type="TransformComponent">
 		<Position x="2" y="1" z="0" />
-		<Rotation x="" y="" z="" />		
+		<Rotation x="0" y="0" z="0" />
 	</Component>
 	
 	<Component type="PlayerControllerComponent">
 		<MovementParams
-				moveSpeed="80"
+				moveSpeed="160"
 				dodgeSpeed="100"
 				dodgeTime="0.8"
-		/>				
+				timeBetweenComboInput="0.8"	
+		/>
 	</Component>
 	
 	<Component type="PlayerAnimComponent">
@@ -42,11 +43,39 @@
 			frameCount="6"
 			timeBetweenFrames="0.1"
 		/>
-		<SpriteSheet type="Attack"
-			path="res/Graphics/Player/Attack/attackAnim.png" 
-			plistPath="res/Graphics/Player/Attack/attackAnim.plist"
-			frameNamePattern="attack%d.png"
-			frameCount="15"
+		<SpriteSheet type="LightAttackOne"
+			path="res/Graphics/Player/Attack/LightAttackOne/lightAttackOneAnim.png" 
+			plistPath="res/Graphics/Player/Attack/LightAttackOne/lightAttackOneAnim.plist"
+			frameNamePattern="lightAttackOne%d.png"
+			frameCount="3"
+			timeBetweenFrames="0.1"
+		/>
+		<SpriteSheet type="LightAttackTwo"
+			path="res/Graphics/Player/Attack/LightAttackTwo/lightAttackTwoAnim.png" 
+			plistPath="res/Graphics/Player/Attack/LightAttackTwo/lightAttackTwoAnim.plist"
+			frameNamePattern="lightAttackTwo%d.png"
+			frameCount="3"
+			timeBetweenFrames="0.1"
+		/>
+		<SpriteSheet type="LightAttackThree"
+			path="res/Graphics/Player/Attack/LightAttackThree/lightAttackThreeAnim.png" 
+			plistPath="res/Graphics/Player/Attack/LightAttackThree/lightAttackThreeAnim.plist"
+			frameNamePattern="lightAttackThree%d.png"
+			frameCount="3"
+			timeBetweenFrames="0.1"
+		/>
+		<SpriteSheet type="LightAttackFour"
+			path="res/Graphics/Player/Attack/LightAttackFour/lightAttackFourAnim.png" 
+			plistPath="res/Graphics/Player/Attack/LightAttackFour/lightAttackFourAnim.plist"
+			frameNamePattern="lightAttackFour%d.png"
+			frameCount="3"
+			timeBetweenFrames="0.1"
+		/>
+		<SpriteSheet type="LightAttackFive"
+			path="res/Graphics/Player/Attack/LightAttackFive/lightAttackFiveAnim.png" 
+			plistPath="res/Graphics/Player/Attack/LightAttackFive/lightAttackFiveAnim.plist"
+			frameNamePattern="lightAttackFive%d.png"
+			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 	</Component>
