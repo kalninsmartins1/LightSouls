@@ -1,79 +1,79 @@
 <?xml version="1.0" ?>
-<Actor type="Player">
+<Entity type="Player"
+			moveSpeed="160"
+			dodgeSpeed="100"
+			dodgeTime="0.8"
+	>
+	
 	<Component type="TransformComponent">
 		<Position x="2" y="1" z="0" />
 		<Rotation x="0" y="0" z="0" />
 	</Component>
 	
-	<Component type="PlayerControllerComponent">
-		<MovementParams
-				moveSpeed="160"
-				dodgeSpeed="100"
-				dodgeTime="0.8"
-				timeBetweenComboInput="0.8"	
-		/>
+	<Component type="PlayerControllerComponent"
+				timeBetweenComboInput="0.8">		
 	</Component>
 	
 	<Component type="PlayerAnimComponent">
-		<SpriteSheet type="Running"
-			path="res/Graphics/Player/Run/runAnim.png" 
-			plistPath="res/Graphics/Player/Run/runAnim.plist"
+		<SpriteSheet type="Run"
+			path="res/Graphics/World/Player/Run/runAnim.png" 
+			plistPath="res/Graphics/World/Player/Run/runAnim.plist"
 			frameNamePattern="run%d.png"
 			frameCount="10"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Idle"
-			path="res/Graphics/Player/Idle/idleAnim.png" 
-			plistPath="res/Graphics/Player/Idle/idleAnim.plist"
+			path="res/Graphics/World/Player/Idle/idleAnim.png" 
+			plistPath="res/Graphics/World/Player/Idle/idleAnim.plist"
 			frameNamePattern="idle%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Hurt"
-			path="res/Graphics/Player/Hurt/hurtAnim.png" 
-			plistPath="res/Graphics/Player/Hurt/hurtAnim.plist"
+			path="res/Graphics/World/Player/Hurt/hurtAnim.png" 
+			plistPath="res/Graphics/World/Player/Hurt/hurtAnim.plist"
 			frameNamePattern="hurt%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Dodge"
-			path="res/Graphics/Player/Dodge/dodgeSpriteSheet.png" 
-			plistPath="res/Graphics/Player/Dodge/dodgeData.plist"
+			path="res/Graphics/World/Player/Dodge/dodgeSpriteSheet.png" 
+			plistPath="res/Graphics/World/Player/Dodge/dodgeData.plist"
 			frameNamePattern="dodge%d.png"
 			frameCount="6"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="LightAttackOne"
-			path="res/Graphics/Player/Attack/LightAttackOne/lightAttackOneAnim.png" 
-			plistPath="res/Graphics/Player/Attack/LightAttackOne/lightAttackOneAnim.plist"
+			path="res/Graphics/World/Player/Attack/LightAttackOne/lightAttackOneAnim.png" 
+			plistPath="res/Graphics/World/Player/Attack/LightAttackOne/lightAttackOneAnim.plist"
 			frameNamePattern="lightAttackOne%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="LightAttackTwo"
-			path="res/Graphics/Player/Attack/LightAttackTwo/lightAttackTwoAnim.png" 
-			plistPath="res/Graphics/Player/Attack/LightAttackTwo/lightAttackTwoAnim.plist"
+			path="res/Graphics/World/Player/Attack/LightAttackTwo/lightAttackTwoAnim.png" 
+			plistPath="res/Graphics/World/Player/Attack/LightAttackTwo/lightAttackTwoAnim.plist"
 			frameNamePattern="lightAttackTwo%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="LightAttackThree"
-			path="res/Graphics/Player/Attack/LightAttackThree/lightAttackThreeAnim.png" 
-			plistPath="res/Graphics/Player/Attack/LightAttackThree/lightAttackThreeAnim.plist"
+			path="res/Graphics/World/Player/Attack/LightAttackThree/lightAttackThreeAnim.png" 
+			plistPath="res/Graphics/World/Player/Attack/LightAttackThree/lightAttackThreeAnim.plist"
 			frameNamePattern="lightAttackThree%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="LightAttackFour"
-			path="res/Graphics/Player/Attack/LightAttackFour/lightAttackFourAnim.png" 
-			plistPath="res/Graphics/Player/Attack/LightAttackFour/lightAttackFourAnim.plist"
+			path="res/Graphics/World/Player/Attack/LightAttackFour/lightAttackFourAnim.png" 
+			plistPath="res/Graphics/World/Player/Attack/LightAttackFour/lightAttackFourAnim.plist"
 			frameNamePattern="lightAttackFour%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="LightAttackFive"
-			path="res/Graphics/Player/Attack/LightAttackFive/lightAttackFiveAnim.png" 
-			plistPath="res/Graphics/Player/Attack/LightAttackFive/lightAttackFiveAnim.plist"
+			path="res/Graphics/World/Player/Attack/LightAttackFive/lightAttackFiveAnim.png" 
+			plistPath="res/Graphics/World/Player/Attack/LightAttackFive/lightAttackFiveAnim.plist"
 			frameNamePattern="lightAttackFive%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
@@ -95,4 +95,4 @@
 	<Component type="MirrorSpriteComponent">
 	</Component>
 	
-</Actor>
+</Entity>

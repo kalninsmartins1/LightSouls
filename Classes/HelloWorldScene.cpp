@@ -1,21 +1,22 @@
 #include "HelloWorldScene.h"
-#include "Entity/Player/Player.h"
+#include "World/Entity/Player/Player.h"
 #include "Input/GameInput.h"
 #include "World/World.h"
-#include "Entity/CustomActions/CameraFallow.h"
+#include "World/Entity/CustomActions/CameraFallow.h"
 #include "Utils/Utils.h"
+#include "World/Entity/AI/AIAgentManager.h"
 
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
 {
 	// create the scene with physics enabled
-	auto scene = Scene::createWithPhysics();
+	auto scene = createWithPhysics();
 
-	auto layer = HelloWorld::create();
+	auto layer = create();
 	scene->addChild(layer);
 
-	return scene;    
+	return scene;
 }
 
 // Print useful error message instead of segfaulting when files are not there.
@@ -43,7 +44,7 @@ bool HelloWorld::init()
 	{
 		// Halt the game when in debug mode
 		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
-	}	
+	}
 
 	// Call update for this scene
 	scheduleUpdate();
@@ -55,6 +56,9 @@ void HelloWorld::update(float deltaTime)
 {	
 	// Keep input events up to date
 	GameInput::getInstance()->update(deltaTime);
+
+	// Update AI
+	AIAgentManager::getInstance()->update(deltaTime);
 }
 
 void HelloWorld::initWolrdLayer()
@@ -66,11 +70,27 @@ void HelloWorld::initWolrdLayer()
 	pWorldLayer->addChild(pWorld);
 
 	// Init player
-	m_pPlayer = Player::create("res/Configs/Player/Player.xml");
+	m_pPlayer = Player::create("res/Configs/World/Player/Player.xml");
 	pWorldLayer->addChild(m_pPlayer);
 
+	// Init AI
+	AIAgentManager* pAgentManger = AIAgentManager::getInstance();
+	if (pAgentManger->init("res/Configs/World/AI/AIManager.xml"))
+	{
+		pAgentManger->setTargetEntity(m_pPlayer);
+		pAgentManger->setWorldLayer(pWorldLayer);
+
+		// Spawn agents in world
+		pAgentManger->spawnAgent("ArcherAgent", Vec2(200, 200));
+	}
+	else
+	{
+		CCASSERT(false, "HelloWorldScene: Failed to initialize AI manager !");
+	}
+
 	// Set world camera mask
-	pWorldLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER1));
+	pWorldLayer->setCameraMask(static_cast<unsigned short int>(
+		CameraFlag::USER1));
 	addChild(pWorldLayer);
 
 	// Create world camera and set it to follow player

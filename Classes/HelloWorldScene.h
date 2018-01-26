@@ -4,7 +4,6 @@
 #include "cocos2d.h"
 
 class Player;
-class CameraController;
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -19,7 +18,6 @@ public:
 
 private:
 	Player* m_pPlayer;
-	
 	void initWolrdLayer();
 	void initUILayer();
 };

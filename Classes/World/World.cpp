@@ -1,5 +1,5 @@
 #include "World.h"
-#include "Utils/XMLLoader.h"
+#include "Utils/XML/XMLLoader.h"
 
 World* World::create(const char* pathToXML)
 {

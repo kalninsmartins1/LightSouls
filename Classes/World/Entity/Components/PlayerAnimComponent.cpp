@@ -2,7 +2,7 @@
 #include "Utils/Utils.h"
 #include "Utils/AnimationUtils.h"
 #include "tinyxml2/tinyxml2.h"
-#include "Entity/Player/Player.h"
+#include "World/Entity/Player/Player.h"
 
 using namespace cocos2d;
 
@@ -12,9 +12,9 @@ PlayerAnimComponent::PlayerAnimComponent(Sprite& player) :
 {
 }
 
-PlayerAnimComponent* PlayerAnimComponent::create(Sprite& player)
+PlayerAnimComponent* PlayerAnimComponent::create(Sprite& sprite)
 {
-	PlayerAnimComponent * ret = new (std::nothrow) PlayerAnimComponent(player);
+	PlayerAnimComponent * ret = new (std::nothrow) PlayerAnimComponent(sprite);
 
 	if (ret && ret->init())
 	{
@@ -33,50 +33,50 @@ void PlayerAnimComponent::loadConfig(tinyxml2::XMLNode* pNode)
 	for (tinyxml2::XMLElement* pElem = pNode->FirstChildElement();
 		pElem != nullptr; pElem = pElem->NextSiblingElement())
 	{
-		const char* animType = pElem->Attribute("type");
+		const std::string& animType = pElem->Attribute("type");
 
 		// Load specific animation based on its type
-		if (Utils::isStrEqual(animType, "Running"))
+		if (animType == "Running")
 		{
 			AnimationUtils::loadAnimationFrames(pElem, m_runFrames,
 				m_timeBetweenRunFrames);
 		}
-		else if (Utils::isStrEqual(animType, "Idle"))
+		else if (animType == "Idle")
 		{
 			AnimationUtils::loadAnimationFrames(pElem, m_idleFrames,
 				m_timeBetweenIdleFrames);
 		}
-		else if (Utils::isStrEqual(animType, "Hurt"))
+		else if (animType == "Hurt")
 		{
 			AnimationUtils::loadAnimationFrames(pElem, m_hurtFrames,
 				m_timeBetweenIdleFrames);
 		}
-		else if (Utils::isStrEqual(animType, "Dodge"))
+		else if (animType == "Dodge")
 		{
 			AnimationUtils::loadAnimationFrames(pElem, m_dodgeFrames,
 				m_timeBetweenDodgeFrames);
 		}
-		else if (Utils::isStrEqual(animType, "LightAttackOne"))
+		else if (animType == "LightAttackOne")
 		{
 			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackOneFrames,
 				m_timeBetweenLightAttackOneFrames);
 		}
-		else if (Utils::isStrEqual(animType, "LightAttackTwo"))
+		else if (animType == "LightAttackTwo")
 		{
 			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackTwoFrames,
 				m_timeBetweenLightAttackTwoFrames);
 		}
-		else if (Utils::isStrEqual(animType, "LightAttackThree"))
+		else if (animType == "LightAttackThree")
 		{
 			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackThreeFrames,
 				m_timeBetweenLightAttackThreeFrames);
 		}
-		else if (Utils::isStrEqual(animType, "LightAttackFour"))
+		else if (animType == "LightAttackFour")
 		{
 			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackFourFrames,
 				m_timeBetweenLightAttackFourFrames);
 		}
-		else if (Utils::isStrEqual(animType, "LightAttackFive"))
+		else if (animType == "LightAttackFive")
 		{
 			AnimationUtils::loadAnimationFrames(pElem, m_lightAttackFiveFrames,
 				m_timeBetweenLightAttackFiveFrames);

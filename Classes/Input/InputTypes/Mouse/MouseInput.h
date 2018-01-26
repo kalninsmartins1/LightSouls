@@ -12,8 +12,8 @@ public:
 	MouseInput();
 	bool init();
 
-	virtual void addActionButton(const char* actionName, const ActionButton& actionButton) override;
-	virtual void addStateButton(const char* actionName, const StateButton& stateButton) override;
+	virtual void addActionButton(const std::string& actionName, const ActionButton& actionButton) override;
+	virtual void addStateButton(const std::string& actionName, const StateButton& stateButton) override;
 
 	virtual bool hasAction(const std::string& action) const override;
 	virtual bool hasActionState(const std::string& action) const override;

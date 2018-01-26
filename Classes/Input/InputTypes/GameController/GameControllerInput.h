@@ -74,10 +74,10 @@ public:
 	virtual bool hasAxisInput(const std::string& axisName) const override;
 	virtual float getAxisInput(const std::string& axisName) const override;
 
-	virtual void addActionButton(const char* actionName, const ActionButton& actionButton) override;
-	virtual void addStateButton(const char* actionName, const StateButton& stateButton) override;
+	virtual void addActionButton(const std::string& actionName, const ActionButton& actionButton) override;
+	virtual void addStateButton(const std::string& actionName, const StateButton& stateButton) override;
 
-	void addAxisButton(const char* actionName, const ControllerAxis& axisButton);
+	void addAxisButton(const std::string& actionName, const ControllerAxis& axisButton);
 	bool isConnected() const;
 
 private:

@@ -60,10 +60,10 @@ public:
 	virtual float getAxisInput(const std::string& axisName) const = 0;
 	
 	// Binds action button to specified action name
-	virtual void addActionButton(const char* actionName, const ActionButton& actionButton) = 0;
+	virtual void addActionButton(const std::string& actionName, const ActionButton& actionButton) = 0;
 
 	// Binds state button to specified action name
-	virtual void addStateButton(const char* actionName, const StateButton& stateButton) = 0;
+	virtual void addStateButton(const std::string& actionName, const StateButton& stateButton) = 0;
 
 	// Manages consistency between actions and buttons
 	virtual void update(float deltaTime);

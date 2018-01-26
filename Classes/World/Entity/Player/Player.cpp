@@ -1,13 +1,13 @@
 #include "Player.h"
 #include "Utils/Utils.h"
-#include "GameConsts.h"
-#include "Entity/Components/PlayerAnimComponent.h"
-#include "Utils/XMLLoader.h"
+#include "../Components/PlayerAnimComponent.h"
+#include "Utils/XML/XMLLoader.h"
+#include "Utils/XML/XMLConsts.h"
 #include "Input/GameInput.h"
 
 using namespace cocos2d;
 
-Player* Player::create(const char* pathToXML)
+Player* Player::create(const std::string& pathToXML)
 {
 	Player* pPlayer = new (std::nothrow) Player();
 	if (pPlayer && pPlayer->init(pathToXML))
@@ -23,24 +23,14 @@ Player* Player::create(const char* pathToXML)
 }
 
 Player::Player() :
-	
 	m_pPlayerAnimComponent(nullptr),
-	m_moveDirection(Vec2::ZERO),
-	m_isRuning(false),
-	m_bIsDodging(false),
-	m_bIsAttacking(false),
-	m_baseMoveSpeed(0),
-	m_moveSpeed(0),
-	m_dodgeSpeed(0),
-	m_dodgeTime(0),	
-	m_timeBetweenComboInput(0),
-	m_curTimeBetweenComboInput(0),
+	m_timeBetweenComboInput(0),	
 	m_lastTimePerformedLightAttack(0),
 	m_curLightAttackAnimIdx(0)
 {
 }
 
-bool Player::init(const char* pathToXML)
+bool Player::init(const std::string& pathToXML)
 {
 	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);
 
@@ -76,26 +66,6 @@ void Player::update(float deltaTime)
 	}
 
 	playAnimations();
-}
-
-void Player::setMoveSpeed(float moveSpeed)
-{
-	m_baseMoveSpeed = moveSpeed;
-}
-
-void Player::setDodgeSpeed(float dodgeSpeed)
-{
-	m_dodgeSpeed = dodgeSpeed;
-}
-
-void Player::setDodgeTime(float dodgeTime)
-{
-	m_dodgeTime = dodgeTime;
-}
-
-Vec2 Player::getHeading() const
-{
-	return m_moveDirection;
 }
 
 void Player::setTimeBetweenComboInput(float timeBetweenComboInput)

@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include "Input/InputTypes/Keyboard/KeyboardInput.h"
+#include "GameConsts.h"
 
 using namespace cocos2d;
 
@@ -14,25 +15,20 @@ long Utils::getTimeStampInMilliseconds()
 	return std::chrono::system_clock::now().time_since_epoch().count() / 10000;
 }
 
-bool Utils::isStrEqual(const std::string& a, const std::string& b)
-{
-	// TODO: Do we really need a function for this ?
-	return a == b;
-}
-
-void Utils::logVec2(const cocos2d::Vec2& v)
+void Utils::logVec2(const Vec2& v)
 {
 	CCLOG("(X: %f, Y: %f)", v.x, v.y);
 }
 
-void Utils::logVec3(const cocos2d::Vec3& v)
+void Utils::logVec3(const Vec3& v)
 {
 	CCLOG("(X: %f, Y: %f, Z: %f)", v.x, v.y, v.z);
 }
 
-void Utils::assertWithStrFormat(bool condition, const char* msg, const char* param)
+void Utils::assertWithStrFormat(bool condition, const std::string& msg,
+	const std::string& param)
 {
-	CCASSERT(condition, StringUtils::format(msg, param).c_str());
+	CCASSERT(condition, StringUtils::format(msg.c_str(), param).c_str());
 }
 
 Vec2 Utils::getScreenFillScale(const Size& curSize)
@@ -59,15 +55,20 @@ void Utils::startTimerWithCallback(Node* pNode, std::function<void()> callback,
 	pNode->runAction(Sequence::create(callbackTimerActions));
 }
 
-MouseButtonCode Utils::convertStringToMouseButtonCode(const char* mouseButtonStr)
+float Utils::getRandAngleInRadians()
+{
+	return (rand() % FULL_CIRCLE_DEGREES) * (PI / HALF_CIRCLE_DEGREES);
+}
+
+MouseButtonCode Utils::convertStringToMouseButtonCode(const std::string& mouseButtonStr)
 {	
 	MouseButtonCode result = MouseButtonCode::BUTTON_UNSET;
 
-	if(isStrEqual(mouseButtonStr, "LeftButton"))
+	if(mouseButtonStr == "LeftButton")
 	{
 		result = MouseButtonCode::BUTTON_LEFT;
 	}
-	else if(isStrEqual(mouseButtonStr, "RightButton"))
+	else if(mouseButtonStr == "RightButton")
 	{
 		result = MouseButtonCode::BUTTON_RIGHT;
 	}
@@ -79,27 +80,27 @@ MouseButtonCode Utils::convertStringToMouseButtonCode(const char* mouseButtonStr
 	return result;
 }
 
-KeyCode Utils::convertStringToKeyCode(const char* keyCodeStr)
+KeyCode Utils::convertStringToKeyCode(const std::string& keyCodeStr)
 {	
 	KeyCode result = KeyCode::KEY_NONE;
 
-	if (isStrEqual(keyCodeStr, "W"))
+	if (keyCodeStr == "W")
 	{
 		result = KeyCode::KEY_W;
 	}
-	else if (isStrEqual(keyCodeStr, "S"))
+	else if (keyCodeStr == "S")
 	{
 		result = KeyCode::KEY_S;
 	}
-	else if (isStrEqual(keyCodeStr, "A"))
+	else if (keyCodeStr == "A")
 	{
 		result = KeyCode::KEY_A;
 	}
-	else if(isStrEqual(keyCodeStr, "D"))
+	else if(keyCodeStr == "D")
 	{
 		result = KeyCode::KEY_D;
 	}
-	else if(isStrEqual(keyCodeStr, "Space"))
+	else if(keyCodeStr == "Space")
 	{
 		result = KeyCode::KEY_SPACE;
 	}
@@ -111,30 +112,30 @@ KeyCode Utils::convertStringToKeyCode(const char* keyCodeStr)
 	return result;
 }
 
-X360Axes Utils::convertStringToGameControllerAxis(const char* controllerAxisStr)
+X360Axes Utils::convertStringToGameControllerAxis(const std::string& controllerAxisStr)
 {
 	X360Axes result = X360Axes::NONE;
-	if(isStrEqual(controllerAxisStr, "LEFT_STICK_X"))
+	if(controllerAxisStr == "LEFT_STICK_X")
 	{
 		result = X360Axes::LEFT_STICK_X;
 	}
-	else if(isStrEqual(controllerAxisStr, "LEFT_STICK_Y"))
+	else if(controllerAxisStr == "LEFT_STICK_Y")
 	{
 		result = X360Axes::LEFT_STICK_Y;
 	}
-	else if (isStrEqual(controllerAxisStr, "RIGHT_STICK_X"))
+	else if (controllerAxisStr == "RIGHT_STICK_X")
 	{
 		result = X360Axes::RIGHT_STICK_X;
 	}
-	else if (isStrEqual(controllerAxisStr, "RIGHT_STICK_Y"))
+	else if (controllerAxisStr == "RIGHT_STICK_Y")
 	{
 		result = X360Axes::RIGHT_STICK_Y;
 	}
-	else if (isStrEqual(controllerAxisStr, "LT"))
+	else if (controllerAxisStr == "LT")
 	{
 		result = X360Axes::LT;
 	}
-	else if (isStrEqual(controllerAxisStr, "RT"))
+	else if (controllerAxisStr == "RT")
 	{
 		result = X360Axes::RT;
 	}
@@ -142,62 +143,62 @@ X360Axes Utils::convertStringToGameControllerAxis(const char* controllerAxisStr)
 	return result;
 }
 
-X360Button Utils::convertStringToGameControllerButton(const char* controllerButtonStr)
+X360Button Utils::convertStringToGameControllerButton(const std::string& controllerButtonStr)
 {
 	X360Button result = X360Button::NONE;
-	if (isStrEqual(controllerButtonStr, "A"))
+	if (controllerButtonStr == "A")
 	{
 		result = X360Button::A;
 	}
-	else if(isStrEqual(controllerButtonStr, "B"))
+	else if(controllerButtonStr == "B")
 	{
 		result = X360Button::B;
 	}
-	else if(isStrEqual(controllerButtonStr, "X"))
+	else if(controllerButtonStr == "X")
 	{
 		result = X360Button::X;
 	}
-	else if (isStrEqual(controllerButtonStr, "Y"))
+	else if (controllerButtonStr == "Y")
 	{
 		result = X360Button::Y;
 	}
-	else if(isStrEqual(controllerButtonStr, "LB"))
+	else if(controllerButtonStr == "LB")
 	{
 		result = X360Button::LB;
 	}
-	else if(isStrEqual(controllerButtonStr, "RB"))
+	else if(controllerButtonStr == "RB")
 	{
 		result = X360Button::RB;
 	}
-	else if (isStrEqual(controllerButtonStr, "BACK"))
+	else if (controllerButtonStr == "BACK")
 	{
 		result = X360Button::BACK;
 	}
-	else if (isStrEqual(controllerButtonStr, "START"))
+	else if (controllerButtonStr == "START")
 	{
 		result = X360Button::START;
 	}
-	else if (isStrEqual(controllerButtonStr, "LEFT_STICK"))
+	else if (controllerButtonStr == "LEFT_STICK")
 	{
 		result = X360Button::LEFT_STICK;
 	}
-	else if (isStrEqual(controllerButtonStr, "RIGHT_STICK"))
+	else if (controllerButtonStr == "RIGHT_STICK")
 	{
 		result = X360Button::RIGHT_STICK;
 	}
-	else if (isStrEqual(controllerButtonStr, "UP"))
+	else if (controllerButtonStr == "UP")
 	{
 		result = X360Button::UP;
 	}
-	else if (isStrEqual(controllerButtonStr, "RIGHT"))
+	else if (controllerButtonStr == "RIGHT")
 	{
 		result = X360Button::RIGHT;
 	}
-	else if (isStrEqual(controllerButtonStr, "DOWN"))
+	else if (controllerButtonStr == "DOWN")
 	{
 		result = X360Button::DOWN;
 	}
-	else if (isStrEqual(controllerButtonStr, "LEFT"))
+	else if (controllerButtonStr == "LEFT")
 	{
 		result = X360Button::LEFT;
 	}

@@ -1,24 +1,24 @@
 #include "MirrorSpriteComponent.h"
 #include "Utils/Utils.h"
-#include "Entity/Player/Player.h"
+#include "../Player/Player.h"
 
 using namespace cocos2d;
 
-void MirrorSpriteComponent::setPlayer(Player* pPlayer)
+void MirrorSpriteComponent::setOwnerEntity(Entity* pEntity)
 {
-	m_pPlayer = pPlayer;
+	m_pEntity = pEntity;
 }
 
 void MirrorSpriteComponent::update(float delta)
 {
 	// Mirror the sprite based on heading direction
-	Vec2 playerHeading = m_pPlayer->getHeading();
+	const Vec2 playerHeading = m_pEntity->getHeading();
 	if(playerHeading.x > 0)
 	{
-		m_pPlayer->setScaleX(1);
+		m_pEntity->setScaleX(1);
 	}
 	else if(playerHeading.x < 0)
 	{
-		m_pPlayer->setScaleX(-1);
+		m_pEntity->setScaleX(-1);
 	}
 }

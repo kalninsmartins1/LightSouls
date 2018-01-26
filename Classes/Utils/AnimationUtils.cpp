@@ -1,4 +1,5 @@
 #include "AnimationUtils.h"
+#include "XML/XMLConsts.h"
 #include "GameConsts.h"
 #include "tinyxml2/tinyxml2.h"
 #include "Utils.h"
@@ -46,14 +47,14 @@ void AnimationUtils::loadAnimationFrames(const tinyxml2::XMLElement* pElem,
 	Vector<SpriteFrame*>& outSpriteFrames, float& outTimeBetweenFrames)
 {	
 	auto spriteCache = SpriteFrameCache::getInstance();
-	const char* plistPath = pElem->Attribute("plistPath");
+	const char* plistPath = pElem->Attribute(XML_ANIM_PLIST_PATH_ATTR);
 	spriteCache->addSpriteFramesWithFile(plistPath);
 
 	// Get template frame name
-	const char* spriteFrameName = pElem->Attribute("frameNamePattern");
+	const char* spriteFrameName = pElem->Attribute(XML_ANIM_FRAME_NAME_PATTERN_ATTR);
 
 	// Get total frame count
-	const int frameCount = pElem->IntAttribute("frameCount");
+	const int frameCount = pElem->IntAttribute(XML_ANIM_FRAME_COUNT_ATTR);
 
 	// Load all the frame for the animation
 	char curSpriteFrameName[MAX_SPRITE_NAME_LENGTH] = { 0 };
@@ -65,5 +66,5 @@ void AnimationUtils::loadAnimationFrames(const tinyxml2::XMLElement* pElem,
 	}
 
 	// Set the time between frames
-	outTimeBetweenFrames = pElem->FloatAttribute("timeBetweenFrames");
+	outTimeBetweenFrames = pElem->FloatAttribute(XML_ANIM_TIME_BETWEEN_FRAMES_ATTR);
 }

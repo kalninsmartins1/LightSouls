@@ -52,11 +52,11 @@ public:
 	virtual bool hasAxisInput(const std::string& axisName) const override;
 	virtual float getAxisInput(const std::string& axisName) const override;
 	
-	virtual void addActionButton(const char* actionName, const ActionButton& actionKey) override;
-	virtual void addStateButton(const char* actionName, const StateButton& stateKey) override;
+	virtual void addActionButton(const std::string& actionName, const ActionButton& actionKey) override;
+	virtual void addStateButton(const std::string& actionName, const StateButton& stateKey) override;
 	virtual void update(float deltaTime) override;
 	
-	void addKeyboardAxis(const char* actionName, const KeyboardAxis& axisKey);
+	void addKeyboardAxis(const std::string& actionName, const KeyboardAxis& axisKey);
 
 private:
 	static void increaseAxisCurValue(KeyboardAxis& keyboardAxis, float value, float deltaTime);

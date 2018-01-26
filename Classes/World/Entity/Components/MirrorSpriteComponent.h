@@ -2,17 +2,17 @@
 
 #include "cocos2d.h"
 
-class Player;
+class Entity;
 
 class MirrorSpriteComponent: public cocos2d::Component
 {
 public:
 	CREATE_FUNC(MirrorSpriteComponent);
 
-	void setPlayer(Player* owner);	
+	void setOwnerEntity(Entity* owner);	
 	virtual void update(float delta) override;
 
 private:
-	Player* m_pPlayer;
+	Entity* m_pEntity;
 };
 

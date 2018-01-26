@@ -13,21 +13,6 @@
     <Filter Include="src\Utils">
       <UniqueIdentifier>{d11e09d1-c309-492f-b1ec-5a357bfed652}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Entity">
-      <UniqueIdentifier>{b5115797-b4a1-4833-a8be-056db0fd956c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Entity\Player">
-      <UniqueIdentifier>{734dc60e-62e7-4257-b899-ece5e08871a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Entity\Enemy">
-      <UniqueIdentifier>{ce9f1082-867a-4d50-a314-887ef0f9efa5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Entity\Skills">
-      <UniqueIdentifier>{f97625a9-2431-42db-a101-3af291bb7f67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Entity\Components">
-      <UniqueIdentifier>{c5bc50c9-245f-457f-ba25-1ec257431706}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Input">
       <UniqueIdentifier>{a0c45887-ca1e-4839-a421-3abca7ef2662}</UniqueIdentifier>
     </Filter>
@@ -46,8 +31,32 @@
     <Filter Include="src\World">
       <UniqueIdentifier>{d88d87d9-71b5-432c-87b5-83bf700c89da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Entity\CustomActions">
+    <Filter Include="src\World\Entity">
+      <UniqueIdentifier>{b5115797-b4a1-4833-a8be-056db0fd956c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\World\Entity\Player">
+      <UniqueIdentifier>{734dc60e-62e7-4257-b899-ece5e08871a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\World\Entity\Skills">
+      <UniqueIdentifier>{f97625a9-2431-42db-a101-3af291bb7f67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\World\Entity\Components">
+      <UniqueIdentifier>{c5bc50c9-245f-457f-ba25-1ec257431706}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\World\Entity\CustomActions">
       <UniqueIdentifier>{5cd679f1-a500-4cda-bf56-26c7dc7244e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\World\Entity\AI">
+      <UniqueIdentifier>{76963597-271b-41b9-987c-b327d9b13d64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\World\Entity\AI\StateMachine">
+      <UniqueIdentifier>{03d5ddab-0a16-42a4-af4d-af5b747fd45e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\World\Entity\AI\StateMachine\States">
+      <UniqueIdentifier>{dcd833f8-9a73-45fa-8a1f-385d687b6c96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utils\XML">
+      <UniqueIdentifier>{db420575-c042-44ec-a9e9-970536e6c990}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,23 +72,8 @@
     <ClCompile Include="..\Classes\Utils\Utils.cpp">
       <Filter>src\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Entity\Enemy\Enemy.cpp">
-      <Filter>src\Entity\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Entity\Player\Player.cpp">
-      <Filter>src\Entity\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Entity\Components\PlayerAnimComponent.cpp">
-      <Filter>src\Entity\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Utils\AnimationUtils.cpp">
       <Filter>src\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Utils\XMLLoader.cpp">
-      <Filter>src\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Entity\Components\MirrorSpriteComponent.cpp">
-      <Filter>src\Entity\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Input\GameInput.cpp">
       <Filter>src\Input</Filter>
@@ -99,8 +93,44 @@
     <ClCompile Include="..\Classes\World\World.cpp">
       <Filter>src\World</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Entity\CustomActions\CameraFallow.cpp">
-      <Filter>src\Entity\CustomActions</Filter>
+    <ClCompile Include="..\Classes\World\Entity\AI\AIAgent.cpp">
+      <Filter>src\World\Entity\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\StateMachine.cpp">
+      <Filter>src\World\Entity\AI\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateAttack.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateChase.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Player\Player.cpp">
+      <Filter>src\World\Entity\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Entity.cpp">
+      <Filter>src\World\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\AIAgentManager.cpp">
+      <Filter>src\World\Entity\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Utils\XML\XMLLoader.cpp">
+      <Filter>src\Utils\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\AgentAnimationComponent.cpp">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.cpp">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\PlayerAnimComponent.cpp">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\CustomActions\CameraFallow.cpp">
+      <Filter>src\World\Entity\CustomActions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,26 +149,11 @@
     <ClInclude Include="..\Classes\GameConsts.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Entity\Enemy\Enemy.h">
-      <Filter>src\Entity\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Entity\Skills\AttackStyle.h">
-      <Filter>src\Entity\Skills</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Entity\Player\Player.h">
-      <Filter>src\Entity\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Entity\Components\PlayerAnimComponent.h">
-      <Filter>src\Entity\Components</Filter>
+      <Filter>src\World\Entity\Skills</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Utils\AnimationUtils.h">
       <Filter>src\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Utils\XMLLoader.h">
-      <Filter>src\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Entity\Components\MirrorSpriteComponent.h">
-      <Filter>src\Entity\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Input\GameInput.h">
       <Filter>src\Input</Filter>
@@ -158,8 +173,50 @@
     <ClInclude Include="..\Classes\World\World.h">
       <Filter>src\World</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Entity\CustomActions\CameraFallow.h">
-      <Filter>src\Entity\CustomActions</Filter>
+    <ClInclude Include="..\Classes\World\Entity\AI\AIAgent.h">
+      <Filter>src\World\Entity\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\StateMachine.h">
+      <Filter>src\World\Entity\AI\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateAttack.h">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateChase.h">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\IState.h">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Player\Player.h">
+      <Filter>src\World\Entity\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Entity.h">
+      <Filter>src\World\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\AIAgentManager.h">
+      <Filter>src\World\Entity\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Utils\XML\XMLLoader.h">
+      <Filter>src\Utils\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Utils\XML\XMLConsts.h">
+      <Filter>src\Utils\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\AgentAnimationComponent.h">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.h">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\PlayerAnimComponent.h">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\CustomActions\CameraFallow.h">
+      <Filter>src\World\Entity\CustomActions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

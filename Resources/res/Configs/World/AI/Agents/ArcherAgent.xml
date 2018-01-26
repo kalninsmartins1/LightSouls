@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<Entity type="ArcherAgent"	
+			moveSpeed="160"
+			dodgeSpeed="100"
+			dodgeTime="0.8"
+			>
+
+	<Component type="TransformComponent">
+		<Position x="2" y="1" z="0" />
+		<Rotation x="0" y="0" z="0" />
+		<Scale x="0" y="0" z="0"/>
+	</Component>
+	
+	<Component type="AIControllerComponent"
+		workingRadius="20"
+		attackRadius="10"
+		patrolPauseInSeconds="5">		
+	</Component>
+	
+	<Component type="AgentAnimationComponent">
+		<SpriteSheet type="Idle"
+			path="res/Graphics/World/AI/Archer/Idle/IdleAnim.png" 
+			plistPath="res/Graphics/World/AI/Archer/Idle/IdleAnim.plist"
+			frameNamePattern="archerIdle%d.png"
+			frameCount="1"
+			timeBetweenFrames="0.1"
+		/>
+	</Component>
+	
+	<Component type="RigidBodyComponent">
+		<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
+		<PhysicsBody
+			shape="box"
+			width="40"
+			height="15"
+			isDynamic="true" 
+			isGravityEnabled="false" 
+			collisionBitMask="0xFFFFFF"
+			/>
+	</Component>
+	
+	<Component type="MirrorSpriteComponent">
+	</Component>
+	
+</Entity>

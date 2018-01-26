@@ -1,12 +1,13 @@
 #include "XMLLoader.h"
 #include "physics/CCPhysicsBody.h"
-#include "GameConsts.h"
+#include "XMLConsts.h"
 #include "World/Entity/Player/Player.h"
-#include "Utils.h"
+#include "../Utils.h"
 #include "World/Entity/Components/PlayerAnimComponent.h"
 #include "World/Entity/Components/MirrorSpriteComponent.h"
 #include "Input/GameInput.h"
 #include "World/World.h"
+#include "World/Entity/Components/AgentAnimationComponent.h"
 
 
 using namespace cocos2d;
@@ -28,14 +29,16 @@ bool XMLLoader::initializeAIManagerUsingXMLFile(AIAgentManager& aiManager, const
 			pNode = pNode->NextSiblingElement())
 		{
 			const std::string& elementName = pNode->Value();
-			if(elementName == "AgentConfigList")
+			if(elementName == XML_NODE_AGENT_CONFIG_LIST)
 			{
 				// Load all agent configs
 				for (XMLElement* pChild = pNode->FirstChildElement(); pChild;
 					pChild = pChild->NextSiblingElement())
 				{
 					const std::string& path = pChild->Attribute(XML_PATH_ATTR);
-					aiManager.addAgent(AIAgent::create(path));
+					AIAgent* pAgent = AIAgent::create(path);
+					const std::string& type = pAgent->getType();
+					aiManager.addAgent(type, pAgent);
 				}
 			}
 		}
@@ -99,7 +102,7 @@ void XMLLoader::loadKeyboardAxis(GameInput& gameInput, const XMLElement* pElemen
 		const float valueFrom = pChild->FloatAttribute(XML_INPUT_VALUE_FROM_ATTR);
 		const float valueTo = pChild->FloatAttribute(XML_INPUT_VALUE_TO_ATTR);
 
-		gameInput.addAxisActionInput(GameInputType::Keyboard,
+		gameInput.addAxisActionInput(GameInputType::KEYBOARD,
 			actionName, keyCodeFrom, keyCodeTo, valueFrom, valueTo);
 	}
 }
@@ -113,7 +116,7 @@ void XMLLoader::loadGameControllerAxis(GameInput& gameInput, const XMLElement* p
 		const float valueFrom = pChild->FloatAttribute(XML_INPUT_VALUE_FROM_ATTR);
 		const float valueTo = pChild->FloatAttribute(XML_INPUT_VALUE_TO_ATTR);
 
-		gameInput.addAxisActionInput(GameInputType::GameController,
+		gameInput.addAxisActionInput(GameInputType::GAME_CONTROLLER,
 			actionName, axisName, axisName, valueFrom, valueTo);
 	}
 }
@@ -137,7 +140,8 @@ void XMLLoader::loadActionButton(GameInput& gameInput, GameInputType inputType, 
 	}
 }
 
-bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const std::string& pathToXML)
+bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, 
+	const std::string& pathToXML)
 {
 	// Load the file
 	XMLDoc doc;
@@ -145,8 +149,8 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const std::string& 
 	
 	if (!err)
 	{
-		XMLElement* pData = doc.RootElement();
-		for (XMLElement* pElement = pData->FirstChildElement(); pElement;
+		XMLElement* pRoot = doc.RootElement();
+		for (XMLElement* pElement = pRoot->FirstChildElement(); pElement;
 			pElement = pElement->NextSiblingElement())
 		{
 			// Check all actor components
@@ -162,39 +166,48 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const std::string& 
 				sprite.setRotation3D(loadVec3FromAttributes(pRotationNode));
 			}
 			else if (componentType == XML_PLAYER_CONTROLLER_COMPONENT)
-			{
-				const XMLElement* pMovementElement = pElement->FirstChildElement();
-
-				const float moveSpeed = pMovementElement->FloatAttribute(XML_ENTITY_MOVE_SPEED);
-				const float dodgeSpeed = pMovementElement->FloatAttribute(XML_ENTITY_DODGE_SPEED);
-				const float dodgeTime = pMovementElement->FloatAttribute(XML_ENTITY_DODGE_TIME);
+			{				
+				const float moveSpeed = pRoot->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
+				const float dodgeSpeed = pRoot->FloatAttribute(XML_ENTITY_DODGE_SPEED_ATTR);
+				const float dodgeTime = pRoot->FloatAttribute(XML_ENTITY_DODGE_TIME_ATTR);
+								
 				const float timeBetweenComboInput =
-					pMovementElement->FloatAttribute("timeBetweenComboInput");
+					pElement->FloatAttribute(XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR);
 
 				Player* pPlayer = dynamic_cast<Player*>(&sprite);
-				pPlayer->setMoveSpeed(moveSpeed);
+				pPlayer->setBaseMoveSpeed(moveSpeed);
 				pPlayer->setDodgeSpeed(dodgeSpeed);
 				pPlayer->setDodgeTime(dodgeTime);
 				pPlayer->setTimeBetweenComboInput(timeBetweenComboInput);
 			}
 			else if(componentType == XML_AI_CONTROLLER_COMPONENT)
 			{
-				const float attackRadius = pElement->FloatAttribute("attackRadius");
-				const float workingRadius = pElement->FloatAttribute("workingRadius");
-				const Vec3& basePosition = 
-					loadVec3FromAttributes(pElement->FirstChildElement("BasePosition"));
+				const float moveSpeed = pRoot->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
+				const float attackRadius = pElement->FloatAttribute(XML_AI_ATTACK_RADIUS_ATTR);
+				const float workingRadius = pElement->FloatAttribute(XML_AI_WORKING_RADIUS_ATTR);				
+				const float patrolPause = pElement->FloatAttribute(XML_AI_PATROL_PAUSE_ATTR);
 
-				AIAgent* pAgent = dynamic_cast<AIAgent*>(&sprite);
-				pAgent->setBasePosition(Vec2(basePosition.x, basePosition.y));
+				AIAgent* pAgent = dynamic_cast<AIAgent*>(&sprite);	
+				const std::string& agentType = pRoot->Attribute(XML_TYPE_ATTR);
+				pAgent->setAgentType(agentType);
 				pAgent->setAttackRadius(attackRadius);
 				pAgent->setWorkingRadius(workingRadius);
+				pAgent->setPatrolPause(patrolPause);
+				pAgent->setBaseMoveSpeed(moveSpeed);
 			}
 			else if (componentType == XML_PLAYER_ANIM_COMPONENT)
 			{
 				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create(sprite);
 				pPlayerAnim->setName(XML_PLAYER_ANIM_COMPONENT);
-				sprite.addComponent(pPlayerAnim);
 				pPlayerAnim->loadConfig(pElement);
+				sprite.addComponent(pPlayerAnim);
+			}
+			else if(componentType == XML_AI_ANIM_COMPONENT)
+			{
+				AgentAnimationComponent* pAgentAnim = AgentAnimationComponent::create(sprite);
+				pAgentAnim->setName(XML_AI_ANIM_COMPONENT);
+				pAgentAnim->loadConfig(pElement);
+				sprite.addComponent(pAgentAnim);
 			}
 			else if (componentType == XML_RIGID_BODY_COMPONENT)
 			{
@@ -206,7 +219,7 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, const std::string& 
 			{
 				MirrorSpriteComponent* pMirrorSprite = MirrorSpriteComponent::create();
 				pMirrorSprite->setName(XML_MIRROR_SPRITE_COMPONENT);
-				pMirrorSprite->setPlayer(dynamic_cast<Player*>(&sprite));
+				pMirrorSprite->setOwnerEntity(dynamic_cast<Entity*>(&sprite));
 				sprite.addComponent(pMirrorSprite);
 			}
 		}
@@ -228,7 +241,7 @@ bool XMLLoader::loadInputSettings(GameInput& gameInput, const std::string& pathT
 		for (const XMLElement* pElem = pFirstElement; pElem != nullptr;
 			pElem = pElem->NextSiblingElement())
 		{
-			const char* nodeName = pElem->Value();
+			const std::string& nodeName = pElem->Value();
 			if (nodeName == XML_INPUT_AXIS)
 			{
 				loadActionTriggers(gameInput, pElem,
@@ -249,17 +262,17 @@ bool XMLLoader::loadInputSettings(GameInput& gameInput, const std::string& pathT
 				loadActionTriggers(gameInput, pElem,
 					[](GameInput& gameInput, const XMLElement* pElem, const std::string& actionName)
 					{
-						loadActionButton(gameInput, GameInputType::Keyboard, pElem, 
+						loadActionButton(gameInput, GameInputType::KEYBOARD, pElem, 
 							actionName, XML_INPUT_KEY_CODE_ATTR);
 					},
 					[](GameInput& gameInput, const XMLElement* pElem, const std::string& actionName)
 					{
-						loadActionButton(gameInput, GameInputType::Mouse, pElem,
+						loadActionButton(gameInput, GameInputType::MOUSE, pElem,
 							actionName,  XML_INPUT_BUTTON_CODE_ATTR);
 					},
 					[](GameInput& gameInput, const XMLElement* pElem, const std::string& actionName)
 					{
-						loadActionButton(gameInput, GameInputType::GameController, pElem,
+						loadActionButton(gameInput, GameInputType::GAME_CONTROLLER, pElem,
 							actionName, XML_INPUT_BUTTON_CODE_ATTR);
 					});
 			}
@@ -277,7 +290,7 @@ bool XMLLoader::loadWorld(World& world, const std::string& pathToXML)
 	{
 		XMLElement* pRoot = doc.RootElement();
 		XMLElement* pChild = pRoot->FirstChildElement();
-		const char* pathToSprite = pChild->Attribute("path");
+		const char* pathToSprite = pChild->Attribute(XML_PATH_ATTR);
 		world.initWithFile(pathToSprite);
 	}
 	else
@@ -292,18 +305,18 @@ bool XMLLoader::loadWorld(World& world, const std::string& pathToXML)
 PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* pNode)
 {
 	const tinyxml2::XMLElement* pPhysicsBodyElem =
-		pNode->FirstChildElement(XML_PHYSICS_BODY);
+		pNode->FirstChildElement(XML_NODE_PHYSICS_BODY);
 
-	std::string bodyType = pPhysicsBodyElem->Attribute("shape");
-	const Size bodySize = Size(pPhysicsBodyElem->FloatAttribute("width"),
-		pPhysicsBodyElem->FloatAttribute("height"));
+	std::string bodyType = pPhysicsBodyElem->Attribute(XML_SHAPE_ATTR);
+	const Size bodySize = Size(pPhysicsBodyElem->FloatAttribute(XML_WIDTH_ATTR),
+		pPhysicsBodyElem->FloatAttribute(XML_HEIGHT_ATTR));
 
-	const bool isGravityEnabled = pPhysicsBodyElem->BoolAttribute("isGravityEnabled");
-	const bool isBodyDynamic = pPhysicsBodyElem->BoolAttribute("isDynamic");
-	const int collisionBitMask = pPhysicsBodyElem->IntAttribute("collisionBitMask");
+	const bool isGravityEnabled = pPhysicsBodyElem->BoolAttribute(XML_PHYSICS_GRAVITY_ATTR);
+	const bool isBodyDynamic = pPhysicsBodyElem->BoolAttribute(XML_PHYSICS_DYNAMIC_BODY_ATTR);
+	const int collisionBitMask = pPhysicsBodyElem->IntAttribute(XML_PHYSICS_BIT_MASK_ATTR);
 
 	PhysicsBody* pPhysicsBody = nullptr;
-	if (bodyType == "box")
+	if (bodyType == XML_PHYSICS_BODY_BOX_ATTR)
 	{
 		pPhysicsBody = PhysicsBody::createBox(bodySize,
 			loadPhysicsMaterialFromAttributes(pNode));
@@ -316,18 +329,18 @@ PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* p
 
 GameInputType XMLLoader::strToGameInputType(const std::string& inputType)
 {
-	GameInputType type = GameInputType::None;
+	GameInputType type = GameInputType::NONE;
 	if (inputType == XML_INPUT_KEYBOARD)
 	{
-		type = GameInputType::Keyboard;
+		type = GameInputType::KEYBOARD;
 	}
 	else if (inputType == XML_INPUT_MOUSE)
 	{
-		type = GameInputType::Mouse;
+		type = GameInputType::MOUSE;
 	}
 	else if (inputType == XML_INPUT_GAME_CONTROLLER)
 	{
-		type = GameInputType::GameController;
+		type = GameInputType::GAME_CONTROLLER;
 	}
 	else
 	{
@@ -342,10 +355,10 @@ PhysicsMaterial XMLLoader::loadPhysicsMaterialFromAttributes(
 	const tinyxml2::XMLNode* pNode)
 {
 	const tinyxml2::XMLElement* pPhysicsMaterialElem = pNode->
-		FirstChildElement(XML_PHYSICS_MATERIAL);
-	const float density = pPhysicsMaterialElem->FloatAttribute("density");
-	const float restitution = pPhysicsMaterialElem->FloatAttribute("restitution");
-	const float friction = pPhysicsMaterialElem->FloatAttribute("friction");
+		FirstChildElement(XML_NODE_PHYSICS_MATERIAL);
+	const float density = pPhysicsMaterialElem->FloatAttribute(XML_PHYSICS_DESITY_ATTR);
+	const float restitution = pPhysicsMaterialElem->FloatAttribute(XML_PHYSICS_RESTITUTION_ATTR);
+	const float friction = pPhysicsMaterialElem->FloatAttribute(XML_PHYSICS_FRICTION_ATTR);
 
 	return PhysicsMaterial(density, restitution, friction);
 }
@@ -353,9 +366,9 @@ PhysicsMaterial XMLLoader::loadPhysicsMaterialFromAttributes(
 Vec3 XMLLoader::loadVec3FromAttributes(const tinyxml2::XMLNode* pNode)
 {
 	Vec3 result;
-	result.x = pNode->ToElement()->FloatAttribute("x");
-	result.y = pNode->ToElement()->FloatAttribute("y");
-	result.z = pNode->ToElement()->FloatAttribute("z");
+	result.x = pNode->ToElement()->FloatAttribute(XML_AXIS_X_ATTR);
+	result.y = pNode->ToElement()->FloatAttribute(XML_AXIS_Y_ATTR);
+	result.z = pNode->ToElement()->FloatAttribute(XML_AXIS_Z_ATTR);
 
 	return result;
 }

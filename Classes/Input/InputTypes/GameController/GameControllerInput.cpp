@@ -83,20 +83,20 @@ bool GameControllerInput::hasAxisInput(const std::string& axisName) const
 	return bHasAxisInput;
 }
 
-void GameControllerInput::addAxisButton(const char* actionName,
+void GameControllerInput::addAxisButton(const std::string& actionName,
 	const ControllerAxis& axisButton)
 {
 	m_buttonCodeToAxisAction[axisButton.buttonCode] = actionName;
 	m_controllerAxis.insert(std::make_pair(actionName, axisButton));
 }
 
-void GameControllerInput::addActionButton(const char* actionName, const ActionButton& actionButton)
+void GameControllerInput::addActionButton(const std::string& actionName, const ActionButton& actionButton)
 {
 	m_actionButtons.insert(std::make_pair(actionName, actionButton));
 	m_buttonCodeToAction[actionButton.buttonCode] = actionName;
 }
 
-void GameControllerInput::addStateButton(const char* actionName, const StateButton& stateButton)
+void GameControllerInput::addStateButton(const std::string& actionName, const StateButton& stateButton)
 {
 	m_stateButtons.insert(std::make_pair(actionName, stateButton));
 	m_buttonCodeToStateAction[stateButton.buttonCode] = actionName;

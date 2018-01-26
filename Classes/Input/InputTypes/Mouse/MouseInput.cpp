@@ -26,13 +26,13 @@ bool MouseInput::init()
 	return pEventDispatcher != nullptr;
 }
 
-void MouseInput::addActionButton(const char* actionName, const ActionButton& actionButton)
+void MouseInput::addActionButton(const std::string& actionName, const ActionButton& actionButton)
 {
 	m_actionButtons.insert(std::make_pair(std::string(actionName), actionButton));
 	m_buttonCodeToAction[actionButton.buttonCode] = actionName; 
 }
 
-void MouseInput::addStateButton(const char* actionName, const StateButton& stateButton)
+void MouseInput::addStateButton(const std::string& actionName, const StateButton& stateButton)
 {
 	m_stateButtons.insert(std::make_pair(std::string(actionName), stateButton));
 	m_buttonCodeToStateAction[stateButton.buttonCode] = actionName;
@@ -89,7 +89,7 @@ void MouseInput::setActionButtonState(bool bIsActive, const MouseButtonCode& inp
 	if (Utils::containsKey(m_buttonCodeToAction, buttonCode))
 	{
 		std::string& actionName = m_buttonCodeToAction[buttonCode];
-		m_actionButtons[actionName].bIsActive = bIsActive;		
+		m_actionButtons[actionName].bIsActive = bIsActive;
 	}	
 }
 

@@ -7,7 +7,7 @@ KeyboardInput::KeyboardInput()
 {
 	if (!init())
 	{
-		cocos2d::log("KeyboardInput: Error initilizing !");
+		CCLOG("KeyboardInput: Error initilizing !");
 	}
 }
 
@@ -24,7 +24,7 @@ bool KeyboardInput::init()
 	return pEventDispatcher != nullptr;
 }
 
-void KeyboardInput::addKeyboardAxis(const char* actionName, const KeyboardAxis& axisKey)
+void KeyboardInput::addKeyboardAxis(const std::string& actionName, const KeyboardAxis& axisKey)
 {
 	m_keyboardAxis.insert(std::make_pair(actionName, axisKey));
 
@@ -33,13 +33,13 @@ void KeyboardInput::addKeyboardAxis(const char* actionName, const KeyboardAxis& 
 	m_keyCodeToAxisAction[axisKey.keyCodeTo] = actionName;
 }
 
-void KeyboardInput::addActionButton(const char* actionName, const ActionButton& actionKey)
+void KeyboardInput::addActionButton(const std::string& actionName, const ActionButton& actionKey)
 {
 	m_actionButtons.insert(std::make_pair(actionName, actionKey));
 	m_buttonCodeToAction[actionKey.buttonCode] = actionName;
 }
 
-void KeyboardInput::addStateButton(const char* actionName, const StateButton& stateKey)
+void KeyboardInput::addStateButton(const std::string& actionName, const StateButton& stateKey)
 {
 	m_stateButtons.insert(std::make_pair(actionName, stateKey));
 	m_buttonCodeToStateAction[stateKey.buttonCode] = actionName;
