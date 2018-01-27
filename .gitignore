@@ -130,3 +130,6 @@ lib/
 
 # Log files
 *.log
+
+# Temporary files
+*.TMP
