@@ -12,9 +12,9 @@
 	</Component>
 	
 	<Component type="AIControllerComponent"
-		workingRadius="20"
-		attackRadius="10"
-		patrolPauseInSeconds="5">		
+		workingRadius="120"
+		attackRadius="20"
+		patrolPauseInSeconds="5">
 	</Component>
 	
 	<Component type="AgentAnimationComponent">

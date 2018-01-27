@@ -7,11 +7,20 @@ namespace tinyxml2
 	class XMLElement;
 }
 
+enum class AnimationKind
+{
+	NONE,
+	RUN,
+	IDLE,
+	ATTACK,
+	DODGE
+};
+
 class AnimationUtils
 {
 public:
 
-	static void startSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
+	static void startSpriteFrameAnimationWithDelayedCallback(cocos2d::Sprite* pSprite,
 		cocos2d::Vector<cocos2d::SpriteFrame*>& spriteFrames,
 		float timeBetweenFrames, const std::function<void()>& onFinished);
 

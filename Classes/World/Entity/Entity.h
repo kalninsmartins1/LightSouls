@@ -18,7 +18,7 @@ public:
 protected:
 	cocos2d::Vec2 m_moveDirection;
 
-	bool m_isRuning;
+	bool m_bIsRuning;
 	bool m_bIsDodging;
 	bool m_bIsAttacking;
 

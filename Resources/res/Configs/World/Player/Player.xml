@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Entity type="Player"
-			moveSpeed="160"
+			moveSpeed="360"
 			dodgeSpeed="100"
 			dodgeTime="0.8"
 	>
@@ -11,7 +11,7 @@
 	</Component>
 	
 	<Component type="PlayerControllerComponent"
-				timeBetweenComboInput="0.8">		
+				timeBetweenComboInput="0.6">
 	</Component>
 	
 	<Component type="PlayerAnimComponent">

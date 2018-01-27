@@ -4,7 +4,7 @@ using namespace cocos2d;
 
 Entity::Entity() :
 	m_moveDirection(Vec2::ZERO),
-	m_isRuning(false),
+	m_bIsRuning(false),
 	m_bIsDodging(false),
 	m_bIsAttacking(false),
 	m_baseMoveSpeed(0),

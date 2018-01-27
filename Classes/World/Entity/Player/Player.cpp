@@ -24,6 +24,7 @@ Player* Player::create(const std::string& pathToXML)
 
 Player::Player() :
 	m_pPlayerAnimComponent(nullptr),
+	m_bIsAttackComboDelayExpired(true),
 	m_timeBetweenComboInput(0),	
 	m_lastTimePerformedLightAttack(0),
 	m_curLightAttackAnimIdx(0)
@@ -38,13 +39,13 @@ bool Player::init(const std::string& pathToXML)
 	getPhysicsBody()->setPositionOffset(Vec2(0, -getContentSize().height / 2));
 
 	// Force position player in middle of screen
-	Size size = Director::getInstance()->getWinSize();
+	const Size size = Director::getInstance()->getWinSize();
 	setPosition(size.width / 2, size.height / 2);
 
 	// Get animation component to trigger animations when that is necessary
 	m_pPlayerAnimComponent =
 		dynamic_cast<PlayerAnimComponent*>(getComponent(XML_PLAYER_ANIM_COMPONENT));
-	m_pPlayerAnimComponent->playIdleAnimation();
+	m_pPlayerAnimComponent->loopIdleAnimation();
 
 	// Set move speed at begining
 	m_moveSpeed = m_baseMoveSpeed;
@@ -60,12 +61,12 @@ void Player::update(float deltaTime)
 	manageInput();
 
 	// We can move only when we are not attacking
-	if (!m_bIsAttacking)
+	if (!m_bIsAttacking && m_bIsAttackComboDelayExpired)
 	{
 		setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);
-	}
-
-	playAnimations();
+		m_bIsRuning = m_moveDirection.lengthSquared() > 0;
+		playRunOrIdleAnimation();
+	}	
 }
 
 void Player::setTimeBetweenComboInput(float timeBetweenComboInput)
@@ -79,26 +80,23 @@ void Player::onDodgeFinished()
 
 	// Set back regular speed
 	m_moveSpeed = m_baseMoveSpeed;
-
-	if (m_isRuning)
-	{
-		// Go back to regular running
-		m_pPlayerAnimComponent->playRunAnimation();
-	}
 }
 
 void Player::onAttackFinished()
 {
 	m_bIsAttacking = false;
+	// Start light attack combo expiration
+	const float secondsBeforeComboInputExpires = getSecondsForValidLighAttackCombo();
+	Utils::startTimerWithCallback(this, 
+		CC_CALLBACK_0(Player::onLightAttackComboExpired, this),
+		secondsBeforeComboInputExpires);
 
-	if (m_isRuning)
-	{
-		m_pPlayerAnimComponent->playRunAnimation();
-	}
-	else
-	{
-		m_pPlayerAnimComponent->playIdleAnimation();
-	}
+	m_bIsAttackComboDelayExpired = false;
+}
+
+void Player::onLightAttackComboExpired()
+{
+	m_bIsAttackComboDelayExpired = true;
 }
 
 void Player::manageInput()
@@ -112,7 +110,7 @@ void Player::manageInput()
 	{
 		//lightAttack();
 	}
-	else if (pInput->hasAction("DodgeInput") && m_isRuning)
+	else if (pInput->hasAction("DodgeInput") && m_bIsRuning)
 	{
 		performDodge();
 	}
@@ -132,13 +130,8 @@ void Player::lightAttack()
 	{
 		// Activating attack
 		m_bIsAttacking = true;
-		
-		const long currnentTime = Utils::getTimeStampInMilliseconds();
-		const float secondsSinceLastAttack = // Devide by 1000 to convert to seconds
-			(currnentTime - m_lastTimePerformedLightAttack) / 1000.f;
-		const bool bIsComboActive = secondsSinceLastAttack < m_timeBetweenComboInput;
-		
-		if(bIsComboActive)
+
+		if(!m_bIsAttackComboDelayExpired)
 		{
 			// Go to next attack in combo
 			m_curLightAttackAnimIdx++;
@@ -169,26 +162,38 @@ void Player::performDodge()
 {
 	m_bIsDodging = true;
 	m_moveSpeed = m_dodgeSpeed;
-	m_pPlayerAnimComponent->playDodgeAnimation();
+	m_pPlayerAnimComponent->loopDodgeAnimation();
 	Utils::startTimerWithCallback(this,
 		CC_CALLBACK_0(Player::onDodgeFinished, this), m_dodgeTime);
 }
 
-void Player::playAnimations()
-{
-	if (!m_bIsAttacking)
+void Player::playRunOrIdleAnimation()
+{			
+	if (m_bIsRuning && !m_bIsDodging)
 	{
-		const float moveDirectionSqrt = m_moveDirection.lengthSquared();
-		if (!m_bIsDodging && moveDirectionSqrt > 0 && !m_isRuning)
+		if(m_pPlayerAnimComponent->getCurrentlyLoopingAnimation() 
+			!= AnimationKind::RUN)
 		{
-			// When keyboard is down we are always moving
-			m_pPlayerAnimComponent->playRunAnimation();
-			m_isRuning = true;
-		}
-		else if (moveDirectionSqrt <= FLT_EPSILON && m_isRuning)
-		{
-			m_pPlayerAnimComponent->playIdleAnimation();
-			m_isRuning = false;
+			m_pPlayerAnimComponent->loopRunAnimation();
 		}
 	}
+	else if (!m_bIsRuning)
+	{
+		if(m_pPlayerAnimComponent->getCurrentlyLoopingAnimation() 
+			!= AnimationKind::IDLE)
+		{
+			m_pPlayerAnimComponent->loopIdleAnimation();
+		}
+	}
+}
+
+float Player::getSecondsForValidLighAttackCombo() const
+{
+	const long currnentTime = Utils::getTimeStampInMilliseconds();
+	const float secondsSinceLastAttack = // Devide by 1000 to convert to seconds
+		(currnentTime - m_lastTimePerformedLightAttack) / 1000.f;
+
+	const float secondsBeforeComboExpires = m_timeBetweenComboInput - secondsSinceLastAttack;
+
+	return secondsBeforeComboExpires;
 }

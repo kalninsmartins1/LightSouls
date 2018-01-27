@@ -42,7 +42,11 @@ static constexpr char* XML_ANIM_TYPE_RUN = "Run";
 static constexpr char* XML_ANIM_TYPE_IDLE = "Idle";
 static constexpr char* XML_ANIM_TYPE_DODGE = "Dodge";
 static constexpr char* XML_ANIM_TYPE_HURT = "Hurt";
-
+static constexpr char* XML_ANIM_TYPE_LIGHT_ATTACK_ONE = "LightAttackOne";
+static constexpr char* XML_ANIM_TYPE_LIGHT_ATTACK_TWO = "LightAttackTwo";
+static constexpr char* XML_ANIM_TYPE_LIGHT_ATTACK_THREE = "LightAttackThree";
+static constexpr char* XML_ANIM_TYPE_LIGHT_ATTACK_FOUR = "LightAttackFour";
+static constexpr char* XML_ANIM_TYPE_LIGHT_ATTACK_FIVE = "LightAttackFive";
 
 // XML generic attributes
 static constexpr char* XML_NAME_ATTR = "name";

@@ -19,16 +19,21 @@ public:
 private:
 	void onDodgeFinished();
 	void onAttackFinished();
+	void onLightAttackComboExpired();
 	
 	void manageInput();
 	void lightAttack();
 	void performDodge();
-	void playAnimations();
-	
+	void playRunOrIdleAnimation();
+
+	// Returns negative value if time for combo has expired
+	float getSecondsForValidLighAttackCombo() const;
+
 
 	PlayerAnimComponent* m_pPlayerAnimComponent;
 	
-	float m_timeBetweenComboInput;	
+	bool m_bIsAttackComboDelayExpired;
+	float m_timeBetweenComboInput;
 	long m_lastTimePerformedLightAttack;
 	unsigned short int m_curLightAttackAnimIdx;
 };

@@ -6,8 +6,9 @@
 
 using namespace cocos2d;
 
-void AnimationUtils::startSpriteFrameAnimationWithCallback(Sprite* pSprite,
-	Vector<SpriteFrame*>& spriteFrames, float timeBetweenFrames, const std::function<void()>& onFinished)
+void AnimationUtils::startSpriteFrameAnimationWithDelayedCallback(Sprite* pSprite,
+	Vector<SpriteFrame*>& spriteFrames, float timeBetweenFrames, 
+	const std::function<void()>& onFinished)
 {
 	// Stop any previously started animation
 	pSprite->stopActionByTag(ACTION_ANIM_TAG);

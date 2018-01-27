@@ -2,6 +2,7 @@
 
 #include "2d/CCComponent.h"
 #include "2d/CCSprite.h"
+#include "Utils/AnimationUtils.h"
 
 class Player;
 
@@ -30,20 +31,25 @@ class PlayerAnimComponent: public cocos2d::Component
 public:
 	static PlayerAnimComponent* create(cocos2d::Sprite& sprite);
 
+	AnimationKind getCurrentlyLoopingAnimation() const;
+
 	// Load animation configuration from xml file
 	void loadConfig(tinyxml2::XMLNode* pNode);
 
 	// Public interface to start animations
-	void playLightAttackAnimation(LightAttackStage stage, const AnimationCallback& callback);	
-	void playRunAnimation();
-	void playIdleAnimation();
-	void playDodgeAnimation();
+	void playLightAttackAnimation(LightAttackStage stage, 
+		const AnimationCallback& callback);	
 	void playHurtAnimation();
+	
+	void loopRunAnimation();
+	void loopIdleAnimation();
+	void loopDodgeAnimation();
 
 private:
 	PlayerAnimComponent(cocos2d::Sprite& sprite);
+	void onPlayingNoLoopingAnim();
 
-
+	AnimationKind m_currentlyLoopingAnim;
 	cocos2d::Sprite& m_playerSprite;
 	
 	// Animation containers	
