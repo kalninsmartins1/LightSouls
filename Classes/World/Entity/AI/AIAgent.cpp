@@ -1,11 +1,8 @@
 #include "AIAgent.h"
-#include "StateMachine/StateMachine.h"
 #include "Utils/XML/XMLLoader.h"
 
-using namespace cocos2d;
 
-
-AIAgent* AIAgent::create(const std::string& pathToXML)
+AIAgent* AIAgent::create(const String& pathToXML)
 {
 	AIAgent* pAgent = new (std::nothrow) AIAgent();
 	if (pAgent && pAgent->init(pathToXML))
@@ -20,23 +17,9 @@ AIAgent* AIAgent::create(const std::string& pathToXML)
 	return pAgent;
 }
 
-AIAgent* AIAgent::create(AIAgent& agent)
-{
-	AIAgent* pAgent = new (std::nothrow) AIAgent();
-	if (pAgent && pAgent->init(agent))
-	{
-		pAgent->autorelease();
-	}
-	else
-	{
-		CC_SAFE_DELETE(pAgent);
-	}
-
-	return pAgent;
-}
-
 AIAgent::AIAgent() :
-	m_basePosition(Vec2::ZERO),
+	m_stateMachine(*this),
+	m_basePosition(Vector2::ZERO),
 	m_workingRadius(0),
 	m_attackRadius(0),
 	m_patrolPauseInSeconds(0)
@@ -53,41 +36,31 @@ void AIAgent::setAttackRadius(float radius)
 	m_attackRadius = radius;
 }
 
-void AIAgent::setBasePosition(const Vec2& position)
+void AIAgent::setBasePosition(const Vector2& position)
 {
 	m_basePosition = position;
 }
 
-void AIAgent::setAgentType(const std::string& type)
+void AIAgent::setAgentType(const String& type)
 {
 	m_agentType = type;
 }
 
-bool AIAgent::init(const std::string& pathToXML)
+bool AIAgent::init(const String& pathToXML)
 {	
-	return XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);
-}
-
-bool AIAgent::init(AIAgent& agent)
-{	
-	setAttackRadius(agent.m_attackRadius);
-	setWorkingRadius(agent.m_workingRadius);
-	setPatrolPause(agent.m_patrolPauseInSeconds);
-	setBasePosition(agent.m_basePosition);
-	setAgentType(agent.m_agentType);
-	setBaseMoveSpeed(agent.m_baseMoveSpeed);
-	initWithTexture(agent.getTexture());	
+	const bool bIsInitializedSuccessfully = 
+		XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);
+	if(bIsInitializedSuccessfully)
+	{
+		m_stateMachine.start();
+	}
 	
-	// Start out moving at regular speed
-	m_moveSpeed = m_baseMoveSpeed;
-	m_pStateMachine = std::make_unique<StateMachine>(*this);
-
-	return true;
+	return bIsInitializedSuccessfully;
 }
 
 void AIAgent::update(float deltaTime)
 {
-	m_pStateMachine->update();
+	m_stateMachine.onStep();
 }
 
 float AIAgent::getPatrolPause() const
@@ -100,12 +73,17 @@ float AIAgent::getActiveRadius() const
 	return m_workingRadius;
 }
 
-const std::string& AIAgent::getType() const
+float AIAgent::getAttackRadius() const
+{
+	return m_attackRadius;
+}
+
+const String& AIAgent::getType() const
 {
 	return m_agentType;
 }
 
-const Vec2& AIAgent::getBasePosition() const
+const Vector2& AIAgent::getBasePosition() const
 {
 	return m_basePosition;
 }

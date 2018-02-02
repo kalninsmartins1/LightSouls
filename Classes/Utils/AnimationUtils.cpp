@@ -14,7 +14,8 @@ void AnimationUtils::startSpriteFrameAnimationWithDelayedCallback(Sprite* pSprit
 	pSprite->stopActionByTag(ACTION_ANIM_TAG);
 
 	// Start character animation
-	const auto pAnimation = Animation::createWithSpriteFrames(spriteFrames, timeBetweenFrames);
+	const auto pAnimation = Animation::createWithSpriteFrames(spriteFrames,
+		timeBetweenFrames);
 	const auto pAnimate = Animate::create(pAnimation);
 	const auto pCallback = CallFunc::create(onFinished);
 

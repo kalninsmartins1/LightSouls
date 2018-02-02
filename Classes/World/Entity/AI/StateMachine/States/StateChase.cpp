@@ -1,22 +1,29 @@
 #include "StateChase.h"
+#include "World/Entity/AI/AIAgent.h"
+#include "World/Entity/AI/AIAgentManager.h"
+#include "World/Entity/CustomActions/ChaseAction.h"
 
-StateChase::StateChase() :
-	m_curProgress(StateProgress::NONE)
+StateChase::StateChase(AIAgent& agent) :
+	m_curProgress(StateProgress::NONE),
+	m_targetEntity(AIAgentManager::getInstance()->getTargetEntity()),
+	m_agent(agent)	
 {
 }
 
 void StateChase::onEnter()
 {
 	m_curProgress = StateProgress::IN_PROGRESS;
+	const auto pChase = ChaseAction::create(m_targetEntity, m_agent);
+	const auto pCallBack = cocos2d::CallFunc::create(
+		CC_CALLBACK_0(StateChase::onTargetReached, this));
+	m_agent.runAction(cocos2d::Sequence::create(
+		pChase,
+		pCallBack,
+		nullptr));
 }
 
 StateProgress StateChase::onStep()
 {
-	if(m_curProgress == StateProgress::IN_PROGRESS)
-	{
-		// Only perform actions while in progress
-	}
-
 	return m_curProgress;
 }
 
@@ -28,4 +35,9 @@ void StateChase::onExit()
 AIState StateChase::getStateType()
 {
 	return AIState::CHASE;
+}
+
+void StateChase::onTargetReached()
+{
+	m_curProgress = StateProgress::DONE;
 }

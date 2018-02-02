@@ -11,9 +11,10 @@ class Utils
 public:
 
 	static long getTimeStampInMilliseconds();
+	static float convertMillisecondsToSeconds(long milliseconds);
 	static void startTimerWithCallback(cocos2d::Node* pNode,
 		std::function<void()> callback, float time);
-	
+
 	static float getRandAngleInRadians();
 	static cocos2d::Vec2 getScreenFillScale(const cocos2d::Size& curSize);
 	static void logVec2(const cocos2d::Vec2& v);

@@ -1,10 +1,13 @@
 #pragma once
-#include "2d/CCSprite.h"
 
+#include "2d/CCSprite.h"
 
 class Entity: public cocos2d::Sprite
 {
 public:
+	typedef cocos2d::Vec2 Vector2;
+	typedef std::string String;
+
 	Entity();
 
 	void setBaseMoveSpeed(float moveSpeed);
@@ -12,11 +15,10 @@ public:
 	void setDodgeTime(float dodgeTime);	
 
 	float getCurrentMoveSpeed() const;
-
-	cocos2d::Vec2 getHeading() const;
+	Vector2 getHeading() const;	
 
 protected:
-	cocos2d::Vec2 m_moveDirection;
+	Vector2 m_moveDirection;
 
 	bool m_bIsRuning;
 	bool m_bIsDodging;

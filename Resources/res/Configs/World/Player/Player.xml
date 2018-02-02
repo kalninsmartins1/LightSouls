@@ -1,13 +1,14 @@
 <?xml version="1.0" ?>
 <Entity type="Player"
 			moveSpeed="360"
-			dodgeSpeed="100"
+			dodgeSpeed="720"
 			dodgeTime="0.8"
 	>
 	
 	<Component type="TransformComponent">
 		<Position x="2" y="1" z="0" />
 		<Rotation x="0" y="0" z="0" />
+		<Scale x="0.5" y="0.5" z="0.5"/>
 	</Component>
 	
 	<Component type="PlayerControllerComponent"

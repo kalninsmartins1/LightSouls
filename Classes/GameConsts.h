@@ -7,3 +7,13 @@ static constexpr int MAX_SPRITE_NAME_LENGTH = 100;
 
 static constexpr int ACTION_MOVE_TAG = 0;
 static constexpr int ACTION_ANIM_TAG = 1;
+
+// Entity components
+static constexpr char* PLAYER_ANIM_COMPONENT = "PlayerAnimComponent";
+static constexpr char* TRANSFORM_COMPONENT = "TransformComponent";
+static constexpr char* RIGID_BODY_COMPONENT = "RigidBodyComponent";
+static constexpr char* PLAYER_CONTROLLER_COMPONENT = "PlayerControllerComponent";
+static constexpr char* MIRROR_SPRITE_COMPONENT = "MirrorSpriteComponent";
+static constexpr char* AI_CONTROLLER_COMPONENT = "AIControllerComponent";
+static constexpr char* AI_ANIM_COMPONENT = "AgentAnimationComponent";
+static constexpr char* RANGED_ATTACK_COMPONENT = "RangedAttackComponent";

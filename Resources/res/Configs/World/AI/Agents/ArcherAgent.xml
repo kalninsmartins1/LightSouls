@@ -8,13 +8,20 @@
 	<Component type="TransformComponent">
 		<Position x="2" y="1" z="0" />
 		<Rotation x="0" y="0" z="0" />
-		<Scale x="0" y="0" z="0"/>
+		<Scale x="1" y="1" z="1"/>
 	</Component>
 	
 	<Component type="AIControllerComponent"
-		workingRadius="120"
-		attackRadius="20"
+		workingRadius="680"
+		attackRadius="120"
 		patrolPauseInSeconds="5">
+	</Component>
+	
+	<Component type="RangedAttackComponent"
+		secondsBetweenAttacks="1"
+		maxFlyDistance="500"
+		moveSpeed="3"
+		path="res/Graphics/World/Ammo/arrow.png">		
 	</Component>
 	
 	<Component type="AgentAnimationComponent">

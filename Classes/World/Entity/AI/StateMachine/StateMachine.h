@@ -4,13 +4,13 @@
 #include "States/StateAttack.h"
 #include "States/StateChase.h"
 #include "States/StatePatrol.h"
-#include "World/Entity/AI/AIAgent.h"
 
 class StateMachine
 {
 public:		
 	StateMachine(AIAgent& agent);
-	void update();	
+	void start();
+	void onStep();	
 
 private:	
 	void switchState(IState& newState);

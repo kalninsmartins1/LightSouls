@@ -37,9 +37,6 @@
     <Filter Include="src\World\Entity\Player">
       <UniqueIdentifier>{734dc60e-62e7-4257-b899-ece5e08871a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\World\Entity\Skills">
-      <UniqueIdentifier>{f97625a9-2431-42db-a101-3af291bb7f67}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\World\Entity\Components">
       <UniqueIdentifier>{c5bc50c9-245f-457f-ba25-1ec257431706}</UniqueIdentifier>
     </Filter>
@@ -57,6 +54,9 @@
     </Filter>
     <Filter Include="src\Utils\XML">
       <UniqueIdentifier>{db420575-c042-44ec-a9e9-970536e6c990}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\World\Entity\Ammo">
+      <UniqueIdentifier>{522ed146-dc0a-4cea-beb5-3e0cb6494630}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +132,15 @@
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\CustomActions\ChaseAction.cpp">
+      <Filter>src\World\Entity\CustomActions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\RangedAttackComponent.cpp">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Ammo\Arrow.cpp">
+      <Filter>src\World\Entity\Ammo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -148,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\GameConsts.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Entity\Skills\AttackStyle.h">
-      <Filter>src\World\Entity\Skills</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Utils\AnimationUtils.h">
       <Filter>src\Utils</Filter>
@@ -217,6 +223,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\CustomActions\ChaseAction.h">
+      <Filter>src\World\Entity\CustomActions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\RangedAttackComponent.h">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Ammo\Arrow.h">
+      <Filter>src\World\Entity\Ammo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

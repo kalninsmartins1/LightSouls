@@ -1,6 +1,8 @@
 #include "Utils.h"
 #include "Input/InputTypes/Keyboard/KeyboardInput.h"
 #include "GameConsts.h"
+#include "World/Entity/Components/MirrorSpriteComponent.h"
+#include "World/Entity/Components/AgentAnimationComponent.h"
 
 using namespace cocos2d;
 
@@ -13,6 +15,11 @@ long Utils::getTimeStampInMilliseconds()
 {
 	// Convert system ticks to milliseconds
 	return std::chrono::system_clock::now().time_since_epoch().count() / 10000;
+}
+
+float Utils::convertMillisecondsToSeconds(long milliseconds)
+{
+	return milliseconds / 1000.f;
 }
 
 void Utils::logVec2(const Vec2& v)

@@ -8,7 +8,9 @@
 #include "Input/GameInput.h"
 #include "World/World.h"
 #include "World/Entity/Components/AgentAnimationComponent.h"
-
+#include "GameConsts.h"
+#include "World/Entity/Components/RangedAttackComponent.h"
+#include <rapidxml/rapidxml.hpp>
 
 using namespace cocos2d;
 
@@ -31,14 +33,13 @@ bool XMLLoader::initializeAIManagerUsingXMLFile(AIAgentManager& aiManager, const
 			const std::string& elementName = pNode->Value();
 			if(elementName == XML_NODE_AGENT_CONFIG_LIST)
 			{
-				// Load all agent configs
+				// Load all agent configurations
 				for (XMLElement* pChild = pNode->FirstChildElement(); pChild;
 					pChild = pChild->NextSiblingElement())
 				{
 					const std::string& path = pChild->Attribute(XML_PATH_ATTR);
-					AIAgent* pAgent = AIAgent::create(path);
-					const std::string& type = pAgent->getType();
-					aiManager.addAgent(type, pAgent);
+					const std::string& type = pChild->Attribute(XML_TYPE_ATTR);
+					aiManager.addAgentConfig(type, path);
 				}
 			}
 		}
@@ -156,21 +157,25 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 			// Check all actor components
 			const std::string componentType = pElement->Attribute(XML_TYPE_ATTR);
 			
-			if (componentType == XML_TRANSFORM_COMPONENT)
+			if (componentType == TRANSFORM_COMPONENT)
 			{
 				// Trasform component has data types in specific order
 				XMLNode* pPositionNode = pElement->FirstChild();
 				XMLNode* pRotationNode = pPositionNode->NextSibling();
+				XMLNode* pScaleNode = pRotationNode->NextSiblingElement();
 
 				sprite.setPosition3D(loadVec3FromAttributes(pPositionNode));
 				sprite.setRotation3D(loadVec3FromAttributes(pRotationNode));
+
+				const Vec3 scale = loadVec3FromAttributes(pScaleNode);
+				sprite.setScale(scale.x, scale.y);
 			}
-			else if (componentType == XML_PLAYER_CONTROLLER_COMPONENT)
-			{				
+			else if (componentType == PLAYER_CONTROLLER_COMPONENT)
+			{
 				const float moveSpeed = pRoot->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
 				const float dodgeSpeed = pRoot->FloatAttribute(XML_ENTITY_DODGE_SPEED_ATTR);
 				const float dodgeTime = pRoot->FloatAttribute(XML_ENTITY_DODGE_TIME_ATTR);
-								
+
 				const float timeBetweenComboInput =
 					pElement->FloatAttribute(XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR);
 
@@ -180,7 +185,7 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 				pPlayer->setDodgeTime(dodgeTime);
 				pPlayer->setTimeBetweenComboInput(timeBetweenComboInput);
 			}
-			else if(componentType == XML_AI_CONTROLLER_COMPONENT)
+			else if(componentType == AI_CONTROLLER_COMPONENT)
 			{
 				const float moveSpeed = pRoot->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
 				const float attackRadius = pElement->FloatAttribute(XML_AI_ATTACK_RADIUS_ATTR);
@@ -195,30 +200,51 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 				pAgent->setPatrolPause(patrolPause);
 				pAgent->setBaseMoveSpeed(moveSpeed);
 			}
-			else if (componentType == XML_PLAYER_ANIM_COMPONENT)
+			else if (componentType == PLAYER_ANIM_COMPONENT)
 			{
 				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create(sprite);
-				pPlayerAnim->setName(XML_PLAYER_ANIM_COMPONENT);
+				pPlayerAnim->setName(PLAYER_ANIM_COMPONENT);
 				pPlayerAnim->loadConfig(pElement);
 				sprite.addComponent(pPlayerAnim);
 			}
-			else if(componentType == XML_AI_ANIM_COMPONENT)
+			else if(componentType == AI_ANIM_COMPONENT)
 			{
 				AgentAnimationComponent* pAgentAnim = AgentAnimationComponent::create(sprite);
-				pAgentAnim->setName(XML_AI_ANIM_COMPONENT);
+				pAgentAnim->setName(AI_ANIM_COMPONENT);
 				pAgentAnim->loadConfig(pElement);
 				sprite.addComponent(pAgentAnim);
 			}
-			else if (componentType == XML_RIGID_BODY_COMPONENT)
+			else if(componentType == RANGED_ATTACK_COMPONENT)
+			{
+				const std::string& pathToAmmoSprite =
+					pElement->Attribute(XML_PATH_ATTR);
+				const float maxAmmoFlyDistance =
+					pElement->FloatAttribute(XML_AI_MAX_FLY_DISTANCE);
+				const float ammoMoveSpeed = 
+					pElement->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
+				const float secondsBetweenAttacks =
+					pElement->FloatAttribute(
+						XML_AI_SECONDS_BETWEEN_ATTACK_ATTR);
+
+				RangedAttackComponent* pRangedAttack = 
+					RangedAttackComponent::create(
+						pathToAmmoSprite,
+						maxAmmoFlyDistance,
+						ammoMoveSpeed,
+						secondsBetweenAttacks);
+				pRangedAttack->setName(RANGED_ATTACK_COMPONENT);
+				sprite.addComponent(pRangedAttack);
+			}
+			else if (componentType == RIGID_BODY_COMPONENT)
 			{
 				PhysicsBody* pPhysicsBody = loadPhysicsBodyFromAttributes(pElement);
-				pPhysicsBody->setName(XML_RIGID_BODY_COMPONENT);
+				pPhysicsBody->setName(RIGID_BODY_COMPONENT);
 				sprite.addComponent(pPhysicsBody);
 			}
-			else if (componentType == XML_MIRROR_SPRITE_COMPONENT)
+			else if (componentType == MIRROR_SPRITE_COMPONENT)
 			{
 				MirrorSpriteComponent* pMirrorSprite = MirrorSpriteComponent::create();
-				pMirrorSprite->setName(XML_MIRROR_SPRITE_COMPONENT);
+				pMirrorSprite->setName(MIRROR_SPRITE_COMPONENT);
 				pMirrorSprite->setOwnerEntity(dynamic_cast<Entity*>(&sprite));
 				sprite.addComponent(pMirrorSprite);
 			}

@@ -2,7 +2,6 @@
 
 #include "cocos2d.h"
 #include "tinyxml2/tinyxml2.h"
-#include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/AI/AIAgentManager.h"
 
 class GameInput;

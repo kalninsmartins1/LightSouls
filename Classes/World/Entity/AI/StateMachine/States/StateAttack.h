@@ -1,9 +1,16 @@
+#pragma once
+
 #include "IState.h"
+#include "World/Entity/Entity.h"
+#include "World/Entity/Components/RangedAttackComponent.h"
+
+class AIAgent;
 
 class StateAttack: public IState
 {
 public:
-	StateAttack();
+	StateAttack(AIAgent& agent);
+	bool init();
 
 	virtual void onEnter() override;
 	virtual StateProgress onStep() override;
@@ -12,4 +19,7 @@ public:
 
 private:
 	StateProgress m_curProgress;
+	AIAgent& m_agent;
+	const Entity& m_targetEntity;
+	RangedAttackComponent* m_pAttackComponent;
 };

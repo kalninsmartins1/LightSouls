@@ -1,9 +1,7 @@
 #include "Entity.h"
 
-using namespace cocos2d;
-
 Entity::Entity() :
-	m_moveDirection(Vec2::ZERO),
+	m_moveDirection(Vector2::ZERO),
 	m_bIsRuning(false),
 	m_bIsDodging(false),
 	m_bIsAttacking(false),
@@ -30,11 +28,11 @@ void Entity::setDodgeTime(float dodgeTime)
 }
 
 float Entity::getCurrentMoveSpeed() const
-{
+{	
 	return m_moveSpeed;
 }
 
-Vec2 Entity::getHeading() const
-{
+Entity::Vector2 Entity::getHeading() const
+{	
 	return m_moveDirection;
 }

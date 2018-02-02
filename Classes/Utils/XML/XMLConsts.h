@@ -1,19 +1,9 @@
 #pragma once
 
-
 // XML nodes
 static constexpr char* XML_NODE_PHYSICS_MATERIAL = "PhysicsMaterial";
 static constexpr char* XML_NODE_PHYSICS_BODY = "PhysicsBody";
 static constexpr char* XML_NODE_AGENT_CONFIG_LIST = "AgentConfigList";
-
-// XML entity components
-static constexpr char* XML_PLAYER_ANIM_COMPONENT = "PlayerAnimComponent";
-static constexpr char* XML_TRANSFORM_COMPONENT = "TransformComponent";
-static constexpr char* XML_RIGID_BODY_COMPONENT = "RigidBodyComponent";
-static constexpr char* XML_PLAYER_CONTROLLER_COMPONENT = "PlayerControllerComponent";
-static constexpr char* XML_MIRROR_SPRITE_COMPONENT = "MirrorSpriteComponent";
-static constexpr char* XML_AI_CONTROLLER_COMPONENT = "AIControllerComponent";
-static constexpr char* XML_AI_ANIM_COMPONENT = "AgentAnimationComponent";
 
 // XML entity attributes
 static constexpr char* XML_ENTITY_MOVE_SPEED_ATTR = "moveSpeed";
@@ -27,6 +17,8 @@ static constexpr char* XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR = "timeBetweenComb
 static constexpr char* XML_AI_ATTACK_RADIUS_ATTR = "attackRadius";
 static constexpr char* XML_AI_WORKING_RADIUS_ATTR = "workingRadius";
 static constexpr char* XML_AI_PATROL_PAUSE_ATTR = "patrolPauseInSeconds";
+static constexpr char* XML_AI_SECONDS_BETWEEN_ATTACK_ATTR = "secondsBetweenAttacks";
+static constexpr char* XML_AI_MAX_FLY_DISTANCE = "maxFlyDistance";
 
 // XML animation component specifics
 static constexpr char* XML_ANIM_SPRITE_FRAME = "SpriteFrame";

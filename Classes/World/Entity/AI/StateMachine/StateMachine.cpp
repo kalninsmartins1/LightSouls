@@ -1,14 +1,21 @@
-#include "StateMachine.h"
 #include "cocos2d.h"
+#include "StateMachine.h"
+#include "World/Entity/AI/AIAgent.h"
 
 using namespace cocos2d;
 
 StateMachine::StateMachine(AIAgent& agent) :
 	m_Agent(agent),	
 	m_curState(nullptr),
+	m_attackState(agent),
+	m_chaseState(agent),
 	m_patrolState(agent)
 {
-	// Agent starts out patroling the area
+}
+
+void StateMachine::start()
+{
+	m_attackState.init();
 	switchState(m_patrolState);
 }
 
@@ -22,7 +29,7 @@ void StateMachine::switchState(IState& newState)
 	m_curState->onEnter();
 }
 
-void StateMachine::update()
+void StateMachine::onStep()
 {
 	const StateProgress& curProgress = m_curState->onStep();
 	switch (curProgress)

@@ -2,7 +2,7 @@
 #include "Utils/Utils.h"
 #include "../Components/PlayerAnimComponent.h"
 #include "Utils/XML/XMLLoader.h"
-#include "Utils/XML/XMLConsts.h"
+#include "GameConsts.h"
 #include "Input/GameInput.h"
 
 using namespace cocos2d;
@@ -44,7 +44,8 @@ bool Player::init(const std::string& pathToXML)
 
 	// Get animation component to trigger animations when that is necessary
 	m_pPlayerAnimComponent =
-		dynamic_cast<PlayerAnimComponent*>(getComponent(XML_PLAYER_ANIM_COMPONENT));
+		dynamic_cast<PlayerAnimComponent*>(
+			getComponent(PLAYER_ANIM_COMPONENT));
 	m_pPlayerAnimComponent->loopIdleAnimation();
 
 	// Set move speed at begining
@@ -63,9 +64,10 @@ void Player::update(float deltaTime)
 	// We can move only when we are not attacking
 	if (!m_bIsAttacking && m_bIsAttackComboDelayExpired)
 	{
-		setPosition(getPosition() + m_moveDirection * m_moveSpeed * deltaTime);
+		setPosition(getPosition() + m_moveDirection *
+			m_moveSpeed * deltaTime);
 		m_bIsRuning = m_moveDirection.lengthSquared() > 0;
-		playRunOrIdleAnimation();
+		playRunOrIdleAnimation();		
 	}	
 }
 

@@ -1,6 +1,10 @@
 #pragma once
+
 #include "IState.h"
-#include "World/Entity/AI/AIAgent.h"
+#include "cocos2d.h"
+#include "World/Entity/Entity.h"
+
+class AIAgent;
 
 class StatePatrol: public IState
 {

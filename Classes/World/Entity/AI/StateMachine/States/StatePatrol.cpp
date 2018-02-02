@@ -36,7 +36,12 @@ StateProgress StatePatrol::onStep()
 			moveToPositionAction->isDone())
 		{
 			moveToRandomPosition();
-		}			
+		}	
+		
+		if(hasPlayerBeenSpotted())
+		{
+			m_curProgress = StateProgress::DONE;
+		}
 	}
 
 	return m_curProgress;
