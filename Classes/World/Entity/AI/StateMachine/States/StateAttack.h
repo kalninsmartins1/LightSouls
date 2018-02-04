@@ -21,5 +21,5 @@ private:
 	StateProgress m_curProgress;
 	AIAgent& m_agent;
 	const Entity& m_targetEntity;
-	RangedAttackComponent* m_pAttackComponent;
+	AttackComponent* m_pAttackComponent;
 };

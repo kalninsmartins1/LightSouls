@@ -81,7 +81,7 @@ void HelloWorld::initWolrdLayer()
 		pAgentManger->setWorldLayer(pWorldLayer);
 
 		// Spawn agents in world
-		pAgentManger->spawnAgent("ArcherAgent", Vec2(200, 200));
+		pAgentManger->spawnAgent("WarriorAgent", Vec2(200, 200));
 	}
 	else
 	{

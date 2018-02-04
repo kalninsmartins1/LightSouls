@@ -141,6 +141,12 @@
     <ClCompile Include="..\Classes\World\Entity\Ammo\Arrow.cpp">
       <Filter>src\World\Entity\Ammo</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.cpp">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\AttackComponent.cpp">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -232,6 +238,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Ammo\Arrow.h">
       <Filter>src\World\Entity\Ammo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\AttackComponent.h">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.h">
+      <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

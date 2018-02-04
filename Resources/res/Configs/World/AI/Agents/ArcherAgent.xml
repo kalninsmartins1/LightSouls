@@ -18,9 +18,9 @@
 	</Component>
 	
 	<Component type="RangedAttackComponent"
-		secondsBetweenAttacks="1"
+		secondsBetweenAttacks="5"
 		maxFlyDistance="500"
-		moveSpeed="3"
+		moveSpeed="50"
 		path="res/Graphics/World/Ammo/arrow.png">		
 	</Component>
 	

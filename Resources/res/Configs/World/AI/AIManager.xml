@@ -1,7 +1,7 @@
 <AIManager>
 	<AgentConfigList>
 		<AgentConfig type="ArcherAgent" path="res/Configs/World/AI/Agents/ArcherAgent.xml"/>
-		<!--<AgentConfig path="res/Configs/World/AI/Agents/DaggerAgent.xml"/>
-		<AgentConfig path="res/Configs/World/AI/Agents/WarriorAgent.xml"/>-->
+		<AgentConfig type="DaggerAgent" path="res/Configs/World/AI/Agents/DaggerAgent.xml"/>
+		<AgentConfig type="WarriorAgent" path="res/Configs/World/AI/Agents/WarriorAgent.xml"/>
 	</AgentConfigList>
 </AIManager>

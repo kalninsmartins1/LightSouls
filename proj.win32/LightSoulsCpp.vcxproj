@@ -166,6 +166,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Ammo\Arrow.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\AgentAnimationComponent.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Components\AttackComponent.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\PlayerAnimComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\RangedAttackComponent.cpp" />
@@ -198,6 +200,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h" />
     <ClInclude Include="..\Classes\World\Entity\Ammo\Arrow.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\AgentAnimationComponent.h" />
+    <ClInclude Include="..\Classes\World\Entity\Components\AttackComponent.h" />
+    <ClInclude Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\PlayerAnimComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\RangedAttackComponent.h" />

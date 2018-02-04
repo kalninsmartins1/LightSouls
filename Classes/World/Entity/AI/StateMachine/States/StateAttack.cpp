@@ -13,7 +13,7 @@ StateAttack::StateAttack(AIAgent& agent) :
 bool StateAttack::init()
 {
 	m_pAttackComponent =
-		dynamic_cast<RangedAttackComponent*>(
+		dynamic_cast<AttackComponent*>(
 			m_agent.getComponent(RANGED_ATTACK_COMPONENT));
 	CC_ASSERT(m_pAttackComponent != nullptr &&
 		"Attack component not found !");
@@ -32,9 +32,9 @@ StateProgress StateAttack::onStep()
 	{
 		if(m_pAttackComponent->isReadyToAttack())
 		{
-			Vector2 toTarget = m_targetEntity.getPosition() -
+			cocos2d::Vec2 toTarget = m_targetEntity.getPosition() -
 				m_agent.getPosition();
-			m_pAttackComponent->shoot(toTarget.getNormalized());
+			m_pAttackComponent->attack(toTarget.getNormalized());
 		}		
 	}
 	return m_curProgress;
