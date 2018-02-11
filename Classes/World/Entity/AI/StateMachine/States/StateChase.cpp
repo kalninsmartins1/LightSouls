@@ -10,9 +10,11 @@ StateChase::StateChase(AIAgent& agent) :
 {
 }
 
-void StateChase::onEnter()
+void StateChase::onEnter(AIAnimComponent* pAnimComponent)
 {
 	m_curProgress = StateProgress::IN_PROGRESS;
+
+	// Start chasing player
 	const auto pChase = ChaseAction::create(m_targetEntity, m_agent);
 	const auto pCallBack = cocos2d::CallFunc::create(
 		CC_CALLBACK_0(StateChase::onTargetReached, this));
@@ -20,6 +22,9 @@ void StateChase::onEnter()
 		pChase,
 		pCallBack,
 		nullptr));
+
+	// Play run animation
+	pAnimComponent->playRunAnimation();
 }
 
 StateProgress StateChase::onStep()

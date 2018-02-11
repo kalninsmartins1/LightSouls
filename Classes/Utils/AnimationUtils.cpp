@@ -6,7 +6,7 @@
 
 using namespace cocos2d;
 
-void AnimationUtils::startSpriteFrameAnimationWithDelayedCallback(Sprite* pSprite,
+void AnimationUtils::startSpriteFrameAnimationWithCallback(Sprite* pSprite,
 	Vector<SpriteFrame*>& spriteFrames, float timeBetweenFrames, 
 	const std::function<void()>& onFinished)
 {
@@ -19,7 +19,7 @@ void AnimationUtils::startSpriteFrameAnimationWithDelayedCallback(Sprite* pSprit
 	const auto pAnimate = Animate::create(pAnimation);
 	const auto pCallback = CallFunc::create(onFinished);
 
-	/* By cocos2d documentation last parameter to Sequnce::create must be nullptr
+	/* According to cocos2d documentation last parameter to Sequnce::create must be nullptr
 	 * http://www.cocos2d-x.org/docs/cocos2d-x/en/actions/sequences.html
 	*/
 	Sequence* pSequence = Sequence::create(pAnimate, pCallback, nullptr);

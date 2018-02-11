@@ -4,6 +4,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "GameConsts.h"
 #include "Input/GameInput.h"
+#include "physics3d/CCPhysics3DWorld.h"
 
 using namespace cocos2d;
 
@@ -127,7 +128,7 @@ void Player::manageInput()
 }
 
 void Player::lightAttack()
-{
+{	
 	if (!m_bIsAttacking && !m_bIsDodging)
 	{
 		// Activating attack
@@ -169,7 +170,7 @@ void Player::performDodge()
 		CC_CALLBACK_0(Player::onDodgeFinished, this), m_dodgeTime);
 }
 
-void Player::playRunOrIdleAnimation()
+void Player::playRunOrIdleAnimation() const
 {			
 	if (m_bIsRuning && !m_bIsDodging)
 	{

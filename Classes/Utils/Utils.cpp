@@ -2,7 +2,7 @@
 #include "Input/InputTypes/Keyboard/KeyboardInput.h"
 #include "GameConsts.h"
 #include "World/Entity/Components/MirrorSpriteComponent.h"
-#include "World/Entity/Components/AgentAnimationComponent.h"
+#include "World/Entity/Components/AIAnimComponent.h"
 
 using namespace cocos2d;
 

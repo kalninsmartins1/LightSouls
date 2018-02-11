@@ -85,8 +85,8 @@
 		<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
 		<PhysicsBody
 			shape="box"
-			width="40"
-			height="15"
+			width="10"
+			height="50"
 			isDynamic="true" 
 			isGravityEnabled="false" 
 			collisionBitMask="0xFFFFFF"

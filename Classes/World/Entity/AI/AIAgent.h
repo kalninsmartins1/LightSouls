@@ -29,7 +29,7 @@ private:
 
 	StateMachine m_stateMachine;
 	Vector2 m_basePosition;
-	String m_agentType;
+	String m_agentType;	
 	float m_workingRadius;	
 	float m_attackRadius;
 	float m_patrolPauseInSeconds;

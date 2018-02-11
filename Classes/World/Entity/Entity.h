@@ -13,6 +13,7 @@ public:
 	void setBaseMoveSpeed(float moveSpeed);
 	void setDodgeSpeed(float dodgeSpeed);
 	void setDodgeTime(float dodgeTime);	
+	void setMoveDirection(const Vector2& direction);
 
 	float getCurrentMoveSpeed() const;
 	Vector2 getHeading() const;	

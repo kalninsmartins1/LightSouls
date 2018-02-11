@@ -7,10 +7,11 @@
 #include "World/Entity/Components/MirrorSpriteComponent.h"
 #include "Input/GameInput.h"
 #include "World/World.h"
-#include "World/Entity/Components/AgentAnimationComponent.h"
+#include "World/Entity/Components/AIAnimComponent.h"
 #include "GameConsts.h"
 #include "World/Entity/Components/RangedAttackComponent.h"
 #include <rapidxml/rapidxml.hpp>
+#include "World/Entity/Components/LongSwordAttackComponent.h"
 
 using namespace cocos2d;
 
@@ -209,7 +210,7 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 			}
 			else if(componentType == AI_ANIM_COMPONENT)
 			{
-				AgentAnimationComponent* pAgentAnim = AgentAnimationComponent::create(sprite);
+				AIAnimComponent* pAgentAnim = AIAnimComponent::create(sprite);
 				pAgentAnim->setName(AI_ANIM_COMPONENT);
 				pAgentAnim->loadConfig(pElement);
 				sprite.addComponent(pAgentAnim);
@@ -234,6 +235,17 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 						secondsBetweenAttacks);
 				pRangedAttack->setName(RANGED_ATTACK_COMPONENT);
 				sprite.addComponent(pRangedAttack);
+			}
+			else if(componentType == LONG_SWORD_ATTACK_COMPONENT)
+			{				
+				const float secondsBetweenAttacks =
+					pElement->FloatAttribute(
+						XML_AI_SECONDS_BETWEEN_ATTACK_ATTR);
+
+				LongSwordAttackComponent* pLongSwordAttack =
+					LongSwordAttackComponent::create(secondsBetweenAttacks);
+				pLongSwordAttack->setName(RANGED_ATTACK_COMPONENT);
+				sprite.addComponent(pLongSwordAttack);
 			}
 			else if (componentType == RIGID_BODY_COMPONENT)
 			{

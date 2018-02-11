@@ -117,9 +117,6 @@
     <ClCompile Include="..\Classes\Utils\XML\XMLLoader.cpp">
       <Filter>src\Utils\XML</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\Components\AgentAnimationComponent.cpp">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
@@ -145,6 +142,9 @@
       <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Components\AttackComponent.cpp">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\AIAnimComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -215,9 +215,6 @@
     <ClInclude Include="..\Classes\Utils\XML\XMLConsts.h">
       <Filter>src\Utils\XML</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\Components\AgentAnimationComponent.h">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.h">
       <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
@@ -243,6 +240,9 @@
       <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.h">
+      <Filter>src\World\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\AIAnimComponent.h">
       <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
   </ItemGroup>

@@ -34,6 +34,7 @@ static constexpr char* XML_ANIM_TYPE_RUN = "Run";
 static constexpr char* XML_ANIM_TYPE_IDLE = "Idle";
 static constexpr char* XML_ANIM_TYPE_DODGE = "Dodge";
 static constexpr char* XML_ANIM_TYPE_HURT = "Hurt";
+static constexpr char* XML_ANIM_TYPE_ATTACK = "Attack";
 static constexpr char* XML_ANIM_TYPE_LIGHT_ATTACK_ONE = "LightAttackOne";
 static constexpr char* XML_ANIM_TYPE_LIGHT_ATTACK_TWO = "LightAttackTwo";
 static constexpr char* XML_ANIM_TYPE_LIGHT_ATTACK_THREE = "LightAttackThree";

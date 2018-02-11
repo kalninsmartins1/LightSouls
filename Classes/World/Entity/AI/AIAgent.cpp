@@ -1,5 +1,6 @@
 #include "AIAgent.h"
 #include "Utils/XML/XMLLoader.h"
+#include "GameConsts.h"
 
 
 AIAgent* AIAgent::create(const String& pathToXML)
@@ -19,7 +20,7 @@ AIAgent* AIAgent::create(const String& pathToXML)
 
 AIAgent::AIAgent() :
 	m_stateMachine(*this),
-	m_basePosition(Vector2::ZERO),
+	m_basePosition(Vector2::ZERO),	
 	m_workingRadius(0),
 	m_attackRadius(0),
 	m_patrolPauseInSeconds(0)
@@ -52,7 +53,10 @@ bool AIAgent::init(const String& pathToXML)
 		XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);
 	if(bIsInitializedSuccessfully)
 	{
-		m_stateMachine.start();
+		AIAnimComponent* pAnimComponent = dynamic_cast<AIAnimComponent*>(getComponent(AI_ANIM_COMPONENT));
+		CC_ASSERT(pAnimComponent != nullptr && "AIAgent: AIAnimComponent not found !");
+			
+		m_stateMachine.start(pAnimComponent);		
 	}
 	
 	return bIsInitializedSuccessfully;
@@ -60,6 +64,7 @@ bool AIAgent::init(const String& pathToXML)
 
 void AIAgent::update(float deltaTime)
 {
+	Entity::update(deltaTime);
 	m_stateMachine.onStep();
 }
 
@@ -78,12 +83,12 @@ float AIAgent::getAttackRadius() const
 	return m_attackRadius;
 }
 
-const String& AIAgent::getType() const
+const Entity::String& AIAgent::getType() const
 {
 	return m_agentType;
 }
 
-const Vector2& AIAgent::getBasePosition() const
+const Entity::Vector2& AIAgent::getBasePosition() const
 {
 	return m_basePosition;
 }

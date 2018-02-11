@@ -99,35 +99,35 @@ void PlayerAnimComponent::playLightAttackAnimation(LightAttackStage stage,
 	switch (stage)
 	{
 	case LightAttackStage::ONE:
-		AnimationUtils::startSpriteFrameAnimationWithDelayedCallback(&m_playerSprite,
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
 			m_lightAttackOneFrames,
 			m_timeBetweenLightAttackOneFrames, 
 			callback);
 		break;
 
 	case LightAttackStage::TWO:
-		AnimationUtils::startSpriteFrameAnimationWithDelayedCallback(&m_playerSprite,
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
 			m_lightAttackTwoFrames,
 			m_timeBetweenLightAttackTwoFrames,
 			callback);
 		break;
 
 	case LightAttackStage::THREE:
-		AnimationUtils::startSpriteFrameAnimationWithDelayedCallback(&m_playerSprite,
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
 			m_lightAttackThreeFrames,
 			m_timeBetweenLightAttackThreeFrames,
 			callback);
 		break;
 
 	case LightAttackStage::FOUR:
-		AnimationUtils::startSpriteFrameAnimationWithDelayedCallback(&m_playerSprite,
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
 			m_lightAttackFourFrames,
 			m_timeBetweenLightAttackFourFrames,
 			callback);
 		break;
 
 	case LightAttackStage::FIVE:
-		AnimationUtils::startSpriteFrameAnimationWithDelayedCallback(&m_playerSprite,
+		AnimationUtils::startSpriteFrameAnimationWithCallback(&m_playerSprite,
 			m_lightAttackFiveFrames,
 			m_timeBetweenLightAttackFiveFrames,
 			callback);

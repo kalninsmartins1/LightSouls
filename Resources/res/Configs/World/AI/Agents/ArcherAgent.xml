@@ -24,7 +24,7 @@
 		path="res/Graphics/World/Ammo/arrow.png">		
 	</Component>
 	
-	<Component type="AgentAnimationComponent">
+	<Component type="AIAnimComponent">
 		<SpriteSheet type="Idle"
 			path="res/Graphics/World/AI/Archer/Idle/IdleAnim.png" 
 			plistPath="res/Graphics/World/AI/Archer/Idle/IdleAnim.plist"

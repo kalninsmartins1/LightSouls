@@ -13,7 +13,7 @@ Scene* HelloWorld::createScene()
 	// create the scene with physics enabled
 	auto scene = createWithPhysics();
 
-	auto layer = create();
+	Node* layer = create();
 	scene->addChild(layer);
 
 	return scene;
@@ -58,7 +58,10 @@ void HelloWorld::update(float deltaTime)
 	GameInput::getInstance()->update(deltaTime);
 
 	// Update AI
-	AIAgentManager::getInstance()->update(deltaTime);
+	AIAgentManager::getInstance()->update(deltaTime);	
+
+	Director::getInstance()->getRunningScene()->getPhysicsWorld()->
+		setDebugDrawMask(0xFFFFFF);
 }
 
 void HelloWorld::initWolrdLayer()
@@ -97,7 +100,7 @@ void HelloWorld::initWolrdLayer()
 	Camera* pWorldCamera = Camera::create();
 	pWorldCamera->setCameraFlag(CameraFlag::USER1);
 	pWorldCamera->runAction(CameraFollow::create(m_pPlayer));
-	addChild(pWorldCamera);
+	addChild(pWorldCamera);	
 }
 
 void HelloWorld::initUILayer()
@@ -115,6 +118,7 @@ void HelloWorld::initUILayer()
 
 	// Create UI camera
 	Camera* pUICamera = Camera::create();
-	pUICamera->setCameraFlag(CameraFlag::USER2);
+	pUICamera->setCameraFlag(CameraFlag::USER2);	
 	addChild(pUICamera);
 }
+

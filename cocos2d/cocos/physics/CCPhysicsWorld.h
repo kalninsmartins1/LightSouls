@@ -36,8 +36,8 @@
 struct cpSpace;
 
 NS_CC_BEGIN
-
-class PhysicsBody;
+	enum class CameraFlag;
+	class PhysicsBody;
 class PhysicsJoint;
 class PhysicsShape;
 class PhysicsContact;
@@ -308,6 +308,13 @@ public:
     * @param mask Mask has four value:DEBUGDRAW_NONE, DEBUGDRAW_SHAPE, DEBUGDRAW_JOINT, DEBUGDRAW_CONTACT and DEBUGDRAW_ALL, default is DEBUGDRAW_NONE
     */
     void setDebugDrawMask(int mask);
+
+	/**
+	* Set camera draw mask for debug draw objects.
+	*
+	* @param mask Mask: All CameraFlag values available.
+	*/
+	void setDebugDrawCameraMask(CameraFlag mask);
 
     /**
     * Get the debug draw mask.

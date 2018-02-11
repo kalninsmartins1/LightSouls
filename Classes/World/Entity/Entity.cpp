@@ -15,6 +15,7 @@ Entity::Entity() :
 void Entity::setBaseMoveSpeed(float moveSpeed)
 {
 	m_baseMoveSpeed = moveSpeed;
+	m_moveSpeed = m_baseMoveSpeed;
 }
 
 void Entity::setDodgeSpeed(float dodgeSpeed)
@@ -25,6 +26,11 @@ void Entity::setDodgeSpeed(float dodgeSpeed)
 void Entity::setDodgeTime(float dodgeTime)
 {
 	m_dodgeTime = dodgeTime;
+}
+
+void Entity::setMoveDirection(const Vector2& direction)
+{
+	m_moveDirection = direction;
 }
 
 float Entity::getCurrentMoveSpeed() const

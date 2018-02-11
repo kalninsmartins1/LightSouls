@@ -20,7 +20,7 @@ class AnimationUtils
 {
 public:
 
-	static void startSpriteFrameAnimationWithDelayedCallback(cocos2d::Sprite* pSprite,
+	static void startSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
 		cocos2d::Vector<cocos2d::SpriteFrame*>& spriteFrames,
 		float timeBetweenFrames, const std::function<void()>& onFinished);
 

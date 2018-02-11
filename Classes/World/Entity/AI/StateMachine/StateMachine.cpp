@@ -5,16 +5,18 @@
 using namespace cocos2d;
 
 StateMachine::StateMachine(AIAgent& agent) :
-	m_Agent(agent),	
+	m_agent(agent),	
 	m_curState(nullptr),
+	m_pAnimComponent(nullptr),
 	m_attackState(agent),
 	m_chaseState(agent),
 	m_patrolState(agent)
 {
 }
 
-void StateMachine::start()
+void StateMachine::start(AIAnimComponent* pAIAnimComponent)
 {
+	m_pAnimComponent = pAIAnimComponent;
 	m_attackState.init();
 	switchState(m_patrolState);
 }
@@ -26,7 +28,7 @@ void StateMachine::switchState(IState& newState)
 		m_curState->onExit();
 	}	
 	m_curState = &newState;
-	m_curState->onEnter();
+	m_curState->onEnter(m_pAnimComponent);	
 }
 
 void StateMachine::onStep()

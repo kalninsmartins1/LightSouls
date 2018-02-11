@@ -24,11 +24,10 @@ private:
 	void manageInput();
 	void lightAttack();
 	void performDodge();
-	void playRunOrIdleAnimation();
+	void playRunOrIdleAnimation() const;
 
 	// Returns negative value if time for combo has expired
 	float getSecondsForValidLighAttackCombo() const;
-
 
 	PlayerAnimComponent* m_pPlayerAnimComponent;
 	

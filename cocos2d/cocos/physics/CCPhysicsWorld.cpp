@@ -263,6 +263,17 @@ static cpSpaceDebugColor ColorForShape(cpShape *shape, cpDataPointer /*data*/)
     }
 }
 
+void PhysicsWorld::setDebugDrawCameraMask(CameraFlag mask)
+{
+	if(_debugDraw != nullptr)
+	{
+		_debugDraw->setCameraMask(static_cast<unsigned int>(mask));
+	}
+	else
+	{
+		CCLOG("PhysicsWorld: setDebugDrawCameraMask - _debugDraw was nullptr !");
+	}
+}
 
 void PhysicsWorld::debugDraw()
 {

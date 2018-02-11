@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Entity type="ArcherAgent"
+<Entity type="WarriorAgent"
 			moveSpeed="160"
 			dodgeSpeed="100"
 			dodgeTime="0.8"
@@ -8,20 +8,38 @@
 	<Component type="TransformComponent">
 		<Position x="2" y="1" z="0" />
 		<Rotation x="0" y="0" z="0" />
-		<Scale x="1" y="1" z="1"/>
+		<Scale x="0.5" y="0.5" z="0.5"/>
 	</Component>
 	
 	<Component type="AIControllerComponent"
-		workingRadius="20"
-		attackRadius="10"
+		workingRadius="200"
+		attackRadius="80"
 		patrolPauseInSeconds="5">			
 	</Component>
 	
-	<Component type="AgentAnimationComponent">
+	<Component 	type="LongSwordAttackComponent"
+				secondsBetweenAttacks="5">
+	</Component>
+	
+	<Component type="AIAnimComponent">
 		<SpriteSheet type="Idle"
 			path="res/Graphics/World/Player/Idle/idleAnim.png" 
 			plistPath="res/Graphics/World/Player/Idle/idleAnim.plist"
 			frameNamePattern="idle%d.png"
+			frameCount="3"
+			timeBetweenFrames="0.1"
+		/>
+		<SpriteSheet type="Run"
+			path="res/Graphics/World/Player/Run/runAnim.png" 
+			plistPath="res/Graphics/World/Player/Run/runAnim.plist"
+			frameNamePattern="run%d.png"
+			frameCount="10"
+			timeBetweenFrames="0.1"
+		/>
+		<SpriteSheet type="Attack"
+			path="res/Graphics/World/Player/Attack/LightAttack1/lightAttack1Anim.png" 
+			plistPath="res/Graphics/World/Player/Attack/LightAttack1/lightAttack1Anim.plist"
+			frameNamePattern="lightAttack1%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>

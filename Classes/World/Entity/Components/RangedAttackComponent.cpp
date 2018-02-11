@@ -31,7 +31,7 @@ RangedAttackComponent::RangedAttackComponent(const String& pathToAmmo,
 	AttackComponent(secondsBetweenAttacks),
 	m_pathToAmmo(pathToAmmo),
 	m_maxAmmoFlyDistance(maxAmmoFlyDistance),
-	m_ammoMoveSpeed(ammoMoveSpeed),
+	m_ammoMoveSpeed(ammoMoveSpeed)
 {
 }
 
