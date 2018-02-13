@@ -14,7 +14,7 @@
 	<Component type="AIControllerComponent"
 		workingRadius="20"
 		attackRadius="10"
-		patrolPauseInSeconds="5">			
+		patrolPauseInSeconds="5">
 	</Component>
 	
 	<Component type="AIAnimComponent">
@@ -35,7 +35,7 @@
 			height="15"
 			isDynamic="true" 
 			isGravityEnabled="false" 
-			collisionBitMask="0xFFFFFF"
+			collisionBitMask="1"
 			/>
 	</Component>
 	

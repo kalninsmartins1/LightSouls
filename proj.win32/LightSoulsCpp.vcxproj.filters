@@ -58,6 +58,9 @@
     <Filter Include="src\World\Entity\Ammo">
       <UniqueIdentifier>{522ed146-dc0a-4cea-beb5-3e0cb6494630}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\World\Physics">
+      <UniqueIdentifier>{6e0cdc4d-6d35-4890-a1fd-7ed05b502dd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -146,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Components\AIAnimComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Physics\PhysicsManager.cpp">
+      <Filter>src\World\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\AIAnimComponent.h">
       <Filter>src\World\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Physics\PhysicsManager.h">
+      <Filter>src\World\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

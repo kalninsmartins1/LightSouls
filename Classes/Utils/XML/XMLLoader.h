@@ -51,8 +51,7 @@ private:
 		const XMLNode* pNode);
 	static cocos2d::Vec3 XMLLoader::loadVec3FromAttributes(
 		const XMLNode* pNode);
-	static cocos2d::PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(
-		const XMLNode* pNode);
+	static cocos2d::PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const XMLNode* pNode);
 
 	static GameInputType strToGameInputType(const std::string& inputType);
 };

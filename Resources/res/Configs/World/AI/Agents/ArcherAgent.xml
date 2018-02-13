@@ -42,7 +42,7 @@
 			height="15"
 			isDynamic="true" 
 			isGravityEnabled="false" 
-			collisionBitMask="0xFFFFFF"
+			collisionBitMask="1"
 			/>
 	</Component>
 	

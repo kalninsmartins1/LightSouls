@@ -14,7 +14,7 @@
 	<Component type="AIControllerComponent"
 		workingRadius="200"
 		attackRadius="80"
-		patrolPauseInSeconds="5">			
+		patrolPauseInSeconds="5">
 	</Component>
 	
 	<Component 	type="LongSwordAttackComponent"
@@ -49,11 +49,11 @@
 		<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
 		<PhysicsBody
 			shape="box"
-			width="40"
-			height="15"
+			width="200"
+			height="300"
 			isDynamic="true" 
 			isGravityEnabled="false" 
-			collisionBitMask="0xFFFFFF"
+			collisionBitMask="1"
 			/>
 	</Component>
 	

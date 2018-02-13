@@ -147,11 +147,16 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 {
 	// Load the file
 	XMLDoc doc;
-	XMLError err = doc.LoadFile(pathToXML.c_str());
+	const XMLError err = doc.LoadFile(pathToXML.c_str());
 	
 	if (!err)
 	{
 		XMLElement* pRoot = doc.RootElement();
+
+		// Set the sprite name as actor type
+		const std::string actorType = pRoot->Attribute(XML_TYPE_ATTR);
+		sprite.setName(actorType);
+
 		for (XMLElement* pElement = pRoot->FirstChildElement(); pElement;
 			pElement = pElement->NextSiblingElement())
 		{
@@ -334,7 +339,7 @@ bool XMLLoader::loadWorld(World& world, const std::string& pathToXML)
 	else
 	{
 		Utils::assertWithStrFormat(false,
-			"XMLLoader: Failed to load .xml file at %s", pathToXML.c_str());
+			"XMLLoader: Failed to load .xml file at %s", pathToXML);
 	}
 
 	return !error;
@@ -345,7 +350,7 @@ PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* p
 	const tinyxml2::XMLElement* pPhysicsBodyElem =
 		pNode->FirstChildElement(XML_NODE_PHYSICS_BODY);
 
-	std::string bodyType = pPhysicsBodyElem->Attribute(XML_SHAPE_ATTR);
+	const std::string bodyType = pPhysicsBodyElem->Attribute(XML_SHAPE_ATTR);
 	const Size bodySize = Size(pPhysicsBodyElem->FloatAttribute(XML_WIDTH_ATTR),
 		pPhysicsBodyElem->FloatAttribute(XML_HEIGHT_ATTR));
 
@@ -360,7 +365,8 @@ PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* p
 			loadPhysicsMaterialFromAttributes(pNode));
 		pPhysicsBody->setDynamic(isBodyDynamic);
 		pPhysicsBody->setGravityEnable(isGravityEnabled);
-		pPhysicsBody->setCollisionBitmask(collisionBitMask);
+		pPhysicsBody->setContactTestBitmask(collisionBitMask); // TODO: Need hex support
+		pPhysicsBody->setCategoryBitmask(collisionBitMask);
 	}
 	return pPhysicsBody;
 }
@@ -384,7 +390,7 @@ GameInputType XMLLoader::strToGameInputType(const std::string& inputType)
 	{
 		Utils::assertWithStrFormat(false,
 			"XMLLoader: [strToGameInpuType] invalid input type: %s",
-			inputType.c_str());
+			inputType);
 	}
 	return type;
 }
@@ -398,7 +404,7 @@ PhysicsMaterial XMLLoader::loadPhysicsMaterialFromAttributes(
 	const float restitution = pPhysicsMaterialElem->FloatAttribute(XML_PHYSICS_RESTITUTION_ATTR);
 	const float friction = pPhysicsMaterialElem->FloatAttribute(XML_PHYSICS_FRICTION_ATTR);
 
-	return PhysicsMaterial(density, restitution, friction);
+	return {density, restitution, friction};
 }
 
 Vec3 XMLLoader::loadVec3FromAttributes(const tinyxml2::XMLNode* pNode)

@@ -5,6 +5,7 @@
 #include "GameConsts.h"
 #include "Input/GameInput.h"
 #include "physics3d/CCPhysics3DWorld.h"
+#include "World/Physics/PhysicsManager.h"
 
 using namespace cocos2d;
 
@@ -36,9 +37,6 @@ bool Player::init(const std::string& pathToXML)
 {
 	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);
 
-	// Position physics body at the bottom of sprite
-	getPhysicsBody()->setPositionOffset(Vec2(0, -getContentSize().height / 2));
-
 	// Force position player in middle of screen
 	const Size size = Director::getInstance()->getWinSize();
 	setPosition(size.width / 2, size.height / 2);
@@ -51,6 +49,9 @@ bool Player::init(const std::string& pathToXML)
 
 	// Set move speed at begining
 	m_moveSpeed = m_baseMoveSpeed;
+	
+	PhysicsManager::getInstance()->addContactListener(getName(), 
+		CC_CALLBACK_1(Player::onContactBegin, this));
 
 	return true;
 }
@@ -68,7 +69,7 @@ void Player::update(float deltaTime)
 		setPosition(getPosition() + m_moveDirection *
 			m_moveSpeed * deltaTime);
 		m_bIsRuning = m_moveDirection.lengthSquared() > 0;
-		playRunOrIdleAnimation();		
+		playRunOrIdleAnimation();
 	}	
 }
 
@@ -188,6 +189,12 @@ void Player::playRunOrIdleAnimation() const
 			m_pPlayerAnimComponent->loopIdleAnimation();
 		}
 	}
+}
+
+void Player::onContactBegin(const cocos2d::PhysicsBody* otherBody)
+{
+	const std::string& name = otherBody->getNode()->getName();
+	CCLOG("Player collided with %s", name.c_str());
 }
 
 float Player::getSecondsForValidLighAttackCombo() const

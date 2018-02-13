@@ -5,6 +5,7 @@
 #include "World/Entity/CustomActions/CameraFallow.h"
 #include "Utils/Utils.h"
 #include "World/Entity/AI/AIAgentManager.h"
+#include "World/Physics/PhysicsManager.h"
 
 USING_NS_CC;
 
@@ -46,6 +47,12 @@ bool HelloWorld::init()
 		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
 	}
 
+	// Init physics manager
+	if(!PhysicsManager::getInstance()->init(this))
+	{
+		CCASSERT(false, "HelloWorldScene: Failed to initialize PhysicsManager !");
+	}
+
 	// Call update for this scene
 	scheduleUpdate();
     
@@ -60,8 +67,12 @@ void HelloWorld::update(float deltaTime)
 	// Update AI
 	AIAgentManager::getInstance()->update(deltaTime);	
 
-	Director::getInstance()->getRunningScene()->getPhysicsWorld()->
-		setDebugDrawMask(0xFFFFFF);
+	PhysicsWorld* pWorld = Director::getInstance()->getRunningScene()->getPhysicsWorld();
+	if(pWorld != nullptr)
+	{
+		pWorld->setDebugDrawMask(0xFFFFFF);
+		pWorld->setDebugDrawCameraMask(CameraFlag::USER1);
+	}
 }
 
 void HelloWorld::initWolrdLayer()
@@ -118,7 +129,7 @@ void HelloWorld::initUILayer()
 
 	// Create UI camera
 	Camera* pUICamera = Camera::create();
-	pUICamera->setCameraFlag(CameraFlag::USER2);	
+	pUICamera->setCameraFlag(CameraFlag::USER2);
 	addChild(pUICamera);
 }
 

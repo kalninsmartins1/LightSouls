@@ -1,6 +1,7 @@
 #pragma once
 #include "2d/CCSprite.h"
 #include "World/Entity/Entity.h"
+#include "physics/CCPhysicsContact.h"
 
 class PlayerAnimComponent;
 class GameInput;
@@ -25,6 +26,7 @@ private:
 	void lightAttack();
 	void performDodge();
 	void playRunOrIdleAnimation() const;
+	void onContactBegin(const cocos2d::PhysicsBody* otherBody);
 
 	// Returns negative value if time for combo has expired
 	float getSecondsForValidLighAttackCombo() const;
