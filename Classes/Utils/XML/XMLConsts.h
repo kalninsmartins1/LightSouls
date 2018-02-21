@@ -9,6 +9,8 @@ static constexpr char* XML_NODE_AGENT_CONFIG_LIST = "AgentConfigList";
 static constexpr char* XML_ENTITY_MOVE_SPEED_ATTR = "moveSpeed";
 static constexpr char* XML_ENTITY_DODGE_SPEED_ATTR = "dodgeSpeed";
 static constexpr char* XML_ENTITY_DODGE_TIME_ATTR = "dodgeTime";
+static constexpr char* XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR = "secondsBetweenAttacks";
+static constexpr char* XML_ENTITY_ATTACK_RANGE_ATTR = "attackRange";
 
 // XML player attributes
 static constexpr char* XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR = "timeBetweenComboInput";
@@ -17,7 +19,6 @@ static constexpr char* XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR = "timeBetweenComb
 static constexpr char* XML_AI_ATTACK_RADIUS_ATTR = "attackRadius";
 static constexpr char* XML_AI_WORKING_RADIUS_ATTR = "workingRadius";
 static constexpr char* XML_AI_PATROL_PAUSE_ATTR = "patrolPauseInSeconds";
-static constexpr char* XML_AI_SECONDS_BETWEEN_ATTACK_ATTR = "secondsBetweenAttacks";
 static constexpr char* XML_AI_MAX_FLY_DISTANCE = "maxFlyDistance";
 
 // XML animation component specifics

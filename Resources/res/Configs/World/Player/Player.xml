@@ -15,6 +15,11 @@
 				timeBetweenComboInput="0.6">
 	</Component>
 	
+	<Component 	type="LongSwordAttackComponent"
+				secondsBetweenAttacks="0.6"
+				attackRange="100">
+	</Component>
+	
 	<Component type="PlayerAnimComponent">
 		<SpriteSheet type="Run"
 			path="res/Graphics/World/Player/Run/runAnim.png" 
@@ -87,7 +92,7 @@
 			shape="box"
 			width="200"
 			height="300"
-			isDynamic="true" 
+			isDynamic="false" 
 			isGravityEnabled="false" 
 			collisionBitMask="1"
 			/>

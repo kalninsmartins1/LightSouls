@@ -18,7 +18,8 @@
 	</Component>
 	
 	<Component 	type="LongSwordAttackComponent"
-				secondsBetweenAttacks="5">
+				secondsBetweenAttacks="5"
+				attackRange="50">
 	</Component>
 	
 	<Component type="AIAnimComponent">
@@ -51,7 +52,7 @@
 			shape="box"
 			width="200"
 			height="300"
-			isDynamic="true" 
+			isDynamic="false" 
 			isGravityEnabled="false" 
 			collisionBitMask="1"
 			/>

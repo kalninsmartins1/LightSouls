@@ -18,5 +18,5 @@ public:
 
 private:
 	float m_secondsBetweenAttacks;
-	long m_lastTimeAttacked;
+	long long m_lastTimeAttacked;
 };

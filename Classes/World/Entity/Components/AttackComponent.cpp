@@ -14,10 +14,10 @@ void AttackComponent::attack(const Vector2& direction)
 
 bool AttackComponent::isReadyToAttack() const
 {
-	const long millisecondsSinceLastAttack =
+	const long long millisecondsSinceLastAttack =
 		Utils::getTimeStampInMilliseconds() - m_lastTimeAttacked;
-	const float secondsSinceLastAttack =
+	const double secondsSinceLastAttack =
 		Utils::convertMillisecondsToSeconds(millisecondsSinceLastAttack);
 
-	return secondsSinceLastAttack > m_secondsBetweenAttacks;	
+	return secondsSinceLastAttack > m_secondsBetweenAttacks;
 }

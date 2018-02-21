@@ -230,7 +230,7 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 					pElement->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
 				const float secondsBetweenAttacks =
 					pElement->FloatAttribute(
-						XML_AI_SECONDS_BETWEEN_ATTACK_ATTR);
+						XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
 
 				RangedAttackComponent* pRangedAttack = 
 					RangedAttackComponent::create(
@@ -238,25 +238,29 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 						maxAmmoFlyDistance,
 						ammoMoveSpeed,
 						secondsBetweenAttacks);
-				pRangedAttack->setName(RANGED_ATTACK_COMPONENT);
+				pRangedAttack->setName(ATTACK_COMPONENT);
 				sprite.addComponent(pRangedAttack);
 			}
 			else if(componentType == LONG_SWORD_ATTACK_COMPONENT)
 			{				
 				const float secondsBetweenAttacks =
 					pElement->FloatAttribute(
-						XML_AI_SECONDS_BETWEEN_ATTACK_ATTR);
+						XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
+				const float attackRange = pElement->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);
 
 				LongSwordAttackComponent* pLongSwordAttack =
-					LongSwordAttackComponent::create(secondsBetweenAttacks);
-				pLongSwordAttack->setName(RANGED_ATTACK_COMPONENT);
+					LongSwordAttackComponent::create(secondsBetweenAttacks, attackRange);
+				pLongSwordAttack->setName(ATTACK_COMPONENT);
 				sprite.addComponent(pLongSwordAttack);
 			}
 			else if (componentType == RIGID_BODY_COMPONENT)
 			{
-				PhysicsBody* pPhysicsBody = loadPhysicsBodyFromAttributes(pElement);
+				Size outBodySize;
+				PhysicsBody* pPhysicsBody = 
+					loadPhysicsBodyFromAttributes(pElement, outBodySize);
 				pPhysicsBody->setName(RIGID_BODY_COMPONENT);
 				sprite.addComponent(pPhysicsBody);
+				static_cast<Entity*>(&sprite)->setPhysicsBodySize(outBodySize);
 			}
 			else if (componentType == MIRROR_SPRITE_COMPONENT)
 			{
@@ -345,13 +349,14 @@ bool XMLLoader::loadWorld(World& world, const std::string& pathToXML)
 	return !error;
 }
 
-PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* pNode)
+PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* pNode,
+	Size& outSize)
 {
 	const tinyxml2::XMLElement* pPhysicsBodyElem =
 		pNode->FirstChildElement(XML_NODE_PHYSICS_BODY);
 
 	const std::string bodyType = pPhysicsBodyElem->Attribute(XML_SHAPE_ATTR);
-	const Size bodySize = Size(pPhysicsBodyElem->FloatAttribute(XML_WIDTH_ATTR),
+	outSize = Size(pPhysicsBodyElem->FloatAttribute(XML_WIDTH_ATTR),
 		pPhysicsBodyElem->FloatAttribute(XML_HEIGHT_ATTR));
 
 	const bool isGravityEnabled = pPhysicsBodyElem->BoolAttribute(XML_PHYSICS_GRAVITY_ATTR);
@@ -361,7 +366,7 @@ PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const tinyxml2::XMLNode* p
 	PhysicsBody* pPhysicsBody = nullptr;
 	if (bodyType == XML_PHYSICS_BODY_BOX_ATTR)
 	{
-		pPhysicsBody = PhysicsBody::createBox(bodySize,
+		pPhysicsBody = PhysicsBody::createBox(outSize,
 			loadPhysicsMaterialFromAttributes(pNode));
 		pPhysicsBody->setDynamic(isBodyDynamic);
 		pPhysicsBody->setGravityEnable(isGravityEnabled);

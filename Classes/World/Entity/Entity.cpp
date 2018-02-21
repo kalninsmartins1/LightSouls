@@ -33,6 +33,11 @@ void Entity::setMoveDirection(const Vector2& direction)
 	m_moveDirection = direction;
 }
 
+void Entity::setPhysicsBodySize(cocos2d::Size size)
+{
+	m_PhysicsBodySize = size;
+}
+
 float Entity::getCurrentMoveSpeed() const
 {	
 	return m_moveSpeed;
@@ -41,4 +46,9 @@ float Entity::getCurrentMoveSpeed() const
 Entity::Vector2 Entity::getHeading() const
 {	
 	return m_moveDirection;
+}
+
+cocos2d::Size Entity::getPhysicsBodySize() const
+{
+	return m_PhysicsBodySize;
 }

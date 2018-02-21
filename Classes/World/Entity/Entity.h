@@ -14,12 +14,15 @@ public:
 	void setDodgeSpeed(float dodgeSpeed);
 	void setDodgeTime(float dodgeTime);	
 	void setMoveDirection(const Vector2& direction);
+	void setPhysicsBodySize(cocos2d::Size size);
 
 	float getCurrentMoveSpeed() const;
 	Vector2 getHeading() const;	
+	cocos2d::Size getPhysicsBodySize() const;
 
 protected:
 	Vector2 m_moveDirection;
+	cocos2d::Size m_PhysicsBodySize;
 
 	bool m_bIsRuning;
 	bool m_bIsDodging;

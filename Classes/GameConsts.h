@@ -16,6 +16,7 @@ static constexpr char* PLAYER_CONTROLLER_COMPONENT = "PlayerControllerComponent"
 static constexpr char* MIRROR_SPRITE_COMPONENT = "MirrorSpriteComponent";
 static constexpr char* AI_CONTROLLER_COMPONENT = "AIControllerComponent";
 static constexpr char* AI_ANIM_COMPONENT = "AIAnimComponent";
+static constexpr char* ATTACK_COMPONENT = "AttackComponent";
 static constexpr char* RANGED_ATTACK_COMPONENT = "RangedAttackComponent";
 static constexpr char* LONG_SWORD_ATTACK_COMPONENT = "LongSwordAttackComponent";
 

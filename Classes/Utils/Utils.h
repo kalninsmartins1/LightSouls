@@ -10,8 +10,8 @@ class Utils
 {	
 public:
 
-	static long getTimeStampInMilliseconds();
-	static float convertMillisecondsToSeconds(long milliseconds);
+	static long long getTimeStampInMilliseconds();
+	static float convertMillisecondsToSeconds(long long milliseconds);
 	static void startTimerWithCallback(cocos2d::Node* pNode,
 		std::function<void()> callback, float time);
 

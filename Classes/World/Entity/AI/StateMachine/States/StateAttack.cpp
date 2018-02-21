@@ -17,7 +17,7 @@ bool StateAttack::init()
 {
 	m_pAttackComponent =
 		dynamic_cast<AttackComponent*>(
-			m_agent.getComponent(RANGED_ATTACK_COMPONENT));
+			m_agent.getComponent(ATTACK_COMPONENT));
 	CC_ASSERT(m_pAttackComponent != nullptr &&
 		"Attack component not found !");
 
@@ -68,5 +68,5 @@ AIState StateAttack::getStateType()
 
 void StateAttack::onAttackFinished()
 {
-	m_bIsAttackAnimFinished = true;
+	m_bIsAttackAnimFinished = true;	
 }

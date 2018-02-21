@@ -11,13 +11,14 @@ Utils::Utils()
 	// Private constructor
 }
 
-long Utils::getTimeStampInMilliseconds()
+long long Utils::getTimeStampInMilliseconds()
 {
-	// Convert system ticks to milliseconds
-	return std::chrono::system_clock::now().time_since_epoch().count() / 10000;
+	// Convert system ticks to milliseconds	
+	const long long ticks = std::chrono::system_clock::now().time_since_epoch().count();
+	return ticks / 10000;
 }
 
-float Utils::convertMillisecondsToSeconds(long milliseconds)
+float Utils::convertMillisecondsToSeconds(long long milliseconds)
 {
 	return milliseconds / 1000.f;
 }

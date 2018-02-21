@@ -1,7 +1,7 @@
 #pragma once
 #include "2d/CCSprite.h"
 #include "World/Entity/Entity.h"
-#include "physics/CCPhysicsContact.h"
+#include "World/Entity/Components/LongSwordAttackComponent.h"
 
 class PlayerAnimComponent;
 class GameInput;
@@ -31,8 +31,10 @@ private:
 	// Returns negative value if time for combo has expired
 	float getSecondsForValidLighAttackCombo() const;
 
-	PlayerAnimComponent* m_pPlayerAnimComponent;
-	
+	PlayerAnimComponent* m_pAnimComponent;
+	AttackComponent* m_pAttackComponent;
+	Vector2 m_lastValidMoveDirection;
+
 	bool m_bIsAttackComboDelayExpired;
 	float m_timeBetweenComboInput;
 	long m_lastTimePerformedLightAttack;

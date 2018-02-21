@@ -21,12 +21,20 @@ struct PhysicsContactListener
 class PhysicsManager
 {
 public:
+	typedef cocos2d::Vec2 Vector2;
+
 	static PhysicsManager* getInstance();
 
-	bool init(cocos2d::Node* pContext);
+	bool init(cocos2d::Node* pContext);	
 	
 	// Register for contact events
 	void addContactListener(const std::string& bodyName, ContactCallback onContactBegin);
+
+	void debugDrawRect(const cocos2d::Rect& rect);
+
+	// Checks for overlapping entities in querried circle area
+	static void querryRect(const cocos2d::Rect& rect,
+		const cocos2d::PhysicsQueryRectCallbackFunc& callback);
 
 private:
 
@@ -34,4 +42,6 @@ private:
 	bool onContactBegin(cocos2d::PhysicsContact& contact);
 
 	std::vector<PhysicsContactListener> m_contactListeners;
+	cocos2d::Node* m_pContext;
+	cocos2d::DrawNode* m_pDebugDrawNode;
 };

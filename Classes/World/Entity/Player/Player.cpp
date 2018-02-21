@@ -25,7 +25,9 @@ Player* Player::create(const std::string& pathToXML)
 }
 
 Player::Player() :
-	m_pPlayerAnimComponent(nullptr),
+	m_pAnimComponent(nullptr),
+	m_pAttackComponent(nullptr),
+	m_lastValidMoveDirection(Vector2::UNIT_X), // By default start out moving right
 	m_bIsAttackComboDelayExpired(true),
 	m_timeBetweenComboInput(0),	
 	m_lastTimePerformedLightAttack(0),
@@ -42,10 +44,12 @@ bool Player::init(const std::string& pathToXML)
 	setPosition(size.width / 2, size.height / 2);
 
 	// Get animation component to trigger animations when that is necessary
-	m_pPlayerAnimComponent =
-		dynamic_cast<PlayerAnimComponent*>(
-			getComponent(PLAYER_ANIM_COMPONENT));
-	m_pPlayerAnimComponent->loopIdleAnimation();
+	m_pAnimComponent =
+		static_cast<PlayerAnimComponent*>(getComponent(PLAYER_ANIM_COMPONENT));
+	m_pAnimComponent->loopIdleAnimation();
+
+	m_pAttackComponent = 
+		static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
 
 	// Set move speed at begining
 	m_moveSpeed = m_baseMoveSpeed;
@@ -126,6 +130,12 @@ void Player::manageInput()
 
 	// Make sure we are not moving faster diagonally
 	m_moveDirection.normalize();
+	
+	// If we have an input, then update last valid move direction
+	if (abs(horizontalValue) > MATH_EPSILON || abs(vertiacalValue) > MATH_EPSILON)
+	{
+		m_lastValidMoveDirection = m_moveDirection;
+	}
 }
 
 void Player::lightAttack()
@@ -153,9 +163,10 @@ void Player::lightAttack()
 		}
 		
 		// Play the attack animation
-		m_pPlayerAnimComponent->playLightAttackAnimation(
+		m_pAnimComponent->playLightAttackAnimation(
 			static_cast<LightAttackStage>(m_curLightAttackAnimIdx),
 			CC_CALLBACK_0(Player::onAttackFinished, this));
+		m_pAttackComponent->attack(m_lastValidMoveDirection);
 		
 		// Set the time last light attack was performed
 		m_lastTimePerformedLightAttack = Utils::getTimeStampInMilliseconds();
@@ -166,7 +177,7 @@ void Player::performDodge()
 {
 	m_bIsDodging = true;
 	m_moveSpeed = m_dodgeSpeed;
-	m_pPlayerAnimComponent->loopDodgeAnimation();
+	m_pAnimComponent->loopDodgeAnimation();
 	Utils::startTimerWithCallback(this,
 		CC_CALLBACK_0(Player::onDodgeFinished, this), m_dodgeTime);
 }
@@ -175,18 +186,18 @@ void Player::playRunOrIdleAnimation() const
 {			
 	if (m_bIsRuning && !m_bIsDodging)
 	{
-		if(m_pPlayerAnimComponent->getCurrentlyLoopingAnimation() 
+		if(m_pAnimComponent->getCurrentlyLoopingAnimation() 
 			!= AnimationKind::RUN)
 		{
-			m_pPlayerAnimComponent->loopRunAnimation();
+			m_pAnimComponent->loopRunAnimation();
 		}
 	}
 	else if (!m_bIsRuning)
 	{
-		if(m_pPlayerAnimComponent->getCurrentlyLoopingAnimation() 
+		if(m_pAnimComponent->getCurrentlyLoopingAnimation() 
 			!= AnimationKind::IDLE)
 		{
-			m_pPlayerAnimComponent->loopIdleAnimation();
+			m_pAnimComponent->loopIdleAnimation();
 		}
 	}
 }

@@ -33,7 +33,7 @@
 			shape="box"
 			width="40"
 			height="15"
-			isDynamic="true" 
+			isDynamic="false" 
 			isGravityEnabled="false" 
 			collisionBitMask="1"
 			/>
