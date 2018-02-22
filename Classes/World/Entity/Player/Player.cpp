@@ -37,7 +37,7 @@ Player::Player() :
 
 bool Player::init(const std::string& pathToXML)
 {
-	XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);
+	XMLLoader::initializeEntityUsingXMLFile(*this, pathToXML);
 
 	// Force position player in middle of screen
 	const Size size = Director::getInstance()->getWinSize();

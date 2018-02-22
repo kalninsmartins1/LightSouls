@@ -142,7 +142,7 @@ void XMLLoader::loadActionButton(GameInput& gameInput, GameInputType inputType, 
 	}
 }
 
-bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite, 
+bool XMLLoader::initializeEntityUsingXMLFile(Entity& entity, 
 	const std::string& pathToXML)
 {
 	// Load the file
@@ -153,10 +153,22 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 	{
 		XMLElement* pRoot = doc.RootElement();
 
-		// Set the sprite name as actor type
+		// Load root entity atributes
 		const std::string actorType = pRoot->Attribute(XML_TYPE_ATTR);
-		sprite.setName(actorType);
+		const float moveSpeed = pRoot->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
+		const float dodgeSpeed = pRoot->FloatAttribute(XML_ENTITY_DODGE_SPEED_ATTR);
+		const float dodgeTime = pRoot->FloatAttribute(XML_ENTITY_DODGE_TIME_ATTR);
+		const float baseHealth = pRoot->FloatAttribute(XML_ENTITY_BASE_HEALTH_ATTR);
+		const float baseDamage = pRoot->FloatAttribute(XML_ENTITY_BASE_DAMAGE_ATTR);
 
+		entity.setName(actorType);
+		entity.setBaseMoveSpeed(moveSpeed);
+		entity.setDodgeSpeed(dodgeSpeed);
+		entity.setDodgeTime(dodgeTime);
+		entity.setBaseDamage(baseDamage);
+		entity.setBaseHealth(baseHealth);
+
+		// Load entity components
 		for (XMLElement* pElement = pRoot->FirstChildElement(); pElement;
 			pElement = pElement->NextSiblingElement())
 		{
@@ -170,55 +182,46 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 				XMLNode* pRotationNode = pPositionNode->NextSibling();
 				XMLNode* pScaleNode = pRotationNode->NextSiblingElement();
 
-				sprite.setPosition3D(loadVec3FromAttributes(pPositionNode));
-				sprite.setRotation3D(loadVec3FromAttributes(pRotationNode));
+				entity.setPosition3D(loadVec3FromAttributes(pPositionNode));
+				entity.setRotation3D(loadVec3FromAttributes(pRotationNode));
 
 				const Vec3 scale = loadVec3FromAttributes(pScaleNode);
-				sprite.setScale(scale.x, scale.y);
+				entity.setScale(scale.x, scale.y);
 			}
 			else if (componentType == PLAYER_CONTROLLER_COMPONENT)
 			{
-				const float moveSpeed = pRoot->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
-				const float dodgeSpeed = pRoot->FloatAttribute(XML_ENTITY_DODGE_SPEED_ATTR);
-				const float dodgeTime = pRoot->FloatAttribute(XML_ENTITY_DODGE_TIME_ATTR);
-
 				const float timeBetweenComboInput =
 					pElement->FloatAttribute(XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR);
 
-				Player* pPlayer = dynamic_cast<Player*>(&sprite);
-				pPlayer->setBaseMoveSpeed(moveSpeed);
-				pPlayer->setDodgeSpeed(dodgeSpeed);
-				pPlayer->setDodgeTime(dodgeTime);
+				Player* pPlayer = dynamic_cast<Player*>(&entity);
 				pPlayer->setTimeBetweenComboInput(timeBetweenComboInput);
 			}
 			else if(componentType == AI_CONTROLLER_COMPONENT)
 			{
-				const float moveSpeed = pRoot->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
 				const float attackRadius = pElement->FloatAttribute(XML_AI_ATTACK_RADIUS_ATTR);
-				const float workingRadius = pElement->FloatAttribute(XML_AI_WORKING_RADIUS_ATTR);				
+				const float workingRadius = pElement->FloatAttribute(XML_AI_WORKING_RADIUS_ATTR);
 				const float patrolPause = pElement->FloatAttribute(XML_AI_PATROL_PAUSE_ATTR);
 
-				AIAgent* pAgent = dynamic_cast<AIAgent*>(&sprite);	
+				AIAgent* pAgent = dynamic_cast<AIAgent*>(&entity);
 				const std::string& agentType = pRoot->Attribute(XML_TYPE_ATTR);
 				pAgent->setAgentType(agentType);
 				pAgent->setAttackRadius(attackRadius);
 				pAgent->setWorkingRadius(workingRadius);
 				pAgent->setPatrolPause(patrolPause);
-				pAgent->setBaseMoveSpeed(moveSpeed);
 			}
 			else if (componentType == PLAYER_ANIM_COMPONENT)
 			{
-				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create(sprite);
+				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create(entity);
 				pPlayerAnim->setName(PLAYER_ANIM_COMPONENT);
 				pPlayerAnim->loadConfig(pElement);
-				sprite.addComponent(pPlayerAnim);
+				entity.addComponent(pPlayerAnim);
 			}
 			else if(componentType == AI_ANIM_COMPONENT)
 			{
-				AIAnimComponent* pAgentAnim = AIAnimComponent::create(sprite);
+				AIAnimComponent* pAgentAnim = AIAnimComponent::create(entity);
 				pAgentAnim->setName(AI_ANIM_COMPONENT);
 				pAgentAnim->loadConfig(pElement);
-				sprite.addComponent(pAgentAnim);
+				entity.addComponent(pAgentAnim);
 			}
 			else if(componentType == RANGED_ATTACK_COMPONENT)
 			{
@@ -239,7 +242,7 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 						ammoMoveSpeed,
 						secondsBetweenAttacks);
 				pRangedAttack->setName(ATTACK_COMPONENT);
-				sprite.addComponent(pRangedAttack);
+				entity.addComponent(pRangedAttack);
 			}
 			else if(componentType == LONG_SWORD_ATTACK_COMPONENT)
 			{				
@@ -247,11 +250,14 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 					pElement->FloatAttribute(
 						XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
 				const float attackRange = pElement->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);
+				const float paddingFromBody = pElement->
+					FloatAttribute(XML_ENTITY_PADDING_FROM_BODY_ATTR);
 
 				LongSwordAttackComponent* pLongSwordAttack =
-					LongSwordAttackComponent::create(secondsBetweenAttacks, attackRange);
+					LongSwordAttackComponent::create(secondsBetweenAttacks, attackRange,
+						paddingFromBody);
 				pLongSwordAttack->setName(ATTACK_COMPONENT);
-				sprite.addComponent(pLongSwordAttack);
+				entity.addComponent(pLongSwordAttack);
 			}
 			else if (componentType == RIGID_BODY_COMPONENT)
 			{
@@ -259,15 +265,15 @@ bool XMLLoader::initializeSpriteUsingXMLFile(Sprite& sprite,
 				PhysicsBody* pPhysicsBody = 
 					loadPhysicsBodyFromAttributes(pElement, outBodySize);
 				pPhysicsBody->setName(RIGID_BODY_COMPONENT);
-				sprite.addComponent(pPhysicsBody);
-				static_cast<Entity*>(&sprite)->setPhysicsBodySize(outBodySize);
+				entity.addComponent(pPhysicsBody);
+				static_cast<Entity*>(&entity)->setPhysicsBodySize(outBodySize);
 			}
 			else if (componentType == MIRROR_SPRITE_COMPONENT)
 			{
 				MirrorSpriteComponent* pMirrorSprite = MirrorSpriteComponent::create();
 				pMirrorSprite->setName(MIRROR_SPRITE_COMPONENT);
-				pMirrorSprite->setOwnerEntity(dynamic_cast<Entity*>(&sprite));
-				sprite.addComponent(pMirrorSprite);
+				pMirrorSprite->setOwnerEntity(dynamic_cast<Entity*>(&entity));
+				entity.addComponent(pMirrorSprite);
 			}
 		}
 	}

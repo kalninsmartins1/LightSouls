@@ -50,7 +50,7 @@ void AIAgent::setAgentType(const String& type)
 bool AIAgent::init(const String& pathToXML)
 {	
 	const bool bIsInitializedSuccessfully = 
-		XMLLoader::initializeSpriteUsingXMLFile(*this, pathToXML);
+		XMLLoader::initializeEntityUsingXMLFile(*this, pathToXML);
 	if(bIsInitializedSuccessfully)
 	{
 		AIAnimComponent* pAnimComponent = dynamic_cast<AIAnimComponent*>(getComponent(AI_ANIM_COMPONENT));

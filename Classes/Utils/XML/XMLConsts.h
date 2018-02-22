@@ -11,6 +11,9 @@ static constexpr char* XML_ENTITY_DODGE_SPEED_ATTR = "dodgeSpeed";
 static constexpr char* XML_ENTITY_DODGE_TIME_ATTR = "dodgeTime";
 static constexpr char* XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR = "secondsBetweenAttacks";
 static constexpr char* XML_ENTITY_ATTACK_RANGE_ATTR = "attackRange";
+static constexpr char* XML_ENTITY_PADDING_FROM_BODY_ATTR = "paddingFromBody";
+static constexpr char* XML_ENTITY_BASE_HEALTH_ATTR = "baseHealth";
+static constexpr char* XML_ENTITY_BASE_DAMAGE_ATTR = "baseDamage";
 
 // XML player attributes
 static constexpr char* XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR = "timeBetweenComboInput";

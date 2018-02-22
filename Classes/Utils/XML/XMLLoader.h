@@ -24,7 +24,7 @@ typedef std::function<void(GameInput&, const XMLElement*,
 class XMLLoader
 {
 public:
-	static bool initializeSpriteUsingXMLFile(cocos2d::Sprite& sprite,
+	static bool initializeEntityUsingXMLFile(Entity& entity,
 		const std::string& pathToXML);
 	static bool loadInputSettings(GameInput& gameInput, 
 		const std::string& pathToConfigXml);

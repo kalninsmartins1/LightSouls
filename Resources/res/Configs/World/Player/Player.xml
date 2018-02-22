@@ -3,6 +3,8 @@
 			moveSpeed="360"
 			dodgeSpeed="720"
 			dodgeTime="0.8"
+			baseHealth="100"
+			baseDamage="10"
 	>
 	
 	<Component type="TransformComponent">
@@ -17,7 +19,8 @@
 	
 	<Component 	type="LongSwordAttackComponent"
 				secondsBetweenAttacks="0.6"
-				attackRange="100">
+				attackRange="100"
+				paddingFromBody="5">
 	</Component>
 	
 	<Component type="PlayerAnimComponent">
