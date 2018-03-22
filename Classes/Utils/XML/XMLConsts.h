@@ -65,6 +65,8 @@ static constexpr char* XML_PHYSICS_DESITY_ATTR = "density";
 static constexpr char* XML_PHYSICS_RESTITUTION_ATTR = "restitution";
 static constexpr char* XML_PHYSICS_FRICTION_ATTR = "friction";
 
+// XML world attributes
+static constexpr char* XML_NUMBER_OF_TILES_ATTR = "tileCount";
 // XML input attributes
 static constexpr char* XML_INPUT_KEY_CODE_ATTR = "keyCode";
 static constexpr char* XML_INPUT_KEY_FROM_ATTR = "keyCodeFrom";

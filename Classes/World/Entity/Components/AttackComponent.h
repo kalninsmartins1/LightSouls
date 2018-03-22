@@ -11,10 +11,10 @@ public:
 	AttackComponent(float secondsBetweenAttacks);
 
 	// Performs attack
-	virtual void attack(const Vector2& direction);
+	virtual void Attack(const Vector2& direction);
 	
 	// Returns ready if owner is ready to attack
-	virtual bool isReadyToAttack() const;
+	virtual bool IsReadyToAttack() const;
 
 private:
 	float m_secondsBetweenAttacks;

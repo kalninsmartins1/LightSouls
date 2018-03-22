@@ -7,12 +7,12 @@ AttackComponent::AttackComponent(float secondsBetweenAttacks):
 {
 }
 
-void AttackComponent::attack(const Vector2& direction)
+void AttackComponent::Attack(const Vector2& direction)
 {
 	m_lastTimeAttacked = Utils::getTimeStampInMilliseconds();
 }
 
-bool AttackComponent::isReadyToAttack() const
+bool AttackComponent::IsReadyToAttack() const
 {
 	const long long millisecondsSinceLastAttack =
 		Utils::getTimeStampInMilliseconds() - m_lastTimeAttacked;

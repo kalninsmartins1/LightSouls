@@ -4,8 +4,9 @@
 class World : public cocos2d::Sprite
 {
 public:
-	static World* create(const char* pathToXML);
+	static World*	Create(const std::string& pathToXML);
+	bool			Init(const std::string& pathToSprite, int numberOfTiles);
 
 private:
-	bool init(const char* pathToXML);
+	bool Init(const std::string& pathToXML);	
 };

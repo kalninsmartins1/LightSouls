@@ -6,18 +6,18 @@ class RangedAttackComponent: public AttackComponent
 {
 public:
 
-	static RangedAttackComponent* create(const String& pathToAmmo,
+	static RangedAttackComponent* Create(const String& pathToAmmo,
 		float maxAmmoFlyDistance, float ammoMoveSpeed,
 		float secondsBetweenAttacks);
 
-	virtual void attack(const Vector2& direction) override;
+	virtual void Attack(const Vector2& direction) override;
 
 private:
 	RangedAttackComponent(const String& pathToAmmo,
 		float maxAmmoFlyDistance, float ammoMoveSpeed,
 		float secondsBetweenAttacks);	
 
-	String m_pathToAmmo;
-	float m_maxAmmoFlyDistance;
-	float m_ammoMoveSpeed;
+	String	m_pathToAmmo;
+	float	m_maxAmmoFlyDistance;
+	float	m_ammoMoveSpeed;
 };

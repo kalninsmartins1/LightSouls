@@ -1,3 +1,5 @@
-<WorldConfig>
-	<Sprite path="res/Graphics/World/arena.png"/>
+<WorldConfig
+	path="res/Graphics/World/Tiles/2.png"
+	tileCount="40"
+	>	
 </WorldConfig>

@@ -16,7 +16,7 @@ public:
 		std::function<void()> callback, float time);
 
 	static float getRandAngleInRadians();
-	static cocos2d::Vec2 getScreenFillScale(const cocos2d::Size& curSize);
+	static cocos2d::Vec2 GetScreenFillScale(const cocos2d::Size& curSize);
 	static void logVec2(const cocos2d::Vec2& v);
 	static void logVec3(const cocos2d::Vec3& v);
 	static void assertWithStrFormat(bool condition, const std::string& msg, const std::string& param);

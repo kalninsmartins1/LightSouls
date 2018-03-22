@@ -12,7 +12,7 @@ void MirrorSpriteComponent::setOwnerEntity(Entity* pEntity)
 void MirrorSpriteComponent::update(float delta)
 {
 	// Mirror the sprite based on heading direction
-	const Vec2 entityHeading = m_pEntity->getHeading();
+	const Vec2 entityHeading = m_pEntity->GetHeading();
 	const float absScaleX = abs(m_pEntity->getScaleX());
 	if(entityHeading.x > 0)
 	{		

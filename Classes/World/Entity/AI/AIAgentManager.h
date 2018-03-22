@@ -6,18 +6,18 @@
 class AIAgentManager: cocos2d::Ref
 {
 public:
-	static AIAgentManager* getInstance();
+	static AIAgentManager* GetInstance();
 	
-	bool init(const std::string& pathToXML);
+	bool Init(const std::string& pathToXML);
 
-	void setWorldLayer(cocos2d::Node* pWorldLayer);
-	void setTargetEntity(const Entity* pEntity);
+	void SetWorldLayer(cocos2d::Node* pWorldLayer);
+	void SetTargetEntity(const Entity* pEntity);
 
 	const Entity& getTargetEntity() const;
 	
-	void update(float deltaTime);
+	void Update(float deltaTime);
 	void addAgentConfig(const std::string& type, const std::string& configPath);
-	void spawnAgent(const std::string& type, const cocos2d::Vec2& position);
+	void SpawnAgent(const std::string& type, const cocos2d::Vec2& position);
 
 private:	
 	AIAgentManager();

@@ -95,8 +95,8 @@
 			shape="box"
 			width="200"
 			height="300"
-			isDynamic="false" 
-			isGravityEnabled="false" 
+			isDynamic="true" 
+			isGravityEnabled="true" 
 			collisionBitMask="1"
 			/>
 	</Component>

@@ -8,51 +8,47 @@ class GameInput;
 class World;
 enum class GameInputType;
 
-namespace tinyxml2
-{
-	class XMLNode;
-}
-
-typedef tinyxml2::XMLNode XMLNode;
-typedef tinyxml2::XMLElement XMLElement;
-typedef tinyxml2::XMLDocument XMLDoc;
-typedef tinyxml2::XMLError XMLError;
-typedef std::function<void(GameInput&, const XMLElement*,
-	const std::string&)> LoadInputCallback;
-
+using XMLNode = tinyxml2::XMLNode;
+using XMLElement = tinyxml2::XMLElement;
+using XMLDoc = tinyxml2::XMLDocument;
+using XMLError = tinyxml2::XMLError;
+using LoadInputCallback = std::function<void(GameInput&, const XMLElement*,
+	const std::string&)>;
 
 class XMLLoader
 {
 public:
-	static bool initializeEntityUsingXMLFile(Entity& entity,
+	static bool InitializeEntityUsingXMLFile(Entity& entity,
 		const std::string& pathToXML);
-	static bool loadInputSettings(GameInput& gameInput, 
+	static bool LoadInputSettings(GameInput& gameInput, 
 		const std::string& pathToConfigXml);
-	static bool loadWorld(World& world, const std::string&);
-	static bool initializeAIManagerUsingXMLFile(AIAgentManager& aiManager,
+	static bool LoadWorld(World& world, const std::string&);
+	static bool InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager,
 		const std::string& pathToXML);
 
 private:
 	XMLLoader();
 		
-	static void loadActionTriggers(GameInput& gameInput,
+	static void LoadActionTriggers(GameInput& gameInput,
 		const XMLElement* pElement, LoadInputCallback onKeyboardInput,
 		LoadInputCallback onMouseInput, LoadInputCallback onGameControllerInput);
 
-	static void loadKeyboardAxis(GameInput& gameInput,
+	static void LoadKeyboardAxis(GameInput& gameInput,
 		const XMLElement* pElement, const std::string& actionName);
-	static void loadGameControllerAxis(GameInput& gameInput,
+	static void LoadGameControllerAxis(GameInput& gameInput,
 		const XMLElement* pElement, const std::string& actionName);
 	
-	static void loadActionButton(GameInput& gameInput, GameInputType inputType,
+	static void LoadActionButton(GameInput& gameInput, GameInputType inputType,
 		const XMLElement* pElement, const std::string& actionName, const std::string& xmlAttributeName);
 
-	static cocos2d::PhysicsMaterial loadPhysicsMaterialFromAttributes(
+	static cocos2d::PhysicsMaterial LoadPhysicsMaterialFromAttributes(
 		const XMLNode* pNode);
-	static cocos2d::Vec3 XMLLoader::loadVec3FromAttributes(
+	static cocos2d::Vec3 XMLLoader::LoadVec3FromAttributes(
 		const XMLNode* pNode);
-	static cocos2d::PhysicsBody* XMLLoader::loadPhysicsBodyFromAttributes(const XMLNode* pNode,
+	static void XMLLoader::CreatePhysicsBodyFromAttributes(
+		cocos2d::Node& attachmentNode,
+		const XMLNode* xmlNode,
 		cocos2d::Size& outSize);
 
-	static GameInputType strToGameInputType(const std::string& inputType);
+	static GameInputType StrToGameInputType(const std::string& inputType);
 };

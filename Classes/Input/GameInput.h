@@ -17,7 +17,7 @@ enum class GameInputType
 class GameInput : cocos2d::Ref
 {
 public:
-	static GameInput* getInstance();
+	static GameInput* GetInstance();
 	~GameInput();
 	// Returns true for action once when input is released
 	bool hasAction(const std::string& action) const;
@@ -28,8 +28,8 @@ public:
 	// Return current normalized axis value
 	float getInputAxis(const std::string& axis) const;
 
-	bool loadInputConfiguration(const std::string& pathToConfigFile);
-	void update(float deltaTime);
+	bool LoadInputConfiguration(const std::string& pathToConfigFile);
+	void Update(float deltaTime);
 	void addAxisActionInput(GameInputType inputType, const std::string& actionName,
 		const std::string& keyCodeFromStr, const std::string& keyCodeToStr,
 		float valueFrom, float valueTo) const;

@@ -6,7 +6,7 @@
 StateAttack::StateAttack(AIAgent& agent) :
 	m_curProgress(StateProgress::NONE),
 	m_agent(agent),
-	m_targetEntity(AIAgentManager::getInstance()->getTargetEntity()),
+	m_targetEntity(AIAgentManager::GetInstance()->getTargetEntity()),
 	m_pAttackComponent(nullptr),
 	m_pAnimComponent(nullptr),
 	m_bIsAttackAnimFinished(true)	
@@ -34,11 +34,11 @@ StateProgress StateAttack::onStep()
 {
 	if(m_curProgress == StateProgress::IN_PROGRESS)
 	{
-		if(m_pAttackComponent->isReadyToAttack() && m_bIsAttackAnimFinished)
+		if(m_pAttackComponent->IsReadyToAttack() && m_bIsAttackAnimFinished)
 		{
 			cocos2d::Vec2 toTarget = m_targetEntity.getPosition() -
 				m_agent.getPosition();
-			m_pAttackComponent->attack(toTarget.getNormalized());
+			m_pAttackComponent->Attack(toTarget.getNormalized());
 
 			// Start attack animation
 			m_bIsAttackAnimFinished = false;

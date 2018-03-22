@@ -7,7 +7,7 @@ using namespace cocos2d;
 
 StatePatrol::StatePatrol(AIAgent& agent):
 	m_agent(agent),
-	m_targetEntity(AIAgentManager::getInstance()->getTargetEntity()),
+	m_targetEntity(AIAgentManager::GetInstance()->getTargetEntity()),
 	m_curProgress(StateProgress::NONE),
 	m_pAnimComponent(nullptr)
 {
@@ -61,7 +61,7 @@ float StatePatrol::getTimeToReachTarget(const Vec2& targetPosition) const
 {
 	const Vec2& curAgentPosition = m_agent.getPosition();	
 	const float distanceToTargetPosition = targetPosition.distance(curAgentPosition);
-	const float agentMoveSpeed = m_agent.getCurrentMoveSpeed();
+	const float agentMoveSpeed = m_agent.GetCurrentMoveSpeed();
 	float timeToGetToTarget = 0;
 	
 	// Move speed should be positive number higher than 0
@@ -101,7 +101,7 @@ void StatePatrol::moveToRandomPositionAndWait() const
 	
 	// Update agents moving direction
 	const Vec2 toTarget = targetPosition - m_agent.getPosition();
-	m_agent.setMoveDirection(toTarget.getNormalized());
+	m_agent.SetMoveDirection(toTarget.getNormalized());
 
 	// Move the agent to target position using move action
 	const auto pMoveTo = MoveTo::create(timeToReachTarget, targetPosition);

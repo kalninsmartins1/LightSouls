@@ -175,6 +175,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\CustomActions\ChaseAction.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Entity.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Player\Player.cpp" />
+    <ClCompile Include="..\Classes\World\Physics\PhysicsBodyConfig.cpp" />
     <ClCompile Include="..\Classes\World\Physics\PhysicsManager.cpp" />
     <ClCompile Include="..\Classes\World\World.cpp" />
     <ClCompile Include="main.cpp" />
@@ -210,6 +211,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\CustomActions\ChaseAction.h" />
     <ClInclude Include="..\Classes\World\Entity\Entity.h" />
     <ClInclude Include="..\Classes\World\Entity\Player\Player.h" />
+    <ClInclude Include="..\Classes\World\Physics\PhysicsBodyConfig.h" />
     <ClInclude Include="..\Classes\World\Physics\PhysicsManager.h" />
     <ClInclude Include="..\Classes\World\World.h" />
     <ClInclude Include="main.h" />

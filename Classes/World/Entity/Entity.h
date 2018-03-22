@@ -5,34 +5,49 @@
 class Entity: public cocos2d::Sprite
 {
 public:
-	typedef cocos2d::Vec2 Vector2;
-	typedef std::string String;
+	using Vector2 = cocos2d::Vec2;
+	using String = std::string;
 
 	Entity();
+	virtual ~Entity();
 
-	void setBaseDamage(float baseDamage);
-	void setBaseHealth(float baseHealth);
-	void setBaseMoveSpeed(float moveSpeed);
-	void setDodgeSpeed(float dodgeSpeed);
-	void setDodgeTime(float dodgeTime);	
-	void setMoveDirection(const Vector2& direction);
-	void setPhysicsBodySize(cocos2d::Size size);
+	float					GetCurrentMoveSpeed() const;
+	const Vector2&			GetHeading() const;
+	const cocos2d::Size&	GetPhysicsBodySize() const;
+	float					GetHealth() const;
+	float					GetDamage() const;
+	float					GetDodgeTime() const;
+	float					GetDodgeSpeed() const;
+	unsigned int			GetId() const;
+	bool					IsRunning() const;
+	bool					IsDodging() const;
+	bool					IsAttacking() const;
+
+	void SetBaseDamage(float baseDamage);
+	void SetBaseHealth(float baseHealth);
+	void SetBaseMoveSpeed(float moveSpeed);
+	void SetDodgeSpeed(float dodgeSpeed);
+	void SetDodgeTime(float dodgeTime);	
+	void SetMoveDirection(const Vector2& direction);
+	void SetPhysicsBodySize(cocos2d::Size size);
+	
 	void TakeDamage(float damage);
+	void StartDodging();
+	void StopDodging();
+	void StartAttacking();
+	void StopAttacking();
 
-	float getCurrentMoveSpeed() const;
-	Vector2 getHeading() const;	
-	cocos2d::Size getPhysicsBodySize() const;
-	float getHealth() const;
-	float getDamage() const;
-	unsigned int getId() const;
+	virtual void update(float deltaTime) override;
+private:
+	static unsigned int s_uniqueId;
+	unsigned int		m_Id;
 
-protected:
-	Vector2 m_moveDirection;
-	cocos2d::Size m_PhysicsBodySize;
+	Vector2			m_moveDirection;
+	cocos2d::Size	m_physicsBodySize;
 
-	bool m_bIsRuning;
-	bool m_bIsDodging;
-	bool m_bIsAttacking;
+	bool m_isRuning;
+	bool m_isDodging;
+	bool m_isAttacking;
 
 	float m_baseMoveSpeed;
 	float m_baseHealth;
@@ -42,8 +57,4 @@ protected:
 	float m_moveSpeed;
 	float m_dodgeSpeed;
 	float m_dodgeTime;
-
-private:
-	static unsigned int uniqueId;
-	unsigned int m_Id;
 };

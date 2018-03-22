@@ -1,4 +1,5 @@
 #pragma once
+
 #include "2d/CCSprite.h"
 #include "World/Entity/Entity.h"
 #include "World/Entity/Components/LongSwordAttackComponent.h"
@@ -10,33 +11,36 @@ class Player: public Entity
 {
 
 public:
-	static Player* create(const std::string& pPathToXML);
 	Player();
-	bool init(const std::string& pathToXML);
+
+	void SetTimeBetweenComboInput(float timeBetweenComboInput);
+	
+	static Player*	Create(const std::string& pPathToXML);
+	bool			Init(const std::string& pathToXML);
+	
 	virtual void update(float deltaTime) override;
 
-	void setTimeBetweenComboInput(float timeBetweenComboInput);
 
 private:
-	void onDodgeFinished();
-	void onAttackFinished();
-	void onLightAttackComboExpired();
+	void OnDodgeFinished();
+	void OnAttackFinished();
+	void OnLightAttackComboExpired();
 	
-	void manageInput();
-	void lightAttack();
-	void performDodge();
-	void playRunOrIdleAnimation() const;
-	void onContactBegin(const cocos2d::PhysicsBody* otherBody);
+	void ManageInput();
+	void LightAttack();
+	void PerformDodge();
+	void PlayRunOrIdleAnimation() const;
+	void OnContactBegin(const cocos2d::PhysicsBody* otherBody);
 
 	// Returns negative value if time for combo has expired
-	float getSecondsForValidLighAttackCombo() const;
+	float GetSecondsForValidLighAttackCombo() const;
 
-	PlayerAnimComponent* m_pAnimComponent;
-	AttackComponent* m_pAttackComponent;
-	Vector2 m_lastValidMoveDirection;
+	PlayerAnimComponent*	m_animComponent;
+	AttackComponent*		m_attackComponent;
+	Vector2					m_lastValidMoveDirection;
 
-	bool m_bIsAttackComboDelayExpired;
-	float m_timeBetweenComboInput;
-	long m_lastTimePerformedLightAttack;
-	unsigned short int m_curLightAttackAnimIdx;
+	bool				m_bIsAttackComboDelayExpired;
+	float				m_timeBetweenComboInput;
+	long				m_lastTimePerformedLightAttack;
+	unsigned short int	m_curLightAttackAnimIdx;
 };

@@ -3,8 +3,10 @@
 #include "cocos2d.h"
 
 struct PhysicsContactInformation;
-typedef cocos2d::PhysicsBody PhysicsBody;
-typedef std::function<void(const PhysicsBody* otherBody)> ContactCallback;
+class PhysicsBodyConfig;
+
+using PhysicsBody = cocos2d::PhysicsBody;
+using ContactCallback = std::function<void(const PhysicsBody* otherBody)>;
 
 struct PhysicsContactListener
 {
@@ -21,27 +23,32 @@ struct PhysicsContactListener
 class PhysicsManager
 {
 public:
-	typedef cocos2d::Vec2 Vector2;
+	using Vector2 = cocos2d::Vec2;
 
-	static PhysicsManager* getInstance();
+	static PhysicsManager* GetInstance();
 
-	bool init(cocos2d::Node* pContext);	
+	bool Init(cocos2d::Node* context);	
 	
 	// Register for contact events
-	void addContactListener(const std::string& bodyName, ContactCallback onContactBegin);
+	void AddContactListener(const std::string& bodyName, ContactCallback onContactBegin);
 
-	void debugDrawRect(const cocos2d::Rect& rect);
+	// Add physics body as component to given attachment node
+	static void AddPhysicsBody(cocos2d::Node& attachmentNode,
+		const PhysicsBodyConfig& bodyConfig);
+
+	void DebugDrawRect(const cocos2d::Rect& rect);
 
 	// Checks for overlapping entities in querried circle area
-	static void querryRect(const cocos2d::Rect& rect,
+	static void QuerryRect(const cocos2d::Rect& rect,
 		const cocos2d::PhysicsQueryRectCallbackFunc& callback);
 
 private:
 
 	// Physics world callabck for when two objects begin colliding
-	bool onContactBegin(cocos2d::PhysicsContact& contact);
+	bool OnContactBegin(cocos2d::PhysicsContact& contact);
 
+private:
 	std::vector<PhysicsContactListener> m_contactListeners;
-	cocos2d::Node* m_pContext;
-	cocos2d::DrawNode* m_pDebugDrawNode;
+	cocos2d::Node* m_context;
+	cocos2d::DrawNode* m_debugDrawNode;
 };

@@ -37,24 +37,24 @@ bool HelloWorld::init()
 		return false;
 	}
 	
-	initWolrdLayer();
-	initUILayer();
+	InitWolrdLayer();
+	InitUILayer();
 	
 	// Init Input
-	if(!GameInput::getInstance()->loadInputConfiguration("res/Configs/Input/Input.xml"))
+	if(!GameInput::GetInstance()->LoadInputConfiguration("res/Configs/Input/Input.xml"))
 	{
 		// Halt the game when in debug mode
 		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
 	}
 
 	// Init physics manager
-	if(!PhysicsManager::getInstance()->init(this))
+	if(!PhysicsManager::GetInstance()->Init(this))
 	{
 		CCASSERT(false, "HelloWorldScene: Failed to initialize PhysicsManager !");
 	}
 
 	// Call update for this scene
-	scheduleUpdate();
+	scheduleUpdate(); 
     
     return true;
 }
@@ -62,40 +62,40 @@ bool HelloWorld::init()
 void HelloWorld::update(float deltaTime)
 {	
 	// Keep input events up to date
-	GameInput::getInstance()->update(deltaTime);
+	GameInput::GetInstance()->Update(deltaTime);
 
 	// Update AI
-	AIAgentManager::getInstance()->update(deltaTime);	
+	AIAgentManager::GetInstance()->Update(deltaTime);	
 
-	PhysicsWorld* pWorld = Director::getInstance()->getRunningScene()->getPhysicsWorld();
-	if(pWorld != nullptr)
+	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
+	if(world != nullptr)
 	{
-		pWorld->setDebugDrawMask(0xFFFFFF);
-		pWorld->setDebugDrawCameraMask(CameraFlag::USER1);
+		world->setDebugDrawMask(0xFFFFFF);
+		world->setDebugDrawCameraMask(CameraFlag::USER1);
 	}
 }
 
-void HelloWorld::initWolrdLayer()
+void HelloWorld::InitWolrdLayer()
 {
-	Node* pWorldLayer = Node::create();
+	Node* worldLayer = Node::create();
 
 	// Init world
-	World* pWorld = World::create("res/Configs/World/WorldConfig.xml");
-	pWorldLayer->addChild(pWorld);
+	World* pWorld = World::Create("res/Configs/World/WorldConfig.xml");
+	worldLayer->addChild(pWorld);
 
 	// Init player
-	m_pPlayer = Player::create("res/Configs/World/Player/Player.xml");
-	pWorldLayer->addChild(m_pPlayer);
+	m_player = Player::Create("res/Configs/World/Player/Player.xml");
+	worldLayer->addChild(m_player);
 
 	// Init AI
-	AIAgentManager* pAgentManger = AIAgentManager::getInstance();
-	if (pAgentManger->init("res/Configs/World/AI/AIManager.xml"))
+	AIAgentManager* agentManager = AIAgentManager::GetInstance();
+	if (agentManager->Init("res/Configs/World/AI/AIManager.xml"))
 	{
-		pAgentManger->setTargetEntity(m_pPlayer);
-		pAgentManger->setWorldLayer(pWorldLayer);
+		agentManager->SetTargetEntity(m_player);
+		agentManager->SetWorldLayer(worldLayer);
 
 		// Spawn agents in world
-		pAgentManger->spawnAgent("WarriorAgent", Vec2(200, 200));
+		agentManager->SpawnAgent("WarriorAgent", Vec2(200, 200));
 	}
 	else
 	{
@@ -103,29 +103,29 @@ void HelloWorld::initWolrdLayer()
 	}
 
 	// Set world camera mask
-	pWorldLayer->setCameraMask(static_cast<unsigned short int>(
+	worldLayer->setCameraMask(static_cast<unsigned short int>(
 		CameraFlag::USER1));
-	addChild(pWorldLayer);
+	addChild(worldLayer);
 
 	// Create world camera and set it to follow player
-	Camera* pWorldCamera = Camera::create();
-	pWorldCamera->setCameraFlag(CameraFlag::USER1);
-	pWorldCamera->runAction(CameraFollow::create(m_pPlayer));
-	addChild(pWorldCamera);	
+	Camera* worldCamera = Camera::create();
+	worldCamera->setCameraFlag(CameraFlag::USER1);
+	worldCamera->runAction(CameraFollow::create(m_player));
+	addChild(worldCamera);	
 }
 
-void HelloWorld::initUILayer()
+void HelloWorld::InitUILayer()
 {
 	// Init UI
-	Node* pUILayer = Node::create();
-	Sprite* pScreenOverlay = Sprite::create("res/Graphics/UI/screenOverlay.png");
-	const Vec2 scale = Utils::getScreenFillScale(pScreenOverlay->getContentSize());
-	pScreenOverlay->setScale(scale.x, scale.y);
-	pScreenOverlay->setAnchorPoint(Vec2::ZERO);
+	Node* uiLayer = Node::create();
+	Sprite* screenOverlay = Sprite::create("res/Graphics/UI/screenOverlay.png");
+	const Vec2 scale = Utils::GetScreenFillScale(screenOverlay->getContentSize());
+	screenOverlay->setScale(scale.x, scale.y);
+	screenOverlay->setAnchorPoint(Vec2::ZERO);
 
-	pUILayer->addChild(pScreenOverlay);
-	pUILayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));
-	addChild(pUILayer);
+	uiLayer->addChild(screenOverlay);
+	uiLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));
+	addChild(uiLayer);
 
 	// Create UI camera
 	Camera* pUICamera = Camera::create();

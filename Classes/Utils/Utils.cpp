@@ -39,7 +39,7 @@ void Utils::assertWithStrFormat(bool condition, const std::string& msg,
 	CCASSERT(condition, StringUtils::format(msg.c_str(), param).c_str());
 }
 
-Vec2 Utils::getScreenFillScale(const Size& curSize)
+Vec2 Utils::GetScreenFillScale(const Size& curSize)
 {
 	Vec2 scale = Vec2::ZERO;
 	if(curSize.width > 0 && curSize.height > 0)

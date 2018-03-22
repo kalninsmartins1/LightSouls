@@ -9,10 +9,10 @@
 
 using namespace cocos2d;
 
-Player* Player::create(const std::string& pathToXML)
+Player* Player::Create(const std::string& pathToXML)
 {
 	Player* pPlayer = new (std::nothrow) Player();
-	if (pPlayer && pPlayer->init(pathToXML))
+	if (pPlayer && pPlayer->Init(pathToXML))
 	{
 		pPlayer->autorelease();
 	}
@@ -25,8 +25,8 @@ Player* Player::create(const std::string& pathToXML)
 }
 
 Player::Player() :
-	m_pAnimComponent(nullptr),
-	m_pAttackComponent(nullptr),
+	m_animComponent(nullptr),
+	m_attackComponent(nullptr),
 	m_lastValidMoveDirection(Vector2::UNIT_X), // By default start out moving right
 	m_bIsAttackComboDelayExpired(true),
 	m_timeBetweenComboInput(0),	
@@ -35,27 +35,23 @@ Player::Player() :
 {
 }
 
-bool Player::init(const std::string& pathToXML)
+bool Player::Init(const std::string& pathToXML)
 {
-	XMLLoader::initializeEntityUsingXMLFile(*this, pathToXML);
+	XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
 
 	// Force position player in middle of screen
 	const Size size = Director::getInstance()->getWinSize();
 	setPosition(size.width / 2, size.height / 2);
 
 	// Get animation component to trigger animations when that is necessary
-	m_pAnimComponent =
+	m_animComponent =
 		static_cast<PlayerAnimComponent*>(getComponent(PLAYER_ANIM_COMPONENT));
-	m_pAnimComponent->loopIdleAnimation();
+	m_animComponent->loopIdleAnimation();
 
-	m_pAttackComponent = 
-		static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
-
-	// Set move speed at begining
-	m_moveSpeed = m_baseMoveSpeed;
+	m_attackComponent = static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
 	
-	PhysicsManager::getInstance()->addContactListener(getName(), 
-		CC_CALLBACK_1(Player::onContactBegin, this));
+	PhysicsManager::GetInstance()->AddContactListener(getName(), 
+		CC_CALLBACK_1(Player::OnContactBegin, this));
 
 	return true;
 }
@@ -63,87 +59,86 @@ bool Player::init(const std::string& pathToXML)
 void Player::update(float deltaTime)
 {
 	// Call base update
-	Sprite::update(deltaTime);
+	Entity::update(deltaTime);
 
-	manageInput();
+	ManageInput();
 
 	// We can move only when we are not attacking
-	if (!m_bIsAttacking && m_bIsAttackComboDelayExpired)
+	if (!IsAttacking() && m_bIsAttackComboDelayExpired)
 	{
-		setPosition(getPosition() + m_moveDirection *
-			m_moveSpeed * deltaTime);
-		m_bIsRuning = m_moveDirection.lengthSquared() > 0;
-		playRunOrIdleAnimation();
+		setPosition(getPosition() + GetHeading() *
+			GetCurrentMoveSpeed() * deltaTime);
+		
+		PlayRunOrIdleAnimation();
 	}	
 }
 
-void Player::setTimeBetweenComboInput(float timeBetweenComboInput)
+void Player::SetTimeBetweenComboInput(float timeBetweenComboInput)
 {
 	m_timeBetweenComboInput = timeBetweenComboInput;
 }
 
-void Player::onDodgeFinished()
+void Player::OnDodgeFinished()
 {
-	m_bIsDodging = false;
-
-	// Set back regular speed
-	m_moveSpeed = m_baseMoveSpeed;
+	StopDodging();
 }
 
-void Player::onAttackFinished()
+void Player::OnAttackFinished()
 {
-	m_bIsAttacking = false;
+	StopAttacking();
+
 	// Start light attack combo expiration
-	const float secondsBeforeComboInputExpires = getSecondsForValidLighAttackCombo();
+	const float secondsBeforeComboInputExpires = GetSecondsForValidLighAttackCombo();
 	Utils::startTimerWithCallback(this, 
-		CC_CALLBACK_0(Player::onLightAttackComboExpired, this),
+		CC_CALLBACK_0(Player::OnLightAttackComboExpired, this),
 		secondsBeforeComboInputExpires);
 
 	m_bIsAttackComboDelayExpired = false;
 }
 
-void Player::onLightAttackComboExpired()
+void Player::OnLightAttackComboExpired()
 {
 	m_bIsAttackComboDelayExpired = true;
 }
 
-void Player::manageInput()
+void Player::ManageInput()
 {
-	GameInput* pInput = GameInput::getInstance();
+	GameInput* pInput = GameInput::GetInstance();
 	if (pInput->hasAction("LightAttackInput"))
 	{
-		lightAttack();
+		LightAttack();
 	}
 	else if (pInput->hasAction("StrongAttackInput"))
 	{
 		//lightAttack();
 	}
-	else if (pInput->hasAction("DodgeInput") && m_bIsRuning)
+	else if (pInput->hasAction("DodgeInput") && IsRunning())
 	{
-		performDodge();
+		PerformDodge();
 	}
 
 	// Player movement
 	const float horizontalValue = pInput->getInputAxis("HorizontalMovement");
-	const float vertiacalValue = pInput->getInputAxis("VerticalMovement");
-	m_moveDirection = Vec2(horizontalValue, vertiacalValue);
-
-	// Make sure we are not moving faster diagonally
-	m_moveDirection.normalize();
+//	const float vertiacalValue = pInput->getInputAxis("VerticalMovement");	
+	Vector2& moveDirection = Vector2(horizontalValue, 0.0f);
 	
+	// Make sure we are not moving faster diagonally
+	moveDirection.normalize();
+	SetMoveDirection(moveDirection);
+
 	// If we have an input, then update last valid move direction
-	if (abs(horizontalValue) > MATH_EPSILON || abs(vertiacalValue) > MATH_EPSILON)
+	if (abs(horizontalValue) > MATH_EPSILON)//|| abs(vertiacalValue) > MATH_EPSILON)
 	{
-		m_lastValidMoveDirection = m_moveDirection;
+		m_lastValidMoveDirection = moveDirection;
 	}
 }
 
-void Player::lightAttack()
+void Player::LightAttack()
 {	
-	if (!m_bIsAttacking && !m_bIsDodging)
+	if (!IsAttacking() && !IsDodging())
 	{
 		// Activating attack
-		m_bIsAttacking = true;
+		Entity::StartAttacking();
 
 		if(!m_bIsAttackComboDelayExpired)
 		{
@@ -163,52 +158,51 @@ void Player::lightAttack()
 		}
 		
 		// Play the attack animation
-		m_pAnimComponent->playLightAttackAnimation(
+		m_animComponent->playLightAttackAnimation(
 			static_cast<LightAttackStage>(m_curLightAttackAnimIdx),
-			CC_CALLBACK_0(Player::onAttackFinished, this));
-		m_pAttackComponent->attack(m_lastValidMoveDirection);
+			CC_CALLBACK_0(Player::OnAttackFinished, this));
+		m_attackComponent->Attack(m_lastValidMoveDirection);
 		
 		// Set the time last light attack was performed
 		m_lastTimePerformedLightAttack = Utils::getTimeStampInMilliseconds();
 	}
 }
 
-void Player::performDodge()
-{
-	m_bIsDodging = true;
-	m_moveSpeed = m_dodgeSpeed;
-	m_pAnimComponent->loopDodgeAnimation();
+void Player::PerformDodge()
+{	
+	StartDodging();
+	m_animComponent->loopDodgeAnimation();
 	Utils::startTimerWithCallback(this,
-		CC_CALLBACK_0(Player::onDodgeFinished, this), m_dodgeTime);
+		CC_CALLBACK_0(Player::OnDodgeFinished, this), GetDodgeTime());
 }
 
-void Player::playRunOrIdleAnimation() const
+void Player::PlayRunOrIdleAnimation() const
 {			
-	if (m_bIsRuning && !m_bIsDodging)
+	if (IsRunning() && !IsDodging())
 	{
-		if(m_pAnimComponent->getCurrentlyLoopingAnimation() 
+		if(m_animComponent->getCurrentlyLoopingAnimation() 
 			!= AnimationKind::RUN)
 		{
-			m_pAnimComponent->loopRunAnimation();
+			m_animComponent->loopRunAnimation();
 		}
 	}
-	else if (!m_bIsRuning)
+	else if (!IsRunning())
 	{
-		if(m_pAnimComponent->getCurrentlyLoopingAnimation() 
+		if(m_animComponent->getCurrentlyLoopingAnimation() 
 			!= AnimationKind::IDLE)
 		{
-			m_pAnimComponent->loopIdleAnimation();
+			m_animComponent->loopIdleAnimation();
 		}
 	}
 }
 
-void Player::onContactBegin(const cocos2d::PhysicsBody* otherBody)
+void Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
 	const std::string& name = otherBody->getNode()->getName();
 	CCLOG("Player collided with %s", name.c_str());
 }
 
-float Player::getSecondsForValidLighAttackCombo() const
+float Player::GetSecondsForValidLighAttackCombo() const
 {
 	const long currnentTime = Utils::getTimeStampInMilliseconds();
 	const float secondsSinceLastAttack = // Devide by 1000 to convert to seconds

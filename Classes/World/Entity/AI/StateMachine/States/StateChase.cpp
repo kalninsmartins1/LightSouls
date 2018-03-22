@@ -5,7 +5,7 @@
 
 StateChase::StateChase(AIAgent& agent) :
 	m_curProgress(StateProgress::NONE),
-	m_targetEntity(AIAgentManager::getInstance()->getTargetEntity()),
+	m_targetEntity(AIAgentManager::GetInstance()->getTargetEntity()),
 	m_agent(agent)	
 {
 }

@@ -45,7 +45,7 @@ void ChaseAction::step(float dt)
 	cocos2d::Vec2 toTarget = m_chaseTarget.getPosition() - currentPosition;
 
 	m_agent.setPosition(currentPosition + toTarget.getNormalized() *
-		m_agent.getCurrentMoveSpeed() * dt);
+		m_agent.GetCurrentMoveSpeed() * dt);
 
 	// Check if attack distance has been reached
 	if (toTarget.length() <= m_agent.getAttackRadius())

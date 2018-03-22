@@ -153,6 +153,9 @@
     <ClCompile Include="..\Classes\World\Physics\PhysicsManager.cpp">
       <Filter>src\World\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\Physics\PhysicsBodyConfig.cpp">
+      <Filter>src\World\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -252,6 +255,9 @@
       <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Physics\PhysicsManager.h">
+      <Filter>src\World\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Physics\PhysicsBodyConfig.h">
       <Filter>src\World\Physics</Filter>
     </ClInclude>
   </ItemGroup>

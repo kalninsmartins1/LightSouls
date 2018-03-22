@@ -13,13 +13,15 @@ public:
 	// implement the "static create()" method manually
 	CREATE_FUNC(HelloWorld);
 
-    virtual bool init();    
+    virtual bool init() override;    
 	virtual void update(float deltaTime) override;
 
 private:
-	Player* m_pPlayer;
-	void initWolrdLayer();
-	void initUILayer();
+	void InitWolrdLayer();
+	void InitUILayer();
+
+private:
+	Player* m_player;	
 };
 
 #endif // __HELLOWORLD_SCENE_H__

@@ -11,13 +11,13 @@ AIAgentManager::AIAgentManager() :
 	// Private constructor
 }
 
-AIAgentManager* AIAgentManager::getInstance()
+AIAgentManager* AIAgentManager::GetInstance()
 {
 	static AIAgentManager instace;
 	return &instace;
 }
 
-void AIAgentManager::setTargetEntity(const Entity* pEntity)
+void AIAgentManager::SetTargetEntity(const Entity* pEntity)
 {		
 	m_pTargetEntity = pEntity;
 }
@@ -27,7 +27,7 @@ const Entity& AIAgentManager::getTargetEntity() const
 	return *m_pTargetEntity;
 }
 
-void AIAgentManager::update(float deltaTime)
+void AIAgentManager::Update(float deltaTime)
 {
 	// Update all agents
 	for (AIAgent* agent : m_allActiveAgents)
@@ -42,7 +42,7 @@ void AIAgentManager::addAgentConfig(const std::string& type,
 	m_agentConfigPathMap[type] = configPath;
 }
 
-void AIAgentManager::spawnAgent(const std::string& type, const Vec2& position)
+void AIAgentManager::SpawnAgent(const std::string& type, const Vec2& position)
 {
 	if(Utils::containsKey(m_agentConfigPathMap, type))
 	{
@@ -66,13 +66,13 @@ void AIAgentManager::spawnAgent(const std::string& type, const Vec2& position)
 	}	
 }
 
-bool AIAgentManager::init(const std::string& pathToXML)
+bool AIAgentManager::Init(const std::string& pathToXML)
 {	
-	return XMLLoader::initializeAIManagerUsingXMLFile(*this,
+	return XMLLoader::InitializeAIManagerUsingXMLFile(*this,
 		pathToXML);
 }
 
-void AIAgentManager::setWorldLayer(Node* pWorldLayer)
+void AIAgentManager::SetWorldLayer(Node* pWorldLayer)
 {
 	m_pWorldLayer = pWorldLayer;
 }

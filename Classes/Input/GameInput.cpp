@@ -14,7 +14,7 @@ GameInput::GameInput()
 		CCASSERT(false, "GameInput: Failed to initilize !");
 	}
 }
-GameInput* GameInput::getInstance()
+GameInput* GameInput::GetInstance()
 {
 	static GameInput instance;
 	return &instance;
@@ -36,7 +36,7 @@ bool GameInput::init()
 	return m_pKeyboard != nullptr && m_pMouseInput != nullptr;
 }
 
-void GameInput::update(float deltaTime)
+void GameInput::Update(float deltaTime)
 {
 	m_pMouseInput->update(deltaTime);
 	m_pKeyboard->update(deltaTime);
@@ -77,9 +77,9 @@ float GameInput::getInputAxis(const std::string& axisAction) const
 	return value;
 }
 
-bool GameInput::loadInputConfiguration(const std::string& pathToConfigFile)
+bool GameInput::LoadInputConfiguration(const std::string& pathToConfigFile)
 {
-	return XMLLoader::loadInputSettings(*this, pathToConfigFile);
+	return XMLLoader::LoadInputSettings(*this, pathToConfigFile);
 }
 
 bool GameInput::hasAction(const std::string& action) const

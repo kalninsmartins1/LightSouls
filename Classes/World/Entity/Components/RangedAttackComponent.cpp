@@ -3,7 +3,7 @@
 #include "World/Entity/Ammo/Arrow.h"
 #include "Utils/Utils.h"
 
-RangedAttackComponent* RangedAttackComponent::create(
+RangedAttackComponent* RangedAttackComponent::Create(
 	const String& pathToAmmo,
 	float maxAmmoFlyDistance,
 	float ammoMoveSpeed,
@@ -35,12 +35,12 @@ RangedAttackComponent::RangedAttackComponent(const String& pathToAmmo,
 {
 }
 
-void RangedAttackComponent::attack(const Vector2& direction)
+void RangedAttackComponent::Attack(const Vector2& direction)
 {	
 	// Allow base class to perform its actions
-	AttackComponent::attack(direction);
+	AttackComponent::Attack(direction);
 
-	Arrow* pArrow = Arrow::create(m_pathToAmmo, cocos2d::Vec2(
+	Arrow* pArrow = Arrow::Create(m_pathToAmmo, cocos2d::Vec2(
 		_owner->getPosition()),
 		direction,
 		m_maxAmmoFlyDistance,

@@ -1,29 +1,30 @@
 #include "Arrow.h"
 #include "Utils/Utils.h"
 
-Arrow* Arrow::create(const std::string& pathToSprite, 
+Arrow* Arrow::Create(const std::string& pathToSprite, 
 	const Vector2& startPosition,
 	const Vector2& moveDirection,
 	float maxFlyDistance, float moveSpeed)
 {
-	Arrow* pArrow = new (std::nothrow) Arrow(startPosition, maxFlyDistance);
-	if (pArrow != nullptr && pArrow->init(pathToSprite, moveDirection,
+	Arrow* arrow = new (std::nothrow) Arrow(startPosition, maxFlyDistance);
+	if (arrow != nullptr && arrow->Init(pathToSprite, moveDirection,
 		moveSpeed))
 	{
-		pArrow->autorelease();
+		arrow->autorelease();
 	}
 	else
 	{
-		CC_SAFE_DELETE(pArrow);
+		CC_SAFE_DELETE(arrow);
 	}
 
-	return pArrow;
+	return arrow;
 }
 
 void Arrow::update(float deltaTime)
 {
 	const Vector2& currentPosition = getPosition();
-	setPosition(currentPosition + m_moveDirection * m_moveSpeed * deltaTime);
+	setPosition(currentPosition + GetHeading() * 
+		GetCurrentMoveSpeed() * deltaTime);
 
 	if(currentPosition.distance(m_startPosition) >= m_maxFlyDistance)
 	{
@@ -37,24 +38,24 @@ Arrow::Arrow(Vector2 startPosition, float maxFlyDistance) :
 {	
 }
 
-bool Arrow::init(const std::string& pathToSprite, 
+bool Arrow::Init(const std::string& pathToSprite, 
 	const cocos2d::Vec2& moveDirection,
 	float moveSpeed)
 {
-	m_moveSpeed = moveSpeed;
-	m_moveDirection = moveDirection;
 	
-	setBaseMoveSpeed(moveSpeed);
+	SetMoveDirection(moveDirection);	
+	SetBaseMoveSpeed(moveSpeed);
 	setPosition(m_startPosition);
-	rotateArrowInDirectionOfMovement();
+	RotateArrowInDirectionOfMovement();
 	scheduleUpdate();
 
 	return Entity::initWithFile(pathToSprite);
 }
 
-void Arrow::rotateArrowInDirectionOfMovement()
+void Arrow::RotateArrowInDirectionOfMovement()
 {
+	const Vector2& heading = GetHeading();
 	const float angleBetweenVectors = CC_RADIANS_TO_DEGREES(acos(
-		Vector2(0, 1).dot(m_moveDirection) / m_moveDirection.length()));
+		Vector2(0, 1).dot(heading) / heading.length()));
 	setRotation(angleBetweenVectors);
 }
