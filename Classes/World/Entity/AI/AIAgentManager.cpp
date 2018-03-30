@@ -22,7 +22,7 @@ void AIAgentManager::SetTargetEntity(const Entity* pEntity)
 	m_pTargetEntity = pEntity;
 }
 
-const Entity& AIAgentManager::getTargetEntity() const
+const Entity& AIAgentManager::GetTargetEntity() const
 {
 	return *m_pTargetEntity;
 }
@@ -44,7 +44,7 @@ void AIAgentManager::addAgentConfig(const std::string& type,
 
 void AIAgentManager::SpawnAgent(const std::string& type, const Vec2& position)
 {
-	if(Utils::containsKey(m_agentConfigPathMap, type))
+	if(Utils::ContainsKey(m_agentConfigPathMap, type))
 	{
 		AIAgent* pAgent = AIAgent::create(
 			m_agentConfigPathMap.at(type));
@@ -60,7 +60,7 @@ void AIAgentManager::SpawnAgent(const std::string& type, const Vec2& position)
 	}
 	else
 	{
-		Utils::assertWithStrFormat(false,
+		Utils::AssertWithStrFormat(false,
 			"AIAgentManager: Trying to spawn agent of unknown type: %s",
 			type);
 	}	

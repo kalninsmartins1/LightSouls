@@ -11,20 +11,20 @@ class StatePatrol: public IState
 public:
 	StatePatrol(AIAgent& agent);
 
-	void onEnter(AIAnimComponent* pAnimComponent) override;
-	StateProgress onStep() override;
-	void onExit() override;
-	AIState getStateType() override;
+	void OnEnter(AIAnimComponent* pAnimComponent) override;
+	StateProgress OnStep() override;
+	void OnExit() override;
+	AIState GetStateType() override;
 	
 
 private:
-	float getTimeToReachTarget(const cocos2d::Vec2& targetPosition) const;
-	bool hasTargetBeenSpotted() const;
-	void moveToRandomPositionAndWait() const;
-	void onFinishedMoving() const;
+	float GetTimeToReachTarget(const cocos2d::Vec2& targetPosition) const;
+	bool HasTargetBeenSpotted() const;
+	void MoveToRandomPositionAndWait() const;
+	void OnFinishedMoving() const;
 
 	AIAgent& m_agent;
 	const Entity& m_targetEntity;
 	StateProgress m_curProgress;
-	AIAnimComponent* m_pAnimComponent;
+	AIAnimComponent* m_animComponent;
 };

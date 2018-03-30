@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "IState.h"
 #include "World/Entity/Entity.h"
 
@@ -11,16 +10,16 @@ class StateChase: public IState
 public:
 	StateChase(AIAgent& agent);
 
-	virtual void onEnter(AIAnimComponent* pAnimComponent) override;
-	virtual StateProgress onStep() override;
-	virtual void onExit() override;
-	virtual AIState getStateType() override;
+	virtual AIState			GetStateType() override;
+	
+	virtual void			OnEnter(AIAnimComponent* animComponent) override;
+	virtual StateProgress	OnStep() override;
+	virtual void			OnExit() override;
 
 private: 
+	void					OnTargetReached();
 
-	void onTargetReached();
-
-	StateProgress m_curProgress;
-	const Entity& m_targetEntity;
-	AIAgent& m_agent;	
+	StateProgress	m_curProgress;
+	const Entity&	m_targetEntity;
+	AIAgent&		m_agent;	
 };

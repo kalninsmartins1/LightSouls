@@ -4,6 +4,15 @@
 static constexpr char* XML_NODE_PHYSICS_MATERIAL = "PhysicsMaterial";
 static constexpr char* XML_NODE_PHYSICS_BODY = "PhysicsBody";
 static constexpr char* XML_NODE_AGENT_CONFIG_LIST = "AgentConfigList";
+static constexpr char* XML_NODE_BACKGROUND = "Background";
+static constexpr char* XML_NODE_FOREGROUND = "Foreground";
+static constexpr char* XML_NODE_SPRITE = "Sprite";
+static constexpr char* XML_NODE_SPRITE_FRAME = "SpriteFrame";
+static constexpr char* XML_NODE_NORMALIZED_POSITION = "NormalizedPosition";
+static constexpr char* XML_NODE_ANCHOR_POSITION = "AnchorPosition";
+static constexpr char* XML_NODE_SCALE = "Scale";
+static constexpr char* XML_NODE_POSITION = "Position";
+static constexpr char* XML_NODE_ROTATION = "Rotation";
 
 // XML entity attributes
 static constexpr char* XML_ENTITY_MOVE_SPEED_ATTR = "moveSpeed";
@@ -15,23 +24,26 @@ static constexpr char* XML_ENTITY_PADDING_FROM_BODY_ATTR = "paddingFromBody";
 static constexpr char* XML_ENTITY_BASE_HEALTH_ATTR = "baseHealth";
 static constexpr char* XML_ENTITY_BASE_DAMAGE_ATTR = "baseDamage";
 
+// XML UI attributes
+static constexpr char* XML_UI_ANIMATION_SPEED_ATTR = "animationSpeed";
+static constexpr char* XML_UI_MIN_VALUE = "minValue";
+static constexpr char* XML_UI_MAX_VALUE = "maxValue";
+
 // XML player attributes
 static constexpr char* XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR = "timeBetweenComboInput";
 
-// XML ai attributes
+// XML AI attributes
 static constexpr char* XML_AI_ATTACK_RADIUS_ATTR = "attackRadius";
 static constexpr char* XML_AI_WORKING_RADIUS_ATTR = "workingRadius";
 static constexpr char* XML_AI_PATROL_PAUSE_ATTR = "patrolPauseInSeconds";
 static constexpr char* XML_AI_MAX_FLY_DISTANCE = "maxFlyDistance";
-
-// XML animation component specifics
-static constexpr char* XML_ANIM_SPRITE_FRAME = "SpriteFrame";
 
 // XML animation attributes
 static constexpr char* XML_ANIM_PLIST_PATH_ATTR = "plistPath";
 static constexpr char* XML_ANIM_FRAME_NAME_PATTERN_ATTR = "frameNamePattern";
 static constexpr char* XML_ANIM_FRAME_COUNT_ATTR = "frameCount";
 static constexpr char* XML_ANIM_TIME_BETWEEN_FRAMES_ATTR = "timeBetweenFrames";
+
 
 // XML animation type values
 static constexpr char* XML_ANIM_TYPE_RUN = "Run";

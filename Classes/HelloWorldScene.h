@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 
 class Player;
+class ProgressBar;
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -19,9 +20,11 @@ public:
 private:
 	void InitWolrdLayer();
 	void InitUILayer();
+	void OnPlayerHealthChanged(cocos2d::EventCustom* eventData);
 
 private:
-	Player* m_player;	
+	Player*			m_player;
+	ProgressBar*	m_healthBar;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

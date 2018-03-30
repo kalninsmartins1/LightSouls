@@ -11,29 +11,29 @@ Utils::Utils()
 	// Private constructor
 }
 
-long long Utils::getTimeStampInMilliseconds()
+long long Utils::GetTimeStampInMilliseconds()
 {
 	// Convert system ticks to milliseconds	
 	const long long ticks = std::chrono::system_clock::now().time_since_epoch().count();
 	return ticks / 10000;
 }
 
-float Utils::convertMillisecondsToSeconds(long long milliseconds)
+float Utils::ConvertMillisecondsToSeconds(long long milliseconds)
 {
 	return milliseconds / 1000.f;
 }
 
-void Utils::logVec2(const Vec2& v)
+void Utils::LogVec2(const Vec2& v)
 {
 	CCLOG("(X: %f, Y: %f)", v.x, v.y);
 }
 
-void Utils::logVec3(const Vec3& v)
+void Utils::LogVec3(const Vec3& v)
 {
 	CCLOG("(X: %f, Y: %f, Z: %f)", v.x, v.y, v.z);
 }
 
-void Utils::assertWithStrFormat(bool condition, const std::string& msg,
+void Utils::AssertWithStrFormat(bool condition, const std::string& msg,
 	const std::string& param)
 {
 	CCASSERT(condition, StringUtils::format(msg.c_str(), param).c_str());
@@ -44,7 +44,7 @@ Vec2 Utils::GetScreenFillScale(const Size& curSize)
 	Vec2 scale = Vec2::ZERO;
 	if(curSize.width > 0 && curSize.height > 0)
 	{
-		const Size& winSize = Director::getInstance()->getWinSize();
+		const Size& winSize = GetScreenSize();
 		scale.x = winSize.width / curSize.width;
 		scale.y = winSize.height / curSize.height;
 	}
@@ -52,7 +52,27 @@ Vec2 Utils::GetScreenFillScale(const Size& curSize)
 	return scale;
 }
 
-void Utils::startTimerWithCallback(Node* pNode, std::function<void()> callback,
+const cocos2d::Size& Utils::GetScreenSize()
+{
+	return Director::getInstance()->getWinSize();
+}
+
+float Utils::SafeDevide(const float& up, const float& down)
+{
+	float result = 0;
+	if (down > 0)
+	{
+		result = up/down;
+	}
+	else
+	{
+		CCASSERT(false, "Error trying to devide with 0 !");
+	}
+	
+	return result;
+}
+
+void Utils::StartTimerWithCallback(Node* pNode, std::function<void()> callback,
 	float time)
 {
 	Vector<FiniteTimeAction*> callbackTimerActions;
@@ -63,12 +83,32 @@ void Utils::startTimerWithCallback(Node* pNode, std::function<void()> callback,
 	pNode->runAction(Sequence::create(callbackTimerActions));
 }
 
-float Utils::getRandAngleInRadians()
+cocos2d::Vec2 Utils::GetRandomPositionWithinCircle(const cocos2d::Vec2 centerPos, float radius)
+{
+	// Get random position within range
+	const float angle = Utils::GetRandAngleInRadians();
+	const float targetX = cos(angle) * radius;
+	const float targetY = sin(angle) * radius;
+
+	// Get time it takes for agent to move to position
+	const Vec2 randomPosition = centerPos +
+		Vec2(targetX, targetY);
+
+	return randomPosition;
+}
+
+float Utils::GetRandValueWithinRange(int minValue, int maxValue)
+{
+	int range = maxValue - minValue;
+	return minValue + (rand() % range);
+}
+
+float Utils::GetRandAngleInRadians()
 {
 	return (rand() % FULL_CIRCLE_DEGREES) * (PI / HALF_CIRCLE_DEGREES);
 }
 
-MouseButtonCode Utils::convertStringToMouseButtonCode(const std::string& mouseButtonStr)
+MouseButtonCode Utils::ConvertStringToMouseButtonCode(const std::string& mouseButtonStr)
 {	
 	MouseButtonCode result = MouseButtonCode::BUTTON_UNSET;
 
@@ -82,13 +122,13 @@ MouseButtonCode Utils::convertStringToMouseButtonCode(const std::string& mouseBu
 	}
 	else
 	{
-		assertWithStrFormat(false, "Utils: Invalid button code %s !", mouseButtonStr);
+		AssertWithStrFormat(false, "Utils: Invalid button code %s !", mouseButtonStr);
 	}
 
 	return result;
 }
 
-KeyCode Utils::convertStringToKeyCode(const std::string& keyCodeStr)
+KeyCode Utils::ConvertStringToKeyCode(const std::string& keyCodeStr)
 {	
 	KeyCode result = KeyCode::KEY_NONE;
 
@@ -114,13 +154,13 @@ KeyCode Utils::convertStringToKeyCode(const std::string& keyCodeStr)
 	}
 	else
 	{
-		assertWithStrFormat(false, "Utils: Invalid key code keyCodeStr %s", keyCodeStr);
+		AssertWithStrFormat(false, "Utils: Invalid key code keyCodeStr %s", keyCodeStr);
 	}
 
 	return result;
 }
 
-X360Axes Utils::convertStringToGameControllerAxis(const std::string& controllerAxisStr)
+X360Axes Utils::ConvertStringToGameControllerAxis(const std::string& controllerAxisStr)
 {
 	X360Axes result = X360Axes::NONE;
 	if(controllerAxisStr == "LEFT_STICK_X")
@@ -151,7 +191,7 @@ X360Axes Utils::convertStringToGameControllerAxis(const std::string& controllerA
 	return result;
 }
 
-X360Button Utils::convertStringToGameControllerButton(const std::string& controllerButtonStr)
+X360Button Utils::ConvertStringToGameControllerButton(const std::string& controllerButtonStr)
 {
 	X360Button result = X360Button::NONE;
 	if (controllerButtonStr == "A")
@@ -214,7 +254,7 @@ X360Button Utils::convertStringToGameControllerButton(const std::string& control
 	return result;
 }
 
-int Utils::getSign(const float & value)
+int Utils::GetSign(const float & value)
 {
 	int sign = 1;
 	if (value < 0)

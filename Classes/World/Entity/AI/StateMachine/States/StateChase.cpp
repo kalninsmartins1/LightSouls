@@ -5,44 +5,44 @@
 
 StateChase::StateChase(AIAgent& agent) :
 	m_curProgress(StateProgress::NONE),
-	m_targetEntity(AIAgentManager::GetInstance()->getTargetEntity()),
+	m_targetEntity(AIAgentManager::GetInstance()->GetTargetEntity()),
 	m_agent(agent)	
 {
 }
 
-void StateChase::onEnter(AIAnimComponent* pAnimComponent)
+void StateChase::OnEnter(AIAnimComponent* animComponent)
 {
 	m_curProgress = StateProgress::IN_PROGRESS;
 
 	// Start chasing player
-	const auto pChase = ChaseAction::create(m_targetEntity, m_agent);
-	const auto pCallBack = cocos2d::CallFunc::create(
-		CC_CALLBACK_0(StateChase::onTargetReached, this));
+	const auto chase = ChaseAction::create(m_targetEntity, m_agent);
+	const auto callBack = cocos2d::CallFunc::create(
+		CC_CALLBACK_0(StateChase::OnTargetReached, this));
 	m_agent.runAction(cocos2d::Sequence::create(
-		pChase,
-		pCallBack,
+		chase,
+		callBack,
 		nullptr));
 
 	// Play run animation
-	pAnimComponent->playRunAnimation();
+	animComponent->PlayRunAnimation();
 }
 
-StateProgress StateChase::onStep()
+StateProgress StateChase::OnStep()
 {
 	return m_curProgress;
 }
 
-void StateChase::onExit()
+void StateChase::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
 }
 
-AIState StateChase::getStateType()
+AIState StateChase::GetStateType()
 {
 	return AIState::CHASE;
 }
 
-void StateChase::onTargetReached()
+void StateChase::OnTargetReached()
 {
 	m_curProgress = StateProgress::DONE;
 }

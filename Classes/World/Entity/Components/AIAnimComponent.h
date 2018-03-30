@@ -14,8 +14,8 @@ public:
 	// Load animation configuration from xml file
 	void loadConfig(tinyxml2::XMLNode* pNode);
 
-	void playIdleAnimation();
-	void playRunAnimation();
+	void PlayIdleAnimation();
+	void PlayRunAnimation();
 	void playAttackAnimationWithCallback(std::function<void()> onFinished);
 
 private:

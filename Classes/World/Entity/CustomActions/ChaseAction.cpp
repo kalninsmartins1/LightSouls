@@ -48,7 +48,7 @@ void ChaseAction::step(float dt)
 		m_agent.GetCurrentMoveSpeed() * dt);
 
 	// Check if attack distance has been reached
-	if (toTarget.length() <= m_agent.getAttackRadius())
+	if (toTarget.length() <= m_agent.GetAttackRadius())
 	{
 		// Attack distance has been reached - state finished
 		m_bIsDone = true;

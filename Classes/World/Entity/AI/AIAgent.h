@@ -12,8 +12,8 @@ public:
 	virtual void update(float deltaTime) override;
 
 	float getPatrolPause() const;
-	float getActiveRadius() const;
-	float getAttackRadius() const;
+	float GetActiveRadius() const;
+	float GetAttackRadius() const;
 	const String& getType() const;
 	const Vector2& getBasePosition() const;	
 

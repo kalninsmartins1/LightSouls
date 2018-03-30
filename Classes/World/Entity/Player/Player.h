@@ -13,13 +13,17 @@ class Player: public Entity
 public:
 	Player();
 
+	static const std::string& GetOnHealthChangedEvent();
+
 	void SetTimeBetweenComboInput(float timeBetweenComboInput);
 	
 	static Player*	Create(const std::string& pPathToXML);
 	bool			Init(const std::string& pathToXML);
 	
-	virtual void update(float deltaTime) override;
+	virtual void	update(float deltaTime) override;
 
+protected:
+	virtual void DispatchOnHealthChangedEvent() override;
 
 private:
 	void OnDodgeFinished();
@@ -35,9 +39,11 @@ private:
 	// Returns negative value if time for combo has expired
 	float GetSecondsForValidLighAttackCombo() const;
 
-	PlayerAnimComponent*	m_animComponent;
-	AttackComponent*		m_attackComponent;
-	Vector2					m_lastValidMoveDirection;
+private:
+	static const std::string	s_eventOnPlayerHealthChanged;
+	PlayerAnimComponent*		m_animComponent;
+	AttackComponent*			m_attackComponent;
+	Vector2						m_lastValidMoveDirection;
 
 	bool				m_bIsAttackComboDelayExpired;
 	float				m_timeBetweenComboInput;

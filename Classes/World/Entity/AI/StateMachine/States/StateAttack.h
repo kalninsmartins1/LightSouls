@@ -1,30 +1,30 @@
 #pragma once
 
 #include "IState.h"
-#include "World/Entity/Entity.h"
-#include "World/Entity/Components/RangedAttackComponent.h"
 
 class AIAgent;
+class Entity;
+class AttackComponent;
 
 class StateAttack: public IState
 {
 public:
 	StateAttack(AIAgent& agent);
-	bool init();
+	AIState					GetStateType() override;
 
-	virtual void onEnter(AIAnimComponent* pAnimComponent) override;
-	virtual StateProgress onStep() override;
-	virtual void onExit() override;
-	AIState getStateType() override;
+	bool					Init();
+	virtual void			OnEnter(AIAnimComponent* animComponent) override;
+	virtual StateProgress	OnStep() override;
+	virtual void			OnExit() override;
 
 private:
 
-	void onAttackFinished();
+	void					OnAttackFinished();
 
-	StateProgress m_curProgress;
-	AIAgent& m_agent;
-	const Entity& m_targetEntity;
-	AttackComponent* m_pAttackComponent;
-	AIAnimComponent* m_pAnimComponent;
-	bool m_bIsAttackAnimFinished;
+	StateProgress		m_curProgress;
+	AIAgent&			m_agent;
+	const Entity&		m_targetEntity;
+	AttackComponent*	m_attackComponent;
+	AIAnimComponent*	m_animComponent;
+	bool				m_isAttackAnimFinished;
 };

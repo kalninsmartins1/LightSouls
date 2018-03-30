@@ -58,7 +58,7 @@ float GameInput::getInputAxis(const std::string& axisAction) const
 		}
 		else
 		{
-			Utils::assertWithStrFormat(false,
+			Utils::AssertWithStrFormat(false,
 				"GameInput: Axis action %s for keyboard or mouse not found !",
 				axisAction);
 		}
@@ -69,7 +69,7 @@ float GameInput::getInputAxis(const std::string& axisAction) const
 	}
 	else
 	{
-		Utils::assertWithStrFormat(false,
+		Utils::AssertWithStrFormat(false,
 			"GameInput: Axis action %s for controller not found !",
 			axisAction);
 	}
@@ -123,7 +123,7 @@ bool GameInput::hasActionState(const std::string& action) const
 		}
 		else
 		{
-			Utils::assertWithStrFormat(false,
+			Utils::AssertWithStrFormat(false,
 				"GameInput: State button %s for keyboard or mouse not found !",
 				action);
 		}
@@ -134,7 +134,7 @@ bool GameInput::hasActionState(const std::string& action) const
 	}
 	else
 	{
-		Utils::assertWithStrFormat(false,
+		Utils::AssertWithStrFormat(false,
 			"GameInput: State button %s for controller not found !",
 			action);
 	}
@@ -213,48 +213,48 @@ void GameInput::addStateInput(GameInputType inputType, const std::string& action
 
 void GameInput::addKeyboardActionKey(const std::string& actionName, const std::string& inputCode) const
 {
-	const int keyCode = static_cast<int>(Utils::convertStringToKeyCode(inputCode));
+	const int keyCode = static_cast<int>(Utils::ConvertStringToKeyCode(inputCode));
 	m_pKeyboard->addActionButton(actionName, ActionButton(keyCode));
 }
 
 void GameInput::addKeyboardStateKey(const std::string& actionName, const std::string& inputCode) const
 {
-	const int keyCode = static_cast<int>(Utils::convertStringToKeyCode(inputCode));
+	const int keyCode = static_cast<int>(Utils::ConvertStringToKeyCode(inputCode));
 	m_pKeyboard->addStateButton(actionName, StateButton(keyCode));
 }
 
 void GameInput::addKeyboardAxis(const std::string& actionName, const std::string& keyCodeFromStr,
 	const std::string& keyCodeToStr, float valueFrom, float valueTo) const
 {
-	const KeyCode keyCodeFrom = Utils::convertStringToKeyCode(keyCodeFromStr);
-	const KeyCode keyCodeTo = Utils::convertStringToKeyCode(keyCodeToStr);
+	const KeyCode keyCodeFrom = Utils::ConvertStringToKeyCode(keyCodeFromStr);
+	const KeyCode keyCodeTo = Utils::ConvertStringToKeyCode(keyCodeToStr);
 	const KeyboardAxis key = KeyboardAxis(keyCodeFrom, keyCodeTo, valueFrom, valueTo);
 	m_pKeyboard->addKeyboardAxis(actionName, key);
 }
 
 void GameInput::addMouseActionButton(const std::string& actionName, const std::string& inputCode) const
 {
-	const int buttonCode = static_cast<int>(Utils::convertStringToMouseButtonCode(inputCode));
+	const int buttonCode = static_cast<int>(Utils::ConvertStringToMouseButtonCode(inputCode));
 	m_pMouseInput->addActionButton(actionName, buttonCode);
 }
 
 void GameInput::addMouseStateButton(const std::string& actionName, const std::string& inputCode) const
 {
-	const int buttonCode = static_cast<int>(Utils::convertStringToMouseButtonCode(inputCode));
+	const int buttonCode = static_cast<int>(Utils::ConvertStringToMouseButtonCode(inputCode));
 	m_pMouseInput->addStateButton(actionName, buttonCode);
 }
 
 void GameInput::addGameControllerActionButtons(const std::string& actionName, const std::string& inputCode) const
 {
 	const int buttonCode = static_cast<int>(
-		Utils::convertStringToGameControllerButton(inputCode));
+		Utils::ConvertStringToGameControllerButton(inputCode));
 	m_pGameControllerInput->addActionButton(actionName, buttonCode);
 }
 
 void GameInput::addGameControllerStateButtons(const std::string& actionName, const std::string& inputCode) const
 {
 	const int buttonCode = static_cast<int>(
-		Utils::convertStringToGameControllerButton(inputCode));
+		Utils::ConvertStringToGameControllerButton(inputCode));
 	m_pGameControllerInput->addStateButton(actionName, buttonCode);
 }
 
@@ -262,7 +262,7 @@ void GameInput::addGameControllerAxis(const std::string& actionName, const std::
 	float valueTo) const
 {
 	const int buttonCode = static_cast<int>(
-		Utils::convertStringToGameControllerAxis(axisName));
+		Utils::ConvertStringToGameControllerAxis(axisName));
 
 	const ControllerAxis axis = ControllerAxis(buttonCode, valueFrom, valueTo);
 	m_pGameControllerInput->addAxisButton(actionName, axis);

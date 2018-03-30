@@ -93,7 +93,7 @@ void KeyboardInput::updateAxisKeyState(float deltaTime)
 void KeyboardInput::setActionKeyState(bool bIsActive, KeyCode keyCode)
 {
 	const int code = static_cast<int>(keyCode);
-	if (Utils::containsKey(m_buttonCodeToAction, code))
+	if (Utils::ContainsKey(m_buttonCodeToAction, code))
 	{
 		const std::string& actionName = m_buttonCodeToAction[code];
 		m_actionButtons[actionName].bIsActive = bIsActive;
@@ -107,7 +107,7 @@ void KeyboardInput::setStateKeyState(bool bIsPressed, KeyCode keyCode)
 	 * state to specified on.
 	 */
 	const int code = static_cast<int>(keyCode);
-	if (Utils::containsKey(m_buttonCodeToStateAction, code))
+	if (Utils::ContainsKey(m_buttonCodeToStateAction, code))
 	{
 		const std::string& actionName = m_buttonCodeToStateAction[code];
 		m_stateButtons[actionName].bIsPressed = bIsPressed;
@@ -116,7 +116,7 @@ void KeyboardInput::setStateKeyState(bool bIsPressed, KeyCode keyCode)
 
 void KeyboardInput::setKeyboardAxisState(bool bIsPressed, KeyCode keyCode)
 {
-	if (Utils::containsKey(m_keyCodeToAxisAction, keyCode))
+	if (Utils::ContainsKey(m_keyCodeToAxisAction, keyCode))
 	{
 		const std::string& action = m_keyCodeToAxisAction[keyCode];
 		KeyboardAxis& axis = m_keyboardAxis[action];
@@ -140,7 +140,7 @@ void KeyboardInput::setKeyboardAxisState(bool bIsPressed, KeyCode keyCode)
 bool KeyboardInput::hasAction(const std::string& action) const
 {
 	bool bHasAction = false;
-	if (Utils::containsKey(m_actionButtons, action))
+	if (Utils::ContainsKey(m_actionButtons, action))
 	{
 		bHasAction = m_actionButtons.at(action).bIsActive;
 	}
@@ -151,7 +151,7 @@ bool KeyboardInput::hasAction(const std::string& action) const
 bool KeyboardInput::hasActionState(const std::string& action) const
 {
 	bool bHasActionState = false;
-	if (Utils::containsKey(m_stateButtons, action))
+	if (Utils::ContainsKey(m_stateButtons, action))
 	{
 		bHasActionState = m_stateButtons.at(action).bIsPressed;
 	}
@@ -161,7 +161,7 @@ bool KeyboardInput::hasActionState(const std::string& action) const
 float KeyboardInput::getAxisInput(const std::string& axisName) const
 {
 	float value = 0;
-	if (Utils::containsKey(m_keyboardAxis, axisName))
+	if (Utils::ContainsKey(m_keyboardAxis, axisName))
 	{
 		// Return the sum of all axis key values
 		value = m_keyboardAxis.at(axisName).currentValue;
@@ -171,22 +171,22 @@ float KeyboardInput::getAxisInput(const std::string& axisName) const
 
 bool KeyboardInput::hasAxisInput(const std::string& axisName) const
 {
-	return Utils::containsKey(m_keyboardAxis, axisName);
+	return Utils::ContainsKey(m_keyboardAxis, axisName);
 }
 
 void KeyboardInput::increaseAxisCurValue(KeyboardAxis & keyboardAxis, float value, float deltaTime)
 {
-	keyboardAxis.currentValue += Utils::getSign(value) * deltaTime;
+	keyboardAxis.currentValue += Utils::GetSign(value) * deltaTime;
 
 	// Make sure we stay in range
 	if (keyboardAxis.fromValue > keyboardAxis.toValue)
 	{
-		Utils::clampValue(keyboardAxis.currentValue,
+		Utils::ClampValue(keyboardAxis.currentValue,
 			keyboardAxis.toValue, keyboardAxis.fromValue);
 	}
 	else
 	{
-		Utils::clampValue(keyboardAxis.currentValue,
+		Utils::ClampValue(keyboardAxis.currentValue,
 			keyboardAxis.fromValue, keyboardAxis.toValue);
 	}
 }

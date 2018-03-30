@@ -6,6 +6,8 @@
 #include "Utils/Utils.h"
 #include "World/Entity/AI/AIAgentManager.h"
 #include "World/Physics/PhysicsManager.h"
+#include "UI/InGameIndicators/ProgressBar.h"
+#include "Events/HealthChangedEventData.h"
 
 USING_NS_CC;
 
@@ -73,6 +75,8 @@ void HelloWorld::update(float deltaTime)
 		world->setDebugDrawMask(0xFFFFFF);
 		world->setDebugDrawCameraMask(CameraFlag::USER1);
 	}
+
+	m_healthBar->Update(deltaTime);
 }
 
 void HelloWorld::InitWolrdLayer()
@@ -86,6 +90,9 @@ void HelloWorld::InitWolrdLayer()
 	// Init player
 	m_player = Player::Create("res/Configs/World/Player/Player.xml");
 	worldLayer->addChild(m_player);
+	
+	getEventDispatcher()->addCustomEventListener(Player::GetOnHealthChangedEvent(),
+		CC_CALLBACK_1(HelloWorld::OnPlayerHealthChanged, this));
 
 	// Init AI
 	AIAgentManager* agentManager = AIAgentManager::GetInstance();
@@ -118,12 +125,22 @@ void HelloWorld::InitUILayer()
 {
 	// Init UI
 	Node* uiLayer = Node::create();
+	uiLayer->setContentSize(Utils::GetScreenSize());
+
 	Sprite* screenOverlay = Sprite::create("res/Graphics/UI/screenOverlay.png");
 	const Vec2 scale = Utils::GetScreenFillScale(screenOverlay->getContentSize());
 	screenOverlay->setScale(scale.x, scale.y);
 	screenOverlay->setAnchorPoint(Vec2::ZERO);
 
+	m_healthBar = ProgressBar::Create("res/Configs/UI/InGameIndicators/HealthBar.xml");
+	if (m_healthBar == nullptr)
+	{
+		CCLOG("HelloWorldScene: Failed to initialize health bar !");
+	}
+	
+	// TODO: Add stamina bar
 	uiLayer->addChild(screenOverlay);
+	uiLayer->addChild(m_healthBar);
 	uiLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));
 	addChild(uiLayer);
 
@@ -131,5 +148,15 @@ void HelloWorld::InitUILayer()
 	Camera* pUICamera = Camera::create();
 	pUICamera->setCameraFlag(CameraFlag::USER2);
 	addChild(pUICamera);
+}
+
+void HelloWorld::OnPlayerHealthChanged(EventCustom* eventData)
+{
+	auto healthData = static_cast<HealthChangedEventData*>(eventData->getUserData());
+	
+	if (healthData != nullptr)
+	{
+		m_healthBar->SetCurrentValue(healthData->GetHealthPercentage());
+	}	
 }
 

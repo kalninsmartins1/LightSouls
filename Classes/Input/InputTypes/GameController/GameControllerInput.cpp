@@ -42,7 +42,7 @@ bool GameControllerInput::init()
 bool GameControllerInput::hasAction(const std::string& action) const
 {
 	bool bHasAction = false;
-	if (Utils::containsKey(m_actionButtons, action))
+	if (Utils::ContainsKey(m_actionButtons, action))
 	{
 		bHasAction = m_actionButtons.at(action).bIsActive;
 	}
@@ -53,7 +53,7 @@ bool GameControllerInput::hasAction(const std::string& action) const
 bool GameControllerInput::hasActionState(const std::string& action) const
 {
 	bool bHasActionState = false;
-	if (Utils::containsKey(m_stateButtons, action))
+	if (Utils::ContainsKey(m_stateButtons, action))
 	{
 		bHasActionState = m_stateButtons.at(action).bIsPressed;
 	}
@@ -64,7 +64,7 @@ bool GameControllerInput::hasActionState(const std::string& action) const
 float GameControllerInput::getAxisInput(const std::string& axisName) const
 {
 	float value = 0;
-	if (Utils::containsKey(m_controllerAxis, axisName))
+	if (Utils::ContainsKey(m_controllerAxis, axisName))
 	{
 		value = m_controllerAxis.at(axisName).curValue;
 	}
@@ -75,7 +75,7 @@ float GameControllerInput::getAxisInput(const std::string& axisName) const
 bool GameControllerInput::hasAxisInput(const std::string& axisName) const
 {
 	bool bHasAxisInput = false;
-	if (Utils::containsKey(m_controllerAxis, axisName))
+	if (Utils::ContainsKey(m_controllerAxis, axisName))
 	{
 		bHasAxisInput = m_controllerAxis.at(axisName).bIsPressed;
 	}
@@ -139,7 +139,7 @@ void GameControllerInput::onAxisInput(Controller* pController, int buttonCode,
 
 void GameControllerInput::setActionButtonState(bool bIsActive, int buttonCode)
 {
-	if (Utils::containsKey(m_buttonCodeToAction, buttonCode))
+	if (Utils::ContainsKey(m_buttonCodeToAction, buttonCode))
 	{
 		std::string& actionName = m_buttonCodeToAction[buttonCode];
 		m_actionButtons[actionName].bIsActive = bIsActive;
@@ -148,7 +148,7 @@ void GameControllerInput::setActionButtonState(bool bIsActive, int buttonCode)
 
 void GameControllerInput::setStateButtonState(bool bIsPressed, int buttonCode)
 {
-	if (Utils::containsKey(m_buttonCodeToStateAction, buttonCode))
+	if (Utils::ContainsKey(m_buttonCodeToStateAction, buttonCode))
 	{
 		std::string& actionName = m_buttonCodeToStateAction[buttonCode];
 		m_stateButtons[actionName].bIsPressed = bIsPressed;
@@ -157,7 +157,7 @@ void GameControllerInput::setStateButtonState(bool bIsPressed, int buttonCode)
 
 void GameControllerInput::setAxisInputState(float value, int buttonCode)
 {
-	if (Utils::containsKey(m_buttonCodeToAxisAction, buttonCode))
+	if (Utils::ContainsKey(m_buttonCodeToAxisAction, buttonCode))
 	{
 		std::string& actionName = m_buttonCodeToAxisAction[buttonCode];
 		ControllerAxis& axis = m_controllerAxis[actionName];
@@ -169,11 +169,11 @@ void GameControllerInput::setAxisInputState(float value, int buttonCode)
 			// Clamp axis value to specified range
 			if (axis.toValue > axis.fromValue)
 			{
-				Utils::clampValue(axis.curValue, axis.fromValue, axis.toValue);
+				Utils::ClampValue(axis.curValue, axis.fromValue, axis.toValue);
 			}
 			else
 			{
-				Utils::clampValue(axis.curValue, axis.toValue, axis.fromValue);
+				Utils::ClampValue(axis.curValue, axis.toValue, axis.fromValue);
 			}
 		}
 		else

@@ -3,34 +3,32 @@
 #include "GameConsts.h"
 #include "Utils/Utils.h"
 
-using namespace cocos2d;
-
 StatePatrol::StatePatrol(AIAgent& agent):
 	m_agent(agent),
-	m_targetEntity(AIAgentManager::GetInstance()->getTargetEntity()),
+	m_targetEntity(AIAgentManager::GetInstance()->GetTargetEntity()),
 	m_curProgress(StateProgress::NONE),
-	m_pAnimComponent(nullptr)
+	m_animComponent(nullptr)
 {
 }
 
-void StatePatrol::onEnter(AIAnimComponent* pAnimComponent)
+void StatePatrol::OnEnter(AIAnimComponent* animComponent)
 {
-	m_pAnimComponent = pAnimComponent;
+	m_animComponent = animComponent;
 	m_curProgress = StateProgress::IN_PROGRESS;	
 }
 
-StateProgress StatePatrol::onStep()
+StateProgress StatePatrol::OnStep()
 {
 	if(m_curProgress == StateProgress::IN_PROGRESS)
 	{
 		// First check if player has been spotted
-		if (hasTargetBeenSpotted())
+		if (HasTargetBeenSpotted())
 		{
 			m_curProgress = StateProgress::DONE;
 		}
 		else
 		{
-			// If move action is fiished then start new move action
+			// If move action is finished then start new move action
 			const auto actionManager = m_agent.getActionManager();
 			const auto moveToPositionAction = actionManager->
 				getActionByTag(ACTION_MOVE_TAG, &m_agent);
@@ -38,8 +36,8 @@ StateProgress StatePatrol::onStep()
 			if (moveToPositionAction == nullptr ||
 				moveToPositionAction->isDone())
 			{
-				moveToRandomPositionAndWait();
-				m_pAnimComponent->playRunAnimation();
+				MoveToRandomPositionAndWait();
+				m_animComponent->PlayRunAnimation();
 			}
 		}		
 	}
@@ -47,18 +45,20 @@ StateProgress StatePatrol::onStep()
 	return m_curProgress;
 }
 
-void StatePatrol::onExit()
+void StatePatrol::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
 }
 
-AIState StatePatrol::getStateType()
+AIState StatePatrol::GetStateType()
 {
 	return AIState::PATROL;
 }
 
-float StatePatrol::getTimeToReachTarget(const Vec2& targetPosition) const
+float StatePatrol::GetTimeToReachTarget(const cocos2d::Vec2& targetPosition) const
 {
+	using namespace cocos2d;
+	
 	const Vec2& curAgentPosition = m_agent.getPosition();	
 	const float distanceToTargetPosition = targetPosition.distance(curAgentPosition);
 	const float agentMoveSpeed = m_agent.GetCurrentMoveSpeed();
@@ -73,46 +73,49 @@ float StatePatrol::getTimeToReachTarget(const Vec2& targetPosition) const
 	return timeToGetToTarget;
 }
 
-bool StatePatrol::hasTargetBeenSpotted() const
+bool StatePatrol::HasTargetBeenSpotted() const
 {
-	// Check if target has been spoted
+	using namespace cocos2d;
+
+	// Check if target has been spotted
 	const Vec2& agentPosition = m_agent.getPosition();
 	const Vec2& targetEntityPosition = m_targetEntity.getPosition();
 	const float distanceToTargetEntity = targetEntityPosition
 		.distance(agentPosition);
 
-	return distanceToTargetEntity < m_agent.getAttackRadius();
+	return distanceToTargetEntity < m_agent.GetAttackRadius();
 }
 
-void StatePatrol::moveToRandomPositionAndWait() const
+void StatePatrol::MoveToRandomPositionAndWait() const
 {
-	// Get random position within range
-	const float angle = Utils::getRandAngleInRadians();
-	const float agentActiveRadiues = m_agent.getActiveRadius();
-	const float targetX = cos(angle) * agentActiveRadiues;
-	const float targetY = sin(angle) * agentActiveRadiues;
+	using namespace cocos2d;
+
+	float curPosX = m_agent.getPositionX();
+	float agentRadius = m_agent.GetActiveRadius();
+	float randXPosition = Utils::GetRandValueWithinRange(
+		curPosX - agentRadius, 
+		curPosX + agentRadius);
 
 	// Get time it takes for agent to move to position
 	const Vec2 targetPosition = m_agent.getBasePosition() +
-		Vec2(targetX, targetY);
+		Vec2(randXPosition, 0);
 
-	const float timeToReachTarget =
-		getTimeToReachTarget(targetPosition);
+	const float timeToReachTarget = GetTimeToReachTarget(targetPosition);
 	
 	// Update agents moving direction
 	const Vec2 toTarget = targetPosition - m_agent.getPosition();
 	m_agent.SetMoveDirection(toTarget.getNormalized());
 
 	// Move the agent to target position using move action
-	const auto pMoveTo = MoveTo::create(timeToReachTarget, targetPosition);
-	const auto pCallback = CallFunc::create(CC_CALLBACK_0(StatePatrol::onFinishedMoving, this));
-	const auto pDelay = DelayTime::create(m_agent.getPatrolPause());
-	Sequence* pSequence = Sequence::create(pMoveTo, pCallback, pDelay, nullptr);
-	pSequence->setTag(ACTION_MOVE_TAG);
-	m_agent.runAction(pSequence);
+	const auto moveTo = MoveTo::create(timeToReachTarget, targetPosition);
+	const auto callback = CallFunc::create(CC_CALLBACK_0(StatePatrol::OnFinishedMoving, this));
+	const auto delay = DelayTime::create(m_agent.getPatrolPause());
+	Sequence* sequence = Sequence::create(moveTo, callback, delay, nullptr);
+	sequence->setTag(ACTION_MOVE_TAG);
+	m_agent.runAction(sequence);
 }
 
-void StatePatrol::onFinishedMoving() const
+void StatePatrol::OnFinishedMoving() const
 {
-	m_pAnimComponent->playIdleAnimation();
+	m_animComponent->PlayIdleAnimation();
 }

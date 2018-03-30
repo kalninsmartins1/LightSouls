@@ -17,7 +17,7 @@ StateMachine::StateMachine(AIAgent& agent) :
 void StateMachine::start(AIAnimComponent* pAIAnimComponent)
 {
 	m_pAnimComponent = pAIAnimComponent;
-	m_attackState.init();
+	m_attackState.Init();
 	switchState(m_patrolState);
 }
 
@@ -25,15 +25,15 @@ void StateMachine::switchState(IState& newState)
 {
 	if(m_curState != nullptr)
 	{
-		m_curState->onExit();
+		m_curState->OnExit();
 	}	
 	m_curState = &newState;
-	m_curState->onEnter(m_pAnimComponent);	
+	m_curState->OnEnter(m_pAnimComponent);	
 }
 
 void StateMachine::onStep()
 {
-	const StateProgress& curProgress = m_curState->onStep();
+	const StateProgress& curProgress = m_curState->OnStep();
 	switch (curProgress)
 	{
 	case StateProgress::IN_PROGRESS:
@@ -58,7 +58,7 @@ void StateMachine::onStep()
 void StateMachine::onStateDone()
 {
 	// Switch state
-	switch (m_curState->getStateType())
+	switch (m_curState->GetStateType())
 	{
 	case AIState::CHASE:
 		switchState(m_attackState);
@@ -81,7 +81,7 @@ void StateMachine::onStateDone()
 void StateMachine::onStateFailed()
 {
 	// Switch state
-	switch (m_curState->getStateType())
+	switch (m_curState->GetStateType())
 	{
 	case AIState::CHASE:
 		switchState(m_patrolState);

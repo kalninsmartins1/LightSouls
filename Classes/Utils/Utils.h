@@ -3,50 +3,53 @@
 #include "cocos2d.h"
 #include "Input/InputTypes/GameController/GameControllerInput.h"
 
-typedef cocos2d::EventMouse::MouseButton MouseButtonCode;
-typedef cocos2d::EventKeyboard::KeyCode KeyCode;
+using MouseButtonCode = cocos2d::EventMouse::MouseButton;
+using KeyCode = cocos2d::EventKeyboard::KeyCode;
 
 class Utils
 {	
 public:
-
-	static long long getTimeStampInMilliseconds();
-	static float convertMillisecondsToSeconds(long long milliseconds);
-	static void startTimerWithCallback(cocos2d::Node* pNode,
-		std::function<void()> callback, float time);
-
-	static float getRandAngleInRadians();
-	static cocos2d::Vec2 GetScreenFillScale(const cocos2d::Size& curSize);
-	static void logVec2(const cocos2d::Vec2& v);
-	static void logVec3(const cocos2d::Vec3& v);
-	static void assertWithStrFormat(bool condition, const std::string& msg, const std::string& param);
-
-	static MouseButtonCode convertStringToMouseButtonCode(const std::string& mouseButtonStr);
-	static KeyCode convertStringToKeyCode(const std::string& keyCodeStr);
-	static X360Axes convertStringToGameControllerAxis(const std::string& controllerAxisStr);
-	static X360Button convertStringToGameControllerButton(const std::string& controllerButtonStr);
-
 	// Returns -1 if value is negative, else returns 1
-	static int getSign(const float& value);
+	static int					GetSign(const float& value);
+	static float				GetRandValueWithinRange(int minValue, int maxValue);
+	static cocos2d::Vec2		GetRandomPositionWithinCircle(const cocos2d::Vec2 centerPos, float radius);
+	static float				GetRandAngleInRadians();
+	static cocos2d::Vec2		GetScreenFillScale(const cocos2d::Size& curSize);
+	static const cocos2d::Size& GetScreenSize();
+
+	static float		SafeDevide(const float& up, const float& down);
+	static long long	GetTimeStampInMilliseconds();
+	static float		ConvertMillisecondsToSeconds(long long milliseconds);
+	static void			StartTimerWithCallback(cocos2d::Node* node,
+							std::function<void()> callback, float time);
+
+	static void LogVec2(const cocos2d::Vec2& v);
+	static void LogVec3(const cocos2d::Vec3& v);
+	static void AssertWithStrFormat(bool condition, const std::string& msg, const std::string& param);
+
+	static MouseButtonCode	ConvertStringToMouseButtonCode(const std::string& mouseButtonStr);
+	static KeyCode			ConvertStringToKeyCode(const std::string& keyCodeStr);
+	static X360Axes			ConvertStringToGameControllerAxis(const std::string& controllerAxisStr);
+	static X360Button		ConvertStringToGameControllerButton(const std::string& controllerButtonStr);
 
 	template <typename T, typename K>
-	static bool containsKey(const std::map<T, K>& map, const T& key);
+	static bool ContainsKey(const std::map<T, K>& map, const T& key);
 
 	template <typename T, typename K>
-	static bool containsKey(const cocos2d::Map<T, K>& map, const T& key);
+	static bool ContainsKey(const cocos2d::Map<T, K>& map, const T& key);
 
 	template <typename T>
-	static void clampValue(T& value, const T& minValue, const T& maxValue);
+	static void ClampValue(T& value, const T& minValue, const T& maxValue);
 	
 	template <typename T>
-	static void wrapValue(T& value, const T& startValue, const T& endValue);
+	static void WrapValue(T& value, const T& startValue, const T& endValue);
 
 private:
 	Utils();
 };
 
 template <typename T, typename K>
-bool Utils::containsKey(const std::map<T, K>& map, const T& key)
+bool Utils::ContainsKey(const std::map<T, K>& map, const T& key)
 {
 	bool bDoesContainKey = true;
 	auto it = map.find(key);
@@ -59,7 +62,7 @@ bool Utils::containsKey(const std::map<T, K>& map, const T& key)
 }
 
 template <typename T, typename K>
-bool Utils::containsKey(const cocos2d::Map<T, K>& map, const T& key)
+bool Utils::ContainsKey(const cocos2d::Map<T, K>& map, const T& key)
 {
 	bool bDoesContainKey = true;
 	auto it = map.find(key);
@@ -72,7 +75,7 @@ bool Utils::containsKey(const cocos2d::Map<T, K>& map, const T& key)
 }
 
 template <typename T>
-void Utils::clampValue(T& value, const T& minValue, const T& maxValue)
+void Utils::ClampValue(T& value, const T& minValue, const T& maxValue)
 {
 	if(value > maxValue)
 	{
@@ -85,7 +88,7 @@ void Utils::clampValue(T& value, const T& minValue, const T& maxValue)
 }
 
 template <typename T>
-void Utils::wrapValue(T& value, const T& startValue, const T& endValue)
+void Utils::WrapValue(T& value, const T& startValue, const T& endValue)
 {
 	if(value > endValue)
 	{

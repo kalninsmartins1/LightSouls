@@ -61,6 +61,15 @@
     <Filter Include="src\World\Physics">
       <UniqueIdentifier>{6e0cdc4d-6d35-4890-a1fd-7ed05b502dd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\UI">
+      <UniqueIdentifier>{85337072-40c3-4f82-ae68-7a6ebaac54b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\UI\InGameIndicators">
+      <UniqueIdentifier>{c2b53128-5850-45b2-b177-0be2d4231c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Events">
+      <UniqueIdentifier>{301eeaac-0e7a-439b-8505-c8e22b6c876a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -155,6 +164,18 @@
     </ClCompile>
     <ClCompile Include="..\Classes\World\Physics\PhysicsBodyConfig.cpp">
       <Filter>src\World\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UI\UIElementConfig.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UI\InGameIndicators\ProgressBar.cpp">
+      <Filter>src\UI\InGameIndicators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Events\HealthChangedEventData.cpp">
+      <Filter>src\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Events\IEventData.cpp">
+      <Filter>src\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +280,18 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Physics\PhysicsBodyConfig.h">
       <Filter>src\World\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UI\UIElementConfig.h">
+      <Filter>src\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UI\InGameIndicators\ProgressBar.h">
+      <Filter>src\UI\InGameIndicators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Events\HealthChangedEventData.h">
+      <Filter>src\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Events\IEventData.h">
+      <Filter>src\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

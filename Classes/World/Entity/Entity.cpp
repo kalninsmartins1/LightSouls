@@ -15,7 +15,7 @@ Entity::Entity() :
 	m_moveSpeed(0),
 	m_dodgeSpeed(0),
 	m_dodgeTime(0),
-	m_Id(s_uniqueId++)
+	m_id(s_uniqueId++)
 {
 }
 
@@ -71,6 +71,8 @@ void Entity::TakeDamage(float damage)
 		{
 			m_health = 0;
 		}
+		
+		DispatchOnHealthChangedEvent();
 	}
 }
 
@@ -100,6 +102,11 @@ void Entity::update(float deltaTime)
 {
 	Sprite::update(deltaTime);
 	m_isRuning = m_moveDirection.lengthSquared() > 0;
+}
+
+void Entity::DispatchOnHealthChangedEvent()
+{
+	// Does nothing by default
 }
 
 float Entity::GetCurrentMoveSpeed() const
@@ -137,9 +144,19 @@ float Entity::GetDodgeSpeed() const
 	return m_dodgeSpeed;
 }
 
+float Entity::GetCurrentHealth() const
+{
+	return m_health;
+}
+
+float Entity::GetMaxHealth() const
+{
+	return m_baseHealth;
+}
+
 unsigned Entity::GetId() const
 {
-	return m_Id;
+	return m_id;
 }
 
 bool Entity::IsRunning() const

@@ -6,22 +6,26 @@
 #include "Input/GameInput.h"
 #include "physics3d/CCPhysics3DWorld.h"
 #include "World/Physics/PhysicsManager.h"
+#include "Events/HealthChangedEventData.h"
+#include "cocos2d/cocos/base/CCEventDispatcher.h"
 
 using namespace cocos2d;
 
+const std::string Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
+
 Player* Player::Create(const std::string& pathToXML)
 {
-	Player* pPlayer = new (std::nothrow) Player();
-	if (pPlayer && pPlayer->Init(pathToXML))
+	Player* player = new (std::nothrow) Player();
+	if (player && player->Init(pathToXML))
 	{
-		pPlayer->autorelease();
+		player->autorelease();
 	}
 	else
 	{
-		CC_SAFE_DELETE(pPlayer);
+		CC_SAFE_DELETE(player);
 	}
 
-	return pPlayer;
+	return player;
 }
 
 Player::Player() :
@@ -33,6 +37,11 @@ Player::Player() :
 	m_lastTimePerformedLightAttack(0),
 	m_curLightAttackAnimIdx(0)
 {
+}
+
+const std::string& Player::GetOnHealthChangedEvent()
+{
+	return s_eventOnPlayerHealthChanged;
 }
 
 bool Player::Init(const std::string& pathToXML)
@@ -89,7 +98,7 @@ void Player::OnAttackFinished()
 
 	// Start light attack combo expiration
 	const float secondsBeforeComboInputExpires = GetSecondsForValidLighAttackCombo();
-	Utils::startTimerWithCallback(this, 
+	Utils::StartTimerWithCallback(this, 
 		CC_CALLBACK_0(Player::OnLightAttackComboExpired, this),
 		secondsBeforeComboInputExpires);
 
@@ -146,7 +155,7 @@ void Player::LightAttack()
 			m_curLightAttackAnimIdx++;
 			
 			// Wrap the index within valid values
-			Utils::wrapValue(m_curLightAttackAnimIdx, 
+			Utils::WrapValue(m_curLightAttackAnimIdx, 
 				static_cast<unsigned short int>(LightAttackStage::ONE),
 				static_cast<unsigned short int>(LightAttackStage::FIVE));
 		}
@@ -164,7 +173,7 @@ void Player::LightAttack()
 		m_attackComponent->Attack(m_lastValidMoveDirection);
 		
 		// Set the time last light attack was performed
-		m_lastTimePerformedLightAttack = Utils::getTimeStampInMilliseconds();
+		m_lastTimePerformedLightAttack = Utils::GetTimeStampInMilliseconds();
 	}
 }
 
@@ -172,7 +181,7 @@ void Player::PerformDodge()
 {	
 	StartDodging();
 	m_animComponent->loopDodgeAnimation();
-	Utils::startTimerWithCallback(this,
+	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(Player::OnDodgeFinished, this), GetDodgeTime());
 }
 
@@ -196,6 +205,17 @@ void Player::PlayRunOrIdleAnimation() const
 	}
 }
 
+void Player::DispatchOnHealthChangedEvent()
+{
+	float currentHealth = GetCurrentHealth();
+	float healthPercentage = Utils::SafeDevide(currentHealth, GetMaxHealth());
+	auto eventData = HealthChangedEventData(GetId(), currentHealth, healthPercentage);
+	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerHealthChanged,
+		&eventData);
+
+	CCLOG("Player health changed %f", GetCurrentHealth());
+}
+
 void Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
 	const std::string& name = otherBody->getNode()->getName();
@@ -204,7 +224,7 @@ void Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 
 float Player::GetSecondsForValidLighAttackCombo() const
 {
-	const long currnentTime = Utils::getTimeStampInMilliseconds();
+	const long currnentTime = Utils::GetTimeStampInMilliseconds();
 	const float secondsSinceLastAttack = // Devide by 1000 to convert to seconds
 		(currnentTime - m_lastTimePerformedLightAttack) / 1000.f;
 

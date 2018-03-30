@@ -41,7 +41,7 @@ void MouseInput::addStateButton(const std::string& actionName, const StateButton
 bool MouseInput::hasAction(const std::string& action) const
 {
 	bool bIsActive = false;
-	if(Utils::containsKey(m_actionButtons, action))
+	if(Utils::ContainsKey(m_actionButtons, action))
 	{
 		bIsActive = m_actionButtons.at(action).bIsActive;
 	}
@@ -51,7 +51,7 @@ bool MouseInput::hasAction(const std::string& action) const
 bool MouseInput::hasActionState(const std::string& action) const 
 {
 	bool bIsActiveState = false;
-	if(Utils::containsKey(m_stateButtons, action))
+	if(Utils::ContainsKey(m_stateButtons, action))
 	{
 		bIsActiveState = m_stateButtons.at(action).bIsPressed;
 	}
@@ -86,7 +86,7 @@ void MouseInput::onMouseButtonUp(EventMouse* pEvent)
 void MouseInput::setActionButtonState(bool bIsActive, const MouseButtonCode& inputCode)	
 {
 	const int buttonCode = static_cast<int>(inputCode);
-	if (Utils::containsKey(m_buttonCodeToAction, buttonCode))
+	if (Utils::ContainsKey(m_buttonCodeToAction, buttonCode))
 	{
 		std::string& actionName = m_buttonCodeToAction[buttonCode];
 		m_actionButtons[actionName].bIsActive = bIsActive;
@@ -96,7 +96,7 @@ void MouseInput::setActionButtonState(bool bIsActive, const MouseButtonCode& inp
 void MouseInput::setStateButtonState(bool bIsPressed, const MouseButtonCode& inputCode)
 {
 	int buttonCode = static_cast<int>(inputCode);
-	if (Utils::containsKey(m_buttonCodeToStateAction, buttonCode))
+	if (Utils::ContainsKey(m_buttonCodeToStateAction, buttonCode))
 	{
 		std::string& actionName = m_buttonCodeToStateAction[buttonCode];
 		m_stateButtons[actionName].bIsPressed = bIsPressed;

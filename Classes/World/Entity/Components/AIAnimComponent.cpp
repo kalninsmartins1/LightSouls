@@ -53,13 +53,13 @@ void AIAnimComponent::loadConfig(XMLNode* pNode)
 	m_agentSprite.initWithSpriteFrame(m_idleFrames.at(0));
 }
 
-void AIAnimComponent::playIdleAnimation()
+void AIAnimComponent::PlayIdleAnimation()
 {
 	AnimationUtils::startSpriteFrameAnimation(&m_agentSprite, m_idleFrames,
 		m_timeBetweenIdleFrames);
 }
 
-void AIAnimComponent::playRunAnimation()
+void AIAnimComponent::PlayRunAnimation()
 {
 	AnimationUtils::startSpriteFrameAnimation(&m_agentSprite, m_runFrames,
 		m_timeBetweenRunFrames);

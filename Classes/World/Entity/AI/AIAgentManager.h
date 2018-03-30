@@ -13,7 +13,7 @@ public:
 	void SetWorldLayer(cocos2d::Node* pWorldLayer);
 	void SetTargetEntity(const Entity* pEntity);
 
-	const Entity& getTargetEntity() const;
+	const Entity& GetTargetEntity() const;
 	
 	void Update(float deltaTime);
 	void addAgentConfig(const std::string& type, const std::string& configPath);

@@ -73,12 +73,12 @@ float AIAgent::getPatrolPause() const
 	return m_patrolPauseInSeconds;
 }
 
-float AIAgent::getActiveRadius() const
+float AIAgent::GetActiveRadius() const
 {
 	return m_workingRadius;
 }
 
-float AIAgent::getAttackRadius() const
+float AIAgent::GetAttackRadius() const
 {
 	return m_attackRadius;
 }

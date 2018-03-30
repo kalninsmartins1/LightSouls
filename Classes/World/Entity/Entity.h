@@ -8,6 +8,7 @@ public:
 	using Vector2 = cocos2d::Vec2;
 	using String = std::string;
 
+public:
 	Entity();
 	virtual ~Entity();
 
@@ -18,6 +19,8 @@ public:
 	float					GetDamage() const;
 	float					GetDodgeTime() const;
 	float					GetDodgeSpeed() const;
+	float					GetCurrentHealth() const;
+	float					GetMaxHealth() const;
 	unsigned int			GetId() const;
 	bool					IsRunning() const;
 	bool					IsDodging() const;
@@ -38,9 +41,13 @@ public:
 	void StopAttacking();
 
 	virtual void update(float deltaTime) override;
-private:
-	static unsigned int s_uniqueId;
-	unsigned int		m_Id;
+
+protected:
+	virtual void DispatchOnHealthChangedEvent();
+
+private:	
+	static unsigned int			s_uniqueId;
+	unsigned int				m_id;
 
 	Vector2			m_moveDirection;
 	cocos2d::Size	m_physicsBodySize;

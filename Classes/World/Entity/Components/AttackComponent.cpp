@@ -9,15 +9,15 @@ AttackComponent::AttackComponent(float secondsBetweenAttacks):
 
 void AttackComponent::Attack(const Vector2& direction)
 {
-	m_lastTimeAttacked = Utils::getTimeStampInMilliseconds();
+	m_lastTimeAttacked = Utils::GetTimeStampInMilliseconds();
 }
 
 bool AttackComponent::IsReadyToAttack() const
 {
 	const long long millisecondsSinceLastAttack =
-		Utils::getTimeStampInMilliseconds() - m_lastTimeAttacked;
+		Utils::GetTimeStampInMilliseconds() - m_lastTimeAttacked;
 	const double secondsSinceLastAttack =
-		Utils::convertMillisecondsToSeconds(millisecondsSinceLastAttack);
+		Utils::ConvertMillisecondsToSeconds(millisecondsSinceLastAttack);
 
 	return secondsSinceLastAttack > m_secondsBetweenAttacks;
 }
