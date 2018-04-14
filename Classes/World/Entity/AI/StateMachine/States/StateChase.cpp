@@ -2,6 +2,7 @@
 #include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/AI/AIAgentManager.h"
 #include "World/Entity/CustomActions/ChaseAction.h"
+#include "World/Entity/CustomActions/ActionSequence.h"
 
 StateChase::StateChase(AIAgent& agent) :
 	m_curProgress(StateProgress::NONE),
@@ -15,13 +16,14 @@ void StateChase::OnEnter(AIAnimComponent* animComponent)
 	m_curProgress = StateProgress::IN_PROGRESS;
 
 	// Start chasing player
-	const auto chase = ChaseAction::create(m_targetEntity, m_agent);
+	const auto chase = ChaseAction::Create(m_targetEntity, m_agent);
 	const auto callBack = cocos2d::CallFunc::create(
 		CC_CALLBACK_0(StateChase::OnTargetReached, this));
-	m_agent.runAction(cocos2d::Sequence::create(
-		chase,
-		callBack,
-		nullptr));
+
+	auto sequence = ActionSequnce::Create();
+	sequence->AddAction(chase);
+	sequence->AddAction(callBack);
+	m_agent.runAction(sequence);
 
 	// Play run animation
 	animComponent->PlayRunAnimation();

@@ -227,7 +227,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				LoadVec3FromAttributes(scaleNode, scale);
 
 				entity.setPosition3D(position);
-				entity.setRotation3D(rotation);				
+				entity.setRotation3D(rotation);
 				entity.setScale(scale.x, scale.y);
 			}
 			else if (componentType == PLAYER_CONTROLLER_COMPONENT)
@@ -240,29 +240,35 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			}
 			else if (componentType == AI_CONTROLLER_COMPONENT)
 			{
-				const float attackRadius = element->FloatAttribute(XML_AI_ATTACK_RADIUS_ATTR);
-				const float workingRadius = element->FloatAttribute(XML_AI_WORKING_RADIUS_ATTR);
+				const float chaseRadius = element->FloatAttribute(XML_AI_CHASE_RADIUS_ATTR);
+				const float chaseStopDistance = element->FloatAttribute(XML_AI_CHASE_STOP_DISTANCE);
+				const float patrolRadius = element->FloatAttribute(XML_AI_PATROL_RADIUS_ATTR);
 				const float patrolPause = element->FloatAttribute(XML_AI_PATROL_PAUSE_ATTR);
 
-				AIAgent* pAgent = dynamic_cast<AIAgent*>(&entity);
+				CCASSERT(chaseRadius > 1, "AI chase radius is too small !");
+				CCASSERT(chaseStopDistance > 0, "AI chase distance cant be negative !");
+				CCASSERT(patrolRadius> 1, "AI patrol radius is too small !");
+
+				AIAgent* agent = static_cast<AIAgent*>(&entity);
 				const std::string& agentType = pRoot->Attribute(XML_TYPE_ATTR);
-				pAgent->setAgentType(agentType);
-				pAgent->setAttackRadius(attackRadius);
-				pAgent->setWorkingRadius(workingRadius);
-				pAgent->setPatrolPause(patrolPause);
+				agent->SetAgentType(agentType);
+				agent->SetChaseRadius(chaseRadius);
+				agent->SetChaseStopDistance(chaseStopDistance);
+				agent->SetPatrolRadius(patrolRadius);
+				agent->SetPatrolPause(patrolPause);
 			}
 			else if (componentType == PLAYER_ANIM_COMPONENT)
 			{
-				PlayerAnimComponent* pPlayerAnim = PlayerAnimComponent::create(entity);
-				pPlayerAnim->setName(PLAYER_ANIM_COMPONENT);
-				pPlayerAnim->loadConfig(element);
-				entity.addComponent(pPlayerAnim);
+				PlayerAnimComponent* playerAnim = PlayerAnimComponent::create(entity);
+				playerAnim->setName(PLAYER_ANIM_COMPONENT);
+				playerAnim->LoadConfig(element);
+				entity.addComponent(playerAnim);
 			}
 			else if (componentType == AI_ANIM_COMPONENT)
 			{
-				AIAnimComponent* pAgentAnim = AIAnimComponent::create(entity);
+				AIAnimComponent* pAgentAnim = AIAnimComponent::Create(entity);
 				pAgentAnim->setName(AI_ANIM_COMPONENT);
-				pAgentAnim->loadConfig(element);
+				pAgentAnim->LoadConfig(element);
 				entity.addComponent(pAgentAnim);
 			}
 			else if (componentType == RANGED_ATTACK_COMPONENT)
@@ -296,7 +302,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 					FloatAttribute(XML_ENTITY_PADDING_FROM_BODY_ATTR);
 
 				LongSwordAttackComponent* pLongSwordAttack =
-					LongSwordAttackComponent::create(secondsBetweenAttacks, attackRange,
+					LongSwordAttackComponent::Create(secondsBetweenAttacks, attackRange,
 						paddingFromBody);
 				pLongSwordAttack->setName(ATTACK_COMPONENT);
 				entity.addComponent(pLongSwordAttack);
@@ -408,9 +414,14 @@ bool XMLLoader::LoadWorld(World& world, const std::string& pathToXML)
 	if (isSuccessful)
 	{
 		XMLElement* root = doc.RootElement();
-		const std::string& pathToSprite = root->Attribute(XML_PATH_ATTR);
-		const int numberOfTiles = root->IntAttribute(XML_NUMBER_OF_TILES_ATTR);
-		world.Init(pathToSprite, numberOfTiles);
+		const XMLElement* sprite = root->FirstChildElement(XML_NODE_SPRITE);
+		const XMLElement* collisionData = root->FirstChildElement(XML_NODE_COLLISION_DATA);
+
+		const std::string& pathToSprite = sprite->Attribute(XML_PATH_ATTR);
+		const std::string& pathToCollisionData = collisionData->Attribute(XML_PATH_ATTR);
+		const std::string& bodyName = collisionData->Attribute(XML_NAME_ATTR);
+
+		world.Init(pathToSprite, bodyName, pathToCollisionData);
 	}
 
 	return isSuccessful;
@@ -419,16 +430,17 @@ bool XMLLoader::LoadWorld(World& world, const std::string& pathToXML)
 void XMLLoader::CreatePhysicsBodyFromAttributes(Node& attachmentNode, const XMLNode* xmlNode,
 	Size& outSize)
 {
-	const XMLElement* pPhysicsBodyElem =
+	const XMLElement* physicsBodyElem =
 		xmlNode->FirstChildElement(XML_NODE_PHYSICS_BODY);
 
-	const std::string bodyType = pPhysicsBodyElem->Attribute(XML_SHAPE_ATTR);
-	const Size& bodySize = Size(pPhysicsBodyElem->FloatAttribute(XML_WIDTH_ATTR),
-		pPhysicsBodyElem->FloatAttribute(XML_HEIGHT_ATTR));
+	const std::string bodyType = physicsBodyElem->Attribute(XML_SHAPE_ATTR);
+	const Size& bodySize = Size(physicsBodyElem->FloatAttribute(XML_WIDTH_ATTR),
+		physicsBodyElem->FloatAttribute(XML_HEIGHT_ATTR));
 
-	const bool isGravityEnabled = pPhysicsBodyElem->BoolAttribute(XML_PHYSICS_GRAVITY_ATTR);
-	const bool isBodyDynamic = pPhysicsBodyElem->BoolAttribute(XML_PHYSICS_DYNAMIC_BODY_ATTR);
-	const int collisionBitMask = pPhysicsBodyElem->IntAttribute(XML_PHYSICS_BIT_MASK_ATTR);
+	const bool isGravityEnabled = physicsBodyElem->BoolAttribute(XML_PHYSICS_GRAVITY_ATTR);
+	const bool isBodyDynamic = physicsBodyElem->BoolAttribute(XML_PHYSICS_DYNAMIC_BODY_ATTR);
+	const bool isRotationEnabled = physicsBodyElem->BoolAttribute(XML_PHYSICS_ROTATION_ENABLED_ATTR);
+	const int collisionBitMask = physicsBodyElem->IntAttribute(XML_PHYSICS_BIT_MASK_ATTR);
 
 	if (bodyType == XML_PHYSICS_BODY_BOX_ATTR)
 	{
@@ -440,6 +452,7 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(Node& attachmentNode, const XMLN
 			collisionBitMask,
 			isBodyDynamic,
 			isGravityEnabled);
+		bodyConfig.SetRotationEnabled(isRotationEnabled);
 
 		PhysicsManager::AddPhysicsBody(attachmentNode, bodyConfig);
 	}

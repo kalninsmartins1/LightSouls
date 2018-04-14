@@ -10,6 +10,7 @@ static constexpr char* XML_NODE_SPRITE = "Sprite";
 static constexpr char* XML_NODE_SPRITE_FRAME = "SpriteFrame";
 static constexpr char* XML_NODE_NORMALIZED_POSITION = "NormalizedPosition";
 static constexpr char* XML_NODE_ANCHOR_POSITION = "AnchorPosition";
+static constexpr char* XML_NODE_COLLISION_DATA = "CollisionData";
 static constexpr char* XML_NODE_SCALE = "Scale";
 static constexpr char* XML_NODE_POSITION = "Position";
 static constexpr char* XML_NODE_ROTATION = "Rotation";
@@ -33,8 +34,9 @@ static constexpr char* XML_UI_MAX_VALUE = "maxValue";
 static constexpr char* XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR = "timeBetweenComboInput";
 
 // XML AI attributes
-static constexpr char* XML_AI_ATTACK_RADIUS_ATTR = "attackRadius";
-static constexpr char* XML_AI_WORKING_RADIUS_ATTR = "workingRadius";
+static constexpr char* XML_AI_CHASE_RADIUS_ATTR = "chaseRadius";
+static constexpr char* XML_AI_CHASE_STOP_DISTANCE = "chaseStopDistance";
+static constexpr char* XML_AI_PATROL_RADIUS_ATTR = "patrolRadius";
 static constexpr char* XML_AI_PATROL_PAUSE_ATTR = "patrolPauseInSeconds";
 static constexpr char* XML_AI_MAX_FLY_DISTANCE = "maxFlyDistance";
 
@@ -71,14 +73,13 @@ static constexpr char* XML_AXIS_Z_ATTR = "z";
 // XML physics attributes
 static constexpr char* XML_PHYSICS_BIT_MASK_ATTR = "collisionBitMask";
 static constexpr char* XML_PHYSICS_DYNAMIC_BODY_ATTR = "isDynamic";
+static constexpr char* XML_PHYSICS_ROTATION_ENABLED_ATTR = "isRotationEnabled";
 static constexpr char* XML_PHYSICS_GRAVITY_ATTR = "isGravityEnabled";
 static constexpr char* XML_PHYSICS_BODY_BOX_ATTR = "box";
 static constexpr char* XML_PHYSICS_DESITY_ATTR = "density";
 static constexpr char* XML_PHYSICS_RESTITUTION_ATTR = "restitution";
 static constexpr char* XML_PHYSICS_FRICTION_ATTR = "friction";
 
-// XML world attributes
-static constexpr char* XML_NUMBER_OF_TILES_ATTR = "tileCount";
 // XML input attributes
 static constexpr char* XML_INPUT_KEY_CODE_ATTR = "keyCode";
 static constexpr char* XML_INPUT_KEY_FROM_ATTR = "keyCodeFrom";

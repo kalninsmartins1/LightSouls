@@ -12,20 +12,20 @@ public:
 	StateMachine(AIAgent& agent);
 
 	// Should be called once to turn on the state machine
-	void start(AIAnimComponent* pAIAnimComponent);
+	void Start(AIAnimComponent* pAIAnimComponent);
 
 	// Should be called periodically to update current state of state machine 
-	void onStep();	
+	void OnStep();	
 
 private:	
-	void switchState(IState& newState);
-	void onStateDone();
-	void onStateFailed();
+	void SwitchState(IState& newState);
+	void OnStateDone();
+	void OnStateFailed();
 
-	AIAgent& m_agent;
-	IState* m_curState;
-	AIAnimComponent*  m_pAnimComponent;
-	StateAttack m_attackState;
-	StateChase m_chaseState;
-	StatePatrol m_patrolState;
+	AIAgent&			m_agent;
+	IState*				m_curState;
+	AIAnimComponent*	m_pAnimComponent;
+	StateAttack			m_attackState;
+	StateChase			m_chaseState;
+	StatePatrol			m_patrolState;
 };

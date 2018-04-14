@@ -14,11 +14,13 @@ public:
 
 private:
 	Arrow(Vector2 startPosition, float maxFlyDistance);
+
 	bool Init(const std::string& pathToSprite,		
 		const Vector2& moveDirection,
 		float moveSpeed);
 	void RotateArrowInDirectionOfMovement();
 
+private:
 	Vector2 m_startPosition;
 	float	m_maxFlyDistance;
 };

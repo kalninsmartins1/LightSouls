@@ -117,7 +117,7 @@ void HelloWorld::InitWolrdLayer()
 	// Create world camera and set it to follow player
 	Camera* worldCamera = Camera::create();
 	worldCamera->setCameraFlag(CameraFlag::USER1);
-	worldCamera->runAction(CameraFollow::create(m_player));
+	worldCamera->runAction(CameraFollow::Create(m_player));
 	addChild(worldCamera);	
 }
 

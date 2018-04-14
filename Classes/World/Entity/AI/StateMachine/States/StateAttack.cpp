@@ -14,28 +14,18 @@ StateAttack::StateAttack(AIAgent& agent) :
 {
 }
 
-bool StateAttack::Init()
-{
-	m_attackComponent =
-		dynamic_cast<AttackComponent*>(
-			m_agent.getComponent(ATTACK_COMPONENT));
-	CC_ASSERT(m_attackComponent != nullptr &&
-		"Attack component not found !");
-
-	return m_attackComponent != nullptr;
-}
-
 void StateAttack::OnEnter(AIAnimComponent* pAnimComponent)
 {
 	m_animComponent = pAnimComponent;
+	m_attackComponent = m_agent.GetAttackComponent();
 	m_curProgress = StateProgress::IN_PROGRESS;
 }
 
 StateProgress StateAttack::OnStep()
 {
-	if(m_curProgress == StateProgress::IN_PROGRESS)
+	if(m_curProgress == StateProgress::IN_PROGRESS && m_isAttackAnimFinished)
 	{
-		if(m_attackComponent->IsReadyToAttack() && m_isAttackAnimFinished)
+		if(m_attackComponent->IsReadyToAttack())
 		{
 			cocos2d::Vec2 toTarget = m_targetEntity.getPosition() -
 				m_agent.getPosition();
@@ -48,7 +38,7 @@ StateProgress StateAttack::OnStep()
 		}
 		
 		const cocos2d::Vec2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
-		if(toTarget.length() > m_agent.GetAttackRadius())
+		if(toTarget.length() > m_attackComponent->GetAttackRange())
 		{
 			// Target run away cant attack
 			m_curProgress = StateProgress::DONE;

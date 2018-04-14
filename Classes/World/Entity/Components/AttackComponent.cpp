@@ -1,10 +1,16 @@
 #include "AttackComponent.h"
 #include "Utils/Utils.h"
 
-AttackComponent::AttackComponent(float secondsBetweenAttacks):
-	m_secondsBetweenAttacks(secondsBetweenAttacks),
-	m_lastTimeAttacked(0)
+AttackComponent::AttackComponent(float secondsBetweenAttacks, float attackRange)
+	: m_lastTimeAttacked(0)
+	, m_secondsBetweenAttacks(secondsBetweenAttacks)
+	, m_attackRange(attackRange)
 {
+}
+
+float AttackComponent::GetAttackRange() const
+{
+	return m_attackRange;
 }
 
 void AttackComponent::Attack(const Vector2& direction)

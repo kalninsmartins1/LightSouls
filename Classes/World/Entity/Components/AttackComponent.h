@@ -5,18 +5,22 @@
 class AttackComponent : public cocos2d::Component
 {
 public:
-	typedef cocos2d::Vec2 Vector2;
-	typedef std::string String;
+	using Vector2 = cocos2d::Vec2;
+	using String = std::string;
 	
-	AttackComponent(float secondsBetweenAttacks);
+	AttackComponent(float secondsBetweenAttacks, float attackRange);
 
-	// Performs attack
-	virtual void Attack(const Vector2& direction);
-	
+	// Returns attack range
+	float			GetAttackRange() const;
+
 	// Returns ready if owner is ready to attack
-	virtual bool IsReadyToAttack() const;
+	virtual bool	IsReadyToAttack() const;
+	
+	// Performs attack
+	virtual void	Attack(const Vector2& direction);
 
 private:
-	float m_secondsBetweenAttacks;
-	long long m_lastTimeAttacked;
+	long long	m_lastTimeAttacked;
+	float		m_secondsBetweenAttacks;
+	float		m_attackRange;
 };

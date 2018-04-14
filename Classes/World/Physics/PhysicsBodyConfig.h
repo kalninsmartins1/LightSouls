@@ -19,12 +19,16 @@ public:
 	int								GetCollisionBitMask() const;
 	bool							IsBodyDynamic() const;
 	bool							IsGravityEnabled() const;
+	bool							IsRotationEnabled() const;
+
+	void							SetRotationEnabled(bool isEnabled);
 
 private:
-	cocos2d::Size m_bodySize;
-	cocos2d::PhysicsMaterial m_physicsMaterial;
-	BodyType m_bodyType;
-	int m_collisionBitMask;
-	bool m_isDynamic;
-	bool m_isGravityEnabled;
+	cocos2d::Size				m_bodySize;
+	cocos2d::PhysicsMaterial	m_physicsMaterial;
+	BodyType					m_bodyType;
+	int							m_collisionBitMask;
+	bool						m_isDynamic;
+	bool						m_isGravityEnabled;
+	bool						m_isRotationEnabled;
 };

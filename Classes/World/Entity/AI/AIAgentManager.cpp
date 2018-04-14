@@ -46,7 +46,7 @@ void AIAgentManager::SpawnAgent(const std::string& type, const Vec2& position)
 {
 	if(Utils::ContainsKey(m_agentConfigPathMap, type))
 	{
-		AIAgent* pAgent = AIAgent::create(
+		AIAgent* pAgent = AIAgent::Create(
 			m_agentConfigPathMap.at(type));
 		m_allActiveAgents.push_back(pAgent);
 

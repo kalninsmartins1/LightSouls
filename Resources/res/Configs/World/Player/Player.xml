@@ -8,7 +8,7 @@
 	>
 	
 	<Component type="TransformComponent">
-		<Position x="2" y="1" z="0" />
+		<Position x="2" y="200" z="0" />
 		<Rotation x="0" y="0" z="0" />
 		<Scale x="0.5" y="0.5" z="0.5"/>
 	</Component>
@@ -94,10 +94,11 @@
 		<PhysicsBody
 			shape="box"
 			width="200"
-			height="300"
+			height="100"
 			isDynamic="true" 
-			isGravityEnabled="true" 
-			collisionBitMask="1"
+			isGravityEnabled="false" 
+			isRotationEnabled="false"
+			collisionBitMask="1"			
 			/>
 	</Component>
 	

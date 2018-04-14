@@ -3,12 +3,12 @@
 
 using namespace cocos2d;
 
-CameraFollow* CameraFollow::create(Node* followedNode, const Rect& rect)
+CameraFollow* CameraFollow::Create(Node* followedNode, const Rect& rect)
 {
-	return createWithOffset(followedNode, 0.0, 0.0, rect);
+	return CreateWithOffset(followedNode, 0.0, 0.0, rect);
 }
 
-CameraFollow* CameraFollow::createWithOffset(Node* followedNode, float xOffset, float yOffset, const Rect& rect)
+CameraFollow* CameraFollow::CreateWithOffset(Node* followedNode, float xOffset, float yOffset, const Rect& rect)
 {
 	CameraFollow *follow = new (std::nothrow) CameraFollow();
 

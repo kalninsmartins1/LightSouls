@@ -19,6 +19,7 @@ public:
 private: 
 	void					OnTargetReached();
 
+private:
 	StateProgress	m_curProgress;
 	const Entity&	m_targetEntity;
 	AIAgent&		m_agent;	

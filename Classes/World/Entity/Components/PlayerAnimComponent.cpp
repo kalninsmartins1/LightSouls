@@ -29,7 +29,7 @@ PlayerAnimComponent* PlayerAnimComponent::create(Sprite& sprite)
 	return ret;
 }
 
-void PlayerAnimComponent::loadConfig(tinyxml2::XMLNode* pNode)
+void PlayerAnimComponent::LoadConfig(tinyxml2::XMLNode* pNode)
 {
 	for (tinyxml2::XMLElement* pElem = pNode->FirstChildElement();
 		pElem != nullptr; pElem = pElem->NextSiblingElement())
@@ -154,7 +154,7 @@ void PlayerAnimComponent::loopRunAnimation()
 	m_currentlyLoopingAnim = AnimationKind::RUN;
 }
 
-void PlayerAnimComponent::loopIdleAnimation()
+void PlayerAnimComponent::LoopIdleAnimation()
 {
 	AnimationUtils::startSpriteFrameAnimation(&m_playerSprite, m_idleFrames,
 		m_timeBetweenIdleFrames);

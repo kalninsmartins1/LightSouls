@@ -41,3 +41,13 @@ bool PhysicsBodyConfig::IsGravityEnabled() const
 	return m_isGravityEnabled;
 }
 
+bool PhysicsBodyConfig::IsRotationEnabled() const
+{
+	return m_isRotationEnabled;
+}
+
+void PhysicsBodyConfig::SetRotationEnabled(bool isEnabled)
+{
+	m_isRotationEnabled = isEnabled;
+}
+

@@ -45,7 +45,7 @@ private:
 	AttackComponent*			m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
-	bool				m_bIsAttackComboDelayExpired;
+	bool				m_isAttackComboDelayExpired;
 	float				m_timeBetweenComboInput;
 	long				m_lastTimePerformedLightAttack;
 	unsigned short int	m_curLightAttackAnimIdx;

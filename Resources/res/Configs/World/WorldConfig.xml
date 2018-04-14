@@ -1,5 +1,5 @@
-<WorldConfig
-	path="res/Graphics/World/Tiles/2.png"
-	tileCount="40"
-	>	
+<WorldConfig>
+	
+	<Sprite path="res/Graphics/World/arena.png"/>
+	<CollisionData name="arena" path="res/Configs/World/Collision/worldCollision.plist"/>
 </WorldConfig>

@@ -9,10 +9,10 @@ namespace tinyxml2 {
 class AIAnimComponent : public cocos2d::Component
 {
 public:
-	static AIAnimComponent* create(cocos2d::Sprite& sprite);
+	static AIAnimComponent* Create(cocos2d::Sprite& sprite);
 
 	// Load animation configuration from xml file
-	void loadConfig(tinyxml2::XMLNode* pNode);
+	void LoadConfig(tinyxml2::XMLNode* pNode);
 
 	void PlayIdleAnimation();
 	void PlayRunAnimation();
@@ -21,10 +21,11 @@ public:
 private:
 	AIAnimComponent(cocos2d::Sprite& sprite);
 
-	cocos2d::Sprite& m_agentSprite;
-	float m_timeBetweenIdleFrames;	
-	float m_timeBetweenRunFrames;	
-	float m_timeBetweenAttackFrames;		
+private:
+	cocos2d::Sprite&	m_agentSprite;
+	float				m_timeBetweenIdleFrames;	
+	float				m_timeBetweenRunFrames;	
+	float				m_timeBetweenAttackFrames;		
 
 	// Animation containers	
 	cocos2d::Vector<cocos2d::SpriteFrame*> m_idleFrames;

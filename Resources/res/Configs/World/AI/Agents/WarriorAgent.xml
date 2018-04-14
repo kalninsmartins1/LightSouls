@@ -14,14 +14,15 @@
 	</Component>
 	
 	<Component type="AIControllerComponent"
-		workingRadius="200"
-		attackRadius="80"
-		patrolPauseInSeconds="5">
+		patrolRadius="500"
+		patrolPauseInSeconds="2"
+		chaseStopDistance="80"
+		chaseRadius="300">
 	</Component>
 	
 	<Component 	type="LongSwordAttackComponent"
-				secondsBetweenAttacks="5"
-				attackRange="50"
+				secondsBetweenAttacks="0.6"
+				attackRange="120"
 				paddingFromBody="5">
 	</Component>
 	
@@ -54,9 +55,10 @@
 		<PhysicsBody
 			shape="box"
 			width="200"
-			height="300"
+			height="100"
 			isDynamic="true" 
-			isGravityEnabled="true" 
+			isGravityEnabled="false"
+			isRotationEnabled="false"
 			collisionBitMask="1"
 			/>
 	</Component>

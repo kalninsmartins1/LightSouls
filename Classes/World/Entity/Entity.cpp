@@ -57,9 +57,19 @@ void Entity::SetMoveDirection(const Vector2& direction)
 	m_moveDirection = direction;
 }
 
-void Entity::SetPhysicsBodySize(cocos2d::Size size)
+void Entity::SetPhysicsBodySize(const cocos2d::Size& size)
 {
-	m_physicsBodySize = size;
+	m_physicsBodyScaledSize.width = size.width * abs(getScaleX());
+	m_physicsBodyScaledSize.height = size.height * abs(getScaleY());
+}
+
+void Entity::SetPhysicsBodyAnchor(const cocos2d::Vec2& achorPos)
+{
+	const cocos2d::Size& size = GetPhysicsBodySizeScaled();
+	float physicsBodyAnchorX = achorPos.x * size.width;
+	float physicsBodyAnchorY = -size.height + (achorPos.y * size.height);
+
+	_physicsBody->setPositionOffset(Vector2(physicsBodyAnchorX, physicsBodyAnchorY));
 }
 
 void Entity::TakeDamage(float damage)
@@ -119,9 +129,9 @@ const Entity::Vector2& Entity::GetHeading() const
 	return m_moveDirection;
 }
 
-const cocos2d::Size& Entity::GetPhysicsBodySize() const
+const cocos2d::Size& Entity::GetPhysicsBodySizeScaled() const
 {
-	return m_physicsBodySize;
+	return m_physicsBodyScaledSize;
 }
 
 float Entity::GetHealth() const

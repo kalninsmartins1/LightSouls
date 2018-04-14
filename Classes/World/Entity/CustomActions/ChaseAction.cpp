@@ -1,10 +1,10 @@
 #include "ChaseAction.h"
 
 
-ChaseAction* ChaseAction::create(const Entity& chaseTarget, AIAgent& agent)
+ChaseAction* ChaseAction::Create(const Entity& chaseTarget, AIAgent& agent)
 {
 	ChaseAction *ret = new (std::nothrow) ChaseAction(chaseTarget, agent);
-	if (ret && ret->init())
+	if (ret != nullptr)
 	{
 		ret->autorelease();		
 	}
@@ -19,38 +19,37 @@ ChaseAction* ChaseAction::create(const Entity& chaseTarget, AIAgent& agent)
 ChaseAction::ChaseAction(const Entity& chaseTarget, AIAgent& agent):
 	m_chaseTarget(chaseTarget),	
 	m_agent(agent),
-	m_bIsDone(false)
+	m_isDone(false)
 {
-}
-
-bool ChaseAction::init()
-{
-	return true;
 }
 
 ChaseAction::~ChaseAction()
 {
-	Action::~Action();
+
 }
 
 bool ChaseAction::isDone() const
 {
-	return m_bIsDone;
+	return m_isDone;
 }
 
 void ChaseAction::step(float dt)
 {
-	// Move agent towards taget location
-	const cocos2d::Vec2& currentPosition = m_agent.getPosition();
-	cocos2d::Vec2 toTarget = m_chaseTarget.getPosition() - currentPosition;
+	// Move agent towards target location
+	const Vector2& currentPosition = m_agent.getPosition();
+	Vector2 toTarget = m_chaseTarget.getPosition() - currentPosition;
+	const Vector2& toTargetNormalized = toTarget.getNormalized();
 
-	m_agent.setPosition(currentPosition + toTarget.getNormalized() *
+	m_agent.setPosition(currentPosition + toTargetNormalized *
 		m_agent.GetCurrentMoveSpeed() * dt);
 
+	// Update agent move direction
+	m_agent.SetMoveDirection(toTargetNormalized);
+
 	// Check if attack distance has been reached
-	if (toTarget.length() <= m_agent.GetAttackRadius())
+	if (toTarget.length() <= m_agent.GetChaseStopDistance())
 	{
 		// Attack distance has been reached - state finished
-		m_bIsDone = true;
+		m_isDone = true;
 	}
 }

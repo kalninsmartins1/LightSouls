@@ -7,30 +7,37 @@
 class AIAgent : public Entity
 {
 public:
-	static AIAgent* create(const String& pathToXML);
+	float				GetPatrolPause() const;
+	float				GetPatrolRadius() const;
+	float				GetChaseRadius() const;
+	float				GetChaseStopDistance() const;
+	float				GetAttackRange() const;
+	const String&		GetType() const;
+	const Vector2&		GetBasePosition() const;
+	AttackComponent*	GetAttackComponent() const;
 
-	virtual void update(float deltaTime) override;
-
-	float getPatrolPause() const;
-	float GetActiveRadius() const;
-	float GetAttackRadius() const;
-	const String& getType() const;
-	const Vector2& getBasePosition() const;	
-
-	void setPatrolPause(float pauseInSeconds);
-	void setWorkingRadius(float radius);
-	void setAttackRadius(float radius);
+	void SetPatrolPause(float pauseInSeconds);
+	void SetPatrolRadius(float radius);
+	void SetChaseRadius(float radius);
+	void SetChaseStopDistance(float distance);
 	void setBasePosition(const Vector2& position);
-	void setAgentType(const String& type);	
+	void SetAgentType(const String& type);
+
+	static AIAgent* Create(const String& pathToXML);
+	virtual void	update(float deltaTime) override;
 
 private:
 	AIAgent();
-	bool init(const String& pathToXML);
+	bool Init(const String& pathToXML);
 
-	StateMachine m_stateMachine;
-	Vector2 m_basePosition;
-	String m_agentType;	
-	float m_workingRadius;	
-	float m_attackRadius;
-	float m_patrolPauseInSeconds;
+private:
+	StateMachine	    m_stateMachine;
+	AttackComponent*	m_attackComponent;
+	Vector2				m_basePosition;
+	Vector2				m_previousPosition;
+	String				m_agentType;
+	float				m_chaseRadius;
+	float			    m_patrolRadius;	
+	float				m_patrolPauseInSeconds;
+	float				m_chaseStopDistance;
 };

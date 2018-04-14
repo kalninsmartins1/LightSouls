@@ -14,7 +14,7 @@ public:
 
 	float					GetCurrentMoveSpeed() const;
 	const Vector2&			GetHeading() const;
-	const cocos2d::Size&	GetPhysicsBodySize() const;
+	const cocos2d::Size&	GetPhysicsBodySizeScaled() const;
 	float					GetHealth() const;
 	float					GetDamage() const;
 	float					GetDodgeTime() const;
@@ -32,8 +32,9 @@ public:
 	void SetDodgeSpeed(float dodgeSpeed);
 	void SetDodgeTime(float dodgeTime);	
 	void SetMoveDirection(const Vector2& direction);
-	void SetPhysicsBodySize(cocos2d::Size size);
-	
+	void SetPhysicsBodySize(const cocos2d::Size& size);
+	void SetPhysicsBodyAnchor(const cocos2d::Vec2& achorPos);
+
 	void TakeDamage(float damage);
 	void StartDodging();
 	void StopDodging();
@@ -50,7 +51,7 @@ private:
 	unsigned int				m_id;
 
 	Vector2			m_moveDirection;
-	cocos2d::Size	m_physicsBodySize;
+	cocos2d::Size	m_physicsBodyScaledSize;
 
 	bool m_isRuning;
 	bool m_isDodging;

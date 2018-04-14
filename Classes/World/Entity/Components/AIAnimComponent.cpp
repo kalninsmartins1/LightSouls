@@ -8,7 +8,7 @@ AIAnimComponent::AIAnimComponent(cocos2d::Sprite& sprite) :
 {
 }
 
-AIAnimComponent* AIAnimComponent::create(cocos2d::Sprite& sprite)
+AIAnimComponent* AIAnimComponent::Create(cocos2d::Sprite& sprite)
 {
 	AIAnimComponent * ret = new (std::nothrow) AIAnimComponent(sprite);
 
@@ -24,7 +24,7 @@ AIAnimComponent* AIAnimComponent::create(cocos2d::Sprite& sprite)
 	return ret;
 }
 
-void AIAnimComponent::loadConfig(XMLNode* pNode)
+void AIAnimComponent::LoadConfig(XMLNode* pNode)
 {
 	for (XMLElement* pElem = pNode->FirstChildElement();
 		pElem != nullptr; pElem = pElem->NextSiblingElement())
@@ -70,5 +70,3 @@ void AIAnimComponent::playAttackAnimationWithCallback(std::function<void()> onFi
 	AnimationUtils::startSpriteFrameAnimationWithCallback(&m_agentSprite, m_attackFrames,
 		m_timeBetweenAttackFrames, onFinsihed);
 }
-
-

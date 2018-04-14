@@ -12,15 +12,14 @@ public:
 	StateAttack(AIAgent& agent);
 	AIState					GetStateType() override;
 
-	bool					Init();
 	virtual void			OnEnter(AIAnimComponent* animComponent) override;
 	virtual StateProgress	OnStep() override;
 	virtual void			OnExit() override;
 
 private:
-
 	void					OnAttackFinished();
 
+private:
 	StateProgress		m_curProgress;
 	AIAgent&			m_agent;
 	const Entity&		m_targetEntity;

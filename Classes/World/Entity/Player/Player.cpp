@@ -32,7 +32,7 @@ Player::Player() :
 	m_animComponent(nullptr),
 	m_attackComponent(nullptr),
 	m_lastValidMoveDirection(Vector2::UNIT_X), // By default start out moving right
-	m_bIsAttackComboDelayExpired(true),
+	m_isAttackComboDelayExpired(true),
 	m_timeBetweenComboInput(0),	
 	m_lastTimePerformedLightAttack(0),
 	m_curLightAttackAnimIdx(0)
@@ -46,19 +46,17 @@ const std::string& Player::GetOnHealthChangedEvent()
 
 bool Player::Init(const std::string& pathToXML)
 {
-	XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
-
-	// Force position player in middle of screen
-	const Size size = Director::getInstance()->getWinSize();
-	setPosition(size.width / 2, size.height / 2);
+	XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);	
 
 	// Get animation component to trigger animations when that is necessary
 	m_animComponent =
 		static_cast<PlayerAnimComponent*>(getComponent(PLAYER_ANIM_COMPONENT));
-	m_animComponent->loopIdleAnimation();
+	m_animComponent->LoopIdleAnimation();
 
 	m_attackComponent = static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
-	
+
+	SetPhysicsBodyAnchor(Vector2(0, 0));
+		
 	PhysicsManager::GetInstance()->AddContactListener(getName(), 
 		CC_CALLBACK_1(Player::OnContactBegin, this));
 
@@ -73,7 +71,7 @@ void Player::update(float deltaTime)
 	ManageInput();
 
 	// We can move only when we are not attacking
-	if (!IsAttacking() && m_bIsAttackComboDelayExpired)
+	if (!IsAttacking() && m_isAttackComboDelayExpired)
 	{
 		setPosition(getPosition() + GetHeading() *
 			GetCurrentMoveSpeed() * deltaTime);
@@ -102,41 +100,41 @@ void Player::OnAttackFinished()
 		CC_CALLBACK_0(Player::OnLightAttackComboExpired, this),
 		secondsBeforeComboInputExpires);
 
-	m_bIsAttackComboDelayExpired = false;
+	m_isAttackComboDelayExpired = false;
 }
 
 void Player::OnLightAttackComboExpired()
 {
-	m_bIsAttackComboDelayExpired = true;
+	m_isAttackComboDelayExpired = true;
 }
 
 void Player::ManageInput()
 {
-	GameInput* pInput = GameInput::GetInstance();
-	if (pInput->hasAction("LightAttackInput"))
+	GameInput* input = GameInput::GetInstance();
+	if (input->HasAction("LightAttackInput"))
 	{
 		LightAttack();
 	}
-	else if (pInput->hasAction("StrongAttackInput"))
+	else if (input->HasAction("StrongAttackInput"))
 	{
 		//lightAttack();
 	}
-	else if (pInput->hasAction("DodgeInput") && IsRunning())
+	else if (input->HasAction("DodgeInput") && IsRunning())
 	{
 		PerformDodge();
 	}
 
 	// Player movement
-	const float horizontalValue = pInput->getInputAxis("HorizontalMovement");
-//	const float vertiacalValue = pInput->getInputAxis("VerticalMovement");	
-	Vector2& moveDirection = Vector2(horizontalValue, 0.0f);
+	const float horizontalValue = input->getInputAxis("HorizontalMovement");
+	const float vertiacalValue = input->getInputAxis("VerticalMovement");	
+	Vector2& moveDirection = Vector2(horizontalValue, vertiacalValue);
 	
 	// Make sure we are not moving faster diagonally
 	moveDirection.normalize();
 	SetMoveDirection(moveDirection);
 
 	// If we have an input, then update last valid move direction
-	if (abs(horizontalValue) > MATH_EPSILON)//|| abs(vertiacalValue) > MATH_EPSILON)
+	if (abs(horizontalValue) > MATH_EPSILON || abs(vertiacalValue) > MATH_EPSILON)
 	{
 		m_lastValidMoveDirection = moveDirection;
 	}
@@ -149,7 +147,7 @@ void Player::LightAttack()
 		// Activating attack
 		Entity::StartAttacking();
 
-		if(!m_bIsAttackComboDelayExpired)
+		if(!m_isAttackComboDelayExpired)
 		{
 			// Go to next attack in combo
 			m_curLightAttackAnimIdx++;
@@ -200,7 +198,7 @@ void Player::PlayRunOrIdleAnimation() const
 		if(m_animComponent->getCurrentlyLoopingAnimation() 
 			!= AnimationKind::IDLE)
 		{
-			m_animComponent->loopIdleAnimation();
+			m_animComponent->LoopIdleAnimation();
 		}
 	}
 }

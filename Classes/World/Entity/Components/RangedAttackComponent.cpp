@@ -25,13 +25,11 @@ RangedAttackComponent* RangedAttackComponent::Create(
 }
 
 RangedAttackComponent::RangedAttackComponent(const String& pathToAmmo,
-	float maxAmmoFlyDistance, float ammoMoveSpeed,
-	float secondsBetweenAttacks) 
-		:
-	AttackComponent(secondsBetweenAttacks),
-	m_pathToAmmo(pathToAmmo),
-	m_maxAmmoFlyDistance(maxAmmoFlyDistance),
-	m_ammoMoveSpeed(ammoMoveSpeed)
+		float attackRange, float ammoMoveSpeed,
+		float secondsBetweenAttacks) 
+	: AttackComponent(secondsBetweenAttacks, attackRange)
+	, m_pathToAmmo(pathToAmmo)
+	, m_ammoMoveSpeed(ammoMoveSpeed)
 {
 }
 
@@ -43,7 +41,7 @@ void RangedAttackComponent::Attack(const Vector2& direction)
 	Arrow* pArrow = Arrow::Create(m_pathToAmmo, cocos2d::Vec2(
 		_owner->getPosition()),
 		direction,
-		m_maxAmmoFlyDistance,
+		GetAttackRange(),
 		m_ammoMoveSpeed);
 	
 	// Spawn arrow in world

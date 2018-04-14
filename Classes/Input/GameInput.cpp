@@ -82,7 +82,7 @@ bool GameInput::LoadInputConfiguration(const std::string& pathToConfigFile)
 	return XMLLoader::LoadInputSettings(*this, pathToConfigFile);
 }
 
-bool GameInput::hasAction(const std::string& action) const
+bool GameInput::HasAction(const std::string& action) const
 {
 	bool bHasAction = false;
 	if (!m_pGameControllerInput->isConnected())

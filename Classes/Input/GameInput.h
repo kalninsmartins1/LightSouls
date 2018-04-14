@@ -20,7 +20,7 @@ public:
 	static GameInput* GetInstance();
 	~GameInput();
 	// Returns true for action once when input is released
-	bool hasAction(const std::string& action) const;
+	bool HasAction(const std::string& action) const;
 
 	// Returns true while input for action is not released
 	bool hasActionState(const std::string& action) const;

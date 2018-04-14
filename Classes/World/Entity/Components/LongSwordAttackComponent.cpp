@@ -3,7 +3,7 @@
 #include "World/Entity/Entity.h"
 
 
-LongSwordAttackComponent* LongSwordAttackComponent::create(float secondsBetweenAttacks,
+LongSwordAttackComponent* LongSwordAttackComponent::Create(float secondsBetweenAttacks,
 	float attackRange, float paddingFromBody)
 {
 	LongSwordAttackComponent* pAttackComponent =
@@ -22,11 +22,10 @@ LongSwordAttackComponent* LongSwordAttackComponent::create(float secondsBetweenA
 }
 
 LongSwordAttackComponent::LongSwordAttackComponent(float secondsBetweenAttacks,
-	float attackRange, float paddingFromBody) :
-	AttackComponent(secondsBetweenAttacks),
-	m_ownerEntity(nullptr),
-	m_attackRange(attackRange),
-	m_paddingFromBody(paddingFromBody)
+		float attackRange, float paddingFromBody) 
+	: AttackComponent(secondsBetweenAttacks, attackRange)
+	, m_ownerEntity(nullptr)
+	, m_paddingFromBody(paddingFromBody)
 {
 }
 
@@ -72,15 +71,15 @@ void LongSwordAttackComponent::setOwner(cocos2d::Node* owner)
 void LongSwordAttackComponent::CheckAffectedObjects(const Vector2& direction) const
 {
 	// After attack finished check if we hit something	
-	const cocos2d::Size bodySize = m_ownerEntity->GetPhysicsBodySize();
-	const float bodyWidthScaled = bodySize.width * abs(m_ownerEntity->getScaleX());
+	const cocos2d::Size bodySize = m_ownerEntity->GetPhysicsBodySizeScaled();
+	const float bodyWidthScaled = bodySize.width;
 
 	Vector2 rectOrgin = m_ownerEntity->getPosition() + direction *
 		(bodyWidthScaled + m_paddingFromBody);
-	const float rectWidth = m_attackRange;
-	const float rectHeight = m_attackRange * 2;
 
-	CCLOG("Checking attacking !");
+	const float rectWidth = GetAttackRange();
+	const float rectHeight = rectWidth * 2;
+	
 	// Move the rect anchor to middle
 	rectOrgin -= Vector2(rectWidth / 2, rectHeight / 2);
 

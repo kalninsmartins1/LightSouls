@@ -64,11 +64,7 @@ float StatePatrol::GetTimeToReachTarget(const cocos2d::Vec2& targetPosition) con
 	const float agentMoveSpeed = m_agent.GetCurrentMoveSpeed();
 	float timeToGetToTarget = 0;
 	
-	// Move speed should be positive number higher than 0
-	if(agentMoveSpeed > 0)
-	{
-		timeToGetToTarget = distanceToTargetPosition / agentMoveSpeed;
-	}
+	timeToGetToTarget = Utils::SafeDevide(distanceToTargetPosition, agentMoveSpeed);
 
 	return timeToGetToTarget;
 }
@@ -83,23 +79,17 @@ bool StatePatrol::HasTargetBeenSpotted() const
 	const float distanceToTargetEntity = targetEntityPosition
 		.distance(agentPosition);
 
-	return distanceToTargetEntity < m_agent.GetAttackRadius();
+	return distanceToTargetEntity < m_agent.GetChaseRadius();
 }
 
 void StatePatrol::MoveToRandomPositionAndWait() const
 {
 	using namespace cocos2d;
 
-	float curPosX = m_agent.getPositionX();
-	float agentRadius = m_agent.GetActiveRadius();
-	float randXPosition = Utils::GetRandValueWithinRange(
-		curPosX - agentRadius, 
-		curPosX + agentRadius);
+	const Vec2& targetPosition = Utils::GetRandomPositionWithinCircle(m_agent.getPosition(),
+		m_agent.GetPatrolRadius());
 
 	// Get time it takes for agent to move to position
-	const Vec2 targetPosition = m_agent.getBasePosition() +
-		Vec2(randXPosition, 0);
-
 	const float timeToReachTarget = GetTimeToReachTarget(targetPosition);
 	
 	// Update agents moving direction
@@ -109,7 +99,7 @@ void StatePatrol::MoveToRandomPositionAndWait() const
 	// Move the agent to target position using move action
 	const auto moveTo = MoveTo::create(timeToReachTarget, targetPosition);
 	const auto callback = CallFunc::create(CC_CALLBACK_0(StatePatrol::OnFinishedMoving, this));
-	const auto delay = DelayTime::create(m_agent.getPatrolPause());
+	const auto delay = DelayTime::create(m_agent.GetPatrolPause());
 	Sequence* sequence = Sequence::create(moveTo, callback, delay, nullptr);
 	sequence->setTag(ACTION_MOVE_TAG);
 	m_agent.runAction(sequence);

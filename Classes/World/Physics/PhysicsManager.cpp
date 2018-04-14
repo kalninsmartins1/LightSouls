@@ -41,6 +41,7 @@ void PhysicsManager::AddPhysicsBody(cocos2d::Node& attachmentNode,
 	physicsBody->setContactTestBitmask(bodyConfig.GetCollisionBitMask());
 	physicsBody->setCategoryBitmask(bodyConfig.GetCollisionBitMask());
 	physicsBody->setName(RIGID_BODY_COMPONENT);
+	physicsBody->setRotationEnable(bodyConfig.IsRotationEnabled());
 	attachmentNode.addComponent(physicsBody);
 }
 
@@ -68,7 +69,7 @@ bool PhysicsManager::OnContactBegin(cocos2d::PhysicsContact& contact)
 {
 	const PhysicsBody* bodyA = contact.getShapeA()->getBody();
 	const PhysicsBody* bodyB = contact.getShapeB()->getBody();
-
+	
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
 		const std::string& bodyAName = bodyA->getNode()->getName();

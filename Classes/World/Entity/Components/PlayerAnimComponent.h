@@ -34,7 +34,7 @@ public:
 	AnimationKind getCurrentlyLoopingAnimation() const;
 
 	// Load animation configuration from xml file
-	void loadConfig(tinyxml2::XMLNode* pNode);
+	void LoadConfig(tinyxml2::XMLNode* pNode);
 
 	// Public interface to start animations
 	void playLightAttackAnimation(LightAttackStage stage, 
@@ -42,7 +42,7 @@ public:
 	void playHurtAnimation();
 	
 	void loopRunAnimation();
-	void loopIdleAnimation();
+	void LoopIdleAnimation();
 	void loopDodgeAnimation();
 
 private:
