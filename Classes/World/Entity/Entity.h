@@ -12,6 +12,7 @@ public:
 	Entity();
 	virtual ~Entity();
 
+public:
 	float					GetCurrentMoveSpeed() const;
 	const Vector2&			GetHeading() const;
 	const cocos2d::Size&	GetPhysicsBodySizeScaled() const;
@@ -26,6 +27,7 @@ public:
 	bool					IsDodging() const;
 	bool					IsAttacking() const;
 
+	void SetForceScale(float scale);
 	void SetBaseDamage(float baseDamage);
 	void SetBaseHealth(float baseHealth);
 	void SetBaseMoveSpeed(float moveSpeed);
@@ -34,7 +36,7 @@ public:
 	void SetMoveDirection(const Vector2& direction);
 	void SetPhysicsBodySize(const cocos2d::Size& size);
 	void SetPhysicsBodyAnchor(const cocos2d::Vec2& achorPos);
-
+	
 	void TakeDamage(float damage);
 	void StartDodging();
 	void StopDodging();
@@ -42,17 +44,22 @@ public:
 	void StopAttacking();
 
 	virtual void update(float deltaTime) override;
+	virtual void Move();	
 
 protected:
 	virtual void DispatchOnHealthChangedEvent();
+	void		 OnEntityInitialized();
+
+private:
+	void		 SetCurrentMoveSpeed(float moveSpeed);
 
 private:	
 	static unsigned int			s_uniqueId;
 	unsigned int				m_id;
-
-	Vector2			m_moveDirection;
-	cocos2d::Size	m_physicsBodyScaledSize;
-
+		
+	Vector2					m_moveDirection;
+	cocos2d::Size			m_physicsBodyScaledSize;	
+	
 	bool m_isRuning;
 	bool m_isDodging;
 	bool m_isAttacking;
@@ -65,4 +72,5 @@ private:
 	float m_moveSpeed;
 	float m_dodgeSpeed;
 	float m_dodgeTime;
+	float m_forceScale;
 };

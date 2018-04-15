@@ -1,6 +1,5 @@
 #include "ChaseAction.h"
 
-
 ChaseAction* ChaseAction::Create(const Entity& chaseTarget, AIAgent& agent)
 {
 	ChaseAction *ret = new (std::nothrow) ChaseAction(chaseTarget, agent);
@@ -40,11 +39,11 @@ void ChaseAction::step(float dt)
 	Vector2 toTarget = m_chaseTarget.getPosition() - currentPosition;
 	const Vector2& toTargetNormalized = toTarget.getNormalized();
 
-	m_agent.setPosition(currentPosition + toTargetNormalized *
-		m_agent.GetCurrentMoveSpeed() * dt);
-
 	// Update agent move direction
 	m_agent.SetMoveDirection(toTargetNormalized);
+	
+	// Move the agent
+	m_agent.Move();
 
 	// Check if attack distance has been reached
 	if (toTarget.length() <= m_agent.GetChaseStopDistance())

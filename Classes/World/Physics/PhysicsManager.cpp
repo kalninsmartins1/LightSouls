@@ -1,6 +1,7 @@
 #include "PhysicsManager.h"
 #include "PhysicsBodyConfig.h"
 #include "GameConsts.h"
+#include "World/Entity/Entity.h"
 
 PhysicsManager* PhysicsManager::GetInstance()
 {
@@ -14,7 +15,7 @@ bool PhysicsManager::Init(cocos2d::Node* context)
 
 	// Register for contact events
 	auto contactListener = cocos2d::EventListenerPhysicsContact::create();
-	contactListener->onContactBegin = CC_CALLBACK_1(PhysicsManager::OnContactBegin, this);
+	contactListener->onContactBegin = CC_CALLBACK_1(PhysicsManager::OnContactBegin, this);	
 	context->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, 
 		context);
 
@@ -68,12 +69,15 @@ void PhysicsManager::QuerryRect(const cocos2d::Rect& rect,
 bool PhysicsManager::OnContactBegin(cocos2d::PhysicsContact& contact)
 {
 	const PhysicsBody* bodyA = contact.getShapeA()->getBody();
-	const PhysicsBody* bodyB = contact.getShapeB()->getBody();
-	
+	const PhysicsBody* bodyB = contact.getShapeB()->getBody();		
+
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
-		const std::string& bodyAName = bodyA->getNode()->getName();
-		const std::string& bodyBName = bodyB->getNode()->getName();
+		cocos2d::Node* bodyANode = bodyA->getNode();
+		cocos2d::Node* bodyBNode = bodyB->getNode();
+		
+		const std::string& bodyAName = bodyANode->getName();
+		const std::string& bodyBName = bodyBNode->getName();
 
 		// If contact contains some of the listener names then inform the listeners
 		for(auto& listener : m_contactListeners)

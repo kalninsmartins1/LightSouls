@@ -3,11 +3,13 @@
 #include "GameConsts.h"
 #include "Utils/Utils.h"
 
-StatePatrol::StatePatrol(AIAgent& agent):
-	m_agent(agent),
-	m_targetEntity(AIAgentManager::GetInstance()->GetTargetEntity()),
-	m_curProgress(StateProgress::NONE),
-	m_animComponent(nullptr)
+StatePatrol::StatePatrol(AIAgent& agent)
+	: m_agent(agent)
+	, m_targetEntity(AIAgentManager::GetInstance()->GetTargetEntity())
+	, m_curProgress(StateProgress::NONE)
+	, m_animComponent(nullptr)
+	, m_curTargetPosition(Vector2::ZERO)
+	, m_isLookingAround(false)
 {
 }
 
@@ -15,6 +17,7 @@ void StatePatrol::OnEnter(AIAnimComponent* animComponent)
 {
 	m_animComponent = animComponent;
 	m_curProgress = StateProgress::IN_PROGRESS;	
+	GetRandomPositionInRange(m_curTargetPosition);
 }
 
 StateProgress StatePatrol::OnStep()
@@ -26,19 +29,21 @@ StateProgress StatePatrol::OnStep()
 		{
 			m_curProgress = StateProgress::DONE;
 		}
-		else
+		else if(!m_isLookingAround)
 		{
-			// If move action is finished then start new move action
-			const auto actionManager = m_agent.getActionManager();
-			const auto moveToPositionAction = actionManager->
-				getActionByTag(ACTION_MOVE_TAG, &m_agent);
-
-			if (moveToPositionAction == nullptr ||
-				moveToPositionAction->isDone())
+			Vector2 toTargetPosition = m_curTargetPosition - m_agent.getPosition();
+			m_agent.SetMoveDirection(toTargetPosition.getNormalized());
+			m_agent.Move();
+			m_animComponent->PlayRunAnimation();
+			
+			if (toTargetPosition.length() < 0.1f)
 			{
-				MoveToRandomPositionAndWait();
-				m_animComponent->PlayRunAnimation();
-			}
+				// Target position reached
+				m_isLookingAround = true;
+
+				// idle for specific time				
+				StartLookingAround();
+			}			
 		}		
 	}
 
@@ -55,20 +60,6 @@ AIState StatePatrol::GetStateType()
 	return AIState::PATROL;
 }
 
-float StatePatrol::GetTimeToReachTarget(const cocos2d::Vec2& targetPosition) const
-{
-	using namespace cocos2d;
-	
-	const Vec2& curAgentPosition = m_agent.getPosition();	
-	const float distanceToTargetPosition = targetPosition.distance(curAgentPosition);
-	const float agentMoveSpeed = m_agent.GetCurrentMoveSpeed();
-	float timeToGetToTarget = 0;
-	
-	timeToGetToTarget = Utils::SafeDevide(distanceToTargetPosition, agentMoveSpeed);
-
-	return timeToGetToTarget;
-}
-
 bool StatePatrol::HasTargetBeenSpotted() const
 {
 	using namespace cocos2d;
@@ -82,30 +73,25 @@ bool StatePatrol::HasTargetBeenSpotted() const
 	return distanceToTargetEntity < m_agent.GetChaseRadius();
 }
 
-void StatePatrol::MoveToRandomPositionAndWait() const
+void StatePatrol::GetRandomPositionInRange(Vector2& outRandomPosition) const
+{	
+	outRandomPosition = Utils::GetRandomPositionWithinCircle(m_agent.getPosition(),
+		m_agent.GetPatrolRadius());	
+}
+
+void StatePatrol::StartLookingAround()
 {
 	using namespace cocos2d;
 
-	const Vec2& targetPosition = Utils::GetRandomPositionWithinCircle(m_agent.getPosition(),
-		m_agent.GetPatrolRadius());
-
-	// Get time it takes for agent to move to position
-	const float timeToReachTarget = GetTimeToReachTarget(targetPosition);
+	m_animComponent->PlayIdleAnimation();
+	auto delay = DelayTime::create(m_agent.GetPatrolPause());
+	auto callback = CallFunc::create(CC_CALLBACK_0(StatePatrol::OnFinishedLookingAround, this));
+	auto sequence = Sequence::create(delay, callback, nullptr);
 	
-	// Update agents moving direction
-	const Vec2 toTarget = targetPosition - m_agent.getPosition();
-	m_agent.SetMoveDirection(toTarget.getNormalized());
-
-	// Move the agent to target position using move action
-	const auto moveTo = MoveTo::create(timeToReachTarget, targetPosition);
-	const auto callback = CallFunc::create(CC_CALLBACK_0(StatePatrol::OnFinishedMoving, this));
-	const auto delay = DelayTime::create(m_agent.GetPatrolPause());
-	Sequence* sequence = Sequence::create(moveTo, callback, delay, nullptr);
-	sequence->setTag(ACTION_MOVE_TAG);
 	m_agent.runAction(sequence);
 }
 
-void StatePatrol::OnFinishedMoving() const
+void StatePatrol::OnFinishedLookingAround()
 {
-	m_animComponent->PlayIdleAnimation();
+	m_isLookingAround = false;
 }

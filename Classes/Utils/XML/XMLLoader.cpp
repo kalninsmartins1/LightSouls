@@ -427,7 +427,7 @@ bool XMLLoader::LoadWorld(World& world, const std::string& pathToXML)
 	return isSuccessful;
 }
 
-void XMLLoader::CreatePhysicsBodyFromAttributes(Node& attachmentNode, const XMLNode* xmlNode,
+void XMLLoader::CreatePhysicsBodyFromAttributes(Entity& attachmentEntity, const XMLNode* xmlNode,
 	Size& outSize)
 {
 	const XMLElement* physicsBodyElem =
@@ -441,6 +441,8 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(Node& attachmentNode, const XMLN
 	const bool isBodyDynamic = physicsBodyElem->BoolAttribute(XML_PHYSICS_DYNAMIC_BODY_ATTR);
 	const bool isRotationEnabled = physicsBodyElem->BoolAttribute(XML_PHYSICS_ROTATION_ENABLED_ATTR);
 	const int collisionBitMask = physicsBodyElem->IntAttribute(XML_PHYSICS_BIT_MASK_ATTR);
+	const float forceScale = physicsBodyElem->FloatAttribute(XML_PHYSICS_FORCE_SCALE_ATTR);	
+	attachmentEntity.SetForceScale(forceScale);
 
 	if (bodyType == XML_PHYSICS_BODY_BOX_ATTR)
 	{
@@ -454,7 +456,7 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(Node& attachmentNode, const XMLN
 			isGravityEnabled);
 		bodyConfig.SetRotationEnabled(isRotationEnabled);
 
-		PhysicsManager::AddPhysicsBody(attachmentNode, bodyConfig);
+		PhysicsManager::AddPhysicsBody(attachmentEntity, bodyConfig);
 	}
 
 	outSize = bodySize;

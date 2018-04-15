@@ -2,20 +2,22 @@
 
 unsigned int Entity::s_uniqueId = 0;
 
-Entity::Entity() :
-	m_moveDirection(Vector2::ZERO),
-	m_isRuning(false),
-	m_isDodging(false),
-	m_isAttacking(false),
-	m_baseMoveSpeed(0),
-	m_baseHealth(0),
-	m_baseDamage(0),
-	m_health(0),
-	m_damage(0),
-	m_moveSpeed(0),
-	m_dodgeSpeed(0),
-	m_dodgeTime(0),
-	m_id(s_uniqueId++)
+Entity::Entity()	
+	: m_id(s_uniqueId++)
+	, m_moveDirection(Vector2::ZERO)
+	, m_physicsBodyScaledSize(cocos2d::Size::ZERO)	
+	, m_isRuning(false)
+	, m_isDodging(false)
+	, m_isAttacking(false)
+	, m_baseMoveSpeed(0)
+	, m_baseHealth(0)
+	, m_baseDamage(0)
+	, m_health(0)
+	, m_damage(0)
+	, m_moveSpeed(0)
+	, m_dodgeSpeed(0)
+	, m_dodgeTime(0)
+	, m_forceScale(1)
 {
 }
 
@@ -30,6 +32,15 @@ void Entity::SetBaseDamage(float baseDamage)
 	m_damage = baseDamage;
 }
 
+void Entity::SetCurrentMoveSpeed(float moveSpeed)
+{
+	m_moveSpeed = moveSpeed;
+	if (_physicsBody != nullptr)
+	{
+		_physicsBody->setVelocityLimit(moveSpeed);
+	}	
+}
+
 void Entity::SetBaseHealth(float baseHealth)
 {
 	m_baseHealth = baseHealth;
@@ -39,7 +50,7 @@ void Entity::SetBaseHealth(float baseHealth)
 void Entity::SetBaseMoveSpeed(float moveSpeed)
 {
 	m_baseMoveSpeed = moveSpeed;
-	m_moveSpeed = m_baseMoveSpeed;
+	SetCurrentMoveSpeed(moveSpeed);
 }
 
 void Entity::SetDodgeSpeed(float dodgeSpeed)
@@ -89,13 +100,13 @@ void Entity::TakeDamage(float damage)
 void Entity::StartDodging()
 {
 	m_isDodging = true;
-	m_moveSpeed = m_dodgeSpeed;
+	SetCurrentMoveSpeed(m_dodgeSpeed);	
 }
 
 void Entity::StopDodging()
 {
 	m_isDodging = false;
-	m_moveSpeed = m_baseMoveSpeed;
+	SetCurrentMoveSpeed(m_baseMoveSpeed);	
 }
 
 void Entity::StartAttacking()
@@ -111,12 +122,31 @@ void Entity::StopAttacking()
 void Entity::update(float deltaTime)
 {
 	Sprite::update(deltaTime);
-	m_isRuning = m_moveDirection.lengthSquared() > 0;
+	m_isRuning = m_moveDirection.lengthSquared() > 0;	
 }
 
 void Entity::DispatchOnHealthChangedEvent()
 {
 	// Does nothing by default
+}
+
+void Entity::Move()
+{
+	if (abs(m_moveDirection.x) > 0 || abs(m_moveDirection.y) > 0)
+	{
+		// Move entity by applying force
+		_physicsBody->applyImpulse(m_moveDirection * m_moveSpeed * m_forceScale);		
+	}	
+	else
+	{
+		// Instantly stop moving
+		_physicsBody->setVelocity(Vector2(0.0f, 0.0f));
+	}
+}
+
+void Entity::OnEntityInitialized()
+{
+	_physicsBody->setVelocityLimit(m_moveSpeed);
 }
 
 float Entity::GetCurrentMoveSpeed() const
@@ -182,4 +212,9 @@ bool Entity::IsDodging() const
 bool Entity::IsAttacking() const
 {
 	return m_isAttacking;
+}
+
+void Entity::SetForceScale(float scale)
+{
+	m_forceScale = scale;
 }

@@ -25,8 +25,9 @@ class PhysicsManager
 public:
 	using Vector2 = cocos2d::Vec2;
 
+public:
 	static PhysicsManager* GetInstance();
-
+	
 	bool Init(cocos2d::Node* context);	
 	
 	// Register for contact events
@@ -44,7 +45,7 @@ public:
 
 private:
 
-	// Physics world callabck for when two objects begin colliding
+	// Physics world callback for when two objects begin colliding
 	bool OnContactBegin(cocos2d::PhysicsContact& contact);
 
 private:

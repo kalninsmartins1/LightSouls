@@ -8,7 +8,7 @@
 	>
 	
 	<Component type="TransformComponent">
-		<Position x="2" y="200" z="0" />
+		<Position x="-100" y="200" z="0" />
 		<Rotation x="0" y="0" z="0" />
 		<Scale x="0.5" y="0.5" z="0.5"/>
 	</Component>
@@ -46,10 +46,10 @@
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Dodge"
-			path="res/Graphics/World/Player/Dodge/dodgeSpriteSheet.png" 
-			plistPath="res/Graphics/World/Player/Dodge/dodgeData.plist"
-			frameNamePattern="dodge%d.png"
-			frameCount="6"
+			path="res/Graphics/World/Player/Idle/idleAnim.png" 
+			plistPath="res/Graphics/World/Player/Idle/idleAnim.plist"
+			frameNamePattern="idle%d.png"
+			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="LightAttackOne"
@@ -93,12 +93,13 @@
 		<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
 		<PhysicsBody
 			shape="box"
-			width="200"
+			width="150"
 			height="100"
 			isDynamic="true" 
 			isGravityEnabled="false" 
 			isRotationEnabled="false"
-			collisionBitMask="1"			
+			collisionBitMask="1"
+			forceScale="100"
 			/>
 	</Component>
 	

@@ -26,15 +26,15 @@ GameControllerInput::~GameControllerInput()
 bool GameControllerInput::init()
 {
 	// Register for input events
-	EventListenerController* pControllerListener = EventListenerController::create();
-	pControllerListener->onConnected = CC_CALLBACK_0(GameControllerInput::onControllerConnected, this);
-	pControllerListener->onDisconnected = CC_CALLBACK_0(GameControllerInput::onControllerDisconnected, this);
-	pControllerListener->onKeyDown = CC_CALLBACK_3(GameControllerInput::onButtonDown, this);
-	pControllerListener->onKeyUp = CC_CALLBACK_3(GameControllerInput::onButtonUp, this);
-	pControllerListener->onAxisEvent = CC_CALLBACK_3(GameControllerInput::onAxisInput, this);
+	EventListenerController* controllerListener = EventListenerController::create();
+	controllerListener->onConnected = CC_CALLBACK_0(GameControllerInput::onControllerConnected, this);
+	controllerListener->onDisconnected = CC_CALLBACK_0(GameControllerInput::onControllerDisconnected, this);
+	controllerListener->onKeyDown = CC_CALLBACK_3(GameControllerInput::onButtonDown, this);
+	controllerListener->onKeyUp = CC_CALLBACK_3(GameControllerInput::onButtonUp, this);
+	controllerListener->onAxisEvent = CC_CALLBACK_3(GameControllerInput::onAxisInput, this);
 
 	EventDispatcher* pEventDispatcher = Director::getInstance()->getEventDispatcher();
-	pEventDispatcher->addEventListenerWithFixedPriority(pControllerListener, 1);
+	pEventDispatcher->addEventListenerWithFixedPriority(controllerListener, 1);
 
 	return pEventDispatcher != nullptr;
 }

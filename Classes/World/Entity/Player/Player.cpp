@@ -47,16 +47,21 @@ const std::string& Player::GetOnHealthChangedEvent()
 bool Player::Init(const std::string& pathToXML)
 {
 	XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);	
+	OnEntityInitialized();
 
 	// Get animation component to trigger animations when that is necessary
-	m_animComponent =
-		static_cast<PlayerAnimComponent*>(getComponent(PLAYER_ANIM_COMPONENT));
-	m_animComponent->LoopIdleAnimation();
-
+	m_animComponent = static_cast<PlayerAnimComponent*>(getComponent(PLAYER_ANIM_COMPONENT));
+	if (m_animComponent != nullptr)
+	{
+		m_animComponent->LoopIdleAnimation();
+	}
+	else
+	{
+		CCAssert(false, "Error: Did not find player animation component !");
+	}
 	m_attackComponent = static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
 
-	SetPhysicsBodyAnchor(Vector2(0, 0));
-		
+	SetPhysicsBodyAnchor(Vector2(0, 0));		
 	PhysicsManager::GetInstance()->AddContactListener(getName(), 
 		CC_CALLBACK_1(Player::OnContactBegin, this));
 
@@ -73,8 +78,7 @@ void Player::update(float deltaTime)
 	// We can move only when we are not attacking
 	if (!IsAttacking() && m_isAttackComboDelayExpired)
 	{
-		setPosition(getPosition() + GetHeading() *
-			GetCurrentMoveSpeed() * deltaTime);
+		Move();
 		
 		PlayRunOrIdleAnimation();
 	}	

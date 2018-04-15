@@ -52,8 +52,7 @@ private:
 		const XMLNode* pNode);
 	static void						LoadVec3FromAttributes(const XMLElement* node, cocos2d::Vec3& outResult);
 	static void						LoadVec2FromAttributes(const XMLElement* element, cocos2d::Vec2& outResult);
-	static void						CreatePhysicsBodyFromAttributes(
-										cocos2d::Node& attachmentNode,
+	static void						CreatePhysicsBodyFromAttributes(Entity& attachmentEntity,
 										const XMLNode* xmlNode,
 										cocos2d::Size& outSize);
 

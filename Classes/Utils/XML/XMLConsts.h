@@ -74,6 +74,7 @@ static constexpr char* XML_AXIS_Z_ATTR = "z";
 static constexpr char* XML_PHYSICS_BIT_MASK_ATTR = "collisionBitMask";
 static constexpr char* XML_PHYSICS_DYNAMIC_BODY_ATTR = "isDynamic";
 static constexpr char* XML_PHYSICS_ROTATION_ENABLED_ATTR = "isRotationEnabled";
+static constexpr char* XML_PHYSICS_FORCE_SCALE_ATTR = "forceScale";
 static constexpr char* XML_PHYSICS_GRAVITY_ATTR = "isGravityEnabled";
 static constexpr char* XML_PHYSICS_BODY_BOX_ATTR = "box";
 static constexpr char* XML_PHYSICS_DESITY_ATTR = "density";
