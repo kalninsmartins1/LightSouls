@@ -1,19 +1,20 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "LightSoulsTypes.h"
+
+NS_LIGHTSOULS_BEGIN
 
 struct PhysicsContactInformation;
 class PhysicsBodyConfig;
 
-using PhysicsBody = cocos2d::PhysicsBody;
-using ContactCallback = std::function<void(const PhysicsBody* otherBody)>;
+using ContactCallback = std::function<void(const cocos2d::PhysicsBody* otherBody)>;
 
 struct PhysicsContactListener
 {
-	std::string name;
+	String name;
 	ContactCallback onContactCallback;
 
-	PhysicsContactListener(const std::string& name, ContactCallback onContactCallback)
+	PhysicsContactListener(const String& name, ContactCallback onContactCallback)
 	{
 		this->name = name;
 		this->onContactCallback = onContactCallback;
@@ -23,15 +24,15 @@ struct PhysicsContactListener
 class PhysicsManager
 {
 public:
-	using Vector2 = cocos2d::Vec2;
-
-public:
 	static PhysicsManager* GetInstance();
 	
 	bool Init(cocos2d::Node* context);	
 	
-	// Register for contact events
-	void AddContactListener(const std::string& bodyName, ContactCallback onContactBegin);
+	// Register for begin contact events
+	void AddContactBeginListener(const String& bodyName, ContactCallback onContactBegin);
+
+	// Register for end contact events
+	void AddContactEndListener(const String& bodyName, ContactCallback onContactEnd);
 
 	// Add physics body as component to given attachment node
 	static void AddPhysicsBody(cocos2d::Node& attachmentNode,
@@ -44,12 +45,20 @@ public:
 		const cocos2d::PhysicsQueryRectCallbackFunc& callback);
 
 private:
+	void DispatchContactEventsToListeners(const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners);
 
 	// Physics world callback for when two objects begin colliding
 	bool OnContactBegin(cocos2d::PhysicsContact& contact);
 
+	// Physics world callback for when two objects stop colliding
+	bool OnContactEnd(cocos2d::PhysicsContact& contact);
+
 private:
-	std::vector<PhysicsContactListener> m_contactListeners;
+	std::vector<PhysicsContactListener> m_beginContactListeners;
+	std::vector<PhysicsContactListener> m_endContactListeners;
+
 	cocos2d::Node* m_context;
 	cocos2d::DrawNode* m_debugDrawNode;
 };
+
+NS_LIGHTSOULS_END

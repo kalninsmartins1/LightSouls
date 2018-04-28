@@ -1,14 +1,22 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "LightSoulsTypes.h"
+
+NS_LIGHTSOULS_BEGIN
 
 class World : public cocos2d::Sprite
 {
 public:
-	static World*	Create(const std::string& pathToXML);	
-
-	bool Init(const std::string& pathToSprite, const std::string& bodyName, const std::string& pathToCollisionData);
+	static const String& GetNodeName();
+	
+	static World*	Create(const String& pathToXML);
+	bool			Init(const String& pathToSprite, const String& bodyName, const String& pathToCollisionData);
 
 private:
-	bool Init(const std::string& pathToXML);
+	bool Init(const String& pathToXML);
+
+private:
+	static const String s_nodeName;
 };
+
+NS_LIGHTSOULS_END

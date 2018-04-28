@@ -3,6 +3,8 @@
 #include "World/Entity/Ammo/Arrow.h"
 #include "Utils/Utils.h"
 
+NS_LIGHTSOULS_BEGIN
+
 RangedAttackComponent* RangedAttackComponent::Create(
 	const String& pathToAmmo,
 	float maxAmmoFlyDistance,
@@ -51,3 +53,5 @@ void RangedAttackComponent::Attack(const Vector2& direction)
 	pArrow->setCameraMask(pParent->getCameraMask());
 	pParent->addChild(pArrow);	
 }
+
+NS_LIGHTSOULS_END

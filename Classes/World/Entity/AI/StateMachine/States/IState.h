@@ -1,5 +1,10 @@
 #pragma once
-#include "World/Entity/Components/AIAnimComponent.h"
+
+#include "LightSoulsTypes.h"
+
+NS_LIGHTSOULS_BEGIN
+
+class AnimComponent;
 
 enum class StateProgress
 {
@@ -22,7 +27,7 @@ class IState
 {
 public:
 	// Called when state is first entered
-	virtual void OnEnter(AIAnimComponent* pAnimComponent) = 0;
+	virtual void OnEnter(AnimComponent* animComponent) = 0;
 
 	// Called to progress the state, returns current state progress
 	virtual StateProgress OnStep() = 0;
@@ -32,3 +37,5 @@ public:
 
 	virtual AIState GetStateType() = 0;
 };
+
+NS_LIGHTSOULS_END

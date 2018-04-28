@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "Utils/Utils.h"
-#include "../Components/PlayerAnimComponent.h"
+#include "../Components/AnimComponent.h"
 #include "Utils/XML/XMLLoader.h"
 #include "GameConsts.h"
 #include "Input/GameInput.h"
@@ -8,12 +8,13 @@
 #include "World/Physics/PhysicsManager.h"
 #include "Events/HealthChangedEventData.h"
 #include "cocos2d/cocos/base/CCEventDispatcher.h"
+#include "Utils/AnimationUtils.h"
 
-using namespace cocos2d;
+NS_LIGHTSOULS_BEGIN
 
-const std::string Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
+const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
 
-Player* Player::Create(const std::string& pathToXML)
+Player* Player::Create(const String& pathToXML)
 {
 	Player* player = new (std::nothrow) Player();
 	if (player && player->Init(pathToXML))
@@ -28,32 +29,34 @@ Player* Player::Create(const std::string& pathToXML)
 	return player;
 }
 
-Player::Player() :
-	m_animComponent(nullptr),
-	m_attackComponent(nullptr),
-	m_lastValidMoveDirection(Vector2::UNIT_X), // By default start out moving right
-	m_isAttackComboDelayExpired(true),
-	m_timeBetweenComboInput(0),	
-	m_lastTimePerformedLightAttack(0),
-	m_curLightAttackAnimIdx(0)
+Player::Player()
+	: m_animComponent(nullptr)
+	, m_attackComponent(nullptr)
+	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right
+	, m_isAttackComboDelayExpired(true)
+	, m_timeBetweenComboInput(0)
+	, m_lastTimePerformedLightAttack(0)
+	, m_curAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE))
+	, m_lastAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE))
+	, m_firstAttackAnimId(m_curAttackAnimId)
 {
 }
 
-const std::string& Player::GetOnHealthChangedEvent()
+const String& Player::GetOnHealthChangedEvent()
 {
 	return s_eventOnPlayerHealthChanged;
 }
 
-bool Player::Init(const std::string& pathToXML)
+bool Player::Init(const String& pathToXML)
 {
 	XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);	
 	OnEntityInitialized();
 
 	// Get animation component to trigger animations when that is necessary
-	m_animComponent = static_cast<PlayerAnimComponent*>(getComponent(PLAYER_ANIM_COMPONENT));
+	m_animComponent = static_cast<AnimComponent*>(getComponent(ANIM_COMPONENT));
 	if (m_animComponent != nullptr)
 	{
-		m_animComponent->LoopIdleAnimation();
+		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
 	}
 	else
 	{
@@ -62,7 +65,7 @@ bool Player::Init(const std::string& pathToXML)
 	m_attackComponent = static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
 
 	SetPhysicsBodyAnchor(Vector2(0, 0));		
-	PhysicsManager::GetInstance()->AddContactListener(getName(), 
+	PhysicsManager::GetInstance()->AddContactBeginListener(getName(), 
 		CC_CALLBACK_1(Player::OnContactBegin, this));
 
 	return true;
@@ -77,9 +80,7 @@ void Player::update(float deltaTime)
 
 	// We can move only when we are not attacking
 	if (!IsAttacking() && m_isAttackComboDelayExpired)
-	{
-		Move();
-		
+	{		
 		PlayRunOrIdleAnimation();
 	}	
 }
@@ -129,8 +130,8 @@ void Player::ManageInput()
 	}
 
 	// Player movement
-	const float horizontalValue = input->getInputAxis("HorizontalMovement");
-	const float vertiacalValue = input->getInputAxis("VerticalMovement");	
+	const float horizontalValue = input->GetInputAxis("HorizontalMovement");
+	const float vertiacalValue = input->GetInputAxis("VerticalMovement");	
 	Vector2& moveDirection = Vector2(horizontalValue, vertiacalValue);
 	
 	// Make sure we are not moving faster diagonally
@@ -152,25 +153,18 @@ void Player::LightAttack()
 		Entity::StartAttacking();
 
 		if(!m_isAttackComboDelayExpired)
-		{
-			// Go to next attack in combo
-			m_curLightAttackAnimIdx++;
-			
+		{			
 			// Wrap the index within valid values
-			Utils::WrapValue(m_curLightAttackAnimIdx, 
-				static_cast<unsigned short int>(LightAttackStage::ONE),
-				static_cast<unsigned short int>(LightAttackStage::FIVE));
+			Utils::WrapValue(++m_curAttackAnimId, m_firstAttackAnimId, m_lastAttackAnimId);
 		}
 		else
 		{
 			// Reset back to first attack
-			m_curLightAttackAnimIdx = 
-				static_cast<unsigned short int>(LightAttackStage::ONE);
+			m_curAttackAnimId = m_firstAttackAnimId;				
 		}
 		
 		// Play the attack animation
-		m_animComponent->playLightAttackAnimation(
-			static_cast<LightAttackStage>(m_curLightAttackAnimIdx),
+		m_animComponent->PlayOneShotAnimation(m_curAttackAnimId,
 			CC_CALLBACK_0(Player::OnAttackFinished, this));
 		m_attackComponent->Attack(m_lastValidMoveDirection);
 		
@@ -182,7 +176,7 @@ void Player::LightAttack()
 void Player::PerformDodge()
 {	
 	StartDodging();
-	m_animComponent->loopDodgeAnimation();
+	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_DODGE);
 	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(Player::OnDodgeFinished, this), GetDodgeTime());
 }
@@ -191,18 +185,16 @@ void Player::PlayRunOrIdleAnimation() const
 {			
 	if (IsRunning() && !IsDodging())
 	{
-		if(m_animComponent->getCurrentlyLoopingAnimation() 
-			!= AnimationKind::RUN)
+		if(!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_RUN))
 		{
-			m_animComponent->loopRunAnimation();
+			m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 		}
 	}
 	else if (!IsRunning())
 	{
-		if(m_animComponent->getCurrentlyLoopingAnimation() 
-			!= AnimationKind::IDLE)
+		if(!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_IDLE))
 		{
-			m_animComponent->LoopIdleAnimation();
+			m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
 		}
 	}
 }
@@ -220,7 +212,7 @@ void Player::DispatchOnHealthChangedEvent()
 
 void Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
-	const std::string& name = otherBody->getNode()->getName();
+	const String& name = otherBody->getNode()->getName();
 	CCLOG("Player collided with %s", name.c_str());
 }
 
@@ -234,3 +226,5 @@ float Player::GetSecondsForValidLighAttackCombo() const
 
 	return secondsBeforeComboExpires;
 }
+
+NS_LIGHTSOULS_END

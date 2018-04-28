@@ -1,6 +1,9 @@
 #pragma once
 
+#include "LightSoulsTypes.h"
 #include "IEventData.h"
+
+NS_LIGHTSOULS_BEGIN
 
 class HealthChangedEventData : public IEventData
 {
@@ -14,3 +17,5 @@ private:
 	float m_newHealthValue;
 	float m_healthPercentage;
 };
+
+NS_LIGHTSOULS_END

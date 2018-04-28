@@ -23,7 +23,7 @@
 				paddingFromBody="5">
 	</Component>
 	
-	<Component type="PlayerAnimComponent">
+	<Component type="AnimComponent">
 		<SpriteSheet type="Run"
 			path="res/Graphics/World/Player/Run/runAnim.png" 
 			plistPath="res/Graphics/World/Player/Run/runAnim.plist"
@@ -52,35 +52,35 @@
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
-		<SpriteSheet type="LightAttackOne"
+		<SpriteSheet type="AttackCombo1"
 			path="res/Graphics/World/Player/Attack/LightAttack1/lightAttack1Anim.png" 
 			plistPath="res/Graphics/World/Player/Attack/LightAttack1/lightAttack1Anim.plist"
 			frameNamePattern="lightAttack1%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
-		<SpriteSheet type="LightAttackTwo"
+		<SpriteSheet type="AttackCombo2"
 			path="res/Graphics/World/Player/Attack/LightAttack2/lightAttack2Anim.png" 
 			plistPath="res/Graphics/World/Player/Attack/LightAttack2/lightAttack2Anim.plist"
 			frameNamePattern="lightAttack2%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
-		<SpriteSheet type="LightAttackThree"
+		<SpriteSheet type="AttackCombo3"
 			path="res/Graphics/World/Player/Attack/LightAttack3/lightAttack3Anim.png" 
 			plistPath="res/Graphics/World/Player/Attack/LightAttack3/lightAttack3Anim.plist"
 			frameNamePattern="lightAttack3%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
-		<SpriteSheet type="LightAttackFour"
+		<SpriteSheet type="AttackCombo4"
 			path="res/Graphics/World/Player/Attack/LightAttack4/lightAttack4Anim.png" 
 			plistPath="res/Graphics/World/Player/Attack/LightAttack4/lightAttack4Anim.plist"
 			frameNamePattern="lightAttack4%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
-		<SpriteSheet type="LightAttackFive"
+		<SpriteSheet type="AttackCombo5"
 			path="res/Graphics/World/Player/Attack/LightAttack5/lightAttack5Anim.png" 
 			plistPath="res/Graphics/World/Player/Attack/LightAttack5/lightAttack5Anim.plist"
 			frameNamePattern="lightAttack5%d.png"

@@ -1,10 +1,12 @@
 #include "UIElementConfig.h"
 
+NS_LIGHTSOULS_BEGIN
+
 UIElementConfig::UIElementConfig()
 	: m_pathToSprite()
-	, m_achorPosition(cocos2d::Vec2::ZERO)
-	, m_normalizedPosition(cocos2d::Vec2::ZERO)
-	, m_scale(cocos2d::Vec2::ZERO)
+	, m_achorPosition(Vector2::ZERO)
+	, m_normalizedPosition(Vector2::ZERO)
+	, m_scale(Vector2::ZERO)
 {
 
 }
@@ -14,42 +16,44 @@ UIElementConfig::~UIElementConfig()
 
 }
 
-const cocos2d::Vec2& UIElementConfig::GetAnchorPosition() const
+const Vector2& UIElementConfig::GetAnchorPosition() const
 {
 	return m_achorPosition;
 }
 
-const cocos2d::Vec2& UIElementConfig::GetNormalizedPosition() const
+const Vector2& UIElementConfig::GetNormalizedPosition() const
 {
 	return m_normalizedPosition;
 }
 
-const std::string& UIElementConfig::GetPathToSprite() const
+const String& UIElementConfig::GetPathToSprite() const
 {
 	return m_pathToSprite;
 }
 
-const cocos2d::Vec2& UIElementConfig::GetScale() const
+const Vector2& UIElementConfig::GetScale() const
 {
 	return m_scale;
 }
 
-void UIElementConfig::SetAnchorPosition(const cocos2d::Vec2& anchorPos)
+void UIElementConfig::SetAnchorPosition(const Vector2& anchorPos)
 {
 	m_achorPosition = anchorPos;
 }
 
-void UIElementConfig::SetNormalizedPosition(const cocos2d::Vec2& normalizedPos)
+void UIElementConfig::SetNormalizedPosition(const Vector2& normalizedPos)
 {
 	m_normalizedPosition = normalizedPos;
 }
 
-void UIElementConfig::SetPathToSprite(const std::string& pathToSprite)
+void UIElementConfig::SetPathToSprite(const String& pathToSprite)
 {
 	m_pathToSprite = pathToSprite;
 }
 
-void UIElementConfig::SetScale(const cocos2d::Vec2& scale)
+void UIElementConfig::SetScale(const Vector2& scale)
 {
 	m_scale = scale;
 }
+
+NS_LIGHTSOULS_END

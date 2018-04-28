@@ -1,7 +1,9 @@
 #include "Arrow.h"
 #include "Utils/Utils.h"
 
-Arrow* Arrow::Create(const std::string& pathToSprite, 
+NS_LIGHTSOULS_BEGIN
+
+Arrow* Arrow::Create(const String& pathToSprite, 
 	const Vector2& startPosition,
 	const Vector2& moveDirection,
 	float maxFlyDistance, float moveSpeed)
@@ -38,7 +40,7 @@ Arrow::Arrow(Vector2 startPosition, float maxFlyDistance) :
 {	
 }
 
-bool Arrow::Init(const std::string& pathToSprite, 
+bool Arrow::Init(const String& pathToSprite, 
 	const cocos2d::Vec2& moveDirection,
 	float moveSpeed)
 {
@@ -59,3 +61,5 @@ void Arrow::RotateArrowInDirectionOfMovement()
 		Vector2(0, 1).dot(heading) / heading.length()));
 	setRotation(angleBetweenVectors);
 }
+
+NS_LIGHTSOULS_END

@@ -3,42 +3,48 @@
 #include "World/Entity/AI/AIAgentManager.h"
 #include "GameConsts.h"
 #include "World/Entity/Components/AttackComponent.h"
+#include "World/Entity/Components/AnimComponent.h"
+#include "Utils/AnimationUtils.h"
+#include "Utils/Utils.h"
 
-StateAttack::StateAttack(AIAgent& agent) :
-	m_curProgress(StateProgress::NONE),
-	m_agent(agent),
-	m_targetEntity(AIAgentManager::GetInstance()->GetTargetEntity()),
-	m_attackComponent(nullptr),
-	m_animComponent(nullptr),
-	m_isAttackAnimFinished(true)	
+NS_LIGHTSOULS_BEGIN
+
+StateAttack::StateAttack(AIAgent& agent)
+	: m_curProgress(StateProgress::NONE)
+	, m_agent(agent)
+	, m_targetEntity(AIAgentManager::GetInstance()->GetTargetEntity())
+	, m_attackComponent(nullptr)
+	, m_animComponent(nullptr)
+	, m_isAnimFinished(true)
+	, m_curAnimationId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE))
+	, m_lastAnimationId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE))
+	, m_firstAnimatioId(m_curAnimationId)
 {
 }
 
-void StateAttack::OnEnter(AIAnimComponent* pAnimComponent)
+void StateAttack::OnEnter(AnimComponent* animComponent)
 {
-	m_animComponent = pAnimComponent;
+	m_animComponent = animComponent;
 	m_attackComponent = m_agent.GetAttackComponent();
 	m_curProgress = StateProgress::IN_PROGRESS;
 }
 
 StateProgress StateAttack::OnStep()
 {
-	if(m_curProgress == StateProgress::IN_PROGRESS && m_isAttackAnimFinished)
+	if(m_curProgress == StateProgress::IN_PROGRESS && m_isAnimFinished)
 	{
 		if(m_attackComponent->IsReadyToAttack())
 		{
-			cocos2d::Vec2 toTarget = m_targetEntity.getPosition() -
-				m_agent.getPosition();
+			Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
 			m_attackComponent->Attack(toTarget.getNormalized());
 
 			// Start attack animation
-			m_isAttackAnimFinished = false;
-			m_animComponent->playAttackAnimationWithCallback(
-				CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
+			m_isAnimFinished = false;
+			m_animComponent->PlayOneShotAnimation(m_curAnimationId, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
 		}
 		
-		const cocos2d::Vec2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
-		if(toTarget.length() > m_attackComponent->GetAttackRange())
+		const Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
+		if(toTarget.length() > m_attackComponent->GetAttackRange() && m_isAnimFinished)
 		{
 			// Target run away cant attack
 			m_curProgress = StateProgress::DONE;
@@ -50,6 +56,7 @@ StateProgress StateAttack::OnStep()
 void StateAttack::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
+	m_curAnimationId = m_firstAnimatioId;
 }
 
 AIState StateAttack::GetStateType()
@@ -59,5 +66,8 @@ AIState StateAttack::GetStateType()
 
 void StateAttack::OnAttackFinished()
 {
-	m_isAttackAnimFinished = true;	
+	Utils::WrapValue(++m_curAnimationId, m_firstAnimatioId, m_lastAnimationId);
+	m_isAnimFinished = true;	
 }
+
+NS_LIGHTSOULS_END

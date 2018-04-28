@@ -1,5 +1,8 @@
 #pragma once
-#include "cocos2d.h"
+
+#include "LightSoulsTypes.h"
+
+NS_LIGHTSOULS_BEGIN
 
 class UIElementConfig
 {
@@ -7,19 +10,21 @@ public:
 	UIElementConfig();
 	~UIElementConfig();
 
-	const cocos2d::Vec2& GetAnchorPosition() const;
-	const cocos2d::Vec2& GetNormalizedPosition() const;
-	const std::string&	 GetPathToSprite() const;
-	const cocos2d::Vec2& GetScale() const;
+	const Vector2& GetAnchorPosition() const;
+	const Vector2& GetNormalizedPosition() const;
+	const String&  GetPathToSprite() const;
+	const Vector2& GetScale() const;
 
-	void				 SetAnchorPosition(const cocos2d::Vec2& anchorPos);
-	void				 SetNormalizedPosition(const cocos2d::Vec2& normalizedPos);
-	void				 SetPathToSprite(const std::string& pathToSprite);
-	void				 SetScale(const cocos2d::Vec2& scale);
+	void				 SetAnchorPosition(const Vector2& anchorPos);
+	void				 SetNormalizedPosition(const Vector2& normalizedPos);
+	void				 SetPathToSprite(const String& pathToSprite);
+	void				 SetScale(const Vector2& scale);
 
 private:
-	std::string	  m_pathToSprite;
-	cocos2d::Vec2 m_achorPosition;
-	cocos2d::Vec2 m_normalizedPosition;
-	cocos2d::Vec2 m_scale;
+	String	m_pathToSprite;
+	Vector2 m_achorPosition;
+	Vector2 m_normalizedPosition;
+	Vector2 m_scale;
 };
+
+NS_LIGHTSOULS_END

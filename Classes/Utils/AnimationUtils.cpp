@@ -1,54 +1,86 @@
 #include "AnimationUtils.h"
-#include "XML/XMLConsts.h"
 #include "GameConsts.h"
 #include "tinyxml2/tinyxml2.h"
 #include "Utils.h"
+#include "XML/XMLConsts.h"
 
-using namespace cocos2d;
 
-void AnimationUtils::startSpriteFrameAnimationWithCallback(Sprite* pSprite,
-	Vector<SpriteFrame*>& spriteFrames, float timeBetweenFrames, 
+NS_LIGHTSOULS_BEGIN
+
+const std::map<String, int> LightSouls::AnimationUtils::s_animTypeToId =
+{
+	{ ANIM_TYPE_RUN, 0 },
+	{ ANIM_TYPE_IDLE, 1 },
+	{ ANIM_TYPE_DODGE, 2 },
+	{ ANIM_TYPE_HURT, 3 },
+	{ ANIM_TYPE_ATTACK, 4 },
+	{ ANIM_TYPE_ATTACK_COMBO_ONE, 5 },
+	{ ANIM_TYPE_ATTACK_COMBO_TWO, 6 },
+	{ ANIM_TYPE_ATTACK_COMBO_THREE, 7 },
+	{ ANIM_TYPE_ATTACK_COMBO_FOUR, 8 },
+	{ ANIM_TYPE_ATTACK_COMBO_FIVE, 9 },
+};
+
+int AnimationUtils::GetAnimId(String animName)
+{
+	int animId = -1;	
+	if (Utils::ContainsKey(s_animTypeToId, animName))
+	{
+		animId = s_animTypeToId.at(animName);
+	}
+	else
+	{
+		CCLOGERROR("No animation %s found !", animName.c_str());
+	}
+
+	return animId;
+}
+
+void AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
+	const AnimationData& animationData,
 	const std::function<void()>& onFinished)
 {
 	// Stop any previously started animation
 	pSprite->stopActionByTag(ACTION_ANIM_TAG);
 
 	// Start character animation
-	const auto pAnimation = Animation::createWithSpriteFrames(spriteFrames,
-		timeBetweenFrames);
-	const auto pAnimate = Animate::create(pAnimation);
-	const auto pCallback = CallFunc::create(onFinished);
+	const auto animation = cocos2d::Animation::createWithSpriteFrames(animationData.frames,
+		animationData.timeBetweenFrames);
+	const auto animate = cocos2d::Animate::create(animation);
+	const auto callbackAction = cocos2d::CallFunc::create(onFinished);
 
 	/* According to cocos2d documentation last parameter to Sequnce::create must be nullptr
 	 * http://www.cocos2d-x.org/docs/cocos2d-x/en/actions/sequences.html
 	*/
-	Sequence* pSequence = Sequence::create(pAnimate, pCallback, nullptr);
-	pSequence->setTag(ACTION_ANIM_TAG);
+	auto sequence = cocos2d::Sequence::create(animate, callbackAction, nullptr);
+	sequence->setTag(ACTION_ANIM_TAG);
 
 	// Start new anim
-	pSprite->runAction(pSequence);
+	pSprite->runAction(sequence);
 }
 
-void AnimationUtils::startSpriteFrameAnimation(Sprite* pSprite, Vector<SpriteFrame*>& spriteFrames,
-	float timeBetweenFrames)
+void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const AnimationData& animation)
 {
-	// Stop any previously started animation
-	pSprite->stopActionByTag(ACTION_ANIM_TAG);
+	using namespace cocos2d;
 
-	// Start character animation
-	const auto pAnimation = Animation::createWithSpriteFrames(spriteFrames, timeBetweenFrames);
-	const auto pAnimate = Animate::create(pAnimation);
-	const auto pRepeatAction = RepeatForever::create(pAnimate);
-	pRepeatAction->setTag(ACTION_ANIM_TAG);
+	// Stop any previously started animation
+	sprite->stopActionByTag(ACTION_ANIM_TAG);
+
+	// Start character animation	
+	const auto ccAnimation = cocos2d::Animation::createWithSpriteFrames(animation.frames,
+		animation.timeBetweenFrames);
+	const auto animateAction = Animate::create(ccAnimation);
+	const auto repeatAction = RepeatForever::create(animateAction);
+	repeatAction->setTag(ACTION_ANIM_TAG);
 
 	// Start new anim
-	pSprite->runAction(pRepeatAction);
+	sprite->runAction(repeatAction);
 }
 
-void AnimationUtils::loadAnimationFrames(const tinyxml2::XMLElement* pElem,
-	Vector<SpriteFrame*>& outSpriteFrames, float& outTimeBetweenFrames)
-{	
-	auto spriteCache = SpriteFrameCache::getInstance();
+void AnimationUtils::LoadAnimationFrames(const tinyxml2::XMLElement* pElem,
+	AnimationData& outAnimationData)
+{
+	auto spriteCache = cocos2d::SpriteFrameCache::getInstance();
 	const char* plistPath = pElem->Attribute(XML_ANIM_PLIST_PATH_ATTR);
 	spriteCache->addSpriteFramesWithFile(plistPath);
 
@@ -63,10 +95,14 @@ void AnimationUtils::loadAnimationFrames(const tinyxml2::XMLElement* pElem,
 	for (int i = 0; i < frameCount; i++)
 	{
 		sprintf(curSpriteFrameName, spriteFrameName, i);
-		SpriteFrame* frame = spriteCache->getSpriteFrameByName(curSpriteFrameName);
-		outSpriteFrames.pushBack(frame);
+		cocos2d::SpriteFrame* frame = spriteCache->getSpriteFrameByName(curSpriteFrameName);
+		outAnimationData.frames.pushBack(frame);
 	}
 
 	// Set the time between frames
-	outTimeBetweenFrames = pElem->FloatAttribute(XML_ANIM_TIME_BETWEEN_FRAMES_ATTR);
+	outAnimationData.timeBetweenFrames = pElem->FloatAttribute(XML_ANIM_TIME_BETWEEN_FRAMES_ATTR);
 }
+
+NS_LIGHTSOULS_END
+
+

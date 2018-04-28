@@ -1,37 +1,38 @@
 #include "GameControllerInput.h"
 #include "Utils/Utils.h"
 
-using namespace cocos2d;
+NS_LIGHTSOULS_BEGIN
 
 GameControllerInput::GameControllerInput()
 {
-	m_bIsConnected = false;
+	m_isConnected = false;
 
-	if (!init())
+	if (!Init())
 	{
 		CCASSERT(false, "GameControllerInput: Failed to initialize !");
 	}
 	else
 	{
-		Controller::startDiscoveryController();
+		cocos2d::Controller::startDiscoveryController();
 	}
 }
 
 GameControllerInput::~GameControllerInput()
 {
 	// Stop controller updating and release related resources
-	Controller::stopDiscoveryController();
+	cocos2d::Controller::stopDiscoveryController();
 }
 
-bool GameControllerInput::init()
+bool GameControllerInput::Init()
 {
 	// Register for input events
+	using namespace cocos2d;
 	EventListenerController* controllerListener = EventListenerController::create();
-	controllerListener->onConnected = CC_CALLBACK_0(GameControllerInput::onControllerConnected, this);
-	controllerListener->onDisconnected = CC_CALLBACK_0(GameControllerInput::onControllerDisconnected, this);
-	controllerListener->onKeyDown = CC_CALLBACK_3(GameControllerInput::onButtonDown, this);
-	controllerListener->onKeyUp = CC_CALLBACK_3(GameControllerInput::onButtonUp, this);
-	controllerListener->onAxisEvent = CC_CALLBACK_3(GameControllerInput::onAxisInput, this);
+	controllerListener->onConnected = CC_CALLBACK_0(GameControllerInput::OnControllerConnected, this);
+	controllerListener->onDisconnected = CC_CALLBACK_0(GameControllerInput::OnControllerDisconnected, this);
+	controllerListener->onKeyDown = CC_CALLBACK_3(GameControllerInput::OnButtonDown, this);
+	controllerListener->onKeyUp = CC_CALLBACK_3(GameControllerInput::OnButtonUp, this);
+	controllerListener->onAxisEvent = CC_CALLBACK_3(GameControllerInput::OnAxisInput, this);
 
 	EventDispatcher* pEventDispatcher = Director::getInstance()->getEventDispatcher();
 	pEventDispatcher->addEventListenerWithFixedPriority(controllerListener, 1);
@@ -39,29 +40,7 @@ bool GameControllerInput::init()
 	return pEventDispatcher != nullptr;
 }
 
-bool GameControllerInput::hasAction(const std::string& action) const
-{
-	bool bHasAction = false;
-	if (Utils::ContainsKey(m_actionButtons, action))
-	{
-		bHasAction = m_actionButtons.at(action).bIsActive;
-	}
-
-	return bHasAction;
-}
-
-bool GameControllerInput::hasActionState(const std::string& action) const
-{
-	bool bHasActionState = false;
-	if (Utils::ContainsKey(m_stateButtons, action))
-	{
-		bHasActionState = m_stateButtons.at(action).bIsPressed;
-	}
-
-	return bHasActionState;
-}
-
-float GameControllerInput::getAxisInput(const std::string& axisName) const
+float GameControllerInput::GetAxisInput(const String& axisName) const
 {
 	float value = 0;
 	if (Utils::ContainsKey(m_controllerAxis, axisName))
@@ -72,99 +51,69 @@ float GameControllerInput::getAxisInput(const std::string& axisName) const
 	return value;
 }
 
-bool GameControllerInput::hasAxisInput(const std::string& axisName) const
+bool GameControllerInput::HasAxisInput(const String& axisName) const
 {
 	bool bHasAxisInput = false;
 	if (Utils::ContainsKey(m_controllerAxis, axisName))
 	{
-		bHasAxisInput = m_controllerAxis.at(axisName).bIsPressed;
+		bHasAxisInput = m_controllerAxis.at(axisName).isPressed;
 	}
 
 	return bHasAxisInput;
 }
 
-void GameControllerInput::addAxisButton(const std::string& actionName,
+void GameControllerInput::AddAxisButton(const String& actionName,
 	const ControllerAxis& axisButton)
 {
 	m_buttonCodeToAxisAction[axisButton.buttonCode] = actionName;
 	m_controllerAxis.insert(std::make_pair(actionName, axisButton));
 }
 
-void GameControllerInput::addActionButton(const std::string& actionName, const ActionButton& actionButton)
+bool GameControllerInput::IsConnected() const
 {
-	m_actionButtons.insert(std::make_pair(actionName, actionButton));
-	m_buttonCodeToAction[actionButton.buttonCode] = actionName;
+	return m_isConnected;
 }
 
-void GameControllerInput::addStateButton(const std::string& actionName, const StateButton& stateButton)
+void GameControllerInput::OnControllerConnected()
 {
-	m_stateButtons.insert(std::make_pair(actionName, stateButton));
-	m_buttonCodeToStateAction[stateButton.buttonCode] = actionName;
+	m_isConnected = true;
 }
 
-bool GameControllerInput::isConnected() const
+void GameControllerInput::OnControllerDisconnected()
 {
-	return m_bIsConnected;
+	m_isConnected = false;
 }
 
-void GameControllerInput::onControllerConnected()
+void GameControllerInput::OnButtonDown(cocos2d::Controller* pController, int buttonCode,
+	cocos2d::Event* pEvent)
 {
-	m_bIsConnected = true;
+	SetStateButtonState(true, buttonCode);
 }
 
-void GameControllerInput::onControllerDisconnected()
+void GameControllerInput::OnButtonUp(cocos2d::Controller* pController, int buttonCode,
+	cocos2d::Event* pEvent)
 {
-	m_bIsConnected = false;
+	SetStateButtonState(false, buttonCode);
+	SetActionButtonState(true, buttonCode);
 }
 
-void GameControllerInput::onButtonDown(Controller* pController, int buttonCode,
-	Event* pEvent)
-{
-	setStateButtonState(true, buttonCode);
-}
-
-void GameControllerInput::onButtonUp(Controller* pController, int buttonCode,
-	Event* pEvent)
-{
-	setStateButtonState(false, buttonCode);
-	setActionButtonState(true, buttonCode);
-}
-
-void GameControllerInput::onAxisInput(Controller* pController, int buttonCode,
-	Event* pEvent)
+void GameControllerInput::OnAxisInput(cocos2d::Controller* pController, int buttonCode,
+	cocos2d::Event* pEvent)
 {
 	auto buttonStatus = pController->getKeyStatus(buttonCode);
-	setAxisInputState(buttonStatus.value, buttonCode);
+	SetAxisInputState(buttonStatus.value, buttonCode);
 }
 
-void GameControllerInput::setActionButtonState(bool bIsActive, int buttonCode)
-{
-	if (Utils::ContainsKey(m_buttonCodeToAction, buttonCode))
-	{
-		std::string& actionName = m_buttonCodeToAction[buttonCode];
-		m_actionButtons[actionName].bIsActive = bIsActive;
-	}
-}
-
-void GameControllerInput::setStateButtonState(bool bIsPressed, int buttonCode)
-{
-	if (Utils::ContainsKey(m_buttonCodeToStateAction, buttonCode))
-	{
-		std::string& actionName = m_buttonCodeToStateAction[buttonCode];
-		m_stateButtons[actionName].bIsPressed = bIsPressed;
-	}
-}
-
-void GameControllerInput::setAxisInputState(float value, int buttonCode)
+void GameControllerInput::SetAxisInputState(float value, int buttonCode)
 {
 	if (Utils::ContainsKey(m_buttonCodeToAxisAction, buttonCode))
 	{
-		std::string& actionName = m_buttonCodeToAxisAction[buttonCode];
+		String& actionName = m_buttonCodeToAxisAction[buttonCode];
 		ControllerAxis& axis = m_controllerAxis[actionName];
 		if (abs(value) > 0)
 		{
 			axis.curValue = value;
-			axis.bIsPressed = true;
+			axis.isPressed = true;
 
 			// Clamp axis value to specified range
 			if (axis.toValue > axis.fromValue)
@@ -179,7 +128,9 @@ void GameControllerInput::setAxisInputState(float value, int buttonCode)
 		else
 		{
 			axis.curValue = 0;
-			axis.bIsPressed = false;
+			axis.isPressed = false;
 		}
 	}
 }
+
+NS_LIGHTSOULS_END

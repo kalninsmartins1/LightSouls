@@ -1,7 +1,11 @@
 #pragma once
 
-#include "cocos2d.h"
-#include "Input/InputTypes/GameController/GameControllerInput.h"
+#include "LightSoulsTypes.h"
+
+NS_LIGHTSOULS_BEGIN
+
+enum class X360Axes;
+enum class X360Button;
 
 using MouseButtonCode = cocos2d::EventMouse::MouseButton;
 using KeyCode = cocos2d::EventKeyboard::KeyCode;
@@ -12,9 +16,9 @@ public:
 	// Returns -1 if value is negative, else returns 1
 	static int					GetSign(const float& value);
 	static float				GetRandValueWithinRange(int minValue, int maxValue);
-	static cocos2d::Vec2		GetRandomPositionWithinCircle(const cocos2d::Vec2 centerPos, float radius);
+	static Vector2		GetRandomPositionWithinCircle(const Vector2 centerPos, float radius);
 	static float				GetRandAngleInRadians();
-	static cocos2d::Vec2		GetScreenFillScale(const cocos2d::Size& curSize);
+	static Vector2		GetScreenFillScale(const cocos2d::Size& curSize);
 	static const cocos2d::Size& GetScreenSize();
 
 	static float		SafeDevide(const float& up, const float& down);
@@ -23,14 +27,14 @@ public:
 	static void			StartTimerWithCallback(cocos2d::Node* node,
 							std::function<void()> callback, float time);
 
-	static void LogVec2(const cocos2d::Vec2& v);
-	static void LogVec3(const cocos2d::Vec3& v);
-	static void AssertWithStrFormat(bool condition, const std::string& msg, const std::string& param);
+	static void LogVector2(const Vector2& v);
+	static void LogVector3(const Vector3& v);
+	static void AssertWithStrFormat(bool condition, const String& msg, const String& param);
 
-	static MouseButtonCode	ConvertStringToMouseButtonCode(const std::string& mouseButtonStr);
-	static KeyCode			ConvertStringToKeyCode(const std::string& keyCodeStr);
-	static X360Axes			ConvertStringToGameControllerAxis(const std::string& controllerAxisStr);
-	static X360Button		ConvertStringToGameControllerButton(const std::string& controllerButtonStr);
+	static MouseButtonCode	ConvertStringToMouseButtonCode(const String& mouseButtonStr);
+	static KeyCode			ConvertStringToKeyCode(const String& keyCodeStr);
+	static X360Axes			ConvertStringToGameControllerAxis(const String& controllerAxisStr);
+	static X360Button		ConvertStringToGameControllerButton(const String& controllerButtonStr);
 
 	template <typename T, typename K>
 	static bool ContainsKey(const std::map<T, K>& map, const T& key);
@@ -51,27 +55,27 @@ private:
 template <typename T, typename K>
 bool Utils::ContainsKey(const std::map<T, K>& map, const T& key)
 {
-	bool bDoesContainKey = true;
+	bool doesContainKey = true;
 	auto it = map.find(key);
 	if(it == map.end())
 	{
-		bDoesContainKey = false;
+		doesContainKey = false;
 	}
 
-	return bDoesContainKey;
+	return doesContainKey;
 }
 
 template <typename T, typename K>
 bool Utils::ContainsKey(const cocos2d::Map<T, K>& map, const T& key)
 {
-	bool bDoesContainKey = true;
+	bool doesContainKey = true;
 	auto it = map.find(key);
 	if (it == map.end())
 	{
-		bDoesContainKey = false;
+		doesContainKey = false;
 	}
 
-	return bDoesContainKey;
+	return doesContainKey;
 }
 
 template <typename T>
@@ -99,3 +103,5 @@ void Utils::WrapValue(T& value, const T& startValue, const T& endValue)
 		value = endValue;
 	}
 }
+
+NS_LIGHTSOULS_END

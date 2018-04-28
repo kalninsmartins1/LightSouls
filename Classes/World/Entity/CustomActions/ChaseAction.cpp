@@ -1,4 +1,7 @@
 #include "ChaseAction.h"
+#include "World/Entity/AI/AIAgent.h"
+
+NS_LIGHTSOULS_BEGIN
 
 ChaseAction* ChaseAction::Create(const Entity& chaseTarget, AIAgent& agent)
 {
@@ -42,13 +45,14 @@ void ChaseAction::step(float dt)
 	// Update agent move direction
 	m_agent.SetMoveDirection(toTargetNormalized);
 	
-	// Move the agent
-	m_agent.Move();
+	float distanceToTarget = toTarget.length();
 
-	// Check if attack distance has been reached
-	if (toTarget.length() <= m_agent.GetChaseStopDistance())
+	if (distanceToTarget <= m_agent.GetChaseStopDistance() ||	// Target has been caught
+		distanceToTarget >= m_agent.GetChaseRadius()) // Target run off
 	{
-		// Attack distance has been reached - state finished
+	
 		m_isDone = true;
-	}
+	}	
 }
+
+NS_LIGHTSOULS_END

@@ -1,13 +1,11 @@
 #pragma once
 
-#include "2d/CCSprite.h"
+#include "LightSoulsTypes.h"
+
+NS_LIGHTSOULS_BEGIN
 
 class Entity: public cocos2d::Sprite
 {
-public:
-	using Vector2 = cocos2d::Vec2;
-	using String = std::string;
-
 public:
 	Entity();
 	virtual ~Entity();
@@ -22,12 +20,13 @@ public:
 	float					GetDodgeSpeed() const;
 	float					GetCurrentHealth() const;
 	float					GetMaxHealth() const;
+	float					GetPhysicsBodyForceScale() const;
 	unsigned int			GetId() const;
 	bool					IsRunning() const;
 	bool					IsDodging() const;
 	bool					IsAttacking() const;
 
-	void SetForceScale(float scale);
+	void SetPhysicsBodyForceScale(float scale);
 	void SetBaseDamage(float baseDamage);
 	void SetBaseHealth(float baseHealth);
 	void SetBaseMoveSpeed(float moveSpeed);
@@ -35,7 +34,7 @@ public:
 	void SetDodgeTime(float dodgeTime);	
 	void SetMoveDirection(const Vector2& direction);
 	void SetPhysicsBodySize(const cocos2d::Size& size);
-	void SetPhysicsBodyAnchor(const cocos2d::Vec2& achorPos);
+	void SetPhysicsBodyAnchor(const Vector2& achorPos);
 	
 	void TakeDamage(float damage);
 	void StartDodging();
@@ -44,14 +43,14 @@ public:
 	void StopAttacking();
 
 	virtual void update(float deltaTime) override;
-	virtual void Move();	
 
 protected:
 	virtual void DispatchOnHealthChangedEvent();
 	void		 OnEntityInitialized();
 
 private:
-	void		 SetCurrentMoveSpeed(float moveSpeed);
+	void		SetCurrentMoveSpeed(float moveSpeed);
+	void		Move();	
 
 private:	
 	static unsigned int			s_uniqueId;
@@ -72,5 +71,7 @@ private:
 	float m_moveSpeed;
 	float m_dodgeSpeed;
 	float m_dodgeTime;
-	float m_forceScale;
+	float m_physicsBodyForceScale;
 };
+
+NS_LIGHTSOULS_END

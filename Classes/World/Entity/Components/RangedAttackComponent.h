@@ -2,6 +2,8 @@
 
 #include "AttackComponent.h"
 
+NS_LIGHTSOULS_BEGIN
+
 class RangedAttackComponent: public AttackComponent
 {
 public:
@@ -20,3 +22,5 @@ private:
 	String	m_pathToAmmo;
 	float	m_ammoMoveSpeed;
 };
+
+NS_LIGHTSOULS_END

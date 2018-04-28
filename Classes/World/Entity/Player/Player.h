@@ -4,7 +4,9 @@
 #include "World/Entity/Entity.h"
 #include "World/Entity/Components/LongSwordAttackComponent.h"
 
-class PlayerAnimComponent;
+NS_LIGHTSOULS_BEGIN
+
+class AnimComponent;
 class GameInput;
 
 class Player: public Entity
@@ -13,12 +15,12 @@ class Player: public Entity
 public:
 	Player();
 
-	static const std::string& GetOnHealthChangedEvent();
+	static const String& GetOnHealthChangedEvent();
 
 	void SetTimeBetweenComboInput(float timeBetweenComboInput);
 	
-	static Player*	Create(const std::string& pPathToXML);
-	bool			Init(const std::string& pathToXML);
+	static Player*	Create(const String& pPathToXML);
+	bool			Init(const String& pathToXML);
 	
 	virtual void	update(float deltaTime) override;
 
@@ -40,13 +42,17 @@ private:
 	float GetSecondsForValidLighAttackCombo() const;
 
 private:
-	static const std::string	s_eventOnPlayerHealthChanged;
-	PlayerAnimComponent*		m_animComponent;
+	static const String	s_eventOnPlayerHealthChanged;
+	AnimComponent*		m_animComponent;
 	AttackComponent*			m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
 	bool				m_isAttackComboDelayExpired;
 	float				m_timeBetweenComboInput;
 	long				m_lastTimePerformedLightAttack;
-	unsigned short int	m_curLightAttackAnimIdx;
+	int					m_curAttackAnimId;
+	const int			m_lastAttackAnimId;
+	const int			m_firstAttackAnimId;
 };
+
+NS_LIGHTSOULS_END

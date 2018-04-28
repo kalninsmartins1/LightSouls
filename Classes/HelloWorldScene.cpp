@@ -43,14 +43,14 @@ bool HelloWorld::init()
 	InitUILayer();
 	
 	// Init Input
-	if(!GameInput::GetInstance()->LoadInputConfiguration("res/Configs/Input/Input.xml"))
+	if(!LightSouls::GameInput::GetInstance()->LoadInputConfiguration("res/Configs/Input/Input.xml"))
 	{
 		// Halt the game when in debug mode
 		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
 	}
 
 	// Init physics manager
-	if(!PhysicsManager::GetInstance()->Init(this))
+	if(!LightSouls::PhysicsManager::GetInstance()->Init(this))
 	{
 		CCASSERT(false, "HelloWorldScene: Failed to initialize PhysicsManager !");
 	}
@@ -64,10 +64,10 @@ bool HelloWorld::init()
 void HelloWorld::update(float deltaTime)
 {	
 	// Keep input events up to date
-	GameInput::GetInstance()->Update(deltaTime);
+	LightSouls::GameInput::GetInstance()->Update(deltaTime);
 
 	// Update AI
-	AIAgentManager::GetInstance()->Update(deltaTime);	
+	LightSouls::AIAgentManager::GetInstance()->Update(deltaTime);	
 
 	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
 	if(world != nullptr)
@@ -84,18 +84,18 @@ void HelloWorld::InitWolrdLayer()
 	Node* worldLayer = Node::create();
 
 	// Init world
-	World* pWorld = World::Create("res/Configs/World/WorldConfig.xml");
+	LightSouls::World* pWorld = LightSouls::World::Create("res/Configs/World/WorldConfig.xml");
 	worldLayer->addChild(pWorld);
 
 	// Init player
-	m_player = Player::Create("res/Configs/World/Player/Player.xml");
+	m_player = LightSouls::Player::Create("res/Configs/World/Player/Player.xml");
 	worldLayer->addChild(m_player);
 	
-	getEventDispatcher()->addCustomEventListener(Player::GetOnHealthChangedEvent(),
+	getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetOnHealthChangedEvent(),
 		CC_CALLBACK_1(HelloWorld::OnPlayerHealthChanged, this));
 
 	// Init AI
-	AIAgentManager* agentManager = AIAgentManager::GetInstance();
+	LightSouls::AIAgentManager* agentManager = LightSouls::AIAgentManager::GetInstance();
 	if (agentManager->Init("res/Configs/World/AI/AIManager.xml"))
 	{
 		agentManager->SetTargetEntity(m_player);
@@ -125,14 +125,14 @@ void HelloWorld::InitUILayer()
 {
 	// Init UI
 	Node* uiLayer = Node::create();
-	uiLayer->setContentSize(Utils::GetScreenSize());
+	uiLayer->setContentSize(LightSouls::Utils::GetScreenSize());
 
 	Sprite* screenOverlay = Sprite::create("res/Graphics/UI/screenOverlay.png");
-	const Vec2 scale = Utils::GetScreenFillScale(screenOverlay->getContentSize());
+	const Vec2 scale = LightSouls::Utils::GetScreenFillScale(screenOverlay->getContentSize());
 	screenOverlay->setScale(scale.x, scale.y);
 	screenOverlay->setAnchorPoint(Vec2::ZERO);
 
-	m_healthBar = ProgressBar::Create("res/Configs/UI/InGameIndicators/HealthBar.xml");
+	m_healthBar = LightSouls::ProgressBar::Create("res/Configs/UI/InGameIndicators/HealthBar.xml");
 	if (m_healthBar == nullptr)
 	{
 		CCLOG("HelloWorldScene: Failed to initialize health bar !");
@@ -152,7 +152,7 @@ void HelloWorld::InitUILayer()
 
 void HelloWorld::OnPlayerHealthChanged(EventCustom* eventData)
 {
-	auto healthData = static_cast<HealthChangedEventData*>(eventData->getUserData());
+	auto healthData = static_cast<LightSouls::HealthChangedEventData*>(eventData->getUserData());
 	
 	if (healthData != nullptr)
 	{

@@ -3,6 +3,8 @@
 #include "GameConsts.h"
 #include "World/Entity/Entity.h"
 
+NS_LIGHTSOULS_BEGIN
+
 PhysicsManager* PhysicsManager::GetInstance()
 {
 	static PhysicsManager instance;
@@ -16,6 +18,7 @@ bool PhysicsManager::Init(cocos2d::Node* context)
 	// Register for contact events
 	auto contactListener = cocos2d::EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(PhysicsManager::OnContactBegin, this);	
+	contactListener->onContactSeparate = CC_CALLBACK_1(PhysicsManager::OnContactEnd, this);
 	context->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, 
 		context);
 
@@ -26,15 +29,21 @@ bool PhysicsManager::Init(cocos2d::Node* context)
 	return context != nullptr;
 }
 
-void PhysicsManager::AddContactListener(const std::string& bodyName,
+void PhysicsManager::AddContactBeginListener(const String& bodyName,
 	ContactCallback onContactBegin)
 {
-	m_contactListeners.emplace_back(PhysicsContactListener(bodyName, onContactBegin));
+	m_beginContactListeners.emplace_back(PhysicsContactListener(bodyName, onContactBegin));
+}
+
+void PhysicsManager::AddContactEndListener(const String& bodyName, ContactCallback onContactEnd)
+{
+	m_endContactListeners.emplace_back(PhysicsContactListener(bodyName, onContactEnd));
 }
 
 void PhysicsManager::AddPhysicsBody(cocos2d::Node& attachmentNode,
 	const PhysicsBodyConfig& bodyConfig)
 {
+	using namespace cocos2d;
 	PhysicsBody* physicsBody = PhysicsBody::createBox(bodyConfig.GetSize(),
 		bodyConfig.GetPhysicsMaterial());
 	physicsBody->setDynamic(bodyConfig.IsBodyDynamic());
@@ -66,32 +75,54 @@ void PhysicsManager::QuerryRect(const cocos2d::Rect& rect,
 	pWorld->queryRect(callback, rect, nullptr);
 }
 
+void PhysicsManager::DispatchContactEventsToListeners(const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners)
+{
+	cocos2d::Node* bodyANode = bodyA->getNode();
+	cocos2d::Node* bodyBNode = bodyB->getNode();
+
+	const String& bodyAName = bodyANode->getName();
+	const String& bodyBName = bodyBNode->getName();
+
+	// If contact contains some of the listener names then inform the listeners
+	for (auto& listener : listeners)
+	{
+		if (bodyAName == listener.name)
+		{
+			listener.onContactCallback(bodyB);
+		}
+		else if (bodyBName == listener.name)
+		{
+			listener.onContactCallback(bodyA);
+		}
+	}
+}
+
 bool PhysicsManager::OnContactBegin(cocos2d::PhysicsContact& contact)
 {
-	const PhysicsBody* bodyA = contact.getShapeA()->getBody();
-	const PhysicsBody* bodyB = contact.getShapeB()->getBody();		
+	const cocos2d::PhysicsBody* bodyA = contact.getShapeA()->getBody();
+	const cocos2d::PhysicsBody* bodyB = contact.getShapeB()->getBody();		
 
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
-		cocos2d::Node* bodyANode = bodyA->getNode();
-		cocos2d::Node* bodyBNode = bodyB->getNode();
-		
-		const std::string& bodyAName = bodyANode->getName();
-		const std::string& bodyBName = bodyBNode->getName();
-
-		// If contact contains some of the listener names then inform the listeners
-		for(auto& listener : m_contactListeners)
-		{
-			if (bodyAName == listener.name)
-			{
-				listener.onContactCallback(bodyB);
-			}
-			else if (bodyBName == listener.name)
-			{
-				listener.onContactCallback(bodyA);
-			}
-		}
+		DispatchContactEventsToListeners(bodyA, bodyB, m_beginContactListeners);
 	}
 
 	return true;
 }
+
+bool PhysicsManager::OnContactEnd(cocos2d::PhysicsContact& contact)
+{
+	const cocos2d::PhysicsBody* bodyA = contact.getShapeA()->getBody();
+	const cocos2d::PhysicsBody* bodyB = contact.getShapeB()->getBody();
+
+	if (bodyA != nullptr && bodyB != nullptr)
+	{
+		DispatchContactEventsToListeners(bodyA, bodyB, m_endContactListeners);
+	}
+
+	return true;
+}
+
+NS_LIGHTSOULS_END
+
+

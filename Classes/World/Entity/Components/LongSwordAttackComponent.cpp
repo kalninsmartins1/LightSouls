@@ -2,6 +2,7 @@
 #include "World/Physics/PhysicsManager.h"
 #include "World/Entity/Entity.h"
 
+NS_LIGHTSOULS_BEGIN
 
 LongSwordAttackComponent* LongSwordAttackComponent::Create(float secondsBetweenAttacks,
 	float attackRange, float paddingFromBody)
@@ -90,3 +91,5 @@ void LongSwordAttackComponent::CheckAffectedObjects(const Vector2& direction) co
 		CC_CALLBACK_3(LongSwordAttackComponent::OnAttackHit,
 			this));
 }
+
+NS_LIGHTSOULS_END

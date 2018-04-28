@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+NS_LIGHTSOULS_BEGIN
+
 unsigned int Entity::s_uniqueId = 0;
 
 Entity::Entity()	
@@ -17,7 +19,7 @@ Entity::Entity()
 	, m_moveSpeed(0)
 	, m_dodgeSpeed(0)
 	, m_dodgeTime(0)
-	, m_forceScale(1)
+	, m_physicsBodyForceScale(1)
 {
 }
 
@@ -74,7 +76,7 @@ void Entity::SetPhysicsBodySize(const cocos2d::Size& size)
 	m_physicsBodyScaledSize.height = size.height * abs(getScaleY());
 }
 
-void Entity::SetPhysicsBodyAnchor(const cocos2d::Vec2& achorPos)
+void Entity::SetPhysicsBodyAnchor(const Vector2& achorPos)
 {
 	const cocos2d::Size& size = GetPhysicsBodySizeScaled();
 	float physicsBodyAnchorX = achorPos.x * size.width;
@@ -122,7 +124,8 @@ void Entity::StopAttacking()
 void Entity::update(float deltaTime)
 {
 	Sprite::update(deltaTime);
-	m_isRuning = m_moveDirection.lengthSquared() > 0;	
+	m_isRuning = m_moveDirection.lengthSquared() > 0;
+	Move();
 }
 
 void Entity::DispatchOnHealthChangedEvent()
@@ -135,12 +138,12 @@ void Entity::Move()
 	if (abs(m_moveDirection.x) > 0 || abs(m_moveDirection.y) > 0)
 	{
 		// Move entity by applying force
-		_physicsBody->applyImpulse(m_moveDirection * m_moveSpeed * m_forceScale);		
+		_physicsBody->applyImpulse(m_moveDirection * m_moveSpeed * m_physicsBodyForceScale);		
 	}	
 	else
 	{
 		// Instantly stop moving
-		_physicsBody->setVelocity(Vector2(0.0f, 0.0f));
+		_physicsBody->setVelocity(Vector2::ZERO);
 	}
 }
 
@@ -154,7 +157,7 @@ float Entity::GetCurrentMoveSpeed() const
 	return m_moveSpeed;
 }
 
-const Entity::Vector2& Entity::GetHeading() const
+const Vector2& Entity::GetHeading() const
 {	
 	return m_moveDirection;
 }
@@ -194,6 +197,11 @@ float Entity::GetMaxHealth() const
 	return m_baseHealth;
 }
 
+float Entity::GetPhysicsBodyForceScale() const
+{
+	return m_physicsBodyForceScale;
+}
+
 unsigned Entity::GetId() const
 {
 	return m_id;
@@ -214,7 +222,9 @@ bool Entity::IsAttacking() const
 	return m_isAttacking;
 }
 
-void Entity::SetForceScale(float scale)
+void Entity::SetPhysicsBodyForceScale(float scale)
 {
-	m_forceScale = scale;
+	m_physicsBodyForceScale = scale;
 }
+
+NS_LIGHTSOULS_END

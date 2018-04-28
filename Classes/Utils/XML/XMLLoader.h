@@ -1,7 +1,9 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "LightSoulsTypes.h"
 #include "tinyxml2/tinyxml2.h"
+
+NS_LIGHTSOULS_BEGIN
 
 class GameInput;
 class World;
@@ -16,45 +18,46 @@ using XMLElement = tinyxml2::XMLElement;
 using XMLDoc = tinyxml2::XMLDocument;
 using XMLError = tinyxml2::XMLError;
 using LoadInputCallback = std::function<void(GameInput&, const XMLElement*,
-	const std::string&)>;
+	const String&)>;
 
 class XMLLoader
 {
 public:
 	static bool InitializeEntityUsingXMLFile(Entity& entity,
-		const std::string& pathToXML);
+		const String& pathToXML);
 	static bool LoadInputSettings(GameInput& gameInput, 
-		const std::string& pathToConfigXml);
-	static bool InitializeUIProgressBar(ProgressBar& healthBar, const std::string& pathToXML);
-	static bool LoadWorld(World& world, const std::string& pathToXML);
+		const String& pathToConfigXml);
+	static bool InitializeUIProgressBar(ProgressBar& healthBar, const String& pathToXML);
+	static bool LoadWorld(World& world, const String& pathToXML);
 	static bool InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager,
-		const std::string& pathToXML);
+		const String& pathToXML);
 
 private:
 	XMLLoader();
 		
-	static bool						LoadXMLFile(const std::string& pathToXML, XMLDoc& outDoc);
+	static bool						LoadXMLFile(const String& pathToXML, XMLDoc& outDoc);
 
 	static void						LoadActionTriggers(GameInput& gameInput,
 		const XMLElement* pElement, LoadInputCallback onKeyboardInput,
 		LoadInputCallback onMouseInput, LoadInputCallback onGameControllerInput);
 
 	static void						LoadKeyboardAxis(GameInput& gameInput,
-		const XMLElement* pElement, const std::string& actionName);
+		const XMLElement* pElement, const String& actionName);
 	static void						LoadGameControllerAxis(GameInput& gameInput,
-		const XMLElement* element, const std::string& actionName);
+		const XMLElement* element, const String& actionName);
 	
 	static void						LoadActionButton(GameInput& gameInput, GameInputType inputType,
-		const XMLElement* element, const std::string& actionName, const std::string& xmlAttributeName);
+		const XMLElement* element, const String& actionName, const String& xmlAttributeName);
 
 	static void						LoadUIElement(const XMLElement* element, UIElementConfig& outUIElement);
-	static cocos2d::PhysicsMaterial LoadPhysicsMaterialFromAttributes(
-		const XMLNode* pNode);
-	static void						LoadVec3FromAttributes(const XMLElement* node, cocos2d::Vec3& outResult);
-	static void						LoadVec2FromAttributes(const XMLElement* element, cocos2d::Vec2& outResult);
+	static void						LoadPhysicsMaterialFromAttributes(const XMLNode* pNode, cocos2d::PhysicsMaterial& outMaterial);
+	static void						LoadVector3FromAttributes(const XMLElement* node, cocos2d::Vec3& outResult);
+	static void						LoadVector2FromAttributes(const XMLElement* element, cocos2d::Vec2& outResult);
 	static void						CreatePhysicsBodyFromAttributes(Entity& attachmentEntity,
 										const XMLNode* xmlNode,
 										cocos2d::Size& outSize);
 
-	static GameInputType			StrToGameInputType(const std::string& inputType);
+	static GameInputType			StrToGameInputType(const String& inputType);
 };
+
+NS_LIGHTSOULS_END

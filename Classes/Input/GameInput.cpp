@@ -5,11 +5,11 @@
 #include "Input/InputTypes/GameController/GameControllerInput.h"
 #include "Utils/Utils.h"
 
-using namespace cocos2d;
+NS_LIGHTSOULS_BEGIN
 
 GameInput::GameInput()
 {
-	if (!init())
+	if (!Init())
 	{
 		CCASSERT(false, "GameInput: Failed to initilize !");
 	}
@@ -22,39 +22,39 @@ GameInput* GameInput::GetInstance()
 
 GameInput::~GameInput()
 {
-	m_pMouseInput.release();
-	m_pKeyboard.release();
+	m_mouseInput.release();
+	m_keyboard.release();
 }
 
-bool GameInput::init()
+bool GameInput::Init()
 {
 	// Create input generators
-	m_pKeyboard.reset(new (std::nothrow) KeyboardInput());
-	m_pMouseInput.reset(new (std::nothrow) MouseInput());
-	m_pGameControllerInput.reset(new (std::nothrow) GameControllerInput());
+	m_keyboard.reset(new (std::nothrow) KeyboardInput());
+	m_mouseInput.reset(new (std::nothrow) MouseInput());
+	m_gameControllerInput.reset(new (std::nothrow) GameControllerInput());
 
-	return m_pKeyboard != nullptr && m_pMouseInput != nullptr;
+	return m_keyboard != nullptr && m_mouseInput != nullptr;
 }
 
 void GameInput::Update(float deltaTime)
 {
-	m_pMouseInput->update(deltaTime);
-	m_pKeyboard->update(deltaTime);
-	m_pGameControllerInput->update(deltaTime);
+	m_mouseInput->Update(deltaTime);
+	m_keyboard->Update(deltaTime);
+	m_gameControllerInput->Update(deltaTime);
 }
 
-float GameInput::getInputAxis(const std::string& axisAction) const
+float GameInput::GetInputAxis(const String& axisAction) const
 {
 	float value = 0;
-	if (!m_pGameControllerInput->isConnected())
+	if (!m_gameControllerInput->IsConnected())
 	{
-		if (m_pMouseInput->hasAxisInput(axisAction))
+		if (m_mouseInput->HasAxisInput(axisAction))
 		{
-			value = m_pMouseInput->getAxisInput(axisAction);
+			value = m_mouseInput->GetAxisInput(axisAction);
 		}
-		else if (m_pKeyboard->hasAxisInput(axisAction))
+		else if (m_keyboard->HasAxisInput(axisAction))
 		{
-			value = m_pKeyboard->getAxisInput(axisAction);
+			value = m_keyboard->GetAxisInput(axisAction);
 		}
 		else
 		{
@@ -63,9 +63,9 @@ float GameInput::getInputAxis(const std::string& axisAction) const
 				axisAction);
 		}
 	}
-	else if (m_pGameControllerInput->hasAxisInput(axisAction))
+	else if (m_gameControllerInput->HasAxisInput(axisAction))
 	{
-		value = m_pGameControllerInput->getAxisInput(axisAction);
+		value = m_gameControllerInput->GetAxisInput(axisAction);
 	}
 	else
 	{
@@ -77,21 +77,21 @@ float GameInput::getInputAxis(const std::string& axisAction) const
 	return value;
 }
 
-bool GameInput::LoadInputConfiguration(const std::string& pathToConfigFile)
+bool GameInput::LoadInputConfiguration(const String& pathToConfigFile)
 {
 	return XMLLoader::LoadInputSettings(*this, pathToConfigFile);
 }
 
-bool GameInput::HasAction(const std::string& action) const
+bool GameInput::HasAction(const String& action) const
 {
 	bool bHasAction = false;
-	if (!m_pGameControllerInput->isConnected())
+	if (!m_gameControllerInput->IsConnected())
 	{
-		if (m_pMouseInput->hasAction(action))
+		if (m_mouseInput->HasAction(action))
 		{
 			bHasAction = true;
 		}
-		else if (m_pKeyboard->hasAction(action))
+		else if (m_keyboard->HasAction(action))
 		{
 			bHasAction = true;
 		}
@@ -100,7 +100,7 @@ bool GameInput::HasAction(const std::string& action) const
 			// Currently no active action with specified name has been found
 		}
 	}
-	else if (m_pGameControllerInput->hasAction(action))
+	else if (m_gameControllerInput->HasAction(action))
 	{
 		bHasAction = true;
 	}
@@ -108,16 +108,16 @@ bool GameInput::HasAction(const std::string& action) const
 	return bHasAction;
 }
 
-bool GameInput::hasActionState(const std::string& action) const
+bool GameInput::HasActionState(const String& action) const
 {
 	bool bHasActionState = false;
-	if (!m_pGameControllerInput->isConnected())
+	if (!m_gameControllerInput->IsConnected())
 	{
-		if (m_pMouseInput->hasActionState(action))
+		if (m_mouseInput->HasActionState(action))
 		{
 			bHasActionState = true;
 		}
-		else if (m_pKeyboard->hasAction(action))
+		else if (m_keyboard->HasAction(action))
 		{
 			bHasActionState = true;
 		}
@@ -128,7 +128,7 @@ bool GameInput::hasActionState(const std::string& action) const
 				action);
 		}
 	}
-	else if (m_pGameControllerInput->hasAction(action))
+	else if (m_gameControllerInput->HasAction(action))
 	{
 		bHasActionState = true;
 	}
@@ -142,13 +142,13 @@ bool GameInput::hasActionState(const std::string& action) const
 	return bHasActionState;
 }
 
-void GameInput::addAxisActionInput(GameInputType inputType, const std::string& actionName, const std::string& keyCodeFromStr,
-	const std::string& keyCodeToStr, float valueFrom, float valueTo) const
+void GameInput::addAxisActionInput(GameInputType inputType, const String& actionName, const String& keyCodeFromStr,
+	const String& keyCodeToStr, float valueFrom, float valueTo) const
 {
 	switch (inputType)
 	{
 	case GameInputType::KEYBOARD:
-		addKeyboardAxis(actionName, keyCodeFromStr, keyCodeToStr, valueFrom, valueTo);
+		AddKeyboardAxis(actionName, keyCodeFromStr, keyCodeToStr, valueFrom, valueTo);
 		break;
 
 	case GameInputType::MOUSE:
@@ -156,7 +156,7 @@ void GameInput::addAxisActionInput(GameInputType inputType, const std::string& a
 		break;
 
 	case GameInputType::GAME_CONTROLLER:
-		addGameControllerAxis(actionName, keyCodeFromStr, valueFrom, valueTo);
+		AddGameControllerAxis(actionName, keyCodeFromStr, valueFrom, valueTo);
 		break;
 
 	default:
@@ -165,21 +165,21 @@ void GameInput::addAxisActionInput(GameInputType inputType, const std::string& a
 	}
 }
 
-void GameInput::addActionInput(GameInputType inputType, const std::string& actionName,
-	const std::string& inputCode) const
+void GameInput::AddActionInput(GameInputType inputType, const String& actionName,
+	const String& inputCode) const
 {
 	switch (inputType)
 	{
 	case GameInputType::KEYBOARD:
-		addKeyboardActionKey(actionName, inputCode);
+		AddKeyboardActionKey(actionName, inputCode);
 		break;
 
 	case GameInputType::MOUSE:
-		addMouseActionButton(actionName, inputCode);
+		AddMouseActionButton(actionName, inputCode);
 		break;
 
 	case GameInputType::GAME_CONTROLLER:
-		addGameControllerActionButtons(actionName, inputCode);
+		AddGameControllerActionButtons(actionName, inputCode);
 		break;
 
 	default:
@@ -188,21 +188,21 @@ void GameInput::addActionInput(GameInputType inputType, const std::string& actio
 	}
 }
 
-void GameInput::addStateInput(GameInputType inputType, const std::string& actionName,
-	const std::string& inputCode) const
+void GameInput::AddStateInput(GameInputType inputType, const String& actionName,
+	const String& inputCode) const
 {
 	switch (inputType)
 	{
 	case GameInputType::KEYBOARD:
-		addKeyboardStateKey(actionName, inputCode);
+		AddKeyboardStateKey(actionName, inputCode);
 		break;
 
 	case GameInputType::MOUSE:
-		addMouseStateButton(actionName, inputCode);
+		AddMouseStateButton(actionName, inputCode);
 		break;
 
 	case GameInputType::GAME_CONTROLLER:
-		addGameControllerStateButtons(actionName, inputCode);
+		AddGameControllerStateButtons(actionName, inputCode);
 		break;
 
 	default:
@@ -211,59 +211,61 @@ void GameInput::addStateInput(GameInputType inputType, const std::string& action
 	}
 }
 
-void GameInput::addKeyboardActionKey(const std::string& actionName, const std::string& inputCode) const
+void GameInput::AddKeyboardActionKey(const String& actionName, const String& inputCode) const
 {
 	const int keyCode = static_cast<int>(Utils::ConvertStringToKeyCode(inputCode));
-	m_pKeyboard->addActionButton(actionName, ActionButton(keyCode));
+	m_keyboard->AddActionButton(actionName, ActionButton(keyCode));
 }
 
-void GameInput::addKeyboardStateKey(const std::string& actionName, const std::string& inputCode) const
+void GameInput::AddKeyboardStateKey(const String& actionName, const String& inputCode) const
 {
 	const int keyCode = static_cast<int>(Utils::ConvertStringToKeyCode(inputCode));
-	m_pKeyboard->addStateButton(actionName, StateButton(keyCode));
+	m_keyboard->AddStateButton(actionName, StateButton(keyCode));
 }
 
-void GameInput::addKeyboardAxis(const std::string& actionName, const std::string& keyCodeFromStr,
-	const std::string& keyCodeToStr, float valueFrom, float valueTo) const
+void GameInput::AddKeyboardAxis(const String& actionName, const String& keyCodeFromStr,
+	const String& keyCodeToStr, float valueFrom, float valueTo) const
 {
 	const KeyCode keyCodeFrom = Utils::ConvertStringToKeyCode(keyCodeFromStr);
 	const KeyCode keyCodeTo = Utils::ConvertStringToKeyCode(keyCodeToStr);
 	const KeyboardAxis key = KeyboardAxis(keyCodeFrom, keyCodeTo, valueFrom, valueTo);
-	m_pKeyboard->addKeyboardAxis(actionName, key);
+	m_keyboard->AddKeyboardAxis(actionName, key);
 }
 
-void GameInput::addMouseActionButton(const std::string& actionName, const std::string& inputCode) const
+void GameInput::AddMouseActionButton(const String& actionName, const String& inputCode) const
 {
 	const int buttonCode = static_cast<int>(Utils::ConvertStringToMouseButtonCode(inputCode));
-	m_pMouseInput->addActionButton(actionName, buttonCode);
+	m_mouseInput->AddActionButton(actionName, buttonCode);
 }
 
-void GameInput::addMouseStateButton(const std::string& actionName, const std::string& inputCode) const
+void GameInput::AddMouseStateButton(const String& actionName, const String& inputCode) const
 {
 	const int buttonCode = static_cast<int>(Utils::ConvertStringToMouseButtonCode(inputCode));
-	m_pMouseInput->addStateButton(actionName, buttonCode);
+	m_mouseInput->AddStateButton(actionName, buttonCode);
 }
 
-void GameInput::addGameControllerActionButtons(const std::string& actionName, const std::string& inputCode) const
+void GameInput::AddGameControllerActionButtons(const String& actionName, const String& inputCode) const
 {
 	const int buttonCode = static_cast<int>(
 		Utils::ConvertStringToGameControllerButton(inputCode));
-	m_pGameControllerInput->addActionButton(actionName, buttonCode);
+	m_gameControllerInput->AddActionButton(actionName, buttonCode);
 }
 
-void GameInput::addGameControllerStateButtons(const std::string& actionName, const std::string& inputCode) const
+void GameInput::AddGameControllerStateButtons(const String& actionName, const String& inputCode) const
 {
 	const int buttonCode = static_cast<int>(
 		Utils::ConvertStringToGameControllerButton(inputCode));
-	m_pGameControllerInput->addStateButton(actionName, buttonCode);
+	m_gameControllerInput->AddStateButton(actionName, buttonCode);
 }
 
-void GameInput::addGameControllerAxis(const std::string& actionName, const std::string& axisName, float valueFrom,
+void GameInput::AddGameControllerAxis(const String& actionName, const String& axisName, float valueFrom,
 	float valueTo) const
 {
 	const int buttonCode = static_cast<int>(
 		Utils::ConvertStringToGameControllerAxis(axisName));
 
 	const ControllerAxis axis = ControllerAxis(buttonCode, valueFrom, valueTo);
-	m_pGameControllerInput->addAxisButton(actionName, axis);
+	m_gameControllerInput->AddAxisButton(actionName, axis);
 }
+
+NS_LIGHTSOULS_END

@@ -1,22 +1,24 @@
 #include "KeyboardInput.h"
 #include "Utils/Utils.h"
 
-using namespace cocos2d;
+
+NS_LIGHTSOULS_BEGIN
 
 KeyboardInput::KeyboardInput()
 {
-	if (!init())
+	if (!Init())
 	{
 		CCLOG("KeyboardInput: Error initilizing !");
 	}
 }
 
-bool KeyboardInput::init()
+bool KeyboardInput::Init()
 {
 	// Register for input events	
+	using namespace cocos2d;
 	EventListenerKeyboard* pKeyboardListener = EventListenerKeyboard::create();
-	pKeyboardListener->onKeyReleased = CC_CALLBACK_2(KeyboardInput::onKeyboardKeyUp, this);
-	pKeyboardListener->onKeyPressed = CC_CALLBACK_2(KeyboardInput::onKeyboardKeyDown, this);
+	pKeyboardListener->onKeyReleased = CC_CALLBACK_2(KeyboardInput::OnKeyboardKeyUp, this);
+	pKeyboardListener->onKeyPressed = CC_CALLBACK_2(KeyboardInput::OnKeyboardKeyDown, this);
 
 	EventDispatcher* pEventDispatcher = Director::getInstance()->getEventDispatcher();
 	pEventDispatcher->addEventListenerWithFixedPriority(pKeyboardListener, 1);
@@ -24,7 +26,7 @@ bool KeyboardInput::init()
 	return pEventDispatcher != nullptr;
 }
 
-void KeyboardInput::addKeyboardAxis(const std::string& actionName, const KeyboardAxis& axisKey)
+void KeyboardInput::AddKeyboardAxis(const String& actionName, const KeyboardAxis& axisKey)
 {
 	m_keyboardAxis.insert(std::make_pair(actionName, axisKey));
 
@@ -33,100 +35,76 @@ void KeyboardInput::addKeyboardAxis(const std::string& actionName, const Keyboar
 	m_keyCodeToAxisAction[axisKey.keyCodeTo] = actionName;
 }
 
-void KeyboardInput::addActionButton(const std::string& actionName, const ActionButton& actionKey)
+void KeyboardInput::Update(float deltaTime)
 {
-	m_actionButtons.insert(std::make_pair(actionName, actionKey));
-	m_buttonCodeToAction[actionKey.buttonCode] = actionName;
+	UpdateActionButtonState();
+	UpdateAxisKeyState(deltaTime);
 }
 
-void KeyboardInput::addStateButton(const std::string& actionName, const StateButton& stateKey)
+void KeyboardInput::OnKeyboardKeyUp(cocos2d::EventKeyboard::KeyCode keyCode,
+	cocos2d::Event* pEvent)
 {
-	m_stateButtons.insert(std::make_pair(actionName, stateKey));
-	m_buttonCodeToStateAction[stateKey.buttonCode] = actionName;
-}
-
-void KeyboardInput::update(float deltaTime)
-{
-	updateActionButtonState();
-	updateAxisKeyState(deltaTime);
-}
-
-void KeyboardInput::onKeyboardKeyUp(EventKeyboard::KeyCode keyCode,
-	Event* pEvent)
-{
-	setStateKeyState(false, keyCode);
-	setKeyboardAxisState(false, keyCode);
+	SetStateKeyState(false, keyCode);
+	SetKeyboardAxisState(false, keyCode);
 
 	// Action keys work once based on full press and release sequence
-	setActionKeyState(true, keyCode);
+	SetActionKeyState(true, keyCode);
 }
 
-void KeyboardInput::onKeyboardKeyDown(EventKeyboard::KeyCode keyCode,
-	Event* pEvent)
+void KeyboardInput::OnKeyboardKeyDown(cocos2d::EventKeyboard::KeyCode keyCode,
+	cocos2d::Event* pEvent)
 {
-	setStateKeyState(true, keyCode);
-	setKeyboardAxisState(true, keyCode);
+	SetStateKeyState(true, keyCode);
+	SetKeyboardAxisState(true, keyCode);
 }
 
-void KeyboardInput::updateAxisKeyState(float deltaTime)
+void KeyboardInput::UpdateAxisKeyState(float deltaTime)
 {
 	// Gradually reach max axis value
 	for (auto& pair : m_keyboardAxis)
 	{
 		KeyboardAxis& axis = pair.second;
 
-		if (axis.bFromIsPressed && !axis.bToIsPressed)
+		if (axis.fromIsPressed && !axis.toIsPressed)
 		{
-			increaseAxisCurValue(axis, axis.fromValue, deltaTime);
+			IncreaseAxisCurValue(axis, axis.fromValue, deltaTime);
 		}		
-		else if (axis.bToIsPressed && !axis.bFromIsPressed)
+		else if (axis.toIsPressed && !axis.fromIsPressed)
 		{
-			increaseAxisCurValue(axis, axis.toValue, deltaTime);
+			IncreaseAxisCurValue(axis, axis.toValue, deltaTime);
 		}
-		else if (axis.bFromIsPressed && axis.bToIsPressed)
+		else if (axis.fromIsPressed && axis.toIsPressed)
 		{
 			axis.currentValue = 0;
 		}
 	}
 }
 
-void KeyboardInput::setActionKeyState(bool bIsActive, KeyCode keyCode)
+void KeyboardInput::SetActionKeyState(bool isActive, KeyCode keyCode)
 {
-	const int code = static_cast<int>(keyCode);
-	if (Utils::ContainsKey(m_buttonCodeToAction, code))
-	{
-		const std::string& actionName = m_buttonCodeToAction[code];
-		m_actionButtons[actionName].bIsActive = bIsActive;
-	}
+	const int inputCode = static_cast<int>(keyCode);
+	AInputDevice::SetActionButtonState(isActive, inputCode);
 }
 
-void KeyboardInput::setStateKeyState(bool bIsPressed, KeyCode keyCode)
+void KeyboardInput::SetStateKeyState(bool isPressed, KeyCode keyCode)
 {
-	/*
-	 * If the key is found then change its
-	 * state to specified on.
-	 */
-	const int code = static_cast<int>(keyCode);
-	if (Utils::ContainsKey(m_buttonCodeToStateAction, code))
-	{
-		const std::string& actionName = m_buttonCodeToStateAction[code];
-		m_stateButtons[actionName].bIsPressed = bIsPressed;
-	}
+	const int inputCode = static_cast<int>(keyCode);
+	AInputDevice::SetStateButtonState(isPressed, inputCode);
 }
 
-void KeyboardInput::setKeyboardAxisState(bool bIsPressed, KeyCode keyCode)
+void KeyboardInput::SetKeyboardAxisState(bool bIsPressed, KeyCode keyCode)
 {
 	if (Utils::ContainsKey(m_keyCodeToAxisAction, keyCode))
 	{
-		const std::string& action = m_keyCodeToAxisAction[keyCode];
+		const String& action = m_keyCodeToAxisAction[keyCode];
 		KeyboardAxis& axis = m_keyboardAxis[action];
 		if (axis.keyCodeFrom == keyCode)
 		{			
-			axis.bFromIsPressed = bIsPressed;
+			axis.fromIsPressed = bIsPressed;
 		}
 		else if (axis.keyCodeTo == keyCode)
 		{
-			axis.bToIsPressed = bIsPressed;
+			axis.toIsPressed = bIsPressed;
 		}
 		
 		if (!bIsPressed)
@@ -137,28 +115,7 @@ void KeyboardInput::setKeyboardAxisState(bool bIsPressed, KeyCode keyCode)
 	}
 }
 
-bool KeyboardInput::hasAction(const std::string& action) const
-{
-	bool bHasAction = false;
-	if (Utils::ContainsKey(m_actionButtons, action))
-	{
-		bHasAction = m_actionButtons.at(action).bIsActive;
-	}
-
-	return bHasAction;
-}
-
-bool KeyboardInput::hasActionState(const std::string& action) const
-{
-	bool bHasActionState = false;
-	if (Utils::ContainsKey(m_stateButtons, action))
-	{
-		bHasActionState = m_stateButtons.at(action).bIsPressed;
-	}
-	return bHasActionState;
-}
-
-float KeyboardInput::getAxisInput(const std::string& axisName) const
+float KeyboardInput::GetAxisInput(const String& axisName) const
 {
 	float value = 0;
 	if (Utils::ContainsKey(m_keyboardAxis, axisName))
@@ -169,12 +126,12 @@ float KeyboardInput::getAxisInput(const std::string& axisName) const
 	return value;
 }
 
-bool KeyboardInput::hasAxisInput(const std::string& axisName) const
+bool KeyboardInput::HasAxisInput(const String& axisName) const
 {
 	return Utils::ContainsKey(m_keyboardAxis, axisName);
 }
 
-void KeyboardInput::increaseAxisCurValue(KeyboardAxis & keyboardAxis, float value, float deltaTime)
+void KeyboardInput::IncreaseAxisCurValue(KeyboardAxis & keyboardAxis, float value, float deltaTime)
 {
 	keyboardAxis.currentValue += Utils::GetSign(value) * deltaTime;
 
@@ -190,3 +147,5 @@ void KeyboardInput::increaseAxisCurValue(KeyboardAxis & keyboardAxis, float valu
 			keyboardAxis.fromValue, keyboardAxis.toValue);
 	}
 }
+
+NS_LIGHTSOULS_END

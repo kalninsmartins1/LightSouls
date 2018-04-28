@@ -1,9 +1,11 @@
 #pragma once
 
+#include "LightSoulsTypes.h"
 #include "Input/InputTypes/AInputDevice.h"
-#include "cocos2d.h"
 
-typedef cocos2d::Controller::Key ButtonCode;
+NS_LIGHTSOULS_BEGIN
+
+using ButtonCode = cocos2d::Controller::Key;
 
 struct ControllerAxis
 {
@@ -11,7 +13,7 @@ struct ControllerAxis
 	float curValue;
 	float fromValue;
 	float toValue;
-	bool bIsPressed;
+	bool isPressed;
 
 	ControllerAxis() :
 		buttonCode(0)
@@ -19,7 +21,7 @@ struct ControllerAxis
 		curValue = 0;
 		fromValue = 0;
 		toValue = 0;
-		bIsPressed = false;
+		isPressed = false;
 	}
 
 	ControllerAxis(int buttonCode, float fromValue, float toValue) :
@@ -28,7 +30,7 @@ struct ControllerAxis
 		this->curValue = 0;
 		this->fromValue = fromValue;
 		this->toValue = toValue;
-		this->bIsPressed = false;
+		this->isPressed = false;
 	}
 };
 
@@ -67,38 +69,30 @@ class GameControllerInput : public AInputDevice
 public:
 	GameControllerInput();
 	~GameControllerInput();
-	bool init();
 
-	virtual bool hasAction(const std::string& action) const override;
-	virtual bool hasActionState(const std::string& action) const override;
-	virtual bool hasAxisInput(const std::string& axisName) const override;
-	virtual float getAxisInput(const std::string& axisName) const override;
+public:	
+	virtual bool	HasAxisInput(const String& axisName) const override;
+	virtual float	GetAxisInput(const String& axisName) const override;
+	bool			IsConnected() const;
 
-	virtual void addActionButton(const std::string& actionName, const ActionButton& actionButton) override;
-	virtual void addStateButton(const std::string& actionName, const StateButton& stateButton) override;
+	bool			Init();	
+	void			AddAxisButton(const String& actionName, const ControllerAxis& axisButton);
 
-	void addAxisButton(const std::string& actionName, const ControllerAxis& axisButton);
-	bool isConnected() const;
+private:	
+	void SetAxisInputState(float value, int buttonCode);
+
+	void OnControllerConnected();
+	void OnControllerDisconnected();
+	void OnButtonDown(cocos2d::Controller* pController, int buttonCode, cocos2d::Event* pEvent);
+	void OnButtonUp(cocos2d::Controller* pController, int buttonCode, cocos2d::Event* pEvent);
+	void OnAxisInput(cocos2d::Controller* pController, int axisCode, cocos2d::Event* pEvent);
 
 private:
-	void onControllerConnected();
-	void onControllerDisconnected();
-	void onButtonDown(cocos2d::Controller* pController, int buttonCode,
-		cocos2d::Event* pEvent);
-	void onButtonUp(cocos2d::Controller* pController, int buttonCode,
-		cocos2d::Event* pEvent);
-	void onAxisInput(cocos2d::Controller* pController, int axisCode,
-		cocos2d::Event* pEvent);
-
-	void setActionButtonState(bool bIsActive, int buttonCode);
-	void setStateButtonState(bool bIsPressed, int buttonCode);
-	void setAxisInputState(float value, int buttonCode);
-
-	bool m_bIsConnected;
-
-	std::map<std::string, ControllerAxis> m_controllerAxis;
-	std::map<int, std::string> m_buttonCodeToAxisAction;
+	bool								m_isConnected;
+	std::map<String, ControllerAxis>	m_controllerAxis;
+	std::map<int, String>				m_buttonCodeToAxisAction;
 };
 
+NS_LIGHTSOULS_END
 
 

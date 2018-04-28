@@ -3,6 +3,10 @@
 #include "World/Entity/AI/AIAgentManager.h"
 #include "World/Entity/CustomActions/ChaseAction.h"
 #include "World/Entity/CustomActions/ActionSequence.h"
+#include "World/Entity/Components/AnimComponent.h"
+#include "GameConsts.h"
+
+NS_LIGHTSOULS_BEGIN
 
 StateChase::StateChase(AIAgent& agent) :
 	m_curProgress(StateProgress::NONE),
@@ -11,7 +15,7 @@ StateChase::StateChase(AIAgent& agent) :
 {
 }
 
-void StateChase::OnEnter(AIAnimComponent* animComponent)
+void StateChase::OnEnter(AnimComponent* animComponent)
 {
 	m_curProgress = StateProgress::IN_PROGRESS;
 
@@ -26,7 +30,7 @@ void StateChase::OnEnter(AIAnimComponent* animComponent)
 	m_agent.runAction(sequence);
 
 	// Play run animation
-	animComponent->PlayRunAnimation();
+	animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 }
 
 StateProgress StateChase::OnStep()
@@ -37,6 +41,7 @@ StateProgress StateChase::OnStep()
 void StateChase::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
+	m_agent.SetMoveDirection(Vector2::ZERO);
 }
 
 AIState StateChase::GetStateType()
@@ -48,3 +53,5 @@ void StateChase::OnTargetReached()
 {
 	m_curProgress = StateProgress::DONE;
 }
+
+NS_LIGHTSOULS_END

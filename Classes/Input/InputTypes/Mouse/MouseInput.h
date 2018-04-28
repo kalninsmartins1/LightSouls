@@ -1,29 +1,30 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "LightSoulsTypes.h"
 #include "Input/InputTypes/AInputDevice.h"
 #include "Utils/Utils.h"
 
-typedef cocos2d::EventMouse::MouseButton MouseButtonCode;
+NS_LIGHTSOULS_BEGIN
+
+using MouseButtonCode = cocos2d::EventMouse::MouseButton;
 
 class MouseInput: public AInputDevice
 {
 public:
 	MouseInput();
-	bool init();
 
-	virtual void addActionButton(const std::string& actionName, const ActionButton& actionButton) override;
-	virtual void addStateButton(const std::string& actionName, const StateButton& stateButton) override;
+public:	
+	virtual bool	HasAxisInput(const String& axisName) const override;
+	virtual float	GetAxisInput(const String& axisName) const override;
 
-	virtual bool hasAction(const std::string& action) const override;
-	virtual bool hasActionState(const std::string& action) const override;
-	virtual bool hasAxisInput(const std::string& axisName) const override;
-	virtual float getAxisInput(const std::string& axisName) const override;
+	bool			Init();	
 	
 private:
-	void onMouseButtonDown(cocos2d::EventMouse* pEvent);
-	void onMouseButtonUp(cocos2d::EventMouse* pEvent);
+	void SetActionButtonState(bool isActive, const MouseButtonCode& keyCode);
+	void SetStateButtonState(bool isPressed, const MouseButtonCode& keyCode);
 	
-	void setActionButtonState(bool bIsActive, const MouseButtonCode& keyCode);
-	void setStateButtonState(bool bIsPressed, const MouseButtonCode& keyCode);
+	void OnMouseButtonDown(cocos2d::EventMouse* pEvent);
+	void OnMouseButtonUp(cocos2d::EventMouse* pEvent);	
 };
+
+NS_LIGHTSOULS_END

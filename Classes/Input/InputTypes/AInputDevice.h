@@ -2,79 +2,85 @@
 
 #include <string>
 #include <map>
+#include "LightSoulsTypes.h"
 
+NS_LIGHTSOULS_BEGIN
 
 struct ActionButton
 {
 	const int buttonCode;
-	bool bIsActive;
-	bool bNeedStateReset;
+	bool isActive;
+	bool needStateReset;
 	
 	ActionButton() :
 		buttonCode(0)
 	{
-		bIsActive = false;
-		bNeedStateReset = false;
+		isActive = false;
+		needStateReset = false;
 	}
 
 	ActionButton(int buttonCode) :
 		buttonCode(buttonCode)
 	{
-		bIsActive = false;
-		bNeedStateReset = false;
+		isActive = false;
+		needStateReset = false;
 	}
 };
 
 struct StateButton
 {
 	const int buttonCode;
-	bool bIsPressed;
+	bool isPressed;
 
 	StateButton() :
 		buttonCode(0)
 	{
-		bIsPressed = false;
+		isPressed = false;
 	}
 
 	StateButton(int buttonCode) :
 		buttonCode(buttonCode)
 	{
-		bIsPressed = false;
+		isPressed = false;
 	}
 };
 
 class AInputDevice
 {
 public:
-
 	// Returns true for action once when input is released
-	virtual bool hasAction(const std::string& action) const = 0;
+	bool	HasAction(const String& action) const;
 
 	// Returns true while input for action is not released
-	virtual bool hasActionState(const std::string& action) const = 0;
+	bool	HasActionState(const String& action) const;
 
 	// Returns true if this input device has specified axis input
-	virtual bool hasAxisInput(const std::string& axisName) const = 0;
+	virtual bool	HasAxisInput(const String& axisName) const = 0;
 
 	// Returs current axis input value normalized in range 0 to 1
-	virtual float getAxisInput(const std::string& axisName) const = 0;
+	virtual float	GetAxisInput(const String& axisName) const = 0;
 	
+	// Manages consistency between actions and buttons
+	virtual void	Update(float deltaTime);
+
 	// Binds action button to specified action name
-	virtual void addActionButton(const std::string& actionName, const ActionButton& actionButton) = 0;
+	void			AddActionButton(const String& actionName, const ActionButton& actionButton);
 
 	// Binds state button to specified action name
-	virtual void addStateButton(const std::string& actionName, const StateButton& stateButton) = 0;
-
-	// Manages consistency between actions and buttons
-	virtual void update(float deltaTime);
+	void			AddStateButton(const String& actionName, const StateButton& stateButton);
 
 protected:
-	void updateActionButtonState();
+	void SetActionButtonState(bool isActive, int inputCode);
+	void SetStateButtonState(bool isPressed, int inputCode);
+
+	void UpdateActionButtonState();	
+
+private:
+	std::map<String, StateButton>	m_stateButtons;
+	std::map<String, ActionButton>	m_actionButtons;
 	
-	std::map<std::string, StateButton> m_stateButtons;
-	std::map<std::string, ActionButton> m_actionButtons;
-	
-	std::map<int, std::string> m_buttonCodeToAction;
-	std::map<int, std::string> m_buttonCodeToStateAction;
-	
+	std::map<int, String> m_buttonCodeToAction;
+	std::map<int, String> m_buttonCodeToStateAction;	
 };
+
+NS_LIGHTSOULS_END

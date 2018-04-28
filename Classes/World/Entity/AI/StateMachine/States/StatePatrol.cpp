@@ -2,6 +2,9 @@
 #include "World/Entity/AI/AIAgentManager.h"
 #include "GameConsts.h"
 #include "Utils/Utils.h"
+#include "World/Entity/Components/AnimComponent.h"
+
+NS_LIGHTSOULS_BEGIN
 
 StatePatrol::StatePatrol(AIAgent& agent)
 	: m_agent(agent)
@@ -13,11 +16,11 @@ StatePatrol::StatePatrol(AIAgent& agent)
 {
 }
 
-void StatePatrol::OnEnter(AIAnimComponent* animComponent)
+void StatePatrol::OnEnter(AnimComponent* animComponent)
 {
 	m_animComponent = animComponent;
 	m_curProgress = StateProgress::IN_PROGRESS;	
-	GetRandomPositionInRange(m_curTargetPosition);
+	StartMovingToNewPosition();
 }
 
 StateProgress StatePatrol::OnStep()
@@ -32,16 +35,15 @@ StateProgress StatePatrol::OnStep()
 		else if(!m_isLookingAround)
 		{
 			Vector2 toTargetPosition = m_curTargetPosition - m_agent.getPosition();
-			m_agent.SetMoveDirection(toTargetPosition.getNormalized());
-			m_agent.Move();
-			m_animComponent->PlayRunAnimation();
+			m_agent.SetMoveDirection(toTargetPosition.getNormalized());					
 			
-			if (toTargetPosition.length() < 0.1f)
+			float stoppingDistance = m_agent.GetStoppingDistance();
+			if (toTargetPosition.length() <= stoppingDistance || m_agent.IsCollided())
 			{
 				// Target position reached
 				m_isLookingAround = true;
 
-				// idle for specific time				
+				// Idle for specific time				
 				StartLookingAround();
 			}			
 		}		
@@ -61,12 +63,10 @@ AIState StatePatrol::GetStateType()
 }
 
 bool StatePatrol::HasTargetBeenSpotted() const
-{
-	using namespace cocos2d;
-
+{		
 	// Check if target has been spotted
-	const Vec2& agentPosition = m_agent.getPosition();
-	const Vec2& targetEntityPosition = m_targetEntity.getPosition();
+	const Vector2& agentPosition = m_agent.getPosition();
+	const Vector2& targetEntityPosition = m_targetEntity.getPosition();
 	const float distanceToTargetEntity = targetEntityPosition
 		.distance(agentPosition);
 
@@ -80,18 +80,27 @@ void StatePatrol::GetRandomPositionInRange(Vector2& outRandomPosition) const
 }
 
 void StatePatrol::StartLookingAround()
-{
-	using namespace cocos2d;
+{	
+	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+	m_agent.SetMoveDirection(Vector2::ZERO); // We are not moving while looking around
 
-	m_animComponent->PlayIdleAnimation();
-	auto delay = DelayTime::create(m_agent.GetPatrolPause());
-	auto callback = CallFunc::create(CC_CALLBACK_0(StatePatrol::OnFinishedLookingAround, this));
-	auto sequence = Sequence::create(delay, callback, nullptr);
+	auto delay = cocos2d::DelayTime::create(m_agent.GetPatrolPause());
+	auto callback = cocos2d::CallFunc::create(CC_CALLBACK_0(StatePatrol::OnFinishedLookingAround, this));
+	auto sequence = cocos2d::Sequence::create(delay, callback, nullptr);
 	
 	m_agent.runAction(sequence);
+}
+
+void StatePatrol::StartMovingToNewPosition()
+{
+	GetRandomPositionInRange(m_curTargetPosition);
+	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 }
 
 void StatePatrol::OnFinishedLookingAround()
 {
 	m_isLookingAround = false;
+	StartMovingToNewPosition();
 }
+
+NS_LIGHTSOULS_END

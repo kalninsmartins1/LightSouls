@@ -1,5 +1,7 @@
 #include "PhysicsBodyConfig.h"
 
+NS_LIGHTSOULS_BEGIN
+
 PhysicsBodyConfig::PhysicsBodyConfig(const cocos2d::Size& size, const cocos2d::PhysicsMaterial& physicsMaterial, BodyType bodyType, int collisionMask, bool isDynamic, bool isGravityEnabled)
 	: m_bodySize(size)
 	, m_physicsMaterial(physicsMaterial)
@@ -51,3 +53,4 @@ void PhysicsBodyConfig::SetRotationEnabled(bool isEnabled)
 	m_isRotationEnabled = isEnabled;
 }
 
+NS_LIGHTSOULS_END

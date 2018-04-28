@@ -2,8 +2,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/Utils.h"
 
-using namespace cocos2d;
-
+NS_LIGHTSOULS_BEGIN
 
 AIAgentManager::AIAgentManager() :
 	m_pTargetEntity(nullptr)
@@ -36,13 +35,13 @@ void AIAgentManager::Update(float deltaTime)
 	}
 }
 
-void AIAgentManager::addAgentConfig(const std::string& type,
-	const std::string& configPath)
+void AIAgentManager::addAgentConfig(const String& type,
+	const String& configPath)
 {
 	m_agentConfigPathMap[type] = configPath;
 }
 
-void AIAgentManager::SpawnAgent(const std::string& type, const Vec2& position)
+void AIAgentManager::SpawnAgent(const String& type, const Vector2& position)
 {
 	if(Utils::ContainsKey(m_agentConfigPathMap, type))
 	{
@@ -51,12 +50,12 @@ void AIAgentManager::SpawnAgent(const std::string& type, const Vec2& position)
 		m_allActiveAgents.push_back(pAgent);
 
 		// Set agents camera mask same as world layer so that it is visible to camera
-		pAgent->setCameraMask(m_pWorldLayer->getCameraMask());
-		m_pWorldLayer->addChild(pAgent);
+		pAgent->setCameraMask(m_worldLayer->getCameraMask());
+		m_worldLayer->addChild(pAgent);
 		pAgent->setPosition(position);
 
 		// Actors spawn position is also his base position
-		pAgent->setBasePosition(position);
+		pAgent->SetBasePosition(position);
 	}
 	else
 	{
@@ -66,13 +65,15 @@ void AIAgentManager::SpawnAgent(const std::string& type, const Vec2& position)
 	}	
 }
 
-bool AIAgentManager::Init(const std::string& pathToXML)
+bool AIAgentManager::Init(const String& pathToXML)
 {	
 	return XMLLoader::InitializeAIManagerUsingXMLFile(*this,
 		pathToXML);
 }
 
-void AIAgentManager::SetWorldLayer(Node* pWorldLayer)
+void AIAgentManager::SetWorldLayer(cocos2d::Node* pWorldLayer)
 {
-	m_pWorldLayer = pWorldLayer;
+	m_worldLayer = pWorldLayer;
 }
+
+NS_LIGHTSOULS_END

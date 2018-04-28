@@ -1,14 +1,13 @@
 #pragma once
 
-#include "cocos2d.h"
 #include "World/Entity/Entity.h"
-#include "World/Entity/AI/AIAgentManager.h"
+
+NS_LIGHTSOULS_BEGIN
+
+class AIAgent;
 
 class ChaseAction: public cocos2d::Action
 {
-public:
-	using Vector2 = cocos2d::Vec2;
-
 public:
 	ChaseAction(const Entity& chaseTarget, AIAgent& agent);
 	virtual ~ChaseAction() override;
@@ -24,3 +23,5 @@ private:
 	AIAgent&		m_agent;
 	bool			m_isDone;
 };
+
+NS_LIGHTSOULS_END

@@ -1,13 +1,12 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "LightSoulsTypes.h"
+
+NS_LIGHTSOULS_BEGIN
 
 class AttackComponent : public cocos2d::Component
 {
 public:
-	using Vector2 = cocos2d::Vec2;
-	using String = std::string;
-	
 	AttackComponent(float secondsBetweenAttacks, float attackRange);
 
 	// Returns attack range
@@ -24,3 +23,5 @@ private:
 	float		m_secondsBetweenAttacks;
 	float		m_attackRange;
 };
+
+NS_LIGHTSOULS_END

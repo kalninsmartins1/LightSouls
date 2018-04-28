@@ -170,11 +170,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateChase.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Ammo\Arrow.cpp" />
-    <ClCompile Include="..\Classes\World\Entity\Components\AIAnimComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\AttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.cpp" />
-    <ClCompile Include="..\Classes\World\Entity\Components\PlayerAnimComponent.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Components\AnimComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\RangedAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\ActionSequence.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\CameraFallow.cpp" />
@@ -198,6 +197,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Input\InputTypes\GameController\GameControllerInput.h" />
     <ClInclude Include="..\Classes\Input\InputTypes\Keyboard\KeyboardInput.h" />
     <ClInclude Include="..\Classes\Input\InputTypes\Mouse\MouseInput.h" />
+    <ClInclude Include="..\Classes\LightSoulsTypes.h" />
     <ClInclude Include="..\Classes\UI\InGameIndicators\ProgressBar.h" />
     <ClInclude Include="..\Classes\UI\UIElementConfig.h" />
     <ClInclude Include="..\Classes\Utils\AnimationUtils.h" />
@@ -212,11 +212,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateChase.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h" />
     <ClInclude Include="..\Classes\World\Entity\Ammo\Arrow.h" />
-    <ClInclude Include="..\Classes\World\Entity\Components\AIAnimComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\AttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.h" />
-    <ClInclude Include="..\Classes\World\Entity\Components\PlayerAnimComponent.h" />
+    <ClInclude Include="..\Classes\World\Entity\Components\AnimComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\RangedAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\ActionSequence.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\CameraFallow.h" />

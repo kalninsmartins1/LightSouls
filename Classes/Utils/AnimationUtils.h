@@ -1,34 +1,36 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "LightSoulsTypes.h"
 
-namespace tinyxml2 
+namespace tinyxml2
 {
 	class XMLElement;
-}
+};
 
-enum class AnimationKind
+NS_LIGHTSOULS_BEGIN
+
+struct AnimationData
 {
-	NONE,
-	RUN,
-	IDLE,
-	ATTACK,
-	DODGE
+	cocos2d::Vector<cocos2d::SpriteFrame*>	frames;
+	float									timeBetweenFrames;
 };
 
 class AnimationUtils
 {
 public:
+	static int GetAnimId(String animName);
 
-	static void startSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
-		cocos2d::Vector<cocos2d::SpriteFrame*>& spriteFrames,
-		float timeBetweenFrames, const std::function<void()>& onFinished);
+	static void StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
+		const AnimationData& animationData, const std::function<void()>& onFinished);
 
-	static void startSpriteFrameAnimation(cocos2d::Sprite* pSprite, 
-		cocos2d::Vector<cocos2d::SpriteFrame*>& spriteFrames,
-		float timeBetweenFrames);
+	static void StartSpriteFrameAnimation(cocos2d::Sprite* pSprite, 
+		const AnimationData& animationData);
 
-	static void loadAnimationFrames(const tinyxml2::XMLElement* pElem,
-						cocos2d::Vector<cocos2d::SpriteFrame*>& outSpriteFrames,
-						float& outTimeBetweenFrames);
+	static void LoadAnimationFrames(const tinyxml2::XMLElement* pElem,
+		AnimationData& outAnimationData);
+
+private:
+	static const std::map<String, int> s_animTypeToId;
 };
+
+NS_LIGHTSOULS_END

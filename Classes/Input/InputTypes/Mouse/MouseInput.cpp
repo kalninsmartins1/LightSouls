@@ -1,23 +1,23 @@
 #include "MouseInput.h"
-#include "cocos2d.h"
 #include "Utils/Utils.h"
 
-using namespace cocos2d;
+NS_LIGHTSOULS_BEGIN
 
 MouseInput::MouseInput()
 {
-	if(!init())
+	if(!Init())
 	{
-		cocos2d::log("MouseInput: Failed to initialize !");
+		CCLOG("MouseInput: Failed to initialize !");
 	}
 }
 
-bool MouseInput::init()
+bool MouseInput::Init()
 {	
+	using namespace cocos2d;
 	EventListenerMouse* pMouseListener = EventListenerMouse::create();
-	pMouseListener->onMouseUp = CC_CALLBACK_1(MouseInput::onMouseButtonUp,
+	pMouseListener->onMouseUp = CC_CALLBACK_1(MouseInput::OnMouseButtonUp,
 		this);
-	pMouseListener->onMouseDown = CC_CALLBACK_1(MouseInput::onMouseButtonDown,
+	pMouseListener->onMouseDown = CC_CALLBACK_1(MouseInput::OnMouseButtonDown,
 		this);
 
 	auto pEventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -26,79 +26,41 @@ bool MouseInput::init()
 	return pEventDispatcher != nullptr;
 }
 
-void MouseInput::addActionButton(const std::string& actionName, const ActionButton& actionButton)
-{
-	m_actionButtons.insert(std::make_pair(std::string(actionName), actionButton));
-	m_buttonCodeToAction[actionButton.buttonCode] = actionName; 
-}
-
-void MouseInput::addStateButton(const std::string& actionName, const StateButton& stateButton)
-{
-	m_stateButtons.insert(std::make_pair(std::string(actionName), stateButton));
-	m_buttonCodeToStateAction[stateButton.buttonCode] = actionName;
-}
-
-bool MouseInput::hasAction(const std::string& action) const
-{
-	bool bIsActive = false;
-	if(Utils::ContainsKey(m_actionButtons, action))
-	{
-		bIsActive = m_actionButtons.at(action).bIsActive;
-	}
-	return bIsActive;
-}
-
-bool MouseInput::hasActionState(const std::string& action) const 
-{
-	bool bIsActiveState = false;
-	if(Utils::ContainsKey(m_stateButtons, action))
-	{
-		bIsActiveState = m_stateButtons.at(action).bIsPressed;
-	}
-	return bIsActiveState;
-}
-
-float MouseInput::getAxisInput(const std::string& axisName) const
+float MouseInput::GetAxisInput(const String& axisName) const
 {
 	return 0;
 }
 
-bool MouseInput::hasAxisInput(const std::string& axisName) const
+bool MouseInput::HasAxisInput(const String& axisName) const
 {
 	return false;
 }
 
-void MouseInput::onMouseButtonDown(EventMouse* pEvent)
+void MouseInput::OnMouseButtonDown(cocos2d::EventMouse* pEvent)
 {
 	// Enable active state button
-	setStateButtonState(true, pEvent->getMouseButton());
+	SetStateButtonState(true, pEvent->getMouseButton());
 }
 
-void MouseInput::onMouseButtonUp(EventMouse* pEvent)
+void MouseInput::OnMouseButtonUp(cocos2d::EventMouse* pEvent)
 {
 	// Disable active state button
-	setStateButtonState(false, pEvent->getMouseButton());
+	SetStateButtonState(false, pEvent->getMouseButton());
 
 	// Enable active action button
-	setActionButtonState(true, pEvent->getMouseButton());
+	SetActionButtonState(true, pEvent->getMouseButton());
 }
 
-void MouseInput::setActionButtonState(bool bIsActive, const MouseButtonCode& inputCode)	
+void MouseInput::SetActionButtonState(bool isActive, const MouseButtonCode& buttonCode)	
 {
-	const int buttonCode = static_cast<int>(inputCode);
-	if (Utils::ContainsKey(m_buttonCodeToAction, buttonCode))
-	{
-		std::string& actionName = m_buttonCodeToAction[buttonCode];
-		m_actionButtons[actionName].bIsActive = bIsActive;
-	}	
+	int inputCode = static_cast<int>(buttonCode);
+	AInputDevice::SetActionButtonState(isActive, inputCode);
 }
 
-void MouseInput::setStateButtonState(bool bIsPressed, const MouseButtonCode& inputCode)
+void MouseInput::SetStateButtonState(bool isPressed, const MouseButtonCode& buttonCode)
 {
-	int buttonCode = static_cast<int>(inputCode);
-	if (Utils::ContainsKey(m_buttonCodeToStateAction, buttonCode))
-	{
-		std::string& actionName = m_buttonCodeToStateAction[buttonCode];
-		m_stateButtons[actionName].bIsPressed = bIsPressed;
-	}
+	int inputCode = static_cast<int>(buttonCode);
+	AInputDevice::SetStateButtonState(isPressed, inputCode);
 }
+
+NS_LIGHTSOULS_END

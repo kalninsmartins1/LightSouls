@@ -2,6 +2,12 @@
 #include "Utils/XML/XMLLoader.h"
 #include "GameConsts.h"
 #include "World/Entity/Components/AttackComponent.h"
+#include "Utils/Utils.h"
+#include "World/Entity/AI/StateMachine/StateMachine.h"
+#include "World/Entity/Components/AnimComponent.h"
+#include "World/Physics/PhysicsManager.h"
+
+NS_LIGHTSOULS_BEGIN
 
 AIAgent* AIAgent::Create(const String& pathToXML)
 {
@@ -18,13 +24,14 @@ AIAgent* AIAgent::Create(const String& pathToXML)
 	return pAgent;
 }
 
-AIAgent::AIAgent() 
+AIAgent::AIAgent()
 	: m_stateMachine(*this)
 	, m_basePosition(Vector2::ZERO)
 	, m_chaseRadius(0)
 	, m_patrolRadius(0)
 	, m_patrolPauseInSeconds(0)
 	, m_chaseStopDistance(0)
+	, m_isCollided(false)
 {
 }
 
@@ -43,7 +50,7 @@ void AIAgent::SetChaseStopDistance(float distance)
 	m_chaseStopDistance = distance;
 }
 
-void AIAgent::setBasePosition(const Vector2& position)
+void AIAgent::SetBasePosition(const Vector2& position)
 {
 	m_basePosition = position;
 }
@@ -57,9 +64,12 @@ bool AIAgent::Init(const String& pathToXML)
 {	
 	bool isInitializedSuccessfully = 
 		XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
+
 	if(isInitializedSuccessfully)
 	{
-		AIAnimComponent* animComponent = dynamic_cast<AIAnimComponent*>(getComponent(AI_ANIM_COMPONENT));
+		OnEntityInitialized();
+
+		AnimComponent* animComponent = dynamic_cast<AnimComponent*>(getComponent(ANIM_COMPONENT));
 		const bool isAnimComponentFound = animComponent != nullptr;
 		CC_ASSERT( isAnimComponentFound && "AIAgent: AIAnimComponent not found !");			
 		m_stateMachine.Start(animComponent);
@@ -71,12 +81,28 @@ bool AIAgent::Init(const String& pathToXML)
 
 		SetPhysicsBodyAnchor(Vector2(0, 0));
 
+		// Register for physics events
+		PhysicsManager::GetInstance()->AddContactBeginListener(getName(),
+			CC_CALLBACK_1(AIAgent::OnContactBegin, this));
+		PhysicsManager::GetInstance()->AddContactEndListener(getName(),
+			CC_CALLBACK_1(AIAgent::OnContactBegin, this));
+
 		// init was successful only if the attack and anim compoents are found
 		isInitializedSuccessfully = isInitializedSuccessfully &&
 			isAnimComponentFound &&  isAttackComponentFound;
 	}
 	
 	return isInitializedSuccessfully;
+}
+
+void AIAgent::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
+{
+	m_isCollided = true;
+}
+
+void AIAgent::OnContactEnd(const cocos2d::PhysicsBody* otherBody)
+{
+	m_isCollided = false;
 }
 
 void AIAgent::update(float deltaTime)
@@ -110,12 +136,17 @@ float AIAgent::GetAttackRange() const
 	return m_attackComponent->GetAttackRange();
 }
 
-const Entity::String& AIAgent::GetType() const
+float AIAgent::GetStoppingDistance() const
+{
+	return Utils::SafeDevide(GetCurrentMoveSpeed(), GetPhysicsBodyForceScale());
+}
+
+const String& AIAgent::GetType() const
 {
 	return m_agentType;
 }
 
-const Entity::Vector2& AIAgent::GetBasePosition() const
+const Vector2& AIAgent::GetBasePosition() const
 {
 	return m_basePosition;
 }
@@ -125,8 +156,14 @@ AttackComponent* AIAgent::GetAttackComponent() const
 	return m_attackComponent;
 }
 
+bool AIAgent::IsCollided() const
+{
+	return m_isCollided;
+}
+
 void AIAgent::SetPatrolPause(float pauseInSeconds)
 {
 	m_patrolPauseInSeconds = pauseInSeconds;
 }
 
+NS_LIGHTSOULS_END

@@ -138,9 +138,6 @@
     <ClCompile Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\Components\PlayerAnimComponent.cpp">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\CustomActions\CameraFallow.cpp">
       <Filter>src\World\Entity\CustomActions</Filter>
     </ClCompile>
@@ -160,9 +157,6 @@
       <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Components\AttackComponent.cpp">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\Components\AIAnimComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\Physics\PhysicsManager.cpp">
@@ -188,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.cpp">
       <Filter>src\3rdParty\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\AnimComponent.cpp">
+      <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +257,6 @@
     <ClInclude Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.h">
       <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\Components\PlayerAnimComponent.h">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\CustomActions\CameraFallow.h">
       <Filter>src\World\Entity\CustomActions</Filter>
     </ClInclude>
@@ -282,9 +276,6 @@
       <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.h">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\Components\AIAnimComponent.h">
       <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Physics\PhysicsManager.h">
@@ -310,6 +301,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.h">
       <Filter>src\3rdParty\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LightSoulsTypes.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\AnimComponent.h">
+      <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

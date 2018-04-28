@@ -1,8 +1,11 @@
 #pragma once
 
 #include "World/Entity/Entity.h"
-#include "StateMachine/StateMachine.h"
+#include "World/Entity/AI/StateMachine/StateMachine.h"
 
+NS_LIGHTSOULS_BEGIN
+
+class AttackComponent;
 
 class AIAgent : public Entity
 {
@@ -12,15 +15,17 @@ public:
 	float				GetChaseRadius() const;
 	float				GetChaseStopDistance() const;
 	float				GetAttackRange() const;
+	float				GetStoppingDistance() const;
 	const String&		GetType() const;
 	const Vector2&		GetBasePosition() const;
 	AttackComponent*	GetAttackComponent() const;
+	bool				IsCollided() const;
 
 	void SetPatrolPause(float pauseInSeconds);
 	void SetPatrolRadius(float radius);
 	void SetChaseRadius(float radius);
 	void SetChaseStopDistance(float distance);
-	void setBasePosition(const Vector2& position);
+	void SetBasePosition(const Vector2& position);
 	void SetAgentType(const String& type);
 
 	static AIAgent* Create(const String& pathToXML);
@@ -29,6 +34,8 @@ public:
 private:
 	AIAgent();
 	bool Init(const String& pathToXML);
+	void OnContactBegin(const cocos2d::PhysicsBody* otherBody);
+	void OnContactEnd(const cocos2d::PhysicsBody* otherBody);
 
 private:
 	StateMachine	    m_stateMachine;
@@ -40,4 +47,7 @@ private:
 	float			    m_patrolRadius;	
 	float				m_patrolPauseInSeconds;
 	float				m_chaseStopDistance;
+	bool				m_isCollided;
 };
+
+NS_LIGHTSOULS_END

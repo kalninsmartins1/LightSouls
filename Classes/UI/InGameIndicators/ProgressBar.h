@@ -1,10 +1,12 @@
+#pragma once
+
 // brief: This class represents progress bar
 //		  that works with values normalized
 //		  in range of 0 to 1.
 
-#pragma once
+#include "LightSoulsTypes.h"
 
-#include "cocos2d.h"
+NS_LIGHTSOULS_BEGIN
 
 class UIElementConfig;
 
@@ -14,7 +16,7 @@ public:
 	void SetAnimationSpeed(float animationSpeed);
 	void SetCurrentValue(float currentValue);
 
-	static ProgressBar* Create(const std::string& pathToXML);
+	static ProgressBar* Create(const String& pathToXML);
 	bool				Init(const UIElementConfig& backgroundConfig,
 								const UIElementConfig& foregroundConfig);
 	void				Update(float deltaTime);
@@ -24,7 +26,7 @@ private:
 
 	void SetTargetValue(float value);
 
-	bool Init(const std::string& pathToXML);
+	bool Init(const String& pathToXML);
 	void FinishAnimating();
 
 private:
@@ -36,3 +38,5 @@ private:
 	bool			 m_isAnimating;
 	bool			 m_isAnimationgForward;
 };
+
+NS_LIGHTSOULS_END

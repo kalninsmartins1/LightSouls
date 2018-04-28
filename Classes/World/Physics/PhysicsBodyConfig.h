@@ -1,6 +1,8 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "LightSoulsTypes.h"
+
+NS_LIGHTSOULS_BEGIN
 
 enum class BodyType
 {
@@ -32,3 +34,5 @@ private:
 	bool						m_isGravityEnabled;
 	bool						m_isRotationEnabled;
 };
+
+NS_LIGHTSOULS_END

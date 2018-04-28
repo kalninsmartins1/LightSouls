@@ -1,22 +1,22 @@
-#include "cocos2d.h"
 #include "StateMachine.h"
 #include "World/Entity/AI/AIAgent.h"
+#include "World/Entity/Components/AnimComponent.h"
 
-using namespace cocos2d;
+NS_LIGHTSOULS_BEGIN
 
 StateMachine::StateMachine(AIAgent& agent) :
 	m_agent(agent),	
 	m_curState(nullptr),
-	m_pAnimComponent(nullptr),
+	m_animComponent(nullptr),
 	m_attackState(agent),
 	m_chaseState(agent),
 	m_patrolState(agent)
 {
 }
 
-void StateMachine::Start(AIAnimComponent* pAIAnimComponent)
+void StateMachine::Start(AnimComponent* animComponent)
 {
-	m_pAnimComponent = pAIAnimComponent;
+	m_animComponent = animComponent;
 	SwitchState(m_patrolState);
 }
 
@@ -27,7 +27,7 @@ void StateMachine::SwitchState(IState& newState)
 		m_curState->OnExit();
 	}	
 	m_curState = &newState;
-	m_curState->OnEnter(m_pAnimComponent);	
+	m_curState->OnEnter(m_animComponent);	
 }
 
 void StateMachine::OnStep()
@@ -99,3 +99,5 @@ void StateMachine::OnStateFailed()
 		break;
 	}
 }
+
+NS_LIGHTSOULS_END

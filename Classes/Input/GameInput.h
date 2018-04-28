@@ -1,6 +1,9 @@
 #pragma once
-#include "cocos2d.h"
+
+#include "LightSoulsTypes.h"
 #include <memory>
+
+NS_LIGHTSOULS_BEGIN
 
 class KeyboardInput;
 class MouseInput;
@@ -17,43 +20,51 @@ enum class GameInputType
 class GameInput : cocos2d::Ref
 {
 public:
-	static GameInput* GetInstance();
 	~GameInput();
+
+public:
+	static GameInput*	GetInstance();
+	
 	// Returns true for action once when input is released
-	bool HasAction(const std::string& action) const;
+	bool				HasAction(const String& action) const;
 
 	// Returns true while input for action is not released
-	bool hasActionState(const std::string& action) const;
+	bool				HasActionState(const String& action) const;
 
 	// Return current normalized axis value
-	float getInputAxis(const std::string& axis) const;
+	float				GetInputAxis(const String& axis) const;
 
-	bool LoadInputConfiguration(const std::string& pathToConfigFile);
+	bool LoadInputConfiguration(const String& pathToConfigFile);
 	void Update(float deltaTime);
-	void addAxisActionInput(GameInputType inputType, const std::string& actionName,
-		const std::string& keyCodeFromStr, const std::string& keyCodeToStr,
+	void addAxisActionInput(GameInputType inputType, const String& actionName,
+		const String& keyCodeFromStr, const String& keyCodeToStr,
 		float valueFrom, float valueTo) const;
-	void addActionInput(GameInputType inputType, const std::string& actionName, const std::string& buttonCode) const;
-	void addStateInput(GameInputType inputType, const std::string& actionName, const std::string& buttonCode) const;
+	void AddActionInput(GameInputType inputType, const String& actionName, const String& buttonCode) const;
+	void AddStateInput(GameInputType inputType, const String& actionName, const String& buttonCode) const;
 
 private:
 	GameInput();
-	bool init();
 
-	void addKeyboardActionKey(const std::string& actionName, const std::string& inputCode) const;
-	void addKeyboardStateKey(const std::string& actionName, const std::string& inputCode) const;
-	void addKeyboardAxis(const std::string& actionName, const std::string& keyCodeFromStr,
-		const std::string& keyCodeToStr, float valueFrom, float valueTo) const;
+private:
+	bool Init();
 
-	void addMouseActionButton(const std::string& actionName, const std::string& inputCode) const;
-	void addMouseStateButton(const std::string& actionName, const std::string& inputCode) const;
+	void AddKeyboardActionKey(const String& actionName, const String& inputCode) const;
+	void AddKeyboardStateKey(const String& actionName, const String& inputCode) const;
+	void AddKeyboardAxis(const String& actionName, const String& keyCodeFromStr,
+		const String& keyCodeToStr, float valueFrom, float valueTo) const;
 
-	void addGameControllerActionButtons(const std::string& actionName, const std::string& inputCode) const;
-	void addGameControllerStateButtons(const std::string& actionName, const std::string& inputCode) const;
-	void addGameControllerAxis(const std::string& actionName, const std::string& axisName,
+	void AddMouseActionButton(const String& actionName, const String& inputCode) const;
+	void AddMouseStateButton(const String& actionName, const String& inputCode) const;
+
+	void AddGameControllerActionButtons(const String& actionName, const String& inputCode) const;
+	void AddGameControllerStateButtons(const String& actionName, const String& inputCode) const;
+	void AddGameControllerAxis(const String& actionName, const String& axisName,
 		float valueFrom, float valueTo) const;
 
-	std::unique_ptr<KeyboardInput> m_pKeyboard;
-	std::unique_ptr<MouseInput> m_pMouseInput;
-	std::unique_ptr<GameControllerInput> m_pGameControllerInput;
+private:
+	std::unique_ptr<KeyboardInput>			m_keyboard;
+	std::unique_ptr<MouseInput>				m_mouseInput;
+	std::unique_ptr<GameControllerInput>	m_gameControllerInput;
 };
+
+NS_LIGHTSOULS_END

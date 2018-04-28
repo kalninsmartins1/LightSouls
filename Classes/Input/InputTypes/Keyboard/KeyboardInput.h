@@ -1,10 +1,11 @@
 #pragma once
 
 #include <map>
-#include "cocos2d.h"
 #include "Input/InputTypes/AInputDevice.h"
 
-typedef cocos2d::EventKeyboard::KeyCode KeyCode;
+NS_LIGHTSOULS_BEGIN
+
+using KeyCode = cocos2d::EventKeyboard::KeyCode;
 
 struct KeyboardAxis
 {
@@ -15,8 +16,8 @@ struct KeyboardAxis
 	float toValue;
 	float currentValue;
 
-	bool bFromIsPressed;
-	bool bToIsPressed;
+	bool fromIsPressed;
+	bool toIsPressed;
 	
 	KeyboardAxis() :
 		keyCodeFrom(KeyCode::KEY_NONE),
@@ -25,8 +26,8 @@ struct KeyboardAxis
 		this->fromValue = 0;
 		this->toValue = 0;
 		this->currentValue = 0;
-		this->bFromIsPressed = false;
-		this->bToIsPressed = false;
+		this->fromIsPressed = false;
+		this->toIsPressed = false;
 	}
 
 	KeyboardAxis(KeyCode keyCodeFrom, KeyCode keyCodeTo, float fromValue, float toValue) :
@@ -36,8 +37,8 @@ struct KeyboardAxis
 		this->fromValue = fromValue;
  		this->toValue = toValue;
 		this->currentValue = 0;
-		this->bFromIsPressed = false;
-		this->bToIsPressed = false;
+		this->fromIsPressed = false;
+		this->toIsPressed = false;
 	}
 };
 
@@ -45,33 +46,31 @@ class KeyboardInput: public AInputDevice
 {
 public:
 	KeyboardInput();
-	bool init();
 
-	virtual bool hasAction(const std::string& action) const override;
-	virtual bool hasActionState(const std::string& action) const override;
-	virtual bool hasAxisInput(const std::string& axisName) const override;
-	virtual float getAxisInput(const std::string& axisName) const override;
-	
-	virtual void addActionButton(const std::string& actionName, const ActionButton& actionKey) override;
-	virtual void addStateButton(const std::string& actionName, const StateButton& stateKey) override;
-	virtual void update(float deltaTime) override;
-	
-	void addKeyboardAxis(const std::string& actionName, const KeyboardAxis& axisKey);
+public:
+	bool			Init();
+
+	virtual bool	HasAxisInput(const String& axisName) const override;
+	virtual float	GetAxisInput(const String& axisName) const override;
+		
+	void			AddKeyboardAxis(const String& actionName, const KeyboardAxis& axisKey);
+	virtual void	Update(float deltaTime) override;	
 
 private:
-	static void increaseAxisCurValue(KeyboardAxis& keyboardAxis, float value, float deltaTime);
+	void SetActionKeyState(bool isActive, KeyCode keyCode);
+	void SetStateKeyState(bool isPressed, KeyCode keyCode);
+	void SetKeyboardAxisState(bool isPressed, KeyCode keyCode);
 
-	void onKeyboardKeyUp(cocos2d::EventKeyboard::KeyCode keyCode, 
-		cocos2d::Event* pEvent);
-	void onKeyboardKeyDown(cocos2d::EventKeyboard::KeyCode keyCode, 
-		cocos2d::Event* pEvent);
-		
-	void updateAxisKeyState(float deltaTime);
+	static void IncreaseAxisCurValue(KeyboardAxis& keyboardAxis, float value, float deltaTime);
+	void		OnKeyboardKeyUp(cocos2d::EventKeyboard::KeyCode keyCode, 
+					cocos2d::Event* pEvent);
+	void		OnKeyboardKeyDown(cocos2d::EventKeyboard::KeyCode keyCode, 
+					cocos2d::Event* pEvent);		
+	void		UpdateAxisKeyState(float deltaTime);
 	
-	void setActionKeyState(bool bIsActive, KeyCode keyCode);
-	void setStateKeyState(bool bIsPressed, KeyCode keyCode);
-	void setKeyboardAxisState(bool bIsPressed, KeyCode keyCode);
-
-	std::map<std::string, KeyboardAxis> m_keyboardAxis;
-	std::map<KeyCode, std::string> m_keyCodeToAxisAction;	
+private:
+	std::map<String, KeyboardAxis> m_keyboardAxis;
+	std::map<KeyCode, String> m_keyCodeToAxisAction;	
 };
+
+NS_LIGHTSOULS_END

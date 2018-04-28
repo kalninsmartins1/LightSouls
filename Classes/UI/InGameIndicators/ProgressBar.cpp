@@ -2,6 +2,8 @@
 #include "Utils/XML/XMLLoader.h"
 #include "UI/UIElementConfig.h"
 
+NS_LIGHTSOULS_BEGIN
+
 void ProgressBar::SetCurrentValue(float value)
 {
 	if (value <= 1 || value >= 0)
@@ -20,7 +22,7 @@ void ProgressBar::SetAnimationSpeed(float animationSpeed)
 	m_animationSpeed = animationSpeed;
 }
 
-ProgressBar* ProgressBar::Create(const std::string& pathToXML)
+ProgressBar* ProgressBar::Create(const String& pathToXML)
 {
 	ProgressBar* healthBar = new (std::nothrow) ProgressBar();
 	if (healthBar && healthBar->Init(pathToXML))
@@ -58,7 +60,7 @@ void ProgressBar::SetTargetValue(float value)
 	}
 }
 
-bool ProgressBar::Init(const std::string& pathToXML)
+bool ProgressBar::Init(const String& pathToXML)
 {
 	return XMLLoader::InitializeUIProgressBar(*this, pathToXML);
 }
@@ -117,3 +119,5 @@ void ProgressBar::Update(float deltaTime)
 		m_progressLine->setScaleX(m_currentValue);
 	}
 }
+
+NS_LIGHTSOULS_END

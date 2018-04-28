@@ -1,10 +1,12 @@
 #pragma once
 
-#include "States/IState.h"
 #include "States/StateAttack.h"
 #include "States/StateChase.h"
 #include "States/StatePatrol.h"
-#include "World/Entity/Components/AIAnimComponent.h"
+
+NS_LIGHTSOULS_BEGIN
+
+class AnimComponent;
 
 class StateMachine
 {
@@ -12,7 +14,7 @@ public:
 	StateMachine(AIAgent& agent);
 
 	// Should be called once to turn on the state machine
-	void Start(AIAnimComponent* pAIAnimComponent);
+	void Start(AnimComponent* animComponent);
 
 	// Should be called periodically to update current state of state machine 
 	void OnStep();	
@@ -24,8 +26,10 @@ private:
 
 	AIAgent&			m_agent;
 	IState*				m_curState;
-	AIAnimComponent*	m_pAnimComponent;
+	AnimComponent*	m_animComponent;
 	StateAttack			m_attackState;
 	StateChase			m_chaseState;
 	StatePatrol			m_patrolState;
 };
+
+NS_LIGHTSOULS_END

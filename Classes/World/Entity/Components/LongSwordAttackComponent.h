@@ -1,7 +1,11 @@
 #pragma once
 
 #include "AttackComponent.h"
-#include "World/Entity/Entity.h"
+#include "LightSoulsTypes.h"
+
+NS_LIGHTSOULS_BEGIN
+
+class Entity;
 
 class LongSwordAttackComponent : public AttackComponent
 {
@@ -23,3 +27,5 @@ private:
 	const Entity*	m_ownerEntity;
 	const float		m_paddingFromBody;
 };
+
+NS_LIGHTSOULS_END

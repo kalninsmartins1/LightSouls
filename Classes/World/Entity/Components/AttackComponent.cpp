@@ -1,6 +1,8 @@
 #include "AttackComponent.h"
 #include "Utils/Utils.h"
 
+NS_LIGHTSOULS_BEGIN
+
 AttackComponent::AttackComponent(float secondsBetweenAttacks, float attackRange)
 	: m_lastTimeAttacked(0)
 	, m_secondsBetweenAttacks(secondsBetweenAttacks)
@@ -27,3 +29,5 @@ bool AttackComponent::IsReadyToAttack() const
 
 	return secondsSinceLastAttack > m_secondsBetweenAttacks;
 }
+
+NS_LIGHTSOULS_END
