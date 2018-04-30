@@ -76,13 +76,16 @@ void Player::update(float deltaTime)
 	// Call base update
 	Entity::update(deltaTime);
 
-	ManageInput();
+	if (!IsDodging())
+	{
+		ManageInput();
+	}
 
 	// We can move only when we are not attacking
 	if (!IsAttacking() && m_isAttackComboDelayExpired)
-	{		
+	{
 		PlayRunOrIdleAnimation();
-	}	
+	}
 }
 
 void Player::SetTimeBetweenComboInput(float timeBetweenComboInput)
