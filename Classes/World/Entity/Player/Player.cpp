@@ -6,13 +6,14 @@
 #include "Input/GameInput.h"
 #include "physics3d/CCPhysics3DWorld.h"
 #include "World/Physics/PhysicsManager.h"
-#include "Events/HealthChangedEventData.h"
+#include "Events/ProgressBarChangedEventData.h"
 #include "cocos2d/cocos/base/CCEventDispatcher.h"
 #include "Utils/AnimationUtils.h"
 
 NS_LIGHTSOULS_BEGIN
 
 const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
+const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
 
 Player* Player::Create(const String& pathToXML)
 {
@@ -33,18 +34,27 @@ Player::Player()
 	: m_animComponent(nullptr)
 	, m_attackComponent(nullptr)
 	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right
+	, m_isDodging(false)
 	, m_isAttackComboDelayExpired(true)
-	, m_timeBetweenComboInput(0)
-	, m_lastTimePerformedLightAttack(0)
+	, m_dodgeSpeed(0.0f)
+	, m_dodgeTime(0.0f)
+	, m_timeBetweenComboInput(0.0f)
+	, m_dodgeStaminaConsumption(0.0f)
+	, m_lastTimePerformedLightAttack(0.0f)
 	, m_curAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE))
 	, m_lastAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE))
 	, m_firstAttackAnimId(m_curAttackAnimId)
 {
 }
 
-const String& Player::GetOnHealthChangedEvent()
+const String& Player::GetEventOnHealthChanged()
 {
 	return s_eventOnPlayerHealthChanged;
+}
+
+const String& Player::GetEventOnStaminaChanged()
+{
+	return s_eventOnPlayerStaminaChanged;
 }
 
 bool Player::Init(const String& pathToXML)
@@ -76,7 +86,7 @@ void Player::update(float deltaTime)
 	// Call base update
 	Entity::update(deltaTime);
 
-	if (!IsDodging())
+	if (!m_isDodging)
 	{
 		ManageInput();
 	}
@@ -91,6 +101,21 @@ void Player::update(float deltaTime)
 void Player::SetTimeBetweenComboInput(float timeBetweenComboInput)
 {
 	m_timeBetweenComboInput = timeBetweenComboInput;
+}
+
+void Player::SetDodgeStaminaConsumption(float dodgeStaminaConumption)
+{
+	m_dodgeStaminaConsumption = dodgeStaminaConumption;
+}
+
+void Player::SetDodgeSpeed(float dodgeSpeed)
+{
+	m_dodgeSpeed = dodgeSpeed;
+}
+
+void Player::SetDodgeTime(float dodgeTime)
+{
+	m_dodgeTime = dodgeTime;
 }
 
 void Player::OnDodgeFinished()
@@ -127,7 +152,8 @@ void Player::ManageInput()
 	{
 		//lightAttack();
 	}
-	else if (input->HasAction("DodgeInput") && IsRunning())
+	else if (input->HasAction("DodgeInput") && IsRunning() && 
+		HasEnoughtStamina(m_dodgeStaminaConsumption))
 	{
 		PerformDodge();
 	}
@@ -148,9 +174,24 @@ void Player::ManageInput()
 	}
 }
 
+void Player::StartDodging()
+{
+	m_isDodging = true;
+	SetCurrentMoveSpeed(m_dodgeSpeed);
+
+	// Consume stamina
+	ConsumeStamina(m_dodgeStaminaConsumption);
+}
+
+void Player::StopDodging()
+{
+	m_isDodging = false;
+	ResetMoveSpeed();
+}
+
 void Player::LightAttack()
 {	
-	if (!IsAttacking() && !IsDodging())
+	if (!IsAttacking() && !m_isDodging && m_attackComponent->IsReadyToAttack())
 	{
 		// Activating attack
 		Entity::StartAttacking();
@@ -181,12 +222,12 @@ void Player::PerformDodge()
 	StartDodging();
 	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_DODGE);
 	Utils::StartTimerWithCallback(this,
-		CC_CALLBACK_0(Player::OnDodgeFinished, this), GetDodgeTime());
+		CC_CALLBACK_0(Player::OnDodgeFinished, this), m_dodgeTime);
 }
 
 void Player::PlayRunOrIdleAnimation() const
 {			
-	if (IsRunning() && !IsDodging())
+	if (IsRunning() && !m_isDodging)
 	{
 		if(!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_RUN))
 		{
@@ -206,11 +247,20 @@ void Player::DispatchOnHealthChangedEvent()
 {
 	float currentHealth = GetCurrentHealth();
 	float healthPercentage = Utils::SafeDevide(currentHealth, GetMaxHealth());
-	auto eventData = HealthChangedEventData(GetId(), currentHealth, healthPercentage);
+	auto eventData = ProgressBarChangedEventData(GetId(), currentHealth, healthPercentage);
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerHealthChanged,
 		&eventData);
 
 	CCLOG("Player health changed %f", GetCurrentHealth());
+}
+
+void Player::DispatchOnStaminaChangedEvent()
+{
+	float currentStamina = GetCurrentStamina();
+	float staminaPercentage = Utils::SafeDevide(currentStamina, GetMaxStamina());
+	auto eventData = ProgressBarChangedEventData(GetId(), currentStamina, staminaPercentage);
+	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerStaminaChanged,
+		&eventData);	
 }
 
 void Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)

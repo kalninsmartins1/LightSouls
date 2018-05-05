@@ -18,8 +18,7 @@ public:
 	float				GetStoppingDistance() const;
 	const String&		GetType() const;
 	const Vector2&		GetBasePosition() const;
-	AttackComponent*	GetAttackComponent() const;
-	bool				IsCollided() const;
+	AttackComponent*	GetAttackComponent() const;	
 
 	void SetPatrolPause(float pauseInSeconds);
 	void SetPatrolRadius(float radius);
@@ -34,10 +33,9 @@ public:
 private:
 	AIAgent();
 	bool Init(const String& pathToXML);
-	void OnContactBegin(const cocos2d::PhysicsBody* otherBody);
-	void OnContactEnd(const cocos2d::PhysicsBody* otherBody);
+	void OnContactBegin(const cocos2d::PhysicsBody* otherBody);	
 
-private:
+private:	
 	StateMachine	    m_stateMachine;
 	AttackComponent*	m_attackComponent;
 	Vector2				m_basePosition;
@@ -47,7 +45,6 @@ private:
 	float			    m_patrolRadius;	
 	float				m_patrolPauseInSeconds;
 	float				m_chaseStopDistance;
-	bool				m_isCollided;
 };
 
 NS_LIGHTSOULS_END

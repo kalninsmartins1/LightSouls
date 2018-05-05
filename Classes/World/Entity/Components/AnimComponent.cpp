@@ -46,11 +46,12 @@ void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 	m_ownerSprite.initWithSpriteFrame(m_animations[AnimationUtils::GetAnimId(ANIM_TYPE_IDLE)].frames.at(0));
 }
 
-void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback /*= nullptr*/)
+cocos2d::Action* AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback /*= nullptr*/)
 {
+	cocos2d::Action* action = nullptr;
 	if (Utils::ContainsKey(m_animations, animationId))
 	{
-		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_ownerSprite,
+		action = AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_ownerSprite,
 			m_animations[animationId],
 			callback);
 		SetCurrentAnimId(animationId);
@@ -59,6 +60,8 @@ void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallbac
 	{
 		CCLOGERROR("Animation id %d not found !", animationId);
 	}
+
+	return action;
 }
 
 void AnimComponent::PlayLoopingAnimation(int animationId)
@@ -87,10 +90,10 @@ void LightSouls::AnimComponent::PlayLoopingAnimation(const String& animName)
 	PlayLoopingAnimation(animationId);
 }
 
-void LightSouls::AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback)
+cocos2d::Action* AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback)
 {
 	int animationId = AnimationUtils::GetAnimId(animName);
-	PlayOneShotAnimation(animationId, callback);	
+	return PlayOneShotAnimation(animationId, callback);	
 }
 
 void AnimComponent::SetCurrentAnimId(int currentAnimId)

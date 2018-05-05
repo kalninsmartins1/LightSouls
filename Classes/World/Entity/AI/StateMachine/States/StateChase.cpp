@@ -31,6 +31,8 @@ void StateChase::OnEnter(AnimComponent* animComponent)
 
 	// Play run animation
 	animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+
+	CCLOG("Sate chase enter !");
 }
 
 StateProgress StateChase::OnStep()
@@ -42,6 +44,13 @@ void StateChase::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
 	m_agent.SetMoveDirection(Vector2::ZERO);
+
+	CCLOG("Sate chase exit !");
+}
+
+void StateChase::OnEventReceived(const String& receivedEvent)
+{
+	// ...
 }
 
 AIState StateChase::GetStateType()

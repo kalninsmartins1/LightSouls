@@ -24,10 +24,12 @@ private:
 	void InitWolrdLayer();
 	void InitUILayer();
 	void OnPlayerHealthChanged(cocos2d::EventCustom* eventData);
+	void OnPlayerStaminaChanged(cocos2d::EventCustom* eventData);
 
 private:
 	LightSouls::Player*			m_player;
 	LightSouls::ProgressBar*	m_healthBar;
+	LightSouls::ProgressBar*	m_staminaBar;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

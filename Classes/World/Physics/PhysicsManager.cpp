@@ -5,10 +5,18 @@
 
 NS_LIGHTSOULS_BEGIN
 
+
+const LightSouls::String LightSouls::PhysicsManager::s_onCollisionBeginEvent = "EVENT_ON_COLLISION_BEGIN";
+
 PhysicsManager* PhysicsManager::GetInstance()
 {
 	static PhysicsManager instance;
 	return &instance;
+}
+
+const String& LightSouls::PhysicsManager::GetEventOnCollisionBegin()
+{
+	return s_onCollisionBeginEvent;
 }
 
 bool PhysicsManager::Init(cocos2d::Node* context)
@@ -124,5 +132,4 @@ bool PhysicsManager::OnContactEnd(cocos2d::PhysicsContact& contact)
 }
 
 NS_LIGHTSOULS_END
-
 

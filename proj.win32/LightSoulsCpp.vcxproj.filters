@@ -171,12 +171,6 @@
     <ClCompile Include="..\Classes\UI\InGameIndicators\ProgressBar.cpp">
       <Filter>src\UI\InGameIndicators</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Events\HealthChangedEventData.cpp">
-      <Filter>src\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Events\IEventData.cpp">
-      <Filter>src\Events</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\CustomActions\ActionSequence.cpp">
       <Filter>src\World\Entity\CustomActions</Filter>
     </ClCompile>
@@ -185,6 +179,15 @@
     </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Components\AnimComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Events\ProgressBarChangedEventData.cpp">
+      <Filter>src\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Events\OnCollisionBeginEventData.cpp">
+      <Filter>src\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Events\AEventData.cpp">
+      <Filter>src\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,12 +293,6 @@
     <ClInclude Include="..\Classes\UI\InGameIndicators\ProgressBar.h">
       <Filter>src\UI\InGameIndicators</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Events\HealthChangedEventData.h">
-      <Filter>src\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Events\IEventData.h">
-      <Filter>src\Events</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\CustomActions\ActionSequence.h">
       <Filter>src\World\Entity\CustomActions</Filter>
     </ClInclude>
@@ -307,6 +304,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\AnimComponent.h">
       <Filter>src\World\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Events\ProgressBarChangedEventData.h">
+      <Filter>src\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Events\OnCollisionBeginEventData.h">
+      <Filter>src\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Events\AEventData.h">
+      <Filter>src\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@
 #include "World/Entity/AI/AIAgentManager.h"
 #include "World/Physics/PhysicsManager.h"
 #include "UI/InGameIndicators/ProgressBar.h"
-#include "Events/HealthChangedEventData.h"
+#include "Events/ProgressBarChangedEventData.h"
 
 USING_NS_CC;
 
@@ -76,7 +76,15 @@ void HelloWorld::update(float deltaTime)
 		world->setDebugDrawCameraMask(CameraFlag::USER1);
 	}
 
-	m_healthBar->Update(deltaTime);
+	if (m_healthBar != nullptr)
+	{
+		m_healthBar->Update(deltaTime);
+	}
+
+	if (m_staminaBar != nullptr)
+	{
+		m_staminaBar->Update(deltaTime);
+	}
 }
 
 void HelloWorld::InitWolrdLayer()
@@ -91,8 +99,10 @@ void HelloWorld::InitWolrdLayer()
 	m_player = LightSouls::Player::Create("res/Configs/World/Player/Player.xml");
 	worldLayer->addChild(m_player);
 	
-	getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetOnHealthChangedEvent(),
+	getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnHealthChanged(),
 		CC_CALLBACK_1(HelloWorld::OnPlayerHealthChanged, this));
+	getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
+		CC_CALLBACK_1(HelloWorld::OnPlayerStaminaChanged, this));
 
 	// Init AI
 	LightSouls::AIAgentManager* agentManager = LightSouls::AIAgentManager::GetInstance();
@@ -137,10 +147,17 @@ void HelloWorld::InitUILayer()
 	{
 		CCLOG("HelloWorldScene: Failed to initialize health bar !");
 	}
+
+	m_staminaBar = LightSouls::ProgressBar::Create("res/Configs/UI/InGameIndicators/StaminaBar.xml");
+	if (m_staminaBar == nullptr)
+	{
+		CCLOG("HelloWorldScene: Failed to initialize stamina bar!");
+	}
 	
 	// TODO: Add stamina bar
 	uiLayer->addChild(screenOverlay);
 	uiLayer->addChild(m_healthBar);
+	uiLayer->addChild(m_staminaBar);
 	uiLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));
 	addChild(uiLayer);
 
@@ -152,11 +169,21 @@ void HelloWorld::InitUILayer()
 
 void HelloWorld::OnPlayerHealthChanged(EventCustom* eventData)
 {
-	auto healthData = static_cast<LightSouls::HealthChangedEventData*>(eventData->getUserData());
+	auto healthData = static_cast<LightSouls::ProgressBarChangedEventData*>(eventData->getUserData());
 	
-	if (healthData != nullptr)
+	if (healthData != nullptr && m_healthBar != nullptr)
 	{
-		m_healthBar->SetCurrentValue(healthData->GetHealthPercentage());
+		m_healthBar->SetCurrentValue(healthData->GetPercentage());
 	}	
+}
+
+void HelloWorld::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
+{
+	auto staminaData = static_cast<LightSouls::ProgressBarChangedEventData*>(eventData->getUserData());
+
+	if (staminaData != nullptr && m_staminaBar != nullptr)
+	{
+		m_staminaBar->SetCurrentValue(staminaData->GetPercentage());
+	}
 }
 

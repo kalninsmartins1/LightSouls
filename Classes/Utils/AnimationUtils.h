@@ -20,7 +20,7 @@ class AnimationUtils
 public:
 	static int GetAnimId(String animName);
 
-	static void StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
+	static cocos2d::Action* StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
 		const AnimationData& animationData, const std::function<void()>& onFinished);
 
 	static void StartSpriteFrameAnimation(cocos2d::Sprite* pSprite, 

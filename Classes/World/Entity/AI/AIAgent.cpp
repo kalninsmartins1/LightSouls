@@ -30,8 +30,7 @@ AIAgent::AIAgent()
 	, m_chaseRadius(0)
 	, m_patrolRadius(0)
 	, m_patrolPauseInSeconds(0)
-	, m_chaseStopDistance(0)
-	, m_isCollided(false)
+	, m_chaseStopDistance(0)	
 {
 }
 
@@ -79,7 +78,7 @@ bool AIAgent::Init(const String& pathToXML)
 		CC_ASSERT(isAttackComponentFound && "AIAgent: AIAttackComponent not found !");
 		m_attackComponent = attackComponent;
 
-		SetPhysicsBodyAnchor(Vector2(0, 0));
+		SetPhysicsBodyAnchor(Vector2(0.0f, 0.0f));
 
 		// Register for physics events
 		PhysicsManager::GetInstance()->AddContactBeginListener(getName(),
@@ -97,12 +96,7 @@ bool AIAgent::Init(const String& pathToXML)
 
 void AIAgent::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
-	m_isCollided = true;
-}
-
-void AIAgent::OnContactEnd(const cocos2d::PhysicsBody* otherBody)
-{
-	m_isCollided = false;
+	m_stateMachine.DispatchEvent(PhysicsManager::GetEventOnCollisionBegin());
 }
 
 void AIAgent::update(float deltaTime)
@@ -154,11 +148,6 @@ const Vector2& AIAgent::GetBasePosition() const
 AttackComponent* AIAgent::GetAttackComponent() const
 {
 	return m_attackComponent;
-}
-
-bool AIAgent::IsCollided() const
-{
-	return m_isCollided;
 }
 
 void AIAgent::SetPatrolPause(float pauseInSeconds)

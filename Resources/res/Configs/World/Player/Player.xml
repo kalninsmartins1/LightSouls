@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <Entity type="Player"
-			moveSpeed="360"
-			dodgeSpeed="720"
-			dodgeTime="0.8"
+			moveSpeed="360"		
 			baseHealth="100"
-			baseDamage="10"
+			baseStamina="100"
+			baseDamage="10"	
+			staminaRegenerateSpeed="5"
 	>
 	
 	<Component type="TransformComponent">
@@ -14,13 +14,17 @@
 	</Component>
 	
 	<Component type="PlayerControllerComponent"
-				timeBetweenComboInput="0.6">
+				timeBetweenComboInput="0.8"
+				dodgeSpeed="720"
+				dodgeTime="0.8"
+				dodgeStaminaConsumption="40">
 	</Component>
 	
 	<Component 	type="LongSwordAttackComponent"
 				secondsBetweenAttacks="0.6"
 				attackRange="100"
-				paddingFromBody="5">
+				paddingFromBody="5"
+				staminaConsumption="20">
 	</Component>
 	
 	<Component type="AnimComponent">

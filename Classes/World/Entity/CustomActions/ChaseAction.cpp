@@ -23,11 +23,12 @@ ChaseAction::ChaseAction(const Entity& chaseTarget, AIAgent& agent):
 	m_agent(agent),
 	m_isDone(false)
 {
+	CCLOG("Chase action created !");
 }
 
 ChaseAction::~ChaseAction()
 {
-
+	CCLOG("Chase action destroyed !");
 }
 
 bool ChaseAction::isDone() const

@@ -53,6 +53,10 @@ void StateMachine::OnStep()
 	}
 }
 
+void StateMachine::DispatchEvent(const String& eventType)
+{
+	m_curState->OnEventReceived(eventType);
+}
 
 void StateMachine::OnStateDone()
 {

@@ -29,8 +29,8 @@ public:
 
 	void PlayLoopingAnimation(const String& animName);
 	void PlayLoopingAnimation(int animationId);
-	void PlayOneShotAnimation(const String& animName, const AnimationCallback& callback = nullptr);
-	void PlayOneShotAnimation(int animationId, const AnimationCallback& callback = nullptr);
+	cocos2d::Action* PlayOneShotAnimation(const String& animName, const AnimationCallback& callback = nullptr);
+	cocos2d::Action* PlayOneShotAnimation(int animationId, const AnimationCallback& callback = nullptr);
 
 private:
 	AnimComponent(cocos2d::Sprite& sprite);
@@ -39,8 +39,8 @@ private:
 	void SetCurrentAnimId(int currentAnimId);
 
 private:
-	int							m_currentAnimId;
-	cocos2d::Sprite&			m_ownerSprite;
+	int								m_currentAnimId;
+	cocos2d::Sprite&				m_ownerSprite;
 	std::map<int, AnimationData>	m_animations;
 };
 

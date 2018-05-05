@@ -25,17 +25,19 @@ enum class AIState
 
 class IState
 {
-public:
+public:	
+	virtual AIState GetStateType() = 0;
+
 	// Called when state is first entered
-	virtual void OnEnter(AnimComponent* animComponent) = 0;
+	virtual void			OnEnter(AnimComponent* animComponent) = 0;
 
 	// Called to progress the state, returns current state progress
-	virtual StateProgress OnStep() = 0;
+	virtual StateProgress	OnStep() = 0;
 
 	// Called when state is exited
-	virtual void OnExit() = 0;
+	virtual void			OnExit() = 0;
 
-	virtual AIState GetStateType() = 0;
+	virtual void			OnEventReceived(const String& receivedEvent) = 0;
 };
 
 NS_LIGHTSOULS_END

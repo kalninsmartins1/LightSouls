@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <Entity type="WarriorAgent"
 			moveSpeed="160"
-			dodgeSpeed="100"
-			dodgeTime="0.8"
 			baseHealth="100"
+			baseStamina="100"
 			baseDamage="10"
+			staminaRegenerateSpeed="2"
 			>
 			
 	<Component type="TransformComponent">
@@ -23,7 +23,8 @@
 	<Component 	type="LongSwordAttackComponent"
 				secondsBetweenAttacks="0.6"
 				attackRange="120"
-				paddingFromBody="5">
+				paddingFromBody="5"
+				staminaConsumption="20">
 	</Component>
 	
 	<Component type="AnimComponent">

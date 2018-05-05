@@ -19,13 +19,13 @@ namespace LightSouls
 
 	// XML entity attributes
 	static constexpr char* XML_ENTITY_MOVE_SPEED_ATTR = "moveSpeed";
-	static constexpr char* XML_ENTITY_DODGE_SPEED_ATTR = "dodgeSpeed";
-	static constexpr char* XML_ENTITY_DODGE_TIME_ATTR = "dodgeTime";
 	static constexpr char* XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR = "secondsBetweenAttacks";
 	static constexpr char* XML_ENTITY_ATTACK_RANGE_ATTR = "attackRange";
 	static constexpr char* XML_ENTITY_PADDING_FROM_BODY_ATTR = "paddingFromBody";
 	static constexpr char* XML_ENTITY_BASE_HEALTH_ATTR = "baseHealth";
+	static constexpr char* XML_ENTITY_BASE_STAMINA_ATTR = "baseStamina";
 	static constexpr char* XML_ENTITY_BASE_DAMAGE_ATTR = "baseDamage";
+	static constexpr char* XML_ENTITY_STAMINA_REGENARATE_SPEED_ATTR = "staminaRegenerateSpeed";
 
 	// XML UI attributes
 	static constexpr char* XML_UI_ANIMATION_SPEED_ATTR = "animationSpeed";
@@ -34,6 +34,12 @@ namespace LightSouls
 
 	// XML player attributes
 	static constexpr char* XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR = "timeBetweenComboInput";
+	static constexpr char* XML_PLAYER_DODGE_STAMINA_ATTR = "dodgeStaminaConsumption";
+	static constexpr char* XML_PLAYER_DODGE_SPEED_ATTR = "dodgeSpeed";
+	static constexpr char* XML_PLAYER_DODGE_TIME_ATTR = "dodgeTime";
+
+	// XML attack attributes
+	static constexpr char* XML_ATTACK_STAMINA_CONSUMPTION_ATTR = "staminaConsumption";
 
 	// XML AI attributes
 	static constexpr char* XML_AI_CHASE_RADIUS_ATTR = "chaseRadius";

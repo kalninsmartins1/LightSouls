@@ -24,7 +24,8 @@ struct PhysicsContactListener
 class PhysicsManager
 {
 public:
-	static PhysicsManager* GetInstance();
+	static PhysicsManager*	GetInstance();
+	static const String&	GetEventOnCollisionBegin();
 	
 	bool Init(cocos2d::Node* context);	
 	
@@ -54,6 +55,7 @@ private:
 	bool OnContactEnd(cocos2d::PhysicsContact& contact);
 
 private:
+	static const String					s_onCollisionBeginEvent;
 	std::vector<PhysicsContactListener> m_beginContactListeners;
 	std::vector<PhysicsContactListener> m_endContactListeners;
 

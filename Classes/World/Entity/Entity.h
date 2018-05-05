@@ -15,30 +15,32 @@ public:
 	const Vector2&			GetHeading() const;
 	const cocos2d::Size&	GetPhysicsBodySizeScaled() const;
 	float					GetHealth() const;
-	float					GetDamage() const;
-	float					GetDodgeTime() const;
-	float					GetDodgeSpeed() const;
+	float					GetDamage() const;	
 	float					GetCurrentHealth() const;
+	float					GetCurrentStamina() const;
 	float					GetMaxHealth() const;
+	float					GetMaxStamina() const;
 	float					GetPhysicsBodyForceScale() const;
+	
 	unsigned int			GetId() const;
-	bool					IsRunning() const;
-	bool					IsDodging() const;
+	bool					IsRunning() const;	
 	bool					IsAttacking() const;
-
+	bool					HasEnoughtStamina(float amount);
+	
 	void SetPhysicsBodyForceScale(float scale);
 	void SetBaseDamage(float baseDamage);
 	void SetBaseHealth(float baseHealth);
+	void SetBaseStamina(float baseStamina);
 	void SetBaseMoveSpeed(float moveSpeed);
-	void SetDodgeSpeed(float dodgeSpeed);
-	void SetDodgeTime(float dodgeTime);	
 	void SetMoveDirection(const Vector2& direction);
 	void SetPhysicsBodySize(const cocos2d::Size& size);
-	void SetPhysicsBodyAnchor(const Vector2& achorPos);
-	
+	void SetPhysicsBodyAnchor(const Vector2& achorPos);	
+	void SetCurrentMoveSpeed(float moveSpeed);
+	void SetStaminaRegenerateSpeed(float regenerateSpeed);
+
+	void ResetMoveSpeed();
+	void ConsumeStamina(float amount);
 	void TakeDamage(float damage);
-	void StartDodging();
-	void StopDodging();
 	void StartAttacking();
 	void StopAttacking();
 
@@ -46,11 +48,14 @@ public:
 
 protected:
 	virtual void DispatchOnHealthChangedEvent();
+	virtual void DispatchOnStaminaChangedEvent();
+
+	
 	void		 OnEntityInitialized();
 
-private:
-	void		SetCurrentMoveSpeed(float moveSpeed);
+private:	
 	void		Move();	
+	void		RegenerateStamina(float regenerateSpeedASecond);
 
 private:	
 	static unsigned int			s_uniqueId;
@@ -59,19 +64,19 @@ private:
 	Vector2					m_moveDirection;
 	cocos2d::Size			m_physicsBodyScaledSize;	
 	
-	bool m_isRuning;
-	bool m_isDodging;
+	bool m_isRuning;	
 	bool m_isAttacking;
-
+	
 	float m_baseMoveSpeed;
 	float m_baseHealth;
 	float m_baseDamage;
+	float m_baseStamina;
+	float m_stamina;
 	float m_health;
 	float m_damage;
 	float m_moveSpeed;
-	float m_dodgeSpeed;
-	float m_dodgeTime;
 	float m_physicsBodyForceScale;
+	float m_staminaRegenerateSpeed;
 };
 
 NS_LIGHTSOULS_END

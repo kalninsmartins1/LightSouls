@@ -36,7 +36,7 @@ int AnimationUtils::GetAnimId(String animName)
 	return animId;
 }
 
-void AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
+cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
 	const AnimationData& animationData,
 	const std::function<void()>& onFinished)
 {
@@ -56,7 +56,7 @@ void AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSpr
 	sequence->setTag(ACTION_ANIM_TAG);
 
 	// Start new anim
-	pSprite->runAction(sequence);
+	return pSprite->runAction(sequence);
 }
 
 void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const AnimationData& animation)

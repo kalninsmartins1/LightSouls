@@ -1,0 +1,18 @@
+<HealthBar
+	animationSpeed="0.2">
+	
+	<Background>
+		<Sprite path="res/Graphics/UI/healthBarBg.png"/>
+		<AnchorPosition x="0.0" y="0.0" />
+		<NormalizedPosition x="0.2" y="0.90" />
+		<Scale x="1" y="1"/>
+	</Background>
+	
+	<Foreground>
+		<Sprite path="res/Graphics/UI/staminaFill.png"/>
+		<AnchorPosition x="0.0" y="0.0" />
+		<NormalizedPosition x="0.01" y="0.5" />
+		<Scale x="1.08" y="3"/>
+	</Foreground>
+	
+</HealthBar>

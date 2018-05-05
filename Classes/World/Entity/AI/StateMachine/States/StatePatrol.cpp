@@ -3,6 +3,7 @@
 #include "GameConsts.h"
 #include "Utils/Utils.h"
 #include "World/Entity/Components/AnimComponent.h"
+#include "World/Physics/PhysicsManager.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -13,6 +14,7 @@ StatePatrol::StatePatrol(AIAgent& agent)
 	, m_animComponent(nullptr)
 	, m_curTargetPosition(Vector2::ZERO)
 	, m_isLookingAround(false)
+	, m_isCollided(false)
 {
 }
 
@@ -21,6 +23,7 @@ void StatePatrol::OnEnter(AnimComponent* animComponent)
 	m_animComponent = animComponent;
 	m_curProgress = StateProgress::IN_PROGRESS;	
 	StartMovingToNewPosition();
+	CCLOG("Enter patrol state !");
 }
 
 StateProgress StatePatrol::OnStep()
@@ -38,7 +41,7 @@ StateProgress StatePatrol::OnStep()
 			m_agent.SetMoveDirection(toTargetPosition.getNormalized());					
 			
 			float stoppingDistance = m_agent.GetStoppingDistance();
-			if (toTargetPosition.length() <= stoppingDistance || m_agent.IsCollided())
+			if (toTargetPosition.length() <= stoppingDistance || m_isCollided)
 			{
 				// Target position reached
 				m_isLookingAround = true;
@@ -55,6 +58,16 @@ StateProgress StatePatrol::OnStep()
 void StatePatrol::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
+	CCLOG("Exit patrol state !");
+}
+
+void StatePatrol::OnEventReceived(const String& receivedEvent)
+{
+	if (receivedEvent == PhysicsManager::GetEventOnCollisionBegin())
+	{
+		CCLOG("State Patrol Collided !");
+		m_isCollided = true;
+	}
 }
 
 AIState StatePatrol::GetStateType()
@@ -100,6 +113,7 @@ void StatePatrol::StartMovingToNewPosition()
 void StatePatrol::OnFinishedLookingAround()
 {
 	m_isLookingAround = false;
+	m_isCollided = false;
 	StartMovingToNewPosition();
 }
 

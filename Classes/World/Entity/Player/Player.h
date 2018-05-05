@@ -15,10 +15,15 @@ class Player: public Entity
 public:
 	Player();
 
-	static const String& GetOnHealthChangedEvent();
+public:
+	static const String& GetEventOnHealthChanged();
+	static const String& GetEventOnStaminaChanged();
 
 	void SetTimeBetweenComboInput(float timeBetweenComboInput);
-	
+	void SetDodgeStaminaConsumption(float dodgeStaminaConumption);
+	void SetDodgeSpeed(float dodgeSpeed);
+	void SetDodgeTime(float dodgeTime);
+
 	static Player*	Create(const String& pPathToXML);
 	bool			Init(const String& pathToXML);
 	
@@ -26,8 +31,12 @@ public:
 
 protected:
 	virtual void DispatchOnHealthChangedEvent() override;
+	virtual void DispatchOnStaminaChangedEvent() override;
 
 private:
+	void StartDodging();
+	void StopDodging();
+
 	void OnDodgeFinished();
 	void OnAttackFinished();
 	void OnLightAttackComboExpired();
@@ -42,13 +51,18 @@ private:
 	float GetSecondsForValidLighAttackCombo() const;
 
 private:
-	static const String	s_eventOnPlayerHealthChanged;
-	AnimComponent*		m_animComponent;
+	static const String			s_eventOnPlayerHealthChanged;
+	static const String			s_eventOnPlayerStaminaChanged;
+	AnimComponent*				m_animComponent;
 	AttackComponent*			m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
+	bool				m_isDodging;
 	bool				m_isAttackComboDelayExpired;
+	float				m_dodgeSpeed;
+	float				m_dodgeTime;
 	float				m_timeBetweenComboInput;
+	float				m_dodgeStaminaConsumption;
 	long				m_lastTimePerformedLightAttack;
 	int					m_curAttackAnimId;
 	const int			m_lastAttackAnimId;

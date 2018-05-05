@@ -27,6 +27,7 @@ void StateAttack::OnEnter(AnimComponent* animComponent)
 	m_animComponent = animComponent;
 	m_attackComponent = m_agent.GetAttackComponent();
 	m_curProgress = StateProgress::IN_PROGRESS;
+	PlayIdleAnimation();
 }
 
 StateProgress StateAttack::OnStep()
@@ -40,7 +41,8 @@ StateProgress StateAttack::OnStep()
 
 			// Start attack animation
 			m_isAnimFinished = false;
-			m_animComponent->PlayOneShotAnimation(m_curAnimationId, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
+			CCLOG("Attack Anim not Finished !");
+			m_lastAnimAction = m_animComponent->PlayOneShotAnimation(m_curAnimationId, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
 		}
 		
 		const Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
@@ -57,6 +59,13 @@ void StateAttack::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
 	m_curAnimationId = m_firstAnimatioId;
+	m_isAnimFinished = true;
+	CCLOG("Attack anim finished !");
+}
+
+void LightSouls::StateAttack::OnEventReceived(const String& receivedEvent)
+{
+	// ...
 }
 
 AIState StateAttack::GetStateType()
@@ -67,7 +76,14 @@ AIState StateAttack::GetStateType()
 void StateAttack::OnAttackFinished()
 {
 	Utils::WrapValue(++m_curAnimationId, m_firstAnimatioId, m_lastAnimationId);
-	m_isAnimFinished = true;	
+	m_isAnimFinished = true;
+	PlayIdleAnimation();
+	CCLOG("Attack anim finished!");
+}
+
+void StateAttack::PlayIdleAnimation()
+{
+	m_animComponent->PlayLoopingAnimation(AnimationUtils::GetAnimId(ANIM_TYPE_IDLE));
 }
 
 NS_LIGHTSOULS_END

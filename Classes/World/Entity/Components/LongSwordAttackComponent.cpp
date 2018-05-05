@@ -25,7 +25,6 @@ LongSwordAttackComponent* LongSwordAttackComponent::Create(float secondsBetweenA
 LongSwordAttackComponent::LongSwordAttackComponent(float secondsBetweenAttacks,
 		float attackRange, float paddingFromBody) 
 	: AttackComponent(secondsBetweenAttacks, attackRange)
-	, m_ownerEntity(nullptr)
 	, m_paddingFromBody(paddingFromBody)
 {
 }
@@ -36,9 +35,9 @@ bool LongSwordAttackComponent::OnAttackHit(cocos2d::PhysicsWorld& world,
 	Entity* hitEntity = dynamic_cast<Entity*>(shape.getBody()->getNode());
 
 	// Ignore if hitting self
-	if (hitEntity != nullptr && hitEntity->GetId() != m_ownerEntity->GetId())
+	if (hitEntity != nullptr && hitEntity->GetId() != GetOwnerEntity()->GetId())
 	{
-		hitEntity->TakeDamage(m_ownerEntity->GetDamage());
+		hitEntity->TakeDamage(GetOwnerEntity()->GetDamage());
 		CCLOG("LongSwordAttackComponent: Hit %s",
 			shape.getBody()->getNode()->getName().c_str());
 	}
@@ -48,34 +47,21 @@ bool LongSwordAttackComponent::OnAttackHit(cocos2d::PhysicsWorld& world,
 
 void LongSwordAttackComponent::Attack(const Vector2& direction)
 {
-	if (AttackComponent::IsReadyToAttack())
+	if (IsReadyToAttack())
 	{
 		AttackComponent::Attack(direction);
 		CheckAffectedObjects(direction);
 	}
 }
 
-void LongSwordAttackComponent::setOwner(cocos2d::Node* owner)
-{
-	if (owner != nullptr)
-	{
-		m_ownerEntity = dynamic_cast<Entity*>(owner);
-		CCASSERT(m_ownerEntity != nullptr,
-			"LongSwordAttackComponent: Owner is not an Entity !");
-	}
-	else
-	{
-		CCLOGERROR("LongSwordAttackComponent: Setting nullptr as owner !");
-	}
-}
-
 void LongSwordAttackComponent::CheckAffectedObjects(const Vector2& direction) const
 {
-	// After attack finished check if we hit something	
-	const cocos2d::Size bodySize = m_ownerEntity->GetPhysicsBodySizeScaled();
+	// After attack finished check if we hit something
+	const Entity* ownerEntity = GetOwnerEntity();
+	const cocos2d::Size bodySize = ownerEntity->GetPhysicsBodySizeScaled();
 	const float bodyWidthScaled = bodySize.width;
 
-	Vector2 rectOrgin = m_ownerEntity->getPosition() + direction *
+	Vector2 rectOrgin = ownerEntity->getPosition() + direction *
 		(bodyWidthScaled + m_paddingFromBody);
 
 	const float rectWidth = GetAttackRange();

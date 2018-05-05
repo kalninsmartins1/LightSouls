@@ -191,17 +191,17 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 		// Load root entity attributes
 		const String actorType = root->Attribute(XML_TYPE_ATTR);
 		const float moveSpeed = root->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
-		const float dodgeSpeed = root->FloatAttribute(XML_ENTITY_DODGE_SPEED_ATTR);
-		const float dodgeTime = root->FloatAttribute(XML_ENTITY_DODGE_TIME_ATTR);
 		const float baseHealth = root->FloatAttribute(XML_ENTITY_BASE_HEALTH_ATTR);
+		const float baseStamina = root->FloatAttribute(XML_ENTITY_BASE_STAMINA_ATTR);
 		const float baseDamage = root->FloatAttribute(XML_ENTITY_BASE_DAMAGE_ATTR);
+		const float staminaRegenerateSpeed = root->FloatAttribute(XML_ENTITY_STAMINA_REGENARATE_SPEED_ATTR);
 
 		entity.setName(actorType);
 		entity.SetBaseMoveSpeed(moveSpeed);
-		entity.SetDodgeSpeed(dodgeSpeed);
-		entity.SetDodgeTime(dodgeTime);
 		entity.SetBaseDamage(baseDamage);
 		entity.SetBaseHealth(baseHealth);
+		entity.SetBaseStamina(baseStamina);
+		entity.SetStaminaRegenerateSpeed(staminaRegenerateSpeed);
 
 		// Load entity components
 		for (XMLElement* element = root->FirstChildElement(); element;
@@ -232,11 +232,16 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			}
 			else if (componentType == PLAYER_CONTROLLER_COMPONENT)
 			{
-				const float timeBetweenComboInput =
-					element->FloatAttribute(XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR);
+				const float timeBetweenComboInput = element->FloatAttribute(XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR);
+				const float dodgeSpeed = element->FloatAttribute(XML_PLAYER_DODGE_SPEED_ATTR);
+				const float dodgeTime = element->FloatAttribute(XML_PLAYER_DODGE_TIME_ATTR);
+				const float dodgeStaminaConsumption = element->FloatAttribute(XML_PLAYER_DODGE_STAMINA_ATTR);
 
-				Player* pPlayer = dynamic_cast<Player*>(&entity);
-				pPlayer->SetTimeBetweenComboInput(timeBetweenComboInput);
+				Player* player = dynamic_cast<Player*>(&entity);
+				player->SetTimeBetweenComboInput(timeBetweenComboInput);
+				player->SetDodgeSpeed(dodgeSpeed);
+				player->SetDodgeTime(dodgeTime);
+				player->SetDodgeStaminaConsumption(dodgeStaminaConsumption);
 			}
 			else if (componentType == AI_CONTROLLER_COMPONENT)
 			{
@@ -287,18 +292,18 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			}
 			else if (componentType == LONG_SWORD_ATTACK_COMPONENT)
 			{
-				const float secondsBetweenAttacks =
-					element->FloatAttribute(
-						XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
+				const float secondsBetweenAttacks = element->FloatAttribute(XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
 				const float attackRange = element->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);
-				const float paddingFromBody = element->
-					FloatAttribute(XML_ENTITY_PADDING_FROM_BODY_ATTR);
+				const float paddingFromBody = element->FloatAttribute(XML_ENTITY_PADDING_FROM_BODY_ATTR);
+				const float staminaConsumption = element->FloatAttribute(XML_ATTACK_STAMINA_CONSUMPTION_ATTR);
 
-				LongSwordAttackComponent* pLongSwordAttack =
+				LongSwordAttackComponent* longSwordAttack =
 					LongSwordAttackComponent::Create(secondsBetweenAttacks, attackRange,
 						paddingFromBody);
-				pLongSwordAttack->setName(ATTACK_COMPONENT);
-				entity.addComponent(pLongSwordAttack);
+
+				longSwordAttack->setName(ATTACK_COMPONENT);
+				longSwordAttack->SetStaminaConsumption(staminaConsumption);
+				entity.addComponent(longSwordAttack);
 			}
 			else if (componentType == RIGID_BODY_COMPONENT)
 			{
