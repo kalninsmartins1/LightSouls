@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LightSoulsTypes.h"
+#include "Events/AEventData.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -37,7 +38,7 @@ public:
 	// Called when state is exited
 	virtual void			OnExit() = 0;
 
-	virtual void			OnEventReceived(const String& receivedEvent) = 0;
+	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData) = 0;
 };
 
 NS_LIGHTSOULS_END

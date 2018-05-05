@@ -18,7 +18,7 @@ public:
 	void			OnEnter(AnimComponent* animComponent) override;
 	StateProgress	OnStep() override;
 	void			OnExit() override;
-	virtual void	OnEventReceived(const String& receivedEvent) override;
+	virtual void	OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;
 
 private:	
 	bool	HasTargetBeenSpotted() const;	

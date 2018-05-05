@@ -6,6 +6,7 @@
 #include "World/Entity/AI/StateMachine/StateMachine.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "World/Physics/PhysicsManager.h"
+#include "Events/OnCollisionBeginEventData.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -96,7 +97,12 @@ bool AIAgent::Init(const String& pathToXML)
 
 void AIAgent::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
-	m_stateMachine.DispatchEvent(PhysicsManager::GetEventOnCollisionBegin());
+	cocos2d::Node* node = otherBody->getNode();
+	if (node != nullptr)
+	{
+		m_stateMachine.DispatchEvent(PhysicsManager::GetEventOnCollisionBegin(),
+			OnCollisionBeginEventData(GetId(), node->getName()));
+	}	
 }
 
 void AIAgent::update(float deltaTime)

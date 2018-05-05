@@ -63,7 +63,7 @@ void StateAttack::OnExit()
 	CCLOG("Attack anim finished !");
 }
 
-void LightSouls::StateAttack::OnEventReceived(const String& receivedEvent)
+void StateAttack::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
 {
 	// ...
 }

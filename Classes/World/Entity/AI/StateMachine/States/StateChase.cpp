@@ -48,7 +48,7 @@ void StateChase::OnExit()
 	CCLOG("Sate chase exit !");
 }
 
-void StateChase::OnEventReceived(const String& receivedEvent)
+void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
 {
 	// ...
 }

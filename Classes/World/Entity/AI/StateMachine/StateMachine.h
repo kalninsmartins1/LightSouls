@@ -20,7 +20,7 @@ public:
 	// Should be called periodically to update current state of state machine 
 	void OnStep();
 
-	void DispatchEvent(const String& eventType);
+	void DispatchEvent(const String& eventType, const AEventData& eventData);
 
 private:	
 	void SwitchState(IState& newState);

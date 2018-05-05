@@ -19,7 +19,7 @@ public:
 	virtual void			OnEnter(AnimComponent* animComponent) override;
 	virtual StateProgress	OnStep() override;
 	virtual void			OnExit() override;
-	virtual void			OnEventReceived(const String& receivedEvent) override;
+	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;
 
 private:
 	void					OnAttackFinished();

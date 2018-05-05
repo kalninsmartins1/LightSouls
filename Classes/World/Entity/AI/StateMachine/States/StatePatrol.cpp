@@ -4,6 +4,8 @@
 #include "Utils/Utils.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "World/Physics/PhysicsManager.h"
+#include "Events/OnCollisionBeginEventData.h"
+#include "World/World.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -38,7 +40,7 @@ StateProgress StatePatrol::OnStep()
 		else if(!m_isLookingAround)
 		{
 			Vector2 toTargetPosition = m_curTargetPosition - m_agent.getPosition();
-			m_agent.SetMoveDirection(toTargetPosition.getNormalized());					
+			m_agent.SetMoveDirection(toTargetPosition.getNormalized());
 			
 			float stoppingDistance = m_agent.GetStoppingDistance();
 			if (toTargetPosition.length() <= stoppingDistance || m_isCollided)
@@ -46,10 +48,10 @@ StateProgress StatePatrol::OnStep()
 				// Target position reached
 				m_isLookingAround = true;
 
-				// Idle for specific time				
+				// Idle for specific time
 				StartLookingAround();
-			}			
-		}		
+			}
+		}
 	}
 
 	return m_curProgress;
@@ -61,12 +63,16 @@ void StatePatrol::OnExit()
 	CCLOG("Exit patrol state !");
 }
 
-void StatePatrol::OnEventReceived(const String& receivedEvent)
+void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
 {
 	if (receivedEvent == PhysicsManager::GetEventOnCollisionBegin())
 	{
-		CCLOG("State Patrol Collided !");
-		m_isCollided = true;
+		const OnCollisionBeginEventData& collisionData = static_cast<const OnCollisionBeginEventData&>(eventData);
+		if (collisionData.GetCollidedWithName() == World::GetNodeName())
+		{
+			CCLOG("State Patrol Collided !");
+			m_isCollided = true;
+		}
 	}
 }
 
@@ -106,14 +112,22 @@ void StatePatrol::StartLookingAround()
 
 void StatePatrol::StartMovingToNewPosition()
 {
-	GetRandomPositionInRange(m_curTargetPosition);
+	if(!m_isCollided)
+	{
+		GetRandomPositionInRange(m_curTargetPosition);
+	}
+	else
+	{
+		m_curTargetPosition = m_agent.GetBasePosition();
+		m_isCollided = false;
+	}
+	
 	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 }
 
 void StatePatrol::OnFinishedLookingAround()
 {
 	m_isLookingAround = false;
-	m_isCollided = false;
 	StartMovingToNewPosition();
 }
 

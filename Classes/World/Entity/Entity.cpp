@@ -122,11 +122,13 @@ void Entity::TakeDamage(float damage)
 
 void Entity::StartAttacking()
 {
+	SetCurrentMoveSpeed(0.0f);
 	m_isAttacking = true;
 }
 
 void Entity::StopAttacking()
 {
+	ResetMoveSpeed();
 	m_isAttacking = false;
 }
 

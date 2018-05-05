@@ -86,13 +86,14 @@ void Player::update(float deltaTime)
 	// Call base update
 	Entity::update(deltaTime);
 
-	if (!m_isDodging)
+	// We can move only when we are not attacking
+	if (!IsAttacking() && !m_isDodging)
 	{
 		ManageInput();
 	}
 
-	// We can move only when we are not attacking
-	if (!IsAttacking() && m_isAttackComboDelayExpired)
+	// If still not attacking
+	if (!IsAttacking())
 	{
 		PlayRunOrIdleAnimation();
 	}
@@ -160,9 +161,9 @@ void Player::ManageInput()
 
 	// Player movement
 	const float horizontalValue = input->GetInputAxis("HorizontalMovement");
-	const float vertiacalValue = input->GetInputAxis("VerticalMovement");	
+	const float vertiacalValue = input->GetInputAxis("VerticalMovement");
 	Vector2& moveDirection = Vector2(horizontalValue, vertiacalValue);
-	
+
 	// Make sure we are not moving faster diagonally
 	moveDirection.normalize();
 	SetMoveDirection(moveDirection);

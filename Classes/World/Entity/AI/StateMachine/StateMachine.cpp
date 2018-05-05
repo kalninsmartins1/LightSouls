@@ -1,6 +1,7 @@
 #include "StateMachine.h"
 #include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/Components/AnimComponent.h"
+#include "Events/AEventData.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -53,9 +54,9 @@ void StateMachine::OnStep()
 	}
 }
 
-void StateMachine::DispatchEvent(const String& eventType)
+void StateMachine::DispatchEvent(const String& eventType, const AEventData& eventData)
 {
-	m_curState->OnEventReceived(eventType);
+	m_curState->OnEventReceived(eventType, eventData);
 }
 
 void StateMachine::OnStateDone()
