@@ -20,13 +20,11 @@ public:
 	virtual void			OnExit() override;
 	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;
 
-private: 
-	void					OnTargetReached();
-
 private:
 	StateProgress	m_curProgress;
 	const Entity&	m_targetEntity;
-	AIAgent&		m_agent;	
+	AIAgent&		m_agent;
+	AnimComponent*	m_animComponent;
 };
 
 NS_LIGHTSOULS_END

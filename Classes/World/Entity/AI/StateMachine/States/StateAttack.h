@@ -35,7 +35,6 @@ private:
 	int					m_curAnimationId;
 	const int			m_lastAnimationId;
 	const int			m_firstAnimatioId;
-	cocos2d::Action*	m_lastAnimAction;
 };
 
 NS_LIGHTSOULS_END

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LightSoulsTypes.h"
+#include "GameConsts.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -16,16 +17,16 @@ public:
 	// Returns -1 if value is negative, else returns 1
 	static int					GetSign(const float& value);
 	static float				GetRandValueWithinRange(int minValue, int maxValue);
-	static Vector2		GetRandomPositionWithinCircle(const Vector2 centerPos, float radius);
+	static Vector2				GetRandomPositionWithinCircle(const Vector2 centerPos, float radius);
 	static float				GetRandAngleInRadians();
-	static Vector2		GetScreenFillScale(const cocos2d::Size& curSize);
+	static Vector2				GetScreenFillScale(const cocos2d::Size& curSize);
 	static const cocos2d::Size& GetScreenSize();
+	static long long			GetTimeStampInMilliseconds();
 
 	static float		SafeDevide(const float& up, const float& down);
-	static long long	GetTimeStampInMilliseconds();
 	static float		ConvertMillisecondsToSeconds(long long milliseconds);
 	static void			StartTimerWithCallback(cocos2d::Node* node,
-							std::function<void()> callback, float time);
+							std::function<void()> callback, float time, int tag = ACTION_TIMER_TAG);
 
 	static void LogVector2(const Vector2& v);
 	static void LogVector3(const Vector3& v);

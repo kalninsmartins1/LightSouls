@@ -144,9 +144,6 @@
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\CustomActions\ChaseAction.cpp">
-      <Filter>src\World\Entity\CustomActions</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Components\RangedAttackComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
@@ -265,9 +262,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\CustomActions\ChaseAction.h">
-      <Filter>src\World\Entity\CustomActions</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\RangedAttackComponent.h">
       <Filter>src\World\Entity\Components</Filter>

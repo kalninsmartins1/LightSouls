@@ -1,6 +1,5 @@
 #include "Utils.h"
 #include "Input/InputTypes/Keyboard/KeyboardInput.h"
-#include "GameConsts.h"
 #include "World/Entity/Components/MirrorSpriteComponent.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "Input/InputTypes/GameController/GameControllerInput.h"
@@ -74,16 +73,20 @@ float Utils::SafeDevide(const float& up, const float& down)
 	return result;
 }
 
-void Utils::StartTimerWithCallback(cocos2d::Node* pNode, std::function<void()> callback,
-	float time)
+void Utils::StartTimerWithCallback(cocos2d::Node* node, std::function<void()> callback,
+	float time, int tag)
 {
 	using namespace cocos2d;
+
 	Vector<FiniteTimeAction*> callbackTimerActions;
 	callbackTimerActions.pushBack(DelayTime::create(time));
 	callbackTimerActions.pushBack(CallFunc::create(callback));
 	
+	auto sequence = Sequence::create(callbackTimerActions);
+	sequence->setTag(tag);
+
 	// Start timer with callback
-	pNode->runAction(Sequence::create(callbackTimerActions));
+	node->runAction(sequence);
 }
 
 Vector2 Utils::GetRandomPositionWithinCircle(const Vector2 centerPos, float radius)

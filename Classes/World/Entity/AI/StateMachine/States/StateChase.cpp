@@ -1,7 +1,6 @@
 #include "StateChase.h"
 #include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/AI/AIAgentManager.h"
-#include "World/Entity/CustomActions/ChaseAction.h"
 #include "World/Entity/CustomActions/ActionSequence.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "GameConsts.h"
@@ -18,25 +17,28 @@ StateChase::StateChase(AIAgent& agent) :
 void StateChase::OnEnter(AnimComponent* animComponent)
 {
 	m_curProgress = StateProgress::IN_PROGRESS;
-
-	// Start chasing player
-	const auto chase = ChaseAction::Create(m_targetEntity, m_agent);
-	const auto callBack = cocos2d::CallFunc::create(
-		CC_CALLBACK_0(StateChase::OnTargetReached, this));
-
-	auto sequence = ActionSequnce::Create();
-	sequence->AddAction(chase);
-	sequence->AddAction(callBack);
-	m_agent.runAction(sequence);
-
-	// Play run animation
-	animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
-
+	m_animComponent = animComponent;
 	CCLOG("Sate chase enter !");
+	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 }
 
 StateProgress StateChase::OnStep()
 {
+	// Move agent towards target location
+	const Vector2& currentPosition = m_agent.getPosition();
+	Vector2 toTarget = m_targetEntity.getPosition() - currentPosition;
+	const Vector2& toTargetNormalized = toTarget.getNormalized();
+
+	// Update agent move direction
+	m_agent.SetMoveDirection(toTargetNormalized);
+	float distanceToTarget = toTarget.length();
+
+	if (distanceToTarget <= m_agent.GetChaseStopDistance() ||	// Target has been caught
+		distanceToTarget >= m_agent.GetChaseRadius()) // Target run off
+	{
+
+		m_curProgress = StateProgress::DONE;
+	}
 	return m_curProgress;
 }
 
@@ -44,7 +46,7 @@ void StateChase::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
 	m_agent.SetMoveDirection(Vector2::ZERO);
-
+	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
 	CCLOG("Sate chase exit !");
 }
 
@@ -56,11 +58,6 @@ void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& 
 AIState StateChase::GetStateType()
 {
 	return AIState::CHASE;
-}
-
-void StateChase::OnTargetReached()
-{
-	m_curProgress = StateProgress::DONE;
 }
 
 NS_LIGHTSOULS_END

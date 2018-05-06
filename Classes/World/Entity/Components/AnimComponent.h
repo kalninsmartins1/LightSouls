@@ -29,8 +29,8 @@ public:
 
 	void PlayLoopingAnimation(const String& animName);
 	void PlayLoopingAnimation(int animationId);
-	cocos2d::Action* PlayOneShotAnimation(const String& animName, const AnimationCallback& callback = nullptr);
-	cocos2d::Action* PlayOneShotAnimation(int animationId, const AnimationCallback& callback = nullptr);
+	void PlayOneShotAnimation(const String& animName, const AnimationCallback& callback);
+	void PlayOneShotAnimation(int animationId, const AnimationCallback& callback);
 
 private:
 	AnimComponent(cocos2d::Sprite& sprite);

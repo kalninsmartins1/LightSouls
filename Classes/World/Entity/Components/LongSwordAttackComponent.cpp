@@ -38,8 +38,8 @@ bool LongSwordAttackComponent::OnAttackHit(cocos2d::PhysicsWorld& world,
 	if (hitEntity != nullptr && hitEntity->GetId() != GetOwnerEntity()->GetId())
 	{
 		hitEntity->TakeDamage(GetOwnerEntity()->GetDamage());
-		CCLOG("LongSwordAttackComponent: Hit %s",
-			shape.getBody()->getNode()->getName().c_str());
+// 		CCLOG("LongSwordAttackComponent: Hit %s",
+// 			shape.getBody()->getNode()->getName().c_str());
 	}
 
 	return true;

@@ -27,7 +27,7 @@ void StateAttack::OnEnter(AnimComponent* animComponent)
 	m_animComponent = animComponent;
 	m_attackComponent = m_agent.GetAttackComponent();
 	m_curProgress = StateProgress::IN_PROGRESS;
-	PlayIdleAnimation();
+	CCLOG("Attack state enter");
 }
 
 StateProgress StateAttack::OnStep()
@@ -42,7 +42,7 @@ StateProgress StateAttack::OnStep()
 			// Start attack animation
 			m_isAnimFinished = false;
 			CCLOG("Attack Anim not Finished !");
-			m_lastAnimAction = m_animComponent->PlayOneShotAnimation(m_curAnimationId, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
+			m_animComponent->PlayOneShotAnimation(m_curAnimationId, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
 		}
 		
 		const Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();

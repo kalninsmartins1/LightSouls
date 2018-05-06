@@ -10,6 +10,7 @@ namespace LightSouls
 
 	static constexpr int ACTION_MOVE_TAG = 0;
 	static constexpr int ACTION_ANIM_TAG = 1;
+	static constexpr int ACTION_TIMER_TAG = 2;
 
 	// Entity components
 	static constexpr char* ANIM_COMPONENT = "AnimComponent";

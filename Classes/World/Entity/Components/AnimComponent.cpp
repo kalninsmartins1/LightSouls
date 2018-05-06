@@ -9,7 +9,7 @@ NS_LIGHTSOULS_BEGIN
 
 AnimComponent::AnimComponent(cocos2d::Sprite& ownerSprite) 
 	: m_currentAnimId(-1)
-	, m_ownerSprite(ownerSprite)
+	, m_ownerSprite(ownerSprite)	
 {
 }
 
@@ -46,12 +46,11 @@ void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 	m_ownerSprite.initWithSpriteFrame(m_animations[AnimationUtils::GetAnimId(ANIM_TYPE_IDLE)].frames.at(0));
 }
 
-cocos2d::Action* AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback /*= nullptr*/)
+void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback)
 {
-	cocos2d::Action* action = nullptr;
 	if (Utils::ContainsKey(m_animations, animationId))
 	{
-		action = AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_ownerSprite,
+		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_ownerSprite,
 			m_animations[animationId],
 			callback);
 		SetCurrentAnimId(animationId);
@@ -59,13 +58,11 @@ cocos2d::Action* AnimComponent::PlayOneShotAnimation(int animationId, const Anim
 	else
 	{
 		CCLOGERROR("Animation id %d not found !", animationId);
-	}
-
-	return action;
+	}	
 }
 
 void AnimComponent::PlayLoopingAnimation(int animationId)
-{
+{	
 	if (Utils::ContainsKey(m_animations, animationId))
 	{
 		AnimationUtils::StartSpriteFrameAnimation(&m_ownerSprite,
@@ -84,16 +81,16 @@ bool AnimComponent::IsCurrrentlyPlayingAnimation(const String& animName) const
 	return animId == m_currentAnimId;
 }
 
-void LightSouls::AnimComponent::PlayLoopingAnimation(const String& animName)
+void AnimComponent::PlayLoopingAnimation(const String& animName)
 {
 	int animationId = AnimationUtils::GetAnimId(animName);
 	PlayLoopingAnimation(animationId);
 }
 
-cocos2d::Action* AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback)
+void AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback)
 {
 	int animationId = AnimationUtils::GetAnimId(animName);
-	return PlayOneShotAnimation(animationId, callback);	
+	PlayOneShotAnimation(animationId, callback);	
 }
 
 void AnimComponent::SetCurrentAnimId(int currentAnimId)

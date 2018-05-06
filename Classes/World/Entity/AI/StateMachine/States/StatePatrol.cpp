@@ -60,6 +60,10 @@ StateProgress StatePatrol::OnStep()
 void StatePatrol::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
+	m_isLookingAround = false;
+
+	// Clear any looking around timers
+	m_agent.stopAllActionsByTag(ACTION_TIMER_TAG);
 	CCLOG("Exit patrol state !");
 }
 
@@ -103,11 +107,10 @@ void StatePatrol::StartLookingAround()
 	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
 	m_agent.SetMoveDirection(Vector2::ZERO); // We are not moving while looking around
 
-	auto delay = cocos2d::DelayTime::create(m_agent.GetPatrolPause());
-	auto callback = cocos2d::CallFunc::create(CC_CALLBACK_0(StatePatrol::OnFinishedLookingAround, this));
-	auto sequence = cocos2d::Sequence::create(delay, callback, nullptr);
-	
-	m_agent.runAction(sequence);
+	Utils::StartTimerWithCallback(&m_agent, 
+		CC_CALLBACK_0(StatePatrol::OnFinishedLookingAround, this),
+		m_agent.GetPatrolPause(),
+		ACTION_TIMER_TAG);
 }
 
 void StatePatrol::StartMovingToNewPosition()

@@ -69,12 +69,13 @@ void HelloWorld::update(float deltaTime)
 	// Update AI
 	LightSouls::AIAgentManager::GetInstance()->Update(deltaTime);	
 
-	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
-	if(world != nullptr)
-	{
-		world->setDebugDrawMask(0xFFFFFF);
-		world->setDebugDrawCameraMask(CameraFlag::USER1);
-	}
+	// Debug physics
+// 	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
+// 	if(world != nullptr)
+// 	{
+// 		world->setDebugDrawMask(0xFFFFFF);
+// 		world->setDebugDrawCameraMask(CameraFlag::USER1);
+// 	}
 
 	if (m_healthBar != nullptr)
 	{

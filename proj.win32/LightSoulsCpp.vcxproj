@@ -178,7 +178,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\Components\RangedAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\ActionSequence.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\CameraFallow.cpp" />
-    <ClCompile Include="..\Classes\World\Entity\CustomActions\ChaseAction.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Entity.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Player\Player.cpp" />
     <ClCompile Include="..\Classes\World\Physics\PhysicsBodyConfig.cpp" />
@@ -221,7 +220,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\Components\RangedAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\ActionSequence.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\CameraFallow.h" />
-    <ClInclude Include="..\Classes\World\Entity\CustomActions\ChaseAction.h" />
     <ClInclude Include="..\Classes\World\Entity\Entity.h" />
     <ClInclude Include="..\Classes\World\Entity\Player\Player.h" />
     <ClInclude Include="..\Classes\World\Physics\PhysicsBodyConfig.h" />

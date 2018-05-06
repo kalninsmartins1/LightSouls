@@ -250,9 +250,7 @@ void Player::DispatchOnHealthChangedEvent()
 	float healthPercentage = Utils::SafeDevide(currentHealth, GetMaxHealth());
 	auto eventData = ProgressBarChangedEventData(GetId(), currentHealth, healthPercentage);
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerHealthChanged,
-		&eventData);
-
-	CCLOG("Player health changed %f", GetCurrentHealth());
+		&eventData);	
 }
 
 void Player::DispatchOnStaminaChangedEvent()
@@ -266,14 +264,14 @@ void Player::DispatchOnStaminaChangedEvent()
 
 void Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
-	const String& name = otherBody->getNode()->getName();
-	CCLOG("Player collided with %s", name.c_str());
+// 	const String& name = otherBody->getNode()->getName();
+// 	CCLOG("Player collided with %s", name.c_str());
 }
 
 float Player::GetSecondsForValidLighAttackCombo() const
 {
 	const long currnentTime = Utils::GetTimeStampInMilliseconds();
-	const float secondsSinceLastAttack = // Devide by 1000 to convert to seconds
+	const float secondsSinceLastAttack = // Divide by 1000 to convert to seconds
 		(currnentTime - m_lastTimePerformedLightAttack) / 1000.f;
 
 	const float secondsBeforeComboExpires = m_timeBetweenComboInput - secondsSinceLastAttack;
