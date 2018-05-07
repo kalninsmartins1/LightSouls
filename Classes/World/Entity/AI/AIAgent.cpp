@@ -64,15 +64,13 @@ bool AIAgent::Init(const String& pathToXML)
 {	
 	bool isInitializedSuccessfully = 
 		XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
+	
+	setLocalZOrder(AGENT_LAYER);
 
 	if(isInitializedSuccessfully)
 	{
 		OnEntityInitialized();
-
-		AnimComponent* animComponent = dynamic_cast<AnimComponent*>(getComponent(ANIM_COMPONENT));
-		const bool isAnimComponentFound = animComponent != nullptr;
-		CC_ASSERT( isAnimComponentFound && "AIAgent: AIAnimComponent not found !");			
-		m_stateMachine.Start(animComponent);
+		m_stateMachine.Start(GetAnimComponent());
 
 		AttackComponent* attackComponent = dynamic_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
 		const bool isAttackComponentFound = attackComponent != nullptr;
@@ -84,25 +82,24 @@ bool AIAgent::Init(const String& pathToXML)
 		// Register for physics events
 		PhysicsManager::GetInstance()->AddContactBeginListener(getName(),
 			CC_CALLBACK_1(AIAgent::OnContactBegin, this));
-		PhysicsManager::GetInstance()->AddContactEndListener(getName(),
-			CC_CALLBACK_1(AIAgent::OnContactBegin, this));
 
 		// init was successful only if the attack and anim compoents are found
-		isInitializedSuccessfully = isInitializedSuccessfully &&
-			isAnimComponentFound &&  isAttackComponentFound;
+		isInitializedSuccessfully = isInitializedSuccessfully &&  isAttackComponentFound;
 	}
 	
 	return isInitializedSuccessfully;
 }
 
-void AIAgent::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
+bool AIAgent::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
 	cocos2d::Node* node = otherBody->getNode();
 	if (node != nullptr)
 	{
 		m_stateMachine.DispatchEvent(PhysicsManager::GetEventOnCollisionBegin(),
 			OnCollisionBeginEventData(GetId(), node->getName()));
-	}	
+	}
+
+	return true;
 }
 
 void AIAgent::update(float deltaTime)

@@ -24,7 +24,7 @@ public:
 	void SetDodgeSpeed(float dodgeSpeed);
 	void SetDodgeTime(float dodgeTime);
 
-	static Player*	Create(const String& pPathToXML);
+	static Player*	Create(const String& pathToXML);
 	bool			Init(const String& pathToXML);
 	
 	virtual void	update(float deltaTime) override;
@@ -41,11 +41,13 @@ private:
 	void OnAttackFinished();
 	void OnLightAttackComboExpired();
 	
+	void UpdateSortingLayer();
 	void ManageInput();
 	void LightAttack();
 	void PerformDodge();
 	void PlayRunOrIdleAnimation() const;
-	void OnContactBegin(const cocos2d::PhysicsBody* otherBody);
+	bool OnContactBegin(const cocos2d::PhysicsBody* otherBody);
+	bool OnSortingLayerContactBegin(const cocos2d::PhysicsBody* otherBody);
 
 	// Returns negative value if time for combo has expired
 	float GetSecondsForValidLighAttackCombo() const;
@@ -56,16 +58,17 @@ private:
 	AttackComponent*			m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
-	bool				m_isDodging;
-	bool				m_isAttackComboDelayExpired;
-	float				m_dodgeSpeed;
-	float				m_dodgeTime;
-	float				m_timeBetweenComboInput;
-	float				m_dodgeStaminaConsumption;
-	long				m_lastTimePerformedLightAttack;
-	int					m_curAttackAnimId;
-	const int			m_lastAttackAnimId;
-	const int			m_firstAttackAnimId;
+	bool					m_isDodging;
+	bool					m_isAttackComboDelayExpired;
+	float					m_dodgeSpeed;
+	float					m_dodgeTime;
+	float					m_timeBetweenComboInput;
+	float					m_dodgeStaminaConsumption;
+	long					m_lastTimePerformedLightAttack;
+	int						m_curAttackAnimId;
+	const int				m_lastAttackAnimId;
+	const int				m_firstAttackAnimId;
+	cocos2d::Node*			m_lastCollisionNode;
 };
 
 NS_LIGHTSOULS_END

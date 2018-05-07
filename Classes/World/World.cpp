@@ -42,6 +42,7 @@ bool World::Init(const String& pathToSprite, const String& bodyName, const Strin
 	isSuccessful = isSuccessful && physicsShapeCache->addShapesWithFile(pathToCollisionData);
 	isSuccessful = isSuccessful && physicsShapeCache->setBodyOnSprite(bodyName, this);
 	setName(s_nodeName);
+	setLocalZOrder(WORLD_LAYER);
 
 	// If all operations were successful then init was successful
 	return isSuccessful;

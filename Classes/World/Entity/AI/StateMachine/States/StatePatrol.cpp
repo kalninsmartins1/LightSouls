@@ -25,7 +25,6 @@ void StatePatrol::OnEnter(AnimComponent* animComponent)
 	m_animComponent = animComponent;
 	m_curProgress = StateProgress::IN_PROGRESS;	
 	StartMovingToNewPosition();
-	CCLOG("Enter patrol state !");
 }
 
 StateProgress StatePatrol::OnStep()
@@ -64,7 +63,6 @@ void StatePatrol::OnExit()
 
 	// Clear any looking around timers
 	m_agent.stopAllActionsByTag(ACTION_TIMER_TAG);
-	CCLOG("Exit patrol state !");
 }
 
 void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
@@ -74,7 +72,6 @@ void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData&
 		const OnCollisionBeginEventData& collisionData = static_cast<const OnCollisionBeginEventData&>(eventData);
 		if (collisionData.GetCollidedWithName() == World::GetNodeName())
 		{
-			CCLOG("State Patrol Collided !");
 			m_isCollided = true;
 		}
 	}

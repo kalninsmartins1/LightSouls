@@ -87,7 +87,7 @@
 	</Component>
 	
 	<Component type="RigidBodyComponent">
-		<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
+		<PhysicsMaterial density="0.1" restitution="0" friction="0.3" />
 		<PhysicsBody
 			shape="box"
 			width="150"
@@ -98,6 +98,22 @@
 			collisionBitMask="1"
 			forceScale="100"
 			/>
+	</Component>
+	
+	<Component type="NodeComponent">
+		<Component type="RigidBodyComponent">
+			<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
+			<PhysicsBody
+				shape="box"
+				width="180"
+				height="420"
+				isDynamic="false" 
+				isGravityEnabled="false" 
+				isRotationEnabled="false"
+				collisionBitMask="2"
+				forceScale="0"
+				/>
+		</Component>
 	</Component>
 	
 	<Component type="MirrorSpriteComponent">

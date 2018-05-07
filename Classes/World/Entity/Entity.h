@@ -52,7 +52,6 @@ public:
 protected:
 	virtual void DispatchOnHealthChangedEvent();
 	virtual void DispatchOnStaminaChangedEvent();
-
 	
 	void		 OnEntityInitialized();
 

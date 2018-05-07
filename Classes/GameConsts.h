@@ -12,12 +12,18 @@ namespace LightSouls
 	static constexpr int ACTION_ANIM_TAG = 1;
 	static constexpr int ACTION_TIMER_TAG = 2;
 
+	static constexpr int WORLD_LAYER = -99;
+	static constexpr int PLAYER_UNDER_LAYER = -1;
+	static constexpr int AGENT_LAYER = 0;
+	static constexpr int PLAYER_ON_TOP_LAYER = 1;
+
 	// Entity components
 	static constexpr char* ANIM_COMPONENT = "AnimComponent";
 	static constexpr char* TRANSFORM_COMPONENT = "TransformComponent";
 	static constexpr char* RIGID_BODY_COMPONENT = "RigidBodyComponent";
 	static constexpr char* PLAYER_CONTROLLER_COMPONENT = "PlayerControllerComponent";
 	static constexpr char* MIRROR_SPRITE_COMPONENT = "MirrorSpriteComponent";
+	static constexpr char* NODE_COMPONENT = "NodeComponent";
 	static constexpr char* AI_CONTROLLER_COMPONENT = "AIControllerComponent";
 	static constexpr char* ATTACK_COMPONENT = "AttackComponent";
 	static constexpr char* RANGED_ATTACK_COMPONENT = "RangedAttackComponent";

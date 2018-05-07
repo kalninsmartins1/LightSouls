@@ -53,9 +53,10 @@ private:
 	static void						LoadPhysicsMaterialFromAttributes(const XMLNode* pNode, cocos2d::PhysicsMaterial& outMaterial);
 	static void						LoadVector3FromAttributes(const XMLElement* node, cocos2d::Vec3& outResult);
 	static void						LoadVector2FromAttributes(const XMLElement* element, cocos2d::Vec2& outResult);
-	static void						CreatePhysicsBodyFromAttributes(Entity& attachmentEntity,
+	static void						CreatePhysicsBodyFromAttributes(cocos2d::Node* attachmentNode,
 										const XMLNode* xmlNode,
 										cocos2d::Size& outSize);
+	static void						LoadNodeComponents(cocos2d::Node* node, const XMLElement* root);
 
 	static GameInputType			StrToGameInputType(const String& inputType);
 };

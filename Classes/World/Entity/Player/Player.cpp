@@ -43,6 +43,7 @@ Player::Player()
 	, m_curAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE))
 	, m_lastAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE))
 	, m_firstAttackAnimId(m_curAttackAnimId)
+	, m_lastCollisionNode(nullptr)
 {
 }
 
@@ -66,6 +67,8 @@ bool Player::Init(const String& pathToXML)
 	SetPhysicsBodyAnchor(Vector2(0, 0));		
 	PhysicsManager::GetInstance()->AddContactBeginListener(getName(), 
 		CC_CALLBACK_1(Player::OnContactBegin, this));
+	PhysicsManager::GetInstance()->AddContactBeginListener(getName()+NODE_COMPONENT,
+		CC_CALLBACK_1(Player::OnSortingLayerContactBegin, this));
 
 	return true;
 }
@@ -86,6 +89,8 @@ void Player::update(float deltaTime)
 	{
 		PlayRunOrIdleAnimation();
 	}
+
+	UpdateSortingLayer();
 }
 
 void Player::SetTimeBetweenComboInput(float timeBetweenComboInput)
@@ -129,6 +134,24 @@ void Player::OnAttackFinished()
 void Player::OnLightAttackComboExpired()
 {
 	m_isAttackComboDelayExpired = true;
+}
+
+void Player::UpdateSortingLayer()
+{
+	if (m_lastCollisionNode != nullptr)
+	{
+		// Sprite that is lower on Y should appear on top
+		Vector2 otherPosition = m_lastCollisionNode->getParent()->getPosition();
+		Vector2 playerPosition = getPosition();
+		if (otherPosition.y > playerPosition.y)
+		{
+			setLocalZOrder(PLAYER_ON_TOP_LAYER);
+		}
+		else
+		{
+			setLocalZOrder(PLAYER_UNDER_LAYER);
+		}
+	}
 }
 
 void Player::ManageInput()
@@ -255,10 +278,17 @@ void Player::DispatchOnStaminaChangedEvent()
 		&eventData);
 }
 
-void Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
+bool Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
-// 	const String& name = otherBody->getNode()->getName();
-// 	CCLOG("Player collided with %s", name.c_str());
+	return true;
+}
+
+bool Player::OnSortingLayerContactBegin(const cocos2d::PhysicsBody* otherBody)
+{
+	m_lastCollisionNode = otherBody->getNode();
+
+	// Dont collide with sorting layer
+	return false;
 }
 
 float Player::GetSecondsForValidLighAttackCombo() const

@@ -308,7 +308,11 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			else if (componentType == RIGID_BODY_COMPONENT)
 			{
 				cocos2d::Size outBodySize;
-				CreatePhysicsBodyFromAttributes(entity, element, outBodySize);
+				CreatePhysicsBodyFromAttributes(&entity, element, outBodySize);
+				
+				const XMLElement* physicsBodyElem = element->FirstChildElement(XML_NODE_PHYSICS_BODY);
+				const float forceScale = physicsBodyElem->FloatAttribute(XML_PHYSICS_FORCE_SCALE_ATTR);
+				entity.SetPhysicsBodyForceScale(forceScale);
 				entity.SetPhysicsBodySize(outBodySize);
 			}
 			else if (componentType == MIRROR_SPRITE_COMPONENT)
@@ -317,6 +321,15 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				pMirrorSprite->setName(MIRROR_SPRITE_COMPONENT);
 				pMirrorSprite->setOwnerEntity(dynamic_cast<Entity*>(&entity));
 				entity.addComponent(pMirrorSprite);
+			}
+			else if (componentType == NODE_COMPONENT)
+			{
+				cocos2d::Node* node = cocos2d::Node::create();
+				node->setName(entity.getName() + NODE_COMPONENT);
+				node->setContentSize(entity.getContentSize());
+				node->setAnchorPoint(Vector2(0, 0));
+				LoadNodeComponents(node, element);
+				entity.addChild(node);
 			}
 		}
 	}
@@ -425,11 +438,10 @@ bool XMLLoader::LoadWorld(World& world, const String& pathToXML)
 	return isSuccessful;
 }
 
-void XMLLoader::CreatePhysicsBodyFromAttributes(Entity& attachmentEntity, const XMLNode* xmlNode,
+void XMLLoader::CreatePhysicsBodyFromAttributes(cocos2d::Node* node, const XMLNode* xmlNode,
 	cocos2d::Size& outSize)
 {
-	const XMLElement* physicsBodyElem =
-		xmlNode->FirstChildElement(XML_NODE_PHYSICS_BODY);
+	const XMLElement* physicsBodyElem = xmlNode->FirstChildElement(XML_NODE_PHYSICS_BODY);
 
 	const String bodyType = physicsBodyElem->Attribute(XML_SHAPE_ATTR);
 	const cocos2d::Size& bodySize = cocos2d::Size(physicsBodyElem->FloatAttribute(XML_WIDTH_ATTR),
@@ -439,8 +451,6 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(Entity& attachmentEntity, const 
 	const bool isBodyDynamic = physicsBodyElem->BoolAttribute(XML_PHYSICS_DYNAMIC_BODY_ATTR);
 	const bool isRotationEnabled = physicsBodyElem->BoolAttribute(XML_PHYSICS_ROTATION_ENABLED_ATTR);
 	const int collisionBitMask = physicsBodyElem->IntAttribute(XML_PHYSICS_BIT_MASK_ATTR);
-	const float forceScale = physicsBodyElem->FloatAttribute(XML_PHYSICS_FORCE_SCALE_ATTR);	
-	attachmentEntity.SetPhysicsBodyForceScale(forceScale);
 
 	if (bodyType == XML_PHYSICS_BODY_BOX_ATTR)
 	{
@@ -456,10 +466,23 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(Entity& attachmentEntity, const 
 			isGravityEnabled);
 		bodyConfig.SetRotationEnabled(isRotationEnabled);
 
-		PhysicsManager::AddPhysicsBody(attachmentEntity, bodyConfig);
+		PhysicsManager::AddPhysicsBody(*node, bodyConfig);
 	}
 
 	outSize = bodySize;
+}
+
+void XMLLoader::LoadNodeComponents(cocos2d::Node* node, const XMLElement* root)
+{
+	for (const XMLElement* element = root->FirstChildElement(); element != nullptr; element = element->NextSiblingElement())
+	{
+		const String& componentType = element->Attribute(XML_TYPE_ATTR);
+		if (componentType == RIGID_BODY_COMPONENT)
+		{
+			cocos2d::Size outSize;
+			CreatePhysicsBodyFromAttributes(node, element, outSize);
+		}
+	}
 }
 
 GameInputType XMLLoader::StrToGameInputType(const String& inputType)

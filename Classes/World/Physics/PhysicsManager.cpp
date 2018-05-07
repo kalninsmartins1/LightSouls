@@ -56,8 +56,11 @@ void PhysicsManager::AddPhysicsBody(cocos2d::Node& attachmentNode,
 		bodyConfig.GetPhysicsMaterial());
 	physicsBody->setDynamic(bodyConfig.IsBodyDynamic());
 	physicsBody->setGravityEnable(bodyConfig.IsGravityEnabled());
+
+	physicsBody->setCollisionBitmask(bodyConfig.GetCollisionBitMask());
 	physicsBody->setContactTestBitmask(bodyConfig.GetCollisionBitMask());
 	physicsBody->setCategoryBitmask(bodyConfig.GetCollisionBitMask());
+
 	physicsBody->setName(RIGID_BODY_COMPONENT);
 	physicsBody->setRotationEnable(bodyConfig.IsRotationEnabled());
 	attachmentNode.addComponent(physicsBody);
@@ -83,7 +86,7 @@ void PhysicsManager::QuerryRect(const cocos2d::Rect& rect,
 	pWorld->queryRect(callback, rect, nullptr);
 }
 
-void PhysicsManager::DispatchContactEventsToListeners(const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners)
+bool PhysicsManager::DispatchContactEventsToListeners(const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners)
 {
 	cocos2d::Node* bodyANode = bodyA->getNode();
 	cocos2d::Node* bodyBNode = bodyB->getNode();
@@ -92,17 +95,20 @@ void PhysicsManager::DispatchContactEventsToListeners(const cocos2d::PhysicsBody
 	const String& bodyBName = bodyBNode->getName();
 
 	// If contact contains some of the listener names then inform the listeners
+	bool shouldCollide = true;
 	for (auto& listener : listeners)
 	{
 		if (bodyAName == listener.name)
 		{
-			listener.onContactCallback(bodyB);
+			shouldCollide = shouldCollide && listener.onContactCallback(bodyB);
 		}
 		else if (bodyBName == listener.name)
 		{
-			listener.onContactCallback(bodyA);
+			shouldCollide = shouldCollide && listener.onContactCallback(bodyA);
 		}
 	}
+
+	return shouldCollide;
 }
 
 bool PhysicsManager::OnContactBegin(cocos2d::PhysicsContact& contact)
@@ -110,12 +116,13 @@ bool PhysicsManager::OnContactBegin(cocos2d::PhysicsContact& contact)
 	const cocos2d::PhysicsBody* bodyA = contact.getShapeA()->getBody();
 	const cocos2d::PhysicsBody* bodyB = contact.getShapeB()->getBody();		
 
+	bool shouldCollide = true;
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
-		DispatchContactEventsToListeners(bodyA, bodyB, m_beginContactListeners);
+		shouldCollide = DispatchContactEventsToListeners(bodyA, bodyB, m_beginContactListeners);
 	}
 
-	return true;
+	return shouldCollide;
 }
 
 bool PhysicsManager::OnContactEnd(cocos2d::PhysicsContact& contact)

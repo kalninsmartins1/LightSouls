@@ -27,7 +27,6 @@ void StateAttack::OnEnter(AnimComponent* animComponent)
 	m_animComponent = animComponent;
 	m_attackComponent = m_agent.GetAttackComponent();
 	m_curProgress = StateProgress::IN_PROGRESS;
-	CCLOG("Attack state enter");
 }
 
 StateProgress StateAttack::OnStep()
@@ -41,7 +40,6 @@ StateProgress StateAttack::OnStep()
 
 			// Start attack animation
 			m_isAnimFinished = false;
-			CCLOG("Attack Anim not Finished !");
 			m_animComponent->PlayOneShotAnimation(m_curAnimationId, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
 		}
 		
@@ -60,7 +58,6 @@ void StateAttack::OnExit()
 	m_curProgress = StateProgress::NONE;
 	m_curAnimationId = m_firstAnimatioId;
 	m_isAnimFinished = true;
-	CCLOG("Attack anim finished !");
 }
 
 void StateAttack::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
@@ -78,7 +75,6 @@ void StateAttack::OnAttackFinished()
 	Utils::WrapValue(++m_curAnimationId, m_firstAnimatioId, m_lastAnimationId);
 	m_isAnimFinished = true;
 	PlayIdleAnimation();
-	CCLOG("Attack anim finished!");
 }
 
 void StateAttack::PlayIdleAnimation()

@@ -32,8 +32,10 @@ public:
 
 private:
 	AIAgent();
+
+private:
 	bool Init(const String& pathToXML);
-	void OnContactBegin(const cocos2d::PhysicsBody* otherBody);	
+	bool OnContactBegin(const cocos2d::PhysicsBody* otherBody);	
 
 private:	
 	StateMachine	    m_stateMachine;

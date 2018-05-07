@@ -18,7 +18,6 @@ void StateChase::OnEnter(AnimComponent* animComponent)
 {
 	m_curProgress = StateProgress::IN_PROGRESS;
 	m_animComponent = animComponent;
-	CCLOG("Sate chase enter !");
 	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 }
 
@@ -36,7 +35,6 @@ StateProgress StateChase::OnStep()
 	if (distanceToTarget <= m_agent.GetChaseStopDistance() ||	// Target has been caught
 		distanceToTarget >= m_agent.GetChaseRadius()) // Target run off
 	{
-
 		m_curProgress = StateProgress::DONE;
 	}
 	return m_curProgress;
@@ -47,7 +45,6 @@ void StateChase::OnExit()
 	m_curProgress = StateProgress::NONE;
 	m_agent.SetMoveDirection(Vector2::ZERO);
 	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
-	CCLOG("Sate chase exit !");
 }
 
 void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
