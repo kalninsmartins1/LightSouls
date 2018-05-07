@@ -4,6 +4,8 @@
 
 NS_LIGHTSOULS_BEGIN
 
+class AnimComponent;
+
 class Entity: public cocos2d::Sprite
 {
 public:
@@ -21,10 +23,11 @@ public:
 	float					GetMaxHealth() const;
 	float					GetMaxStamina() const;
 	float					GetPhysicsBodyForceScale() const;
+	AnimComponent*			GetAnimComponent() const;
 	
 	unsigned int			GetId() const;
 	bool					IsRunning() const;	
-	bool					IsAttacking() const;
+	bool					IsReadyToAttack() const;
 	bool					HasEnoughtStamina(float amount);
 	
 	void SetPhysicsBodyForceScale(float scale);
@@ -56,16 +59,19 @@ protected:
 private:	
 	void		Move();	
 	void		RegenerateStamina(float regenerateSpeedASecond);
+	void		OnDamageTaken();
 
 private:	
 	static unsigned int			s_uniqueId;
 	unsigned int				m_id;
-		
-	Vector2					m_moveDirection;
-	cocos2d::Size			m_physicsBodyScaledSize;	
 	
-	bool m_isRuning;	
+	AnimComponent*			m_animComponent;
+	Vector2					m_moveDirection;
+	cocos2d::Size			m_physicsBodyScaledSize;
+	
+	bool m_isRuning;
 	bool m_isAttacking;
+	bool m_isTakingDamage;
 	
 	float m_baseMoveSpeed;
 	float m_baseHealth;

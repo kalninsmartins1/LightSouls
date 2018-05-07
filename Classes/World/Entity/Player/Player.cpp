@@ -31,8 +31,7 @@ Player* Player::Create(const String& pathToXML)
 }
 
 Player::Player()
-	: m_animComponent(nullptr)
-	, m_attackComponent(nullptr)
+	: m_attackComponent(nullptr)
 	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right
 	, m_isDodging(false)
 	, m_isAttackComboDelayExpired(true)
@@ -59,19 +58,9 @@ const String& Player::GetEventOnStaminaChanged()
 
 bool Player::Init(const String& pathToXML)
 {
-	XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);	
+	XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
+	
 	OnEntityInitialized();
-
-	// Get animation component to trigger animations when that is necessary
-	m_animComponent = static_cast<AnimComponent*>(getComponent(ANIM_COMPONENT));
-	if (m_animComponent != nullptr)
-	{
-		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
-	}
-	else
-	{
-		CCAssert(false, "Error: Did not find player animation component !");
-	}
 	m_attackComponent = static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
 
 	SetPhysicsBodyAnchor(Vector2(0, 0));		
@@ -87,13 +76,13 @@ void Player::update(float deltaTime)
 	Entity::update(deltaTime);
 
 	// We can move only when we are not attacking
-	if (!IsAttacking() && !m_isDodging)
+	if (IsReadyToAttack() && !m_isDodging)
 	{
 		ManageInput();
 	}
 
 	// If still not attacking
-	if (!IsAttacking())
+	if (IsReadyToAttack())
 	{
 		PlayRunOrIdleAnimation();
 	}
@@ -192,7 +181,7 @@ void Player::StopDodging()
 
 void Player::LightAttack()
 {	
-	if (!IsAttacking() && !m_isDodging && m_attackComponent->IsReadyToAttack())
+	if (IsReadyToAttack() && !m_isDodging && m_attackComponent->IsReadyToAttack())
 	{
 		// Activating attack
 		Entity::StartAttacking();
@@ -205,11 +194,11 @@ void Player::LightAttack()
 		else
 		{
 			// Reset back to first attack
-			m_curAttackAnimId = m_firstAttackAnimId;				
+			m_curAttackAnimId = m_firstAttackAnimId;
 		}
 		
 		// Play the attack animation
-		m_animComponent->PlayOneShotAnimation(m_curAttackAnimId,
+		GetAnimComponent()->PlayOneShotAnimation(m_curAttackAnimId,
 			CC_CALLBACK_0(Player::OnAttackFinished, this));
 		m_attackComponent->Attack(m_lastValidMoveDirection);
 		
@@ -221,25 +210,29 @@ void Player::LightAttack()
 void Player::PerformDodge()
 {	
 	StartDodging();
-	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_DODGE);
+	GetAnimComponent()->PlayLoopingAnimation(ANIM_TYPE_DODGE);
 	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(Player::OnDodgeFinished, this), m_dodgeTime);
 }
 
 void Player::PlayRunOrIdleAnimation() const
-{			
-	if (IsRunning() && !m_isDodging)
+{		
+	auto animComponent = GetAnimComponent();
+	if (animComponent != nullptr)
 	{
-		if(!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_RUN))
+		if (IsRunning() && !m_isDodging)
 		{
-			m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+			if (!animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_RUN))
+			{
+				animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+			}
 		}
-	}
-	else if (!IsRunning())
-	{
-		if(!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_IDLE))
+		else if (!IsRunning())
 		{
-			m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+			if (!animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_IDLE))
+			{
+				animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+			}
 		}
 	}
 }
@@ -250,7 +243,7 @@ void Player::DispatchOnHealthChangedEvent()
 	float healthPercentage = Utils::SafeDevide(currentHealth, GetMaxHealth());
 	auto eventData = ProgressBarChangedEventData(GetId(), currentHealth, healthPercentage);
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerHealthChanged,
-		&eventData);	
+		&eventData);
 }
 
 void Player::DispatchOnStaminaChangedEvent()
@@ -259,7 +252,7 @@ void Player::DispatchOnStaminaChangedEvent()
 	float staminaPercentage = Utils::SafeDevide(currentStamina, GetMaxStamina());
 	auto eventData = ProgressBarChangedEventData(GetId(), currentStamina, staminaPercentage);
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerStaminaChanged,
-		&eventData);	
+		&eventData);
 }
 
 void Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)

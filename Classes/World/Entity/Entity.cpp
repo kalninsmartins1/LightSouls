@@ -1,15 +1,19 @@
 #include "Entity.h"
+#include "World/Entity/Components/AnimComponent.h"
+#include "GameConsts.h"
 
 NS_LIGHTSOULS_BEGIN
 
 unsigned int Entity::s_uniqueId = 0;
 
-Entity::Entity()	
+Entity::Entity()
 	: m_id(s_uniqueId++)
+	, m_animComponent(nullptr)
 	, m_moveDirection(Vector2::ZERO)
-	, m_physicsBodyScaledSize(cocos2d::Size::ZERO)	
+	, m_physicsBodyScaledSize(cocos2d::Size::ZERO)
 	, m_isRuning(false)
 	, m_isAttacking(false)
+	, m_isTakingDamage(false)
 	, m_baseMoveSpeed(0.0f)
 	, m_baseHealth(0.0f)
 	, m_baseDamage(0.0f)
@@ -118,6 +122,13 @@ void Entity::TakeDamage(float damage)
 		
 		DispatchOnHealthChangedEvent();
 	}
+
+	if (!m_isAttacking)
+	{
+		m_isTakingDamage = true;
+		m_animComponent->PlayOneShotAnimation(ANIM_TYPE_HURT,
+			CC_CALLBACK_0(Entity::OnDamageTaken, this));
+	}	
 }
 
 void Entity::StartAttacking()
@@ -174,8 +185,25 @@ void Entity::RegenerateStamina(float regenerateSpeedASecond)
 	}
 }
 
+void Entity::OnDamageTaken()
+{
+	m_isTakingDamage = false;
+	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+}
+
 void Entity::OnEntityInitialized()
 {
+	// Get animation component to trigger animations when that is necessary
+	m_animComponent = static_cast<AnimComponent*>(getComponent(ANIM_COMPONENT));
+	if (m_animComponent != nullptr)
+	{
+		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+	}
+	else
+	{
+		CCAssert(false, "Error: Did not find player animation component !");
+	}
+
 	_physicsBody->setVelocityLimit(m_moveSpeed);
 }
 
@@ -229,6 +257,11 @@ float Entity::GetPhysicsBodyForceScale() const
 	return m_physicsBodyForceScale;
 }
 
+AnimComponent* Entity::GetAnimComponent() const
+{
+	return m_animComponent;
+}
+
 unsigned Entity::GetId() const
 {
 	return m_id;
@@ -239,9 +272,9 @@ bool Entity::IsRunning() const
 	return m_isRuning;
 }
 
-bool Entity::IsAttacking() const
+bool Entity::IsReadyToAttack() const
 {
-	return m_isAttacking;
+	return !m_isAttacking && !m_isTakingDamage;
 }
 
 bool Entity::HasEnoughtStamina(float amount)

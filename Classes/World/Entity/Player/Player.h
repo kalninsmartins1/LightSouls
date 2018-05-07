@@ -53,7 +53,6 @@ private:
 private:
 	static const String			s_eventOnPlayerHealthChanged;
 	static const String			s_eventOnPlayerStaminaChanged;
-	AnimComponent*				m_animComponent;
 	AttackComponent*			m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
