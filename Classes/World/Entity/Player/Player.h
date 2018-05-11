@@ -34,6 +34,10 @@ protected:
 	virtual void DispatchOnStaminaChangedEvent() override;
 
 private:
+
+	// Returns negative value if time for combo has expired
+	float GetSecondsForValidLighAttackCombo() const;
+
 	void StartDodging();
 	void StopDodging();
 
@@ -43,14 +47,15 @@ private:
 	
 	void UpdateSortingLayer();
 	void ManageInput();
+	void FilterMovementDirectionBasedOnCollisionData(Vector2& moveDirection);
 	void LightAttack();
 	void PerformDodge();
 	void PlayRunOrIdleAnimation() const;
 	bool OnContactBegin(const cocos2d::PhysicsBody* otherBody);
-	bool OnSortingLayerContactBegin(const cocos2d::PhysicsBody* otherBody);
-
-	// Returns negative value if time for combo has expired
-	float GetSecondsForValidLighAttackCombo() const;
+	bool OnContactEnd(const cocos2d::PhysicsBody* otherBody);
+	bool OnSortingLayerContactBegin(const cocos2d::PhysicsBody* otherBody);	
+	void ResetCollisionData();
+	void SetCollisionData(cocos2d::Node* otherNode);
 
 private:
 	static const String			s_eventOnPlayerHealthChanged;
@@ -69,6 +74,11 @@ private:
 	const int				m_lastAttackAnimId;
 	const int				m_firstAttackAnimId;
 	cocos2d::Node*			m_lastCollisionNode;
+	
+	bool					m_isCollidedFromLeft;
+	bool					m_isCollidedFromRight;
+	bool					m_isCollidedFromTop;
+	bool					m_isCollidedFromBottom;
 };
 
 NS_LIGHTSOULS_END

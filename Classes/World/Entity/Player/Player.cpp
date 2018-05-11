@@ -34,7 +34,7 @@ Player::Player()
 	: m_attackComponent(nullptr)
 	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right
 	, m_isDodging(false)
-	, m_isAttackComboDelayExpired(true)
+	, m_isAttackComboDelayExpired(true)	
 	, m_dodgeSpeed(0.0f)
 	, m_dodgeTime(0.0f)
 	, m_timeBetweenComboInput(0.0f)
@@ -44,6 +44,10 @@ Player::Player()
 	, m_lastAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE))
 	, m_firstAttackAnimId(m_curAttackAnimId)
 	, m_lastCollisionNode(nullptr)
+	, m_isCollidedFromLeft(false)
+	, m_isCollidedFromRight(false)
+	, m_isCollidedFromTop(false)
+	, m_isCollidedFromBottom(false)
 {
 }
 
@@ -64,9 +68,12 @@ bool Player::Init(const String& pathToXML)
 	OnEntityInitialized();
 	m_attackComponent = static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
 
-	SetPhysicsBodyAnchor(Vector2(0, 0));		
+	SetPhysicsBodyAnchor(Vector2(0, 0));
 	PhysicsManager::GetInstance()->AddContactBeginListener(getName(), 
 		CC_CALLBACK_1(Player::OnContactBegin, this));
+	PhysicsManager::GetInstance()->AddContactEndListener(getName(),
+		CC_CALLBACK_1(Player::OnContactEnd, this));
+
 	PhysicsManager::GetInstance()->AddContactBeginListener(getName()+NODE_COMPONENT,
 		CC_CALLBACK_1(Player::OnSortingLayerContactBegin, this));
 
@@ -178,12 +185,33 @@ void Player::ManageInput()
 
 	// Make sure we are not moving faster diagonally
 	moveDirection.normalize();
+	FilterMovementDirectionBasedOnCollisionData(moveDirection);
 	SetMoveDirection(moveDirection);
 
 	// If we have an input, then update last valid move direction
 	if (abs(horizontalValue) > MATH_EPSILON || abs(vertiacalValue) > MATH_EPSILON)
 	{
 		m_lastValidMoveDirection = moveDirection;
+	}
+}
+
+void Player::FilterMovementDirectionBasedOnCollisionData(Vector2& moveDirection)
+{
+	if (m_isCollidedFromLeft && moveDirection.x < 0.0f)
+	{
+		 moveDirection.x = 0.0f;
+	}
+	else if (m_isCollidedFromRight && moveDirection.x > 0.0f)
+	{
+		moveDirection.x = 0.0f;
+	}
+	else if (m_isCollidedFromTop && moveDirection.y > 0.0f)
+	{
+		moveDirection.y = 0.0f;
+	}
+	else if (m_isCollidedFromBottom && moveDirection.y < 0.0f)
+	{
+		moveDirection.y = 0.0f;
 	}
 }
 
@@ -280,6 +308,18 @@ void Player::DispatchOnStaminaChangedEvent()
 
 bool Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
+	cocos2d::Node* otherNode = otherBody->getNode();
+	if (otherNode != nullptr)
+	{
+		SetCollisionData(otherNode);
+	}
+
+	return true;
+}
+
+bool Player::OnContactEnd(const cocos2d::PhysicsBody* otherBody)
+{
+	ResetCollisionData();
 	return true;
 }
 
@@ -289,6 +329,34 @@ bool Player::OnSortingLayerContactBegin(const cocos2d::PhysicsBody* otherBody)
 
 	// Dont collide with sorting layer
 	return false;
+}
+
+void Player::ResetCollisionData()
+{
+	m_isCollidedFromLeft = false;
+	m_isCollidedFromRight = false;
+	m_isCollidedFromTop = false;
+	m_isCollidedFromBottom = false;
+}
+
+void Player::SetCollisionData(cocos2d::Node* otherNode)
+{
+	if (m_lastValidMoveDirection.x < 0)
+	{
+		m_isCollidedFromLeft = true;
+	}
+	else if (m_lastValidMoveDirection.x > 0)
+	{
+		m_isCollidedFromRight = true;
+	}
+	else if (m_lastValidMoveDirection.y < 0)
+	{
+		m_isCollidedFromBottom = true;
+	}
+	else if (m_lastValidMoveDirection.y > 0)
+	{
+		m_isCollidedFromTop = true;
+	}
 }
 
 float Player::GetSecondsForValidLighAttackCombo() const
