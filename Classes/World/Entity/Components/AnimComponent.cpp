@@ -48,6 +48,10 @@ void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 
 void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback)
 {
+#if LIGHTSOULS_ANIM_DEBUG
+	CCLOG("PlayOneShotAnimation: %d %s", animationId, getOwner()->getName().c_str());
+#endif
+
 	if (Utils::ContainsKey(m_animations, animationId))
 	{
 		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_ownerSprite,
@@ -62,7 +66,10 @@ void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallbac
 }
 
 void AnimComponent::PlayLoopingAnimation(int animationId)
-{	
+{
+#if LIGHTSOULS_ANIM_DEBUG
+	CCLOG("PlayLoopingAnimation: %d %s", animationId, getOwner()->getName().c_str());
+#endif
 	if (Utils::ContainsKey(m_animations, animationId))
 	{
 		AnimationUtils::StartSpriteFrameAnimation(&m_ownerSprite,
@@ -90,7 +97,7 @@ void AnimComponent::PlayLoopingAnimation(const String& animName)
 void AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback)
 {
 	int animationId = AnimationUtils::GetAnimId(animName);
-	PlayOneShotAnimation(animationId, callback);	
+	PlayOneShotAnimation(animationId, callback);
 }
 
 void AnimComponent::SetCurrentAnimId(int currentAnimId)

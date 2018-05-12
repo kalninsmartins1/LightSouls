@@ -31,13 +31,15 @@ void AttackComponent::Attack(const Vector2& direction)
 
 bool AttackComponent::IsReadyToAttack() const
 {
+	// Check if attack cooldown has passed
 	const long long millisecondsSinceLastAttack =
 		Utils::GetTimeStampInMilliseconds() - m_lastTimeAttacked;
 	const double secondsSinceLastAttack =
 		Utils::ConvertMillisecondsToSeconds(millisecondsSinceLastAttack);
 
 	return secondsSinceLastAttack > m_secondsBetweenAttacks && 
-		m_ownerEntity->HasEnoughtStamina(m_staminaConsumption);
+		m_ownerEntity->HasEnoughtStamina(m_staminaConsumption) &&
+		m_ownerEntity->IsReadyToAttack();
 }
 
 const Entity* LightSouls::AttackComponent::GetOwnerEntity() const

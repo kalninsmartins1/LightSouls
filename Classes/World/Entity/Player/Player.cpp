@@ -232,13 +232,10 @@ void Player::StopDodging()
 
 void Player::LightAttack()
 {	
-	if (IsReadyToAttack() && !m_isDodging && m_attackComponent->IsReadyToAttack())
+	if (!m_isDodging && m_attackComponent->IsReadyToAttack())
 	{
-		// Activating attack
-		Entity::StartAttacking();
-
 		if(!m_isAttackComboDelayExpired)
-		{			
+		{
 			// Wrap the index within valid values
 			Utils::WrapValue(++m_curAttackAnimId, m_firstAttackAnimId, m_lastAttackAnimId);
 		}
@@ -252,6 +249,7 @@ void Player::LightAttack()
 		GetAnimComponent()->PlayOneShotAnimation(m_curAttackAnimId,
 			CC_CALLBACK_0(Player::OnAttackFinished, this));
 		m_attackComponent->Attack(m_lastValidMoveDirection);
+		StartAttacking();
 		
 		// Set the time last light attack was performed
 		m_lastTimePerformedLightAttack = Utils::GetTimeStampInMilliseconds();

@@ -110,10 +110,11 @@ void Entity::ConsumeStamina(float amount)
 	DispatchOnStaminaChangedEvent();
 }
 
-void Entity::TakeDamage(float damage)
-{
+void Entity::TakeDamage(const Entity& attackingEntity)
+{	
 	if(m_health > 0)
 	{
+		float damage = attackingEntity.GetDamage();
 		m_health -= damage;
 		if(m_health < 0)
 		{
@@ -121,14 +122,17 @@ void Entity::TakeDamage(float damage)
 		}
 		
 		DispatchOnHealthChangedEvent();
+		ApplyKnockbackEffect(attackingEntity);
 	}
 
-	if (!m_isAttacking)
+	if (!m_isAttacking && 
+		!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_HURT))
 	{
 		m_isTakingDamage = true;
 		m_animComponent->PlayOneShotAnimation(ANIM_TYPE_HURT,
 			CC_CALLBACK_0(Entity::OnDamageTaken, this));
-	}	
+		CCLOG("Entity %s taking damage !", getName().c_str());
+	}
 }
 
 void Entity::StartAttacking()
@@ -143,11 +147,22 @@ void Entity::StopAttacking()
 	m_isAttacking = false;
 }
 
+void Entity::ApplyKnockbackEffect(const Entity& attackingEntity)
+{	
+	float damage = attackingEntity.GetDamage();
+	Vector2 awayFromAttacker = getPosition() - attackingEntity.getPosition();
+	_physicsBody->applyImpulse(awayFromAttacker.getNormalized() * m_moveSpeed *
+		m_physicsBodyForceScale);
+}
+
 void Entity::update(float deltaTime)
 {
 	Sprite::update(deltaTime);
 	m_isRuning = m_moveDirection.lengthSquared() > 0;
-	Move();
+	if (!m_isTakingDamage)
+	{
+		Move();
+	}
 
 	RegenerateStamina(m_staminaRegenerateSpeed * deltaTime);
 }
@@ -260,6 +275,11 @@ float Entity::GetPhysicsBodyForceScale() const
 AnimComponent* Entity::GetAnimComponent() const
 {
 	return m_animComponent;
+}
+
+bool Entity::IsProcessing() const
+{
+	return m_isTakingDamage;
 }
 
 unsigned Entity::GetId() const

@@ -24,6 +24,7 @@ public:
 	float					GetMaxStamina() const;
 	float					GetPhysicsBodyForceScale() const;
 	AnimComponent*			GetAnimComponent() const;
+	bool					IsProcessing() const;
 	
 	unsigned int			GetId() const;
 	bool					IsRunning() const;	
@@ -43,9 +44,10 @@ public:
 
 	void ResetMoveSpeed();
 	void ConsumeStamina(float amount);
-	void TakeDamage(float damage);
+	void TakeDamage(const Entity& attackingEntity);
 	void StartAttacking();
 	void StopAttacking();
+	void ApplyKnockbackEffect(const Entity& attackingEntity);
 
 	virtual void update(float deltaTime) override;
 

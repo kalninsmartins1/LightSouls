@@ -23,8 +23,16 @@ StatePatrol::StatePatrol(AIAgent& agent)
 void StatePatrol::OnEnter(AnimComponent* animComponent)
 {
 	m_animComponent = animComponent;
-	m_curProgress = StateProgress::IN_PROGRESS;	
-	StartMovingToNewPosition();
+	m_curProgress = StateProgress::IN_PROGRESS;
+
+	if (!m_agent.IsProcessing())
+	{
+		StartMovingToNewPosition();
+	}
+
+#if LIGHTSOULS_DEBUG_AI
+	CCLOG("StatePatrol: OnEnter !");
+#endif
 }
 
 StateProgress StatePatrol::OnStep()
@@ -36,10 +44,15 @@ StateProgress StatePatrol::OnStep()
 		{
 			m_curProgress = StateProgress::DONE;
 		}
-		else if(!m_isLookingAround)
+		else if(!m_isLookingAround && !m_agent.IsProcessing())
 		{
 			Vector2 toTargetPosition = m_curTargetPosition - m_agent.getPosition();
 			m_agent.SetMoveDirection(toTargetPosition.getNormalized());
+
+			if (!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_RUN))
+			{
+				m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+			}
 			
 			float stoppingDistance = m_agent.GetStoppingDistance();
 			if (toTargetPosition.length() <= stoppingDistance || m_isCollided)
@@ -63,6 +76,10 @@ void StatePatrol::OnExit()
 
 	// Clear any looking around timers
 	m_agent.stopAllActionsByTag(ACTION_TIMER_TAG);
+
+#if LIGHTSOULS_DEBUG_AI
+	CCLOG("StatePatrol: OnExit!");
+#endif
 }
 
 void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
