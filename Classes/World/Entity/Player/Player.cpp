@@ -34,12 +34,10 @@ Player::Player()
 	: m_attackComponent(nullptr)
 	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right
 	, m_isDodging(false)
-	, m_isAttackComboDelayExpired(true)	
 	, m_dodgeSpeed(0.0f)
 	, m_dodgeTime(0.0f)
 	, m_timeBetweenComboInput(0.0f)
 	, m_dodgeStaminaConsumption(0.0f)
-	, m_lastTimePerformedLightAttack(0.0f)
 	, m_curAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE))
 	, m_lastAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE))
 	, m_firstAttackAnimId(m_curAttackAnimId)
@@ -100,11 +98,6 @@ void Player::update(float deltaTime)
 	UpdateSortingLayer();
 }
 
-void Player::SetTimeBetweenComboInput(float timeBetweenComboInput)
-{
-	m_timeBetweenComboInput = timeBetweenComboInput;
-}
-
 void Player::SetDodgeStaminaConsumption(float dodgeStaminaConumption)
 {
 	m_dodgeStaminaConsumption = dodgeStaminaConumption;
@@ -123,24 +116,6 @@ void Player::SetDodgeTime(float dodgeTime)
 void Player::OnDodgeFinished()
 {
 	StopDodging();
-}
-
-void Player::OnAttackFinished()
-{
-	StopAttacking();
-
-	// Start light attack combo expiration
-	const float secondsBeforeComboInputExpires = GetSecondsForValidLighAttackCombo();
-	Utils::StartTimerWithCallback(this, 
-		CC_CALLBACK_0(Player::OnLightAttackComboExpired, this),
-		secondsBeforeComboInputExpires);
-
-	m_isAttackComboDelayExpired = false;
-}
-
-void Player::OnLightAttackComboExpired()
-{
-	m_isAttackComboDelayExpired = true;
 }
 
 void Player::UpdateSortingLayer()
@@ -234,7 +209,7 @@ void Player::LightAttack()
 {	
 	if (!m_isDodging && m_attackComponent->IsReadyToAttack())
 	{
-		if(!m_isAttackComboDelayExpired)
+		if(!m_attackComponent->IsComboExpired())
 		{
 			// Wrap the index within valid values
 			Utils::WrapValue(++m_curAttackAnimId, m_firstAttackAnimId, m_lastAttackAnimId);
@@ -247,12 +222,9 @@ void Player::LightAttack()
 		
 		// Play the attack animation
 		GetAnimComponent()->PlayOneShotAnimation(m_curAttackAnimId,
-			CC_CALLBACK_0(Player::OnAttackFinished, this));
+			CC_CALLBACK_0(Entity::StopAttacking, this));
 		m_attackComponent->Attack(m_lastValidMoveDirection);
 		StartAttacking();
-		
-		// Set the time last light attack was performed
-		m_lastTimePerformedLightAttack = Utils::GetTimeStampInMilliseconds();
 	}
 }
 
@@ -325,7 +297,7 @@ bool Player::OnSortingLayerContactBegin(const cocos2d::PhysicsBody* otherBody)
 {
 	m_lastCollisionNode = otherBody->getNode();
 
-	// Dont collide with sorting layer
+	// Don't collide with sorting layer
 	return false;
 }
 
@@ -355,17 +327,6 @@ void Player::SetCollisionData(cocos2d::Node* otherNode)
 	{
 		m_isCollidedFromTop = true;
 	}
-}
-
-float Player::GetSecondsForValidLighAttackCombo() const
-{
-	const long currnentTime = Utils::GetTimeStampInMilliseconds();
-	const float secondsSinceLastAttack = // Divide by 1000 to convert to seconds
-		(currnentTime - m_lastTimePerformedLightAttack) / 1000.f;
-
-	const float secondsBeforeComboExpires = m_timeBetweenComboInput - secondsSinceLastAttack;
-
-	return secondsBeforeComboExpires;
 }
 
 NS_LIGHTSOULS_END

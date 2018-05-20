@@ -1,10 +1,10 @@
-<HealthBar
-	animationSpeed="0.2">
+<StaminaBar
+	animationSpeed="0.5">
 	
 	<Background>
 		<Sprite path="res/Graphics/UI/healthBarBg.png"/>
 		<AnchorPosition x="0.0" y="0.0" />
-		<NormalizedPosition x="0.2" y="0.90" />
+		<NormalizedPosition x="0" y="0.94" />
 		<Scale x="1" y="1"/>
 	</Background>
 	
@@ -15,4 +15,4 @@
 		<Scale x="1.08" y="3"/>
 	</Foreground>
 	
-</HealthBar>
+</StaminaBar>

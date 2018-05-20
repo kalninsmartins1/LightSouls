@@ -39,10 +39,21 @@ StateProgress StateAttack::OnStep()
 	{
 		if(m_attackComponent->IsReadyToAttack())
 		{
+			// Direction to target
 			Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
 			m_attackComponent->Attack(toTarget.getNormalized());
 			m_agent.StartAttacking();
 			
+			// Check for combo
+			if (!m_attackComponent->IsComboExpired())
+			{
+				Utils::WrapValue(++m_curAnimationId, m_firstAnimatioId, m_lastAnimationId);
+			}
+			else
+			{
+				m_curAnimationId = m_firstAnimatioId;
+			}
+
 			// Start attack animation
 			m_isAnimFinished = false;
 			m_animComponent->PlayOneShotAnimation(m_curAnimationId, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
@@ -81,7 +92,6 @@ AIState StateAttack::GetStateType()
 
 void StateAttack::OnAttackFinished()
 {
-	Utils::WrapValue(++m_curAnimationId, m_firstAnimatioId, m_lastAnimationId);
 	m_isAnimFinished = true;
 	m_agent.StopAttacking();
 	PlayIdleAnimation();

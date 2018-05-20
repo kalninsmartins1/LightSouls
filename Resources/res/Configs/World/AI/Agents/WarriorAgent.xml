@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Entity type="WarriorAgent"
-			moveSpeed="160"
+			moveSpeed="120"
 			baseHealth="100"
 			baseStamina="100"
 			baseDamage="10"
@@ -14,15 +14,15 @@
 	</Component>
 	
 	<Component type="AIControllerComponent"
-		patrolRadius="500"
+		patrolRadius="250"
 		patrolPauseInSeconds="2"
-		chaseStopDistance="80"
-		chaseRadius="300">
+		chaseStopDistance="60"
+		chaseRadius="150">
 	</Component>
 	
 	<Component 	type="LongSwordAttackComponent"
 				secondsBetweenAttacks="0.6"
-				attackRange="120"
+				attackRange="60"
 				paddingFromBody="5"
 				staminaConsumption="20">
 	</Component>
@@ -90,13 +90,13 @@
 		<PhysicsMaterial density="0.1" restitution="0" friction="0.3" />
 		<PhysicsBody
 			shape="box"
-			width="150"
-			height="100"
+			width="110"
+			height="70"
 			isDynamic="true" 
 			isGravityEnabled="false"
 			isRotationEnabled="false"
 			collisionBitMask="1"
-			forceScale="100"
+			forceScale="60"
 			/>
 	</Component>
 	
@@ -105,8 +105,8 @@
 			<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
 			<PhysicsBody
 				shape="box"
-				width="180"
-				height="420"
+				width="130"
+				height="280"
 				isDynamic="false" 
 				isGravityEnabled="false" 
 				isRotationEnabled="false"

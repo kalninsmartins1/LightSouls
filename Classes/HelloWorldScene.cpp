@@ -38,7 +38,11 @@ bool HelloWorld::init()
 	{
 		return false;
 	}
-	
+
+	#if LIGHTSOULS_RELEASE
+	Director::getInstance()->setDisplayStats(false);
+	#endif
+
 	InitWolrdLayer();
 	InitUILayer();
 	
@@ -64,7 +68,13 @@ bool HelloWorld::init()
 void HelloWorld::update(float deltaTime)
 {	
 	// Keep input events up to date
-	LightSouls::GameInput::GetInstance()->Update(deltaTime);
+	auto gameInput = LightSouls::GameInput::GetInstance();
+	gameInput->Update(deltaTime);
+	if (gameInput->HasAction("ExitGame"))
+	{
+		Director::getInstance()->end();
+		return;
+	}
 
 	// Update AI
 	LightSouls::AIAgentManager::GetInstance()->Update(deltaTime);	

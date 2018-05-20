@@ -19,6 +19,11 @@ long long Utils::GetTimeStampInMilliseconds()
 	return ticks / 10000;
 }
 
+float LightSouls::Utils::GetScaleFactor()
+{
+	return cocos2d::Director::getInstance()->getContentScaleFactor();
+}
+
 float Utils::ConvertMillisecondsToSeconds(long long milliseconds)
 {
 	return milliseconds / 1000.f;
@@ -157,6 +162,10 @@ KeyCode Utils::ConvertStringToKeyCode(const String& keyCodeStr)
 	else if(keyCodeStr == "Space")
 	{
 		result = KeyCode::KEY_SPACE;
+	}
+	else if (keyCodeStr == "Esc")
+	{
+		result = KeyCode::KEY_ESCAPE;
 	}
 	else
 	{

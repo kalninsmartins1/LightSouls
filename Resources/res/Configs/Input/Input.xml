@@ -25,6 +25,12 @@
 		</GameController>
 	</ActionButton>
 	
+	<ActionButton name="ExitGame">
+		<Keyboard>
+			<KeyboardButton keyCode="Esc"/>
+		</Keyboard>	
+	</ActionButton>
+	
 	<ActionButton name="StrongAttackInput">
 		<Mouse>
 			<MouseButton buttonCode="RightButton"/>

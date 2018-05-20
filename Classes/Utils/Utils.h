@@ -22,6 +22,7 @@ public:
 	static Vector2				GetScreenFillScale(const cocos2d::Size& curSize);
 	static const cocos2d::Size& GetScreenSize();
 	static long long			GetTimeStampInMilliseconds();
+	static float				GetScaleFactor();
 
 	static float		SafeDevide(const float& up, const float& down);
 	static float		ConvertMillisecondsToSeconds(long long milliseconds);

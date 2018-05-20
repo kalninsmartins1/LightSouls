@@ -148,7 +148,7 @@ void XMLLoader::LoadActionButton(GameInput& gameInput, GameInputType inputType, 
 		}
 		else
 		{
-			CCASSERT(false, "XMLLoader: [loadActionButton] missing button code !");
+			CCASSERT(false, "XMLLoader: [LoadActionButton] missing button code !");
 		}
 	}
 }
@@ -232,13 +232,11 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			}
 			else if (componentType == PLAYER_CONTROLLER_COMPONENT)
 			{
-				const float timeBetweenComboInput = element->FloatAttribute(XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR);
 				const float dodgeSpeed = element->FloatAttribute(XML_PLAYER_DODGE_SPEED_ATTR);
 				const float dodgeTime = element->FloatAttribute(XML_PLAYER_DODGE_TIME_ATTR);
 				const float dodgeStaminaConsumption = element->FloatAttribute(XML_PLAYER_DODGE_STAMINA_ATTR);
 
 				Player* player = dynamic_cast<Player*>(&entity);
-				player->SetTimeBetweenComboInput(timeBetweenComboInput);
 				player->SetDodgeSpeed(dodgeSpeed);
 				player->SetDodgeTime(dodgeTime);
 				player->SetDodgeStaminaConsumption(dodgeStaminaConsumption);
@@ -296,6 +294,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				const float attackRange = element->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);
 				const float paddingFromBody = element->FloatAttribute(XML_ENTITY_PADDING_FROM_BODY_ATTR);
 				const float staminaConsumption = element->FloatAttribute(XML_ATTACK_STAMINA_CONSUMPTION_ATTR);
+				const float comboExpireTime = element->FloatAttribute(XML_ENTITY_COMBO_EXPIRE_TIME_ATTR);
 
 				LongSwordAttackComponent* longSwordAttack =
 					LongSwordAttackComponent::Create(secondsBetweenAttacks, attackRange,
@@ -303,6 +302,8 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 
 				longSwordAttack->setName(ATTACK_COMPONENT);
 				longSwordAttack->SetStaminaConsumption(staminaConsumption);
+				longSwordAttack->SetComboExpireTime(comboExpireTime);
+
 				entity.addComponent(longSwordAttack);
 			}
 			else if (componentType == RIGID_BODY_COMPONENT)
@@ -442,10 +443,11 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(cocos2d::Node* node, const XMLNo
 	cocos2d::Size& outSize)
 {
 	const XMLElement* physicsBodyElem = xmlNode->FirstChildElement(XML_NODE_PHYSICS_BODY);
-
 	const String bodyType = physicsBodyElem->Attribute(XML_SHAPE_ATTR);
-	const cocos2d::Size& bodySize = cocos2d::Size(physicsBodyElem->FloatAttribute(XML_WIDTH_ATTR),
-		physicsBodyElem->FloatAttribute(XML_HEIGHT_ATTR));
+
+	const float width = physicsBodyElem->FloatAttribute(XML_WIDTH_ATTR);
+	const float height = physicsBodyElem->FloatAttribute(XML_HEIGHT_ATTR);
+	const cocos2d::Size& bodySize = cocos2d::Size(width, height);
 
 	const bool isGravityEnabled = physicsBodyElem->BoolAttribute(XML_PHYSICS_GRAVITY_ATTR);
 	const bool isBodyDynamic = physicsBodyElem->BoolAttribute(XML_PHYSICS_DYNAMIC_BODY_ATTR);

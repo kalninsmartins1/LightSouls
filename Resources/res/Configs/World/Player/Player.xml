@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <Entity type="Player"
-			moveSpeed="360"		
+			moveSpeed="260"
 			baseHealth="100"
-			baseStamina="100"
+			baseStamina="200"
 			baseDamage="10"	
-			staminaRegenerateSpeed="5"
+			staminaRegenerateSpeed="20"
 	>
 	
 	<Component type="TransformComponent">
@@ -14,17 +14,19 @@
 	</Component>
 	
 	<Component type="PlayerControllerComponent"
-				timeBetweenComboInput="0.8"
-				dodgeSpeed="720"
-				dodgeTime="0.8"
-				dodgeStaminaConsumption="40">
+				dodgeSpeed="800"
+				dodgeTime="0.2"
+				dodgeStaminaConsumption="20">
 	</Component>
 	
+	<!-- "secondsBetweenAttacks" - Time when next attack becomes possible -->
+	<!-- "comboExpireTime" - Time before combo resets, if less than "secondsBetweenAttacks" then no combo is possible -->
 	<Component 	type="LongSwordAttackComponent"
-				secondsBetweenAttacks="0.6"
-				attackRange="100"
+				secondsBetweenAttacks="0.2" 
+				comboExpireTime="0.6" 
+				attackRange="60"
 				paddingFromBody="5"
-				staminaConsumption="20">
+				staminaConsumption="10">
 	</Component>
 	
 	<Component type="AnimComponent">
@@ -50,9 +52,9 @@
 			timeBetweenFrames="0.1"
 		/>
 		<SpriteSheet type="Dodge"
-			path="res/Graphics/World/Player/Idle/idleAnim.png" 
-			plistPath="res/Graphics/World/Player/Idle/idleAnim.plist"
-			frameNamePattern="idle%d.png"
+			path="res/Graphics/World/Player/Run/runAnim.png" 
+			plistPath="res/Graphics/World/Player/Run/runAnim.plist"
+			frameNamePattern="run%d.png"
 			frameCount="3"
 			timeBetweenFrames="0.1"
 		/>
@@ -61,59 +63,61 @@
 			plistPath="res/Graphics/World/Player/Attack/LightAttack1/lightAttack1Anim.plist"
 			frameNamePattern="lightAttack1%d.png"
 			frameCount="3"
-			timeBetweenFrames="0.1"
+			timeBetweenFrames="0.07"
 		/>
 		<SpriteSheet type="AttackCombo2"
 			path="res/Graphics/World/Player/Attack/LightAttack2/lightAttack2Anim.png" 
 			plistPath="res/Graphics/World/Player/Attack/LightAttack2/lightAttack2Anim.plist"
 			frameNamePattern="lightAttack2%d.png"
 			frameCount="3"
-			timeBetweenFrames="0.1"
+			timeBetweenFrames="0.07"
 		/>
 		<SpriteSheet type="AttackCombo3"
 			path="res/Graphics/World/Player/Attack/LightAttack3/lightAttack3Anim.png" 
 			plistPath="res/Graphics/World/Player/Attack/LightAttack3/lightAttack3Anim.plist"
 			frameNamePattern="lightAttack3%d.png"
 			frameCount="3"
-			timeBetweenFrames="0.1"
+			timeBetweenFrames="0.07"
 		/>
 		<SpriteSheet type="AttackCombo4"
 			path="res/Graphics/World/Player/Attack/LightAttack4/lightAttack4Anim.png" 
 			plistPath="res/Graphics/World/Player/Attack/LightAttack4/lightAttack4Anim.plist"
 			frameNamePattern="lightAttack4%d.png"
 			frameCount="3"
-			timeBetweenFrames="0.1"
+			timeBetweenFrames="0.07"
 		/>
 		<SpriteSheet type="AttackCombo5"
 			path="res/Graphics/World/Player/Attack/LightAttack5/lightAttack5Anim.png" 
 			plistPath="res/Graphics/World/Player/Attack/LightAttack5/lightAttack5Anim.plist"
 			frameNamePattern="lightAttack5%d.png"
 			frameCount="3"
-			timeBetweenFrames="0.1"
+			timeBetweenFrames="0.07"
 		/>
 	</Component>
-	
+
+	<!-- Actually collision detection body -->
 	<Component type="RigidBodyComponent">
 		<PhysicsMaterial density="0.1" restitution="0" friction="0.3" />
 		<PhysicsBody
 			shape="box"
-			width="150"
-			height="100"
+			width="110"
+			height="70"
 			isDynamic="true" 
 			isGravityEnabled="false" 
 			isRotationEnabled="false"
 			collisionBitMask="1"
-			forceScale="100"
+			forceScale="60"
 			/>
 	</Component>
 	
+	<!-- Used for sprite sorting layer detection -->
 	<Component type="NodeComponent">
 		<Component type="RigidBodyComponent">
 			<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
 			<PhysicsBody
 				shape="box"
-				width="180"
-				height="420"
+				width="130"
+				height="280"
 				isDynamic="false" 
 				isGravityEnabled="false" 
 				isRotationEnabled="false"
@@ -123,6 +127,7 @@
 		</Component>
 	</Component>
 	
+	<!-- Flips the sprite when moving in left direction -->
 	<Component type="MirrorSpriteComponent">
 	</Component>
 	

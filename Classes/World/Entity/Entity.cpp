@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "GameConsts.h"
+#include "Utils/Utils.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -78,8 +79,9 @@ void Entity::SetMoveDirection(const Vector2& direction)
 
 void Entity::SetPhysicsBodySize(const cocos2d::Size& size)
 {
-	m_physicsBodyScaledSize.width = size.width * abs(getScaleX());
-	m_physicsBodyScaledSize.height = size.height * abs(getScaleY());
+	const float scaleFactor = Utils::GetScaleFactor();
+	m_physicsBodyScaledSize.width = size.width * abs(getScaleX()) * scaleFactor;
+	m_physicsBodyScaledSize.height = size.height * abs(getScaleY()) * scaleFactor;
 }
 
 void Entity::SetPhysicsBodyAnchor(const Vector2& achorPos)

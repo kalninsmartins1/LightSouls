@@ -20,6 +20,7 @@ namespace LightSouls
 	// XML entity attributes
 	static constexpr char* XML_ENTITY_MOVE_SPEED_ATTR = "moveSpeed";
 	static constexpr char* XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR = "secondsBetweenAttacks";
+	static constexpr char* XML_ENTITY_COMBO_EXPIRE_TIME_ATTR = "comboExpireTime";
 	static constexpr char* XML_ENTITY_ATTACK_RANGE_ATTR = "attackRange";
 	static constexpr char* XML_ENTITY_PADDING_FROM_BODY_ATTR = "paddingFromBody";
 	static constexpr char* XML_ENTITY_BASE_HEALTH_ATTR = "baseHealth";
@@ -33,7 +34,6 @@ namespace LightSouls
 	static constexpr char* XML_UI_MAX_VALUE = "maxValue";
 
 	// XML player attributes
-	static constexpr char* XML_PLAYER_TIME_BETWEEN_COMBO_HIT_ATTR = "timeBetweenComboInput";
 	static constexpr char* XML_PLAYER_DODGE_STAMINA_ATTR = "dodgeStaminaConsumption";
 	static constexpr char* XML_PLAYER_DODGE_SPEED_ATTR = "dodgeSpeed";
 	static constexpr char* XML_PLAYER_DODGE_TIME_ATTR = "dodgeTime";
