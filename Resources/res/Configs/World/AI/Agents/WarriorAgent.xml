@@ -5,6 +5,7 @@
 			baseStamina="100"
 			baseDamage="10"
 			staminaRegenerateSpeed="2"
+			staminaRegenerateDelay="1"
 			>
 			
 	<Component type="TransformComponent">
@@ -21,7 +22,8 @@
 	</Component>
 	
 	<Component 	type="LongSwordAttackComponent"
-				secondsBetweenAttacks="0.6"
+				secondsBetweenAttacks="0.2" 
+				comboExpireTime="0.6"
 				attackRange="60"
 				paddingFromBody="5"
 				staminaConsumption="20">

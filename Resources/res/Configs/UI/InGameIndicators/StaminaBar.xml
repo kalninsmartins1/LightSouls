@@ -1,5 +1,5 @@
 <StaminaBar
-	animationSpeed="0.5">
+	animationSpeed="0.3">
 	
 	<Background>
 		<Sprite path="res/Graphics/UI/healthBarBg.png"/>

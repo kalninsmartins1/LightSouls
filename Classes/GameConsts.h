@@ -11,6 +11,7 @@ namespace LightSouls
 	static constexpr int ACTION_MOVE_TAG = 0;
 	static constexpr int ACTION_ANIM_TAG = 1;
 	static constexpr int ACTION_TIMER_TAG = 2;
+	static constexpr int ACTION_STAMINA_DELAY_TIMER = 3;
 
 	static constexpr int WORLD_LAYER = -99;
 	static constexpr int PLAYER_UNDER_LAYER = -1;

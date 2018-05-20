@@ -3,8 +3,9 @@
 			moveSpeed="260"
 			baseHealth="100"
 			baseStamina="200"
-			baseDamage="10"	
+			baseDamage="10"
 			staminaRegenerateSpeed="20"
+			staminaRegenerateDelay="2"
 	>
 	
 	<Component type="TransformComponent">

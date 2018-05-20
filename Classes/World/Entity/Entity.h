@@ -41,6 +41,7 @@ public:
 	void SetPhysicsBodyAnchor(const Vector2& achorPos);	
 	void SetCurrentMoveSpeed(float moveSpeed);
 	void SetStaminaRegenerateSpeed(float regenerateSpeed);
+	void SetStaminaRegenerateDelay(float regenerateDelay);
 
 	void ResetMoveSpeed();
 	void ConsumeStamina(float amount);
@@ -57,7 +58,10 @@ protected:
 	
 	void		 OnEntityInitialized();
 
-private:	
+private:
+	void		StartStaminaRegenerateDelayTimer();
+	void		OnStaminaRegenerateDelayExpired();
+
 	void		Move();	
 	void		RegenerateStamina(float regenerateSpeedASecond);
 	void		OnDamageTaken();
@@ -73,7 +77,8 @@ private:
 	bool m_isRuning;
 	bool m_isAttacking;
 	bool m_isTakingDamage;
-	
+	bool m_isStaminaRegenerateDelayExpired;
+
 	float m_baseMoveSpeed;
 	float m_baseHealth;
 	float m_baseDamage;
@@ -84,6 +89,7 @@ private:
 	float m_moveSpeed;
 	float m_physicsBodyForceScale;
 	float m_staminaRegenerateSpeed;
+	float m_staminaRegenerateDelay;
 };
 
 NS_LIGHTSOULS_END

@@ -15,6 +15,7 @@ Entity::Entity()
 	, m_isRuning(false)
 	, m_isAttacking(false)
 	, m_isTakingDamage(false)
+	, m_isStaminaRegenerateDelayExpired(true)
 	, m_baseMoveSpeed(0.0f)
 	, m_baseHealth(0.0f)
 	, m_baseDamage(0.0f)
@@ -25,6 +26,7 @@ Entity::Entity()
 	, m_moveSpeed(0.0f)
 	, m_physicsBodyForceScale(1.0f)
 	, m_staminaRegenerateSpeed(0.0f)
+	, m_staminaRegenerateDelay(0.0f)
 {
 }
 
@@ -51,6 +53,11 @@ void Entity::SetCurrentMoveSpeed(float moveSpeed)
 void Entity::SetStaminaRegenerateSpeed(float regenerateSpeed)
 {
 	m_staminaRegenerateSpeed = regenerateSpeed;
+}
+
+void Entity::SetStaminaRegenerateDelay(float regenerateDelay)
+{
+	m_staminaRegenerateDelay = regenerateDelay;
 }
 
 void Entity::SetBaseHealth(float baseHealth)
@@ -103,6 +110,7 @@ void Entity::ConsumeStamina(float amount)
 	if (HasEnoughtStamina(amount))
 	{
 		m_stamina -= amount;
+		StartStaminaRegenerateDelayTimer();
 	}
 	else
 	{
@@ -179,6 +187,24 @@ void Entity::DispatchOnStaminaChangedEvent()
 	// Does nothing by default
 }
 
+void Entity::StartStaminaRegenerateDelayTimer()
+{
+	m_isStaminaRegenerateDelayExpired = false;
+
+	// Make sure any previous stamina regenerate actions are stopped
+	stopActionByTag(ACTION_STAMINA_DELAY_TIMER);
+
+	// Start a new timer action
+	Utils::StartTimerWithCallback(this,
+		CC_CALLBACK_0(Entity::OnStaminaRegenerateDelayExpired, this),
+			m_staminaRegenerateDelay, ACTION_STAMINA_DELAY_TIMER);
+}
+
+void Entity::OnStaminaRegenerateDelayExpired()
+{	
+	m_isStaminaRegenerateDelayExpired = true;	
+}
+
 void Entity::Move()
 {
 	if (abs(m_moveDirection.x) > 0 || abs(m_moveDirection.y) > 0)
@@ -195,7 +221,7 @@ void Entity::Move()
 
 void Entity::RegenerateStamina(float regenerateSpeedASecond)
 {
-	if (m_stamina < m_baseStamina)
+	if (m_stamina < m_baseStamina && m_isStaminaRegenerateDelayExpired)
 	{
 		m_stamina += regenerateSpeedASecond;
 		DispatchOnStaminaChangedEvent();

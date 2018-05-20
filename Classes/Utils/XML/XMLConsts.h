@@ -27,6 +27,7 @@ namespace LightSouls
 	static constexpr char* XML_ENTITY_BASE_STAMINA_ATTR = "baseStamina";
 	static constexpr char* XML_ENTITY_BASE_DAMAGE_ATTR = "baseDamage";
 	static constexpr char* XML_ENTITY_STAMINA_REGENARATE_SPEED_ATTR = "staminaRegenerateSpeed";
+	static constexpr char* XML_ENTITY_STAMINA_REGENARATE_DELAY_ATTR = "staminaRegenerateDelay";
 
 	// XML UI attributes
 	static constexpr char* XML_UI_ANIMATION_SPEED_ATTR = "animationSpeed";

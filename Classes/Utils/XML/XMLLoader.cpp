@@ -195,6 +195,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 		const float baseStamina = root->FloatAttribute(XML_ENTITY_BASE_STAMINA_ATTR);
 		const float baseDamage = root->FloatAttribute(XML_ENTITY_BASE_DAMAGE_ATTR);
 		const float staminaRegenerateSpeed = root->FloatAttribute(XML_ENTITY_STAMINA_REGENARATE_SPEED_ATTR);
+		const float staminaRegenerateDelay = root->FloatAttribute(XML_ENTITY_STAMINA_REGENARATE_DELAY_ATTR);
 
 		entity.setName(actorType);
 		entity.SetBaseMoveSpeed(moveSpeed);
@@ -202,6 +203,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 		entity.SetBaseHealth(baseHealth);
 		entity.SetBaseStamina(baseStamina);
 		entity.SetStaminaRegenerateSpeed(staminaRegenerateSpeed);
+		entity.SetStaminaRegenerateDelay(staminaRegenerateDelay);
 
 		// Load entity components
 		for (XMLElement* element = root->FirstChildElement(); element;
