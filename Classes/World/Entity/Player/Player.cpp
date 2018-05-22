@@ -9,6 +9,7 @@
 #include "Events/ProgressBarChangedEventData.h"
 #include "cocos2d/cocos/base/CCEventDispatcher.h"
 #include "Utils/AnimationUtils.h"
+#include "Camera/Components/CameraShake.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -260,11 +261,15 @@ void Player::PlayRunOrIdleAnimation() const
 
 void Player::DispatchOnHealthChangedEvent()
 {
+	// Dispatch health changed event
 	float currentHealth = GetCurrentHealth();
 	float healthPercentage = Utils::SafeDevide(currentHealth, GetMaxHealth());
 	auto eventData = ProgressBarChangedEventData(GetId(), currentHealth, healthPercentage);
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerHealthChanged,
 		&eventData);
+
+	// Dispatch camera shake request
+	getEventDispatcher()->dispatchCustomEvent(CameraShake::GetEventRequestCameraShake());
 }
 
 void Player::DispatchOnStaminaChangedEvent()

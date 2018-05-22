@@ -11,6 +11,7 @@ class ProgressBar;
 class AIAgentManager;
 class Entity;
 class UIElementConfig;
+class Camera;
 enum class GameInputType;
 
 using XMLNode = tinyxml2::XMLNode;
@@ -31,6 +32,7 @@ public:
 	static bool LoadWorld(World& world, const String& pathToXML);
 	static bool InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager,
 		const String& pathToXML);
+	static bool InitializeCamera(Camera& camera, const String& pathToXML);
 
 private:
 	XMLLoader();

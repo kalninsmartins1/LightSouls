@@ -94,7 +94,7 @@ void Utils::StartTimerWithCallback(cocos2d::Node* node, std::function<void()> ca
 	node->runAction(sequence);
 }
 
-Vector2 Utils::GetRandomPositionWithinCircle(const Vector2 centerPos, float radius)
+Vector2 Utils::GetRandomPositionWithinCircle(const Vector2& centerPos, float radius)
 {
 	// Get random position within range
 	const float angle = Utils::GetRandAngleInRadians();
@@ -106,6 +106,11 @@ Vector2 Utils::GetRandomPositionWithinCircle(const Vector2 centerPos, float radi
 		Vector2(targetX, targetY);
 
 	return randomPosition;
+}
+
+Vector2 Utils::GetRandomPositionWithinCircle(const Vector3& centerPos, float radius)
+{	
+	return GetRandomPositionWithinCircle(Vector2(centerPos.x, centerPos.y), radius);
 }
 
 float Utils::GetRandValueWithinRange(int minValue, int maxValue)

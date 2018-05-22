@@ -16,6 +16,8 @@
 #include "UI/InGameIndicators/ProgressBar.h"
 #include "World/Entity/AI/AIAgentManager.h"
 #include "UI/UIElementConfig.h"
+#include "Camera/Camera.h"
+#include "Camera/Components/CameraShake.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -58,6 +60,35 @@ bool XMLLoader::InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager, const
 					const String& type = pChild->Attribute(XML_TYPE_ATTR);
 					aiManager.addAgentConfig(type, path);
 				}
+			}
+		}
+	}
+
+	return isSuccessful;
+}
+
+bool XMLLoader::InitializeCamera(Camera& camera, const String& pathToXML)
+{
+	XMLDoc doc;
+	const bool isSuccessful = LoadXMLFile(pathToXML, doc);
+	if (isSuccessful)
+	{
+		XMLElement* data = doc.RootElement();
+		for (XMLElement* element = data->FirstChildElement(); element;
+			element = element->NextSiblingElement())
+		{ 
+			const String& type = element->Attribute(XML_TYPE_ATTR);
+
+			if (type == CAMERA_SHAKE_COMPONENT)
+			{
+				const float moveSpeed = element->FloatAttribute(XML_MOVE_SPEED_ATTR);				
+				const float shakeTime = element->FloatAttribute(XML_TIME_ATTR);
+				const float shakeRadius = element->FloatAttribute(XML_CAMERA_SHAKE_RADIUS);
+				camera.addComponent(CameraShake::Create(moveSpeed, shakeTime, shakeRadius));
+			}
+			else if (type == CAMERA_FOLLOW_COMPONENT)
+			{
+				//camera.addComponent(CameraFollow::Create());
 			}
 		}
 	}
@@ -190,7 +221,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 
 		// Load root entity attributes
 		const String actorType = root->Attribute(XML_TYPE_ATTR);
-		const float moveSpeed = root->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
+		const float moveSpeed = root->FloatAttribute(XML_MOVE_SPEED_ATTR);
 		const float baseHealth = root->FloatAttribute(XML_ENTITY_BASE_HEALTH_ATTR);
 		const float baseStamina = root->FloatAttribute(XML_ENTITY_BASE_STAMINA_ATTR);
 		const float baseDamage = root->FloatAttribute(XML_ENTITY_BASE_DAMAGE_ATTR);
@@ -276,7 +307,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				const float maxAmmoFlyDistance =
 					element->FloatAttribute(XML_AI_MAX_FLY_DISTANCE);
 				const float ammoMoveSpeed =
-					element->FloatAttribute(XML_ENTITY_MOVE_SPEED_ATTR);
+					element->FloatAttribute(XML_MOVE_SPEED_ATTR);
 				const float secondsBetweenAttacks =
 					element->FloatAttribute(
 						XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);

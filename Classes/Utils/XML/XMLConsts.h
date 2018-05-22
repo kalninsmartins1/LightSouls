@@ -17,8 +17,7 @@ namespace LightSouls
 	static constexpr char* XML_NODE_POSITION = "Position";
 	static constexpr char* XML_NODE_ROTATION = "Rotation";
 
-	// XML entity attributes
-	static constexpr char* XML_ENTITY_MOVE_SPEED_ATTR = "moveSpeed";
+	// XML entity attributes	
 	static constexpr char* XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR = "secondsBetweenAttacks";
 	static constexpr char* XML_ENTITY_COMBO_EXPIRE_TIME_ATTR = "comboExpireTime";
 	static constexpr char* XML_ENTITY_ATTACK_RANGE_ATTR = "attackRange";
@@ -57,6 +56,8 @@ namespace LightSouls
 
 	// XML generic attributes
 	static constexpr char* XML_NAME_ATTR = "name";
+	static constexpr char* XML_TIME_ATTR = "time";
+	static constexpr char* XML_MOVE_SPEED_ATTR = "moveSpeed";
 	static constexpr char* XML_TYPE_ATTR = "type";
 	static constexpr char* XML_PATH_ATTR = "path";
 	static constexpr char* XML_SHAPE_ATTR = "shape";
@@ -95,5 +96,8 @@ namespace LightSouls
 	static constexpr char* XML_INPUT_KEYBOARD = "Keyboard";
 	static constexpr char* XML_INPUT_MOUSE = "Mouse";
 	static constexpr char* XML_INPUT_GAME_CONTROLLER = "GameController";
+
+	// XML camera attributes
+	static constexpr char* XML_CAMERA_SHAKE_RADIUS = "shakeRadius";
 };
 

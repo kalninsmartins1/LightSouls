@@ -141,7 +141,6 @@ void Entity::TakeDamage(const Entity& attackingEntity)
 		m_isTakingDamage = true;
 		m_animComponent->PlayOneShotAnimation(ANIM_TYPE_HURT,
 			CC_CALLBACK_0(Entity::OnDamageTaken, this));
-		CCLOG("Entity %s taking damage !", getName().c_str());
 	}
 }
 

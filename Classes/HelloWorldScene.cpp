@@ -8,6 +8,7 @@
 #include "World/Physics/PhysicsManager.h"
 #include "UI/InGameIndicators/ProgressBar.h"
 #include "Events/ProgressBarChangedEventData.h"
+#include "Camera/Camera.h"
 
 USING_NS_CC;
 
@@ -136,7 +137,7 @@ void HelloWorld::InitWolrdLayer()
 	addChild(worldLayer);
 
 	// Create world camera and set it to follow player
-	Camera* worldCamera = Camera::create();
+	LightSouls::Camera* worldCamera = LightSouls::Camera::Create("res/Configs/Camera/Camera.xml");
 	worldCamera->setCameraFlag(CameraFlag::USER1);
 	worldCamera->runAction(LightSouls::CameraFollow::Create(m_player));
 	addChild(worldCamera);	
@@ -164,8 +165,7 @@ void HelloWorld::InitUILayer()
 	{
 		CCLOG("HelloWorldScene: Failed to initialize stamina bar!");
 	}
-	
-	// TODO: Add stamina bar
+		
 	uiLayer->addChild(screenOverlay);
 	uiLayer->addChild(m_healthBar);
 	uiLayer->addChild(m_staminaBar);
@@ -197,4 +197,3 @@ void HelloWorld::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
 		m_staminaBar->SetCurrentValue(staminaData->GetPercentage());
 	}
 }
-

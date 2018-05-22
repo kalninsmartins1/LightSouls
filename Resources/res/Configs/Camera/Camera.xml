@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<Camera>
+
+	<Component type="CameraShake"
+		time="1"
+		moveSpeed="100"
+		shakeRadius="100">
+	</Component>
+
+</Camera>

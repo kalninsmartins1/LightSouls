@@ -157,9 +157,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\Camera\Camera.cpp" />
+    <ClCompile Include="..\Classes\Camera\Components\CameraShake.cpp" />
     <ClCompile Include="..\Classes\Events\OnCollisionBeginEventData.cpp" />
     <ClCompile Include="..\Classes\Events\ProgressBarChangedEventData.cpp" />
     <ClCompile Include="..\Classes\Events\AEventData.cpp" />
+    <ClCompile Include="..\Classes\Events\RequestCameraShakeEventData.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\Input\GameInput.cpp" />
     <ClCompile Include="..\Classes\Input\InputTypes\AInputDevice.cpp" />
@@ -195,9 +198,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\Camera\Camera.h" />
+    <ClInclude Include="..\Classes\Camera\Components\CameraShake.h" />
     <ClInclude Include="..\Classes\Events\OnCollisionBeginEventData.h" />
     <ClInclude Include="..\Classes\Events\ProgressBarChangedEventData.h" />
     <ClInclude Include="..\Classes\Events\AEventData.h" />
+    <ClInclude Include="..\Classes\Events\RequestCameraShakeEventData.h" />
     <ClInclude Include="..\Classes\GameConsts.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\Input\GameInput.h" />

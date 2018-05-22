@@ -76,6 +76,12 @@
     <Filter Include="src\3rdParty\Physics">
       <UniqueIdentifier>{bec094be-3bb9-48bc-b2f4-b2d214d3bf7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Camera">
+      <UniqueIdentifier>{59ccabd4-f80f-46b8-aa87-8267bee51c36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Camera\Components">
+      <UniqueIdentifier>{6ff2dffd-42de-41db-89a1-1072e9a7fb9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -184,6 +190,15 @@
       <Filter>src\Events</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Events\AEventData.cpp">
+      <Filter>src\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Camera\Camera.cpp">
+      <Filter>src\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Camera\Components\CameraShake.cpp">
+      <Filter>src\Camera\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Events\RequestCameraShakeEventData.cpp">
       <Filter>src\Events</Filter>
     </ClCompile>
   </ItemGroup>
@@ -306,6 +321,15 @@
       <Filter>src\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Events\AEventData.h">
+      <Filter>src\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Camera\Camera.h">
+      <Filter>src\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Camera\Components\CameraShake.h">
+      <Filter>src\Camera\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Events\RequestCameraShakeEventData.h">
       <Filter>src\Events</Filter>
     </ClInclude>
   </ItemGroup>

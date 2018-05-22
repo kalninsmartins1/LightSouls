@@ -17,7 +17,8 @@ public:
 	// Returns -1 if value is negative, else returns 1
 	static int					GetSign(const float& value);
 	static float				GetRandValueWithinRange(int minValue, int maxValue);
-	static Vector2				GetRandomPositionWithinCircle(const Vector2 centerPos, float radius);
+	static Vector2				GetRandomPositionWithinCircle(const Vector2& centerPos, float radius);
+	static Vector2				GetRandomPositionWithinCircle(const Vector3& centerPos, float radius);
 	static float				GetRandAngleInRadians();
 	static Vector2				GetScreenFillScale(const cocos2d::Size& curSize);
 	static const cocos2d::Size& GetScreenSize();
