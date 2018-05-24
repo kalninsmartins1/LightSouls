@@ -60,6 +60,13 @@ void Entity::SetStaminaRegenerateDelay(float regenerateDelay)
 	m_staminaRegenerateDelay = regenerateDelay;
 }
 
+void Entity::setScale(float scaleX, float scaleY)
+{
+	Sprite::setScale(scaleX, scaleY);
+	float entityScale = Utils::Avg(scaleX, scaleY);
+	SetBaseMoveSpeed(m_baseMoveSpeed * entityScale * Utils::SafeDevide(1.0f, Utils::GetScaleFactor()));
+}
+
 void Entity::SetBaseHealth(float baseHealth)
 {
 	m_baseHealth = baseHealth;
@@ -77,7 +84,6 @@ void Entity::SetBaseMoveSpeed(float moveSpeed)
 	m_baseMoveSpeed = moveSpeed;
 	SetCurrentMoveSpeed(moveSpeed);
 }
-
 
 void Entity::SetMoveDirection(const Vector2& direction)
 {

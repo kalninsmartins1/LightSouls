@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Entity type="WarriorAgent"
-			moveSpeed="120"
+			moveSpeed="160"
 			baseHealth="100"
 			baseStamina="100"
 			baseDamage="10"

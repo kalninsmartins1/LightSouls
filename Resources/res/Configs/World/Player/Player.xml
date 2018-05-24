@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Entity type="Player"
-			moveSpeed="260"
+			moveSpeed="360"
 			baseHealth="100"
 			baseStamina="200"
 			baseDamage="10"

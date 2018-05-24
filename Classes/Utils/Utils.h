@@ -39,6 +39,9 @@ public:
 	static X360Axes			ConvertStringToGameControllerAxis(const String& controllerAxisStr);
 	static X360Button		ConvertStringToGameControllerButton(const String& controllerButtonStr);
 
+	template <typename T>
+	static T Avg(T a, T b);
+
 	template <typename T, typename K>
 	static bool ContainsKey(const std::map<T, K>& map, const T& key);
 
@@ -54,6 +57,12 @@ public:
 private:
 	Utils();
 };
+
+template <typename T>
+static T Utils::Avg(T a, T b)
+{
+	return a + b / 2.0f;
+}
 
 template <typename T, typename K>
 bool Utils::ContainsKey(const std::map<T, K>& map, const T& key)

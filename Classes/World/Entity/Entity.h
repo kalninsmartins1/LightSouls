@@ -42,6 +42,7 @@ public:
 	void SetCurrentMoveSpeed(float moveSpeed);
 	void SetStaminaRegenerateSpeed(float regenerateSpeed);
 	void SetStaminaRegenerateDelay(float regenerateDelay);
+	virtual void setScale(float scaleX, float scaleY) override;
 
 	void ResetMoveSpeed();
 	void ConsumeStamina(float amount);
