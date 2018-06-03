@@ -30,6 +30,11 @@ public:
 	static AIAgent* Create(const String& pathToXML);
 	virtual void	update(float deltaTime) override;
 
+protected:
+	virtual void DispatchOnHealthChangedEvent() const override;
+	virtual void DispatchOnStaminaChangedEvent() const override;
+	virtual void DispatchOnGiveDamageEvent() const override;
+
 private:
 	AIAgent();
 

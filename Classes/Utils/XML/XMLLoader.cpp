@@ -81,10 +81,8 @@ bool XMLLoader::InitializeCamera(Camera& camera, const String& pathToXML)
 
 			if (type == CAMERA_SHAKE_COMPONENT)
 			{
-				const float moveSpeed = element->FloatAttribute(XML_MOVE_SPEED_ATTR);				
-				const float shakeTime = element->FloatAttribute(XML_TIME_ATTR);
-				const float shakeRadius = element->FloatAttribute(XML_CAMERA_SHAKE_RADIUS);
-				camera.addComponent(CameraShake::Create(moveSpeed, shakeTime, shakeRadius));
+				auto cameraShake = CameraShake::Create(element);
+				camera.addComponent(cameraShake);
 			}
 			else if (type == CAMERA_FOLLOW_COMPONENT)
 			{

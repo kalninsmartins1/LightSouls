@@ -71,6 +71,9 @@ void LongSwordAttackComponent::CheckAffectedObjects(const Vector2& direction) co
 	const cocos2d::Rect rect(rectOrgin,
 		cocos2d::Size(rectWidth, rectHeight));
 
+	// Debug attack collision
+	//PhysicsManager::GetInstance()->DebugDrawRect(rect);
+
 	PhysicsManager::QuerryRect(rect,
 		CC_CALLBACK_3(LongSwordAttackComponent::OnAttackHit,
 			this));

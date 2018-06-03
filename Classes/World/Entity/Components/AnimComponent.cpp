@@ -4,16 +4,23 @@
 #include "Utils/XML/XMLConsts.h"
 #include "Utils/AnimationUtils.h"
 #include "GameConsts.h"
+#include "World/Entity/Entity.h"
 
 NS_LIGHTSOULS_BEGIN
 
-AnimComponent::AnimComponent(cocos2d::Sprite& ownerSprite) 
-	: m_currentAnimId(-1)
-	, m_ownerSprite(ownerSprite)	
+AnimComponent::AnimComponent(Entity& ownerSprite) 
+	: m_curAnimId(-1)
+	, m_entity(ownerSprite)
+	, m_firstAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD))
+	, m_lastAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD))
+	, m_curAttackAnimId(m_firstAttackAnimId)
+	, m_currentAttackStyle(AttackAnimStyle::FORWARD)
+	, m_animations()
 {
+
 }
 
-AnimComponent* AnimComponent::Create(cocos2d::Sprite& sprite)
+AnimComponent* AnimComponent::Create(Entity& sprite)
 {
 	AnimComponent * ret = new (std::nothrow) AnimComponent(sprite);
 
@@ -31,19 +38,27 @@ AnimComponent* AnimComponent::Create(cocos2d::Sprite& sprite)
 
 void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 {
-	for (tinyxml2::XMLElement* element = node->FirstChildElement();
-		element != nullptr; element = element->NextSiblingElement())
+	for (tinyxml2::XMLElement* spriteSheetNode = node->FirstChildElement();
+		spriteSheetNode != nullptr; spriteSheetNode = spriteSheetNode->NextSiblingElement())
 	{
-		const String& animType = element->Attribute(XML_TYPE_ATTR);
+		auto spriteCache = cocos2d::SpriteFrameCache::getInstance();
+		const char* plistPath = spriteSheetNode->Attribute(XML_ANIM_PLIST_PATH_ATTR);
+		spriteCache->addSpriteFramesWithFile(plistPath);
 
-		// Load specific animation based on its type
-		AnimationData animationData;
-		AnimationUtils::LoadAnimationFrames(element, animationData);
-		m_animations[AnimationUtils::GetAnimId(animType)] = animationData;
+		for (tinyxml2::XMLElement* animNode = spriteSheetNode->FirstChildElement();
+			animNode != nullptr; animNode = animNode->NextSiblingElement())
+		{
+			const String& animType = animNode->Attribute(XML_TYPE_ATTR);
+
+			// Load specific animation based on its type
+			AnimationData animationData;
+			AnimationUtils::LoadAnimationFrames(animNode, animationData);
+			m_animations[AnimationUtils::GetAnimId(animType)] = animationData;
+		}
 	}
 
 	// Init parent sprite
-	m_ownerSprite.initWithSpriteFrame(m_animations[AnimationUtils::GetAnimId(ANIM_TYPE_IDLE)].frames.at(0));
+	m_entity.initWithSpriteFrame(m_animations[AnimationUtils::GetAnimId(ANIM_TYPE_IDLE)].frames.at(0));
 }
 
 void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback)
@@ -54,7 +69,7 @@ void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallbac
 
 	if (Utils::ContainsKey(m_animations, animationId))
 	{
-		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_ownerSprite,
+		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_entity,
 			m_animations[animationId],
 			callback);
 		SetCurrentAnimId(animationId);
@@ -65,6 +80,27 @@ void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallbac
 	}	
 }
 
+void AnimComponent::PlayAttackAnimation(const AnimationCallback& callback)
+{
+	PlayOneShotAnimation(m_curAttackAnimId, callback);
+}
+
+void AnimComponent::GoToNextAttackAnimation()
+{
+	// Wrap the index within valid values
+	Utils::WrapValue(++m_curAttackAnimId, m_firstAttackAnimId, m_lastAttackAnimId);
+}
+
+void AnimComponent::ResetAttackAnimation()
+{
+	m_curAttackAnimId = m_firstAttackAnimId;
+}
+
+void AnimComponent::update(float deltaTime)
+{
+	UpdateAttackAnimState();
+}
+
 void AnimComponent::PlayLoopingAnimation(int animationId)
 {
 #if LIGHTSOULS_ANIM_DEBUG
@@ -72,7 +108,7 @@ void AnimComponent::PlayLoopingAnimation(int animationId)
 #endif
 	if (Utils::ContainsKey(m_animations, animationId))
 	{
-		AnimationUtils::StartSpriteFrameAnimation(&m_ownerSprite,
+		AnimationUtils::StartSpriteFrameAnimation(&m_entity,
 			m_animations[animationId]);
 		SetCurrentAnimId(animationId);
 	}
@@ -85,7 +121,7 @@ void AnimComponent::PlayLoopingAnimation(int animationId)
 bool AnimComponent::IsCurrrentlyPlayingAnimation(const String& animName) const
 {
 	int animId = AnimationUtils::GetAnimId(animName);
-	return animId == m_currentAnimId;
+	return animId == m_curAnimId;
 }
 
 void AnimComponent::PlayLoopingAnimation(const String& animName)
@@ -102,9 +138,34 @@ void AnimComponent::PlayOneShotAnimation(const String& animName, const Animation
 
 void AnimComponent::SetCurrentAnimId(int currentAnimId)
 {
-	m_currentAnimId = currentAnimId;
+	m_curAnimId = currentAnimId;
+}
+
+void AnimComponent::UpdateAttackAnimState()
+{
+	const Vector2& heading = m_entity.GetHeading();
+	if (abs(heading.x) > 0.0f)
+	{
+		m_currentAttackStyle = AttackAnimStyle::FORWARD;
+		m_firstAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD);
+		m_lastAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD);
+		m_curAttackAnimId = m_firstAttackAnimId;
+	}
+	else if (heading.y > 0.0f)
+	{
+		m_currentAttackStyle = AttackAnimStyle::UPWARD;
+		m_firstAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD);
+		m_lastAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD);
+		m_curAttackAnimId = m_firstAttackAnimId;
+	}
+	else if (heading.y < 0.0f)
+	{
+		m_currentAttackStyle = AttackAnimStyle::DOWNWARD;
+		m_firstAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD);
+		m_lastAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD);
+		m_curAttackAnimId = m_firstAttackAnimId;
+	}
 }
 
 NS_LIGHTSOULS_END
-
 

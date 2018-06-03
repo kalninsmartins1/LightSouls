@@ -16,9 +16,6 @@ StateAttack::StateAttack(AIAgent& agent)
 	, m_attackComponent(nullptr)
 	, m_animComponent(nullptr)
 	, m_isAnimFinished(true)
-	, m_curAnimationId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE))
-	, m_lastAnimationId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE))
-	, m_firstAnimatioId(m_curAnimationId)
 {
 }
 
@@ -47,16 +44,16 @@ StateProgress StateAttack::OnStep()
 			// Check for combo
 			if (!m_attackComponent->IsComboExpired())
 			{
-				Utils::WrapValue(++m_curAnimationId, m_firstAnimatioId, m_lastAnimationId);
+				m_animComponent->GoToNextAttackAnimation();
 			}
 			else
 			{
-				m_curAnimationId = m_firstAnimatioId;
+				m_animComponent->ResetAttackAnimation();
 			}
 
 			// Start attack animation
 			m_isAnimFinished = false;
-			m_animComponent->PlayOneShotAnimation(m_curAnimationId, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
+			m_animComponent->PlayAttackAnimation(CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
 		}
 		
 		const Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
@@ -72,7 +69,6 @@ StateProgress StateAttack::OnStep()
 void StateAttack::OnExit()
 {
 	m_curProgress = StateProgress::NONE;
-	m_curAnimationId = m_firstAnimatioId;
 	m_isAnimFinished = true;
 
 #if LIGHTSOULS_DEBUG_AI

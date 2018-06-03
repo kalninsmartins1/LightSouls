@@ -14,10 +14,15 @@ public:
 
 	virtual void update(float deltaTime) override;
 
+protected:
+	virtual void DispatchOnHealthChangedEvent() const override;
+	virtual void DispatchOnStaminaChangedEvent() const override;
+	virtual void DispatchOnGiveDamageEvent() const override;
+
 private:
 	Arrow(Vector2 startPosition, float maxFlyDistance);
 
-	bool Init(const String& pathToSprite,		
+	bool Init(const String& pathToSprite,
 		const Vector2& moveDirection,
 		float moveSpeed);
 	void RotateArrowInDirectionOfMovement();

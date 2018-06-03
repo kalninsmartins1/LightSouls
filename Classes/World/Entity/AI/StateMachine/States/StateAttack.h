@@ -32,9 +32,6 @@ private:
 	AttackComponent*	m_attackComponent;
 	AnimComponent*		m_animComponent;
 	bool				m_isAnimFinished;
-	int					m_curAnimationId;
-	const int			m_lastAnimationId;
-	const int			m_firstAnimatioId;
 };
 
 NS_LIGHTSOULS_END

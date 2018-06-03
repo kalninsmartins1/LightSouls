@@ -15,6 +15,7 @@ NS_LIGHTSOULS_BEGIN
 
 const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
 const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
+const String Player::s_eventOnPlayerGiveDamage = "EVENT_ON_PLAYER_GIVE_DAMAGE";
 
 Player* Player::Create(const String& pathToXML)
 {
@@ -39,15 +40,13 @@ Player::Player()
 	, m_dodgeTime(0.0f)
 	, m_timeBetweenComboInput(0.0f)
 	, m_dodgeStaminaConsumption(0.0f)
-	, m_curAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE))
-	, m_lastAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE))
-	, m_firstAttackAnimId(m_curAttackAnimId)
 	, m_lastCollisionNode(nullptr)
 	, m_isCollidedFromLeft(false)
 	, m_isCollidedFromRight(false)
 	, m_isCollidedFromTop(false)
 	, m_isCollidedFromBottom(false)
 {
+
 }
 
 const String& Player::GetEventOnHealthChanged()
@@ -97,6 +96,11 @@ void Player::update(float deltaTime)
 	}
 
 	UpdateSortingLayer();
+}
+
+const String& Player::GetEventOnGiveDamage()
+{
+	return s_eventOnPlayerGiveDamage;
 }
 
 void Player::SetDodgeStaminaConsumption(float dodgeStaminaConumption)
@@ -210,20 +214,18 @@ void Player::LightAttack()
 {	
 	if (!m_isDodging && m_attackComponent->IsReadyToAttack())
 	{
+		AnimComponent* animComponent = GetAnimComponent();
 		if(!m_attackComponent->IsComboExpired())
 		{
-			// Wrap the index within valid values
-			Utils::WrapValue(++m_curAttackAnimId, m_firstAttackAnimId, m_lastAttackAnimId);
+			animComponent->GoToNextAttackAnimation();
 		}
 		else
 		{
-			// Reset back to first attack
-			m_curAttackAnimId = m_firstAttackAnimId;
+			animComponent->ResetAttackAnimation();
 		}
 		
 		// Play the attack animation
-		GetAnimComponent()->PlayOneShotAnimation(m_curAttackAnimId,
-			CC_CALLBACK_0(Entity::StopAttacking, this));
+		animComponent->PlayAttackAnimation(CC_CALLBACK_0(Entity::StopAttacking, this));
 		m_attackComponent->Attack(m_lastValidMoveDirection);
 		StartAttacking();
 	}
@@ -259,7 +261,7 @@ void Player::PlayRunOrIdleAnimation() const
 	}
 }
 
-void Player::DispatchOnHealthChangedEvent()
+void Player::DispatchOnHealthChangedEvent() const
 {
 	// Dispatch health changed event
 	float currentHealth = GetCurrentHealth();
@@ -267,18 +269,20 @@ void Player::DispatchOnHealthChangedEvent()
 	auto eventData = ProgressBarChangedEventData(GetId(), currentHealth, healthPercentage);
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerHealthChanged,
 		&eventData);
-
-	// Dispatch camera shake request
-	getEventDispatcher()->dispatchCustomEvent(CameraShake::GetEventRequestCameraShake());
 }
 
-void Player::DispatchOnStaminaChangedEvent()
+void Player::DispatchOnStaminaChangedEvent() const
 {
 	float currentStamina = GetCurrentStamina();
 	float staminaPercentage = Utils::SafeDevide(currentStamina, GetMaxStamina());
 	auto eventData = ProgressBarChangedEventData(GetId(), currentStamina, staminaPercentage);
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerStaminaChanged,
 		&eventData);
+}
+
+void Player::DispatchOnGiveDamageEvent() const
+{
+	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerGiveDamage);
 }
 
 bool Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)

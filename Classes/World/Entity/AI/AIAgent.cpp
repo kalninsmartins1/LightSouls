@@ -25,6 +25,11 @@ AIAgent* AIAgent::Create(const String& pathToXML)
 	return pAgent;
 }
 
+void AIAgent::DispatchOnGiveDamageEvent() const
+{
+
+}
+
 AIAgent::AIAgent()
 	: m_stateMachine(*this)
 	, m_basePosition(Vector2::ZERO)
@@ -106,6 +111,16 @@ void AIAgent::update(float deltaTime)
 {
 	Entity::update(deltaTime);
 	m_stateMachine.OnStep();
+}
+
+void AIAgent::DispatchOnStaminaChangedEvent() const
+{
+
+}
+
+void AIAgent::DispatchOnHealthChangedEvent() const
+{
+
 }
 
 float AIAgent::GetPatrolPause() const

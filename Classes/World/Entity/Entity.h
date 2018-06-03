@@ -54,9 +54,10 @@ public:
 	virtual void update(float deltaTime) override;
 
 protected:
-	virtual void DispatchOnHealthChangedEvent();
-	virtual void DispatchOnStaminaChangedEvent();
-	
+	virtual void DispatchOnHealthChangedEvent() const = 0;
+	virtual void DispatchOnStaminaChangedEvent() const = 0;
+	virtual void DispatchOnGiveDamageEvent() const = 0;
+
 	void		 OnEntityInitialized();
 
 private:

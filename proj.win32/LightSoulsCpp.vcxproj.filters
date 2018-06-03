@@ -82,6 +82,9 @@
     <Filter Include="src\Camera\Components">
       <UniqueIdentifier>{6ff2dffd-42de-41db-89a1-1072e9a7fb9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Camera\CameraShake">
+      <UniqueIdentifier>{9c0c0689-c21f-4916-bd2d-528ee6f59996}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -198,8 +201,8 @@
     <ClCompile Include="..\Classes\Camera\Components\CameraShake.cpp">
       <Filter>src\Camera\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Events\RequestCameraShakeEventData.cpp">
-      <Filter>src\Events</Filter>
+    <ClCompile Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.cpp">
+      <Filter>src\Camera\CameraShake</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -329,8 +332,8 @@
     <ClInclude Include="..\Classes\Camera\Components\CameraShake.h">
       <Filter>src\Camera\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Events\RequestCameraShakeEventData.h">
-      <Filter>src\Events</Filter>
+    <ClInclude Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.h">
+      <Filter>src\Camera\CameraShake</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

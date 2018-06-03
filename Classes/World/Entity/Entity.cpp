@@ -137,6 +137,7 @@ void Entity::TakeDamage(const Entity& attackingEntity)
 			m_health = 0;
 		}
 		
+		attackingEntity.DispatchOnGiveDamageEvent();
 		DispatchOnHealthChangedEvent();
 		ApplyKnockbackEffect(attackingEntity);
 	}
@@ -180,16 +181,6 @@ void Entity::update(float deltaTime)
 	}
 
 	RegenerateStamina(m_staminaRegenerateSpeed * deltaTime);
-}
-
-void Entity::DispatchOnHealthChangedEvent()
-{
-	// Does nothing by default
-}
-
-void Entity::DispatchOnStaminaChangedEvent()
-{
-	// Does nothing by default
 }
 
 void Entity::StartStaminaRegenerateDelayTimer()

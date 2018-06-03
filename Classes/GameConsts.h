@@ -41,9 +41,22 @@ namespace LightSouls
 	static constexpr char* ANIM_TYPE_DODGE = "Dodge";
 	static constexpr char* ANIM_TYPE_HURT = "Hurt";
 	static constexpr char* ANIM_TYPE_ATTACK = "Attack";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE = "AttackCombo1";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO = "AttackCombo2";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE = "AttackCombo3";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR = "AttackCombo4";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE = "AttackCombo5";
+	
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD = "AttackForward1";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_FORWARD = "AttackForward2";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE_FORWARD = "AttackForward3";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR_FORWARD = "AttackForward4";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD = "AttackForward5";
+
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD = "AttackUpward1";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_UPWARD = "AttackUpward2";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE_UPWARD = "AttackUpward3";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR_UPWARD = "AttackUpward4";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD = "AttackUpward5";
+
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD = "AttackDownward1";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_DOWNWARD = "AttackDownward2";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE_DOWNWARD = "AttackDownward3";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR_DOWNWARD = "AttackDownward4";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD = "AttackDownward5";
 };

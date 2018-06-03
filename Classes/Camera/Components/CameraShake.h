@@ -2,34 +2,37 @@
 
 #include "LightSoulsTypes.h"
 
+namespace tinyxml2
+{
+	class XMLElement;
+};
+
 NS_LIGHTSOULS_BEGIN
+
+class CameraShakeTrigger;
 
 class CameraShake : public cocos2d::Component
 {
-public:
-	static const String&	GetEventRequestCameraShake();
-	
-	static CameraShake*		Create(float velocity, float time, float shakeRadius);
+public:	
+	static CameraShake*		Create(tinyxml2::XMLElement* element);
 	
 	virtual void			update(float deltaTime) override;
 
 private:
-	CameraShake(float moveSpeed, float time, float shakeRadius);
+	CameraShake();
 
 private:
-	bool Init();
+	bool Init(tinyxml2::XMLElement* element);
 
-	void OnStartCameraShake();
+	void OnStartCameraShake(cocos2d::EventCustom* eventData);
 	void OnEndCameraShake();
 	void OnFinishedMoving();
 
 private:
-	static const String	s_eventRequestCameraShake;	
-	float				m_moveSpeed;
-	float				m_time;
-	float				m_shakeRadius;
-	bool				m_isCameraShakeActive;
-	bool				m_isMovingToNewPosition;
+	std::map<String, CameraShakeTrigger>	m_cameraShakeTriggers;
+	CameraShakeTrigger*						m_curCameraShakeTrigger;
+	bool									m_isCameraShakeActive;
+	bool									m_isMovingToNewPosition;
 };
 
 NS_LIGHTSOULS_END

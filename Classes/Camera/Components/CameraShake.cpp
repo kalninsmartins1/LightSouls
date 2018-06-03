@@ -1,39 +1,60 @@
 #include "CameraShake.h"
 #include "Utils/Utils.h"
+#include "tinyxml2/tinyxml2.h"
+#include "Utils/XML/XMLConsts.h"
+#include "Camera\CameraShake\CameraShakeTrigger.h"
 
 NS_LIGHTSOULS_BEGIN
 
-const String CameraShake::s_eventRequestCameraShake = "EVENT_REQUEST_CAMERA_SHAKE";
-
-CameraShake::CameraShake(float moveSpeed, float time, float shakeRadius)
-	: m_moveSpeed(moveSpeed)
-	, m_time(time)
-	, m_shakeRadius(shakeRadius)
+CameraShake::CameraShake()
+	: m_cameraShakeTriggers()
+	, m_curCameraShakeTrigger(nullptr)
 	, m_isCameraShakeActive(false)
 	, m_isMovingToNewPosition(false)
 {
 
 }
 
-bool CameraShake::Init()
+bool CameraShake::Init(tinyxml2::XMLElement* element)
 {
-	cocos2d::Director::getInstance()->
-		getEventDispatcher()->
-		addCustomEventListener(s_eventRequestCameraShake,
-			CC_CALLBACK_0(CameraShake::OnStartCameraShake, this));
+	for (tinyxml2::XMLElement* triggerData = element->FirstChildElement(); triggerData != nullptr;
+		triggerData = triggerData->NextSiblingElement())
+	{
+		// Extract data
+		const String& triggerEvent = triggerData->Attribute(XML_TYPE_ATTR);
+		const float moveSpeed = triggerData->FloatAttribute(XML_MOVE_SPEED_ATTR);
+		const float shakeTime = triggerData->FloatAttribute(XML_TIME_ATTR);
+		const float shakeRadius = triggerData->FloatAttribute(XML_CAMERA_SHAKE_RADIUS);
+
+		// Add to collection
+		const CameraShakeTrigger trigger(triggerEvent, moveSpeed, shakeTime, shakeRadius);
+		m_cameraShakeTriggers[triggerEvent] = trigger;
+
+		// Register for event
+		cocos2d::Director::getInstance()->
+		 	getEventDispatcher()->
+		 	addCustomEventListener(triggerEvent,
+		 		CC_CALLBACK_1(CameraShake::OnStartCameraShake, this));
+	}
 
 	return true;
 }
 
-void CameraShake::OnStartCameraShake()
+void CameraShake::OnStartCameraShake(cocos2d::EventCustom* eventData)
 {
-	m_isCameraShakeActive = true;
+	const String& eventName = eventData->getEventName();
+	if (!m_isCameraShakeActive && Utils::ContainsKey(m_cameraShakeTriggers, eventName))
+	{
+		m_curCameraShakeTrigger = &m_cameraShakeTriggers[eventName];
+		m_isCameraShakeActive = true;
 
-	// Stop any previous actions
-	getOwner()->stopActionByTag(ACTION_CAMERA_SHAKE);
+		// Stop any previous actions
+		getOwner()->stopActionByTag(ACTION_CAMERA_SHAKE);
 
-	Utils::StartTimerWithCallback(getOwner(),
-		CC_CALLBACK_0(CameraShake::OnEndCameraShake, this), m_time, ACTION_CAMERA_SHAKE);
+		Utils::StartTimerWithCallback(getOwner(),
+			CC_CALLBACK_0(CameraShake::OnEndCameraShake, this),
+			m_curCameraShakeTrigger->GetTime(), ACTION_CAMERA_SHAKE);
+	}	
 }
 
 void CameraShake::OnEndCameraShake()
@@ -46,16 +67,11 @@ void CameraShake::OnFinishedMoving()
 	m_isMovingToNewPosition = false;
 }
 
-const String& CameraShake::GetEventRequestCameraShake()
+CameraShake* CameraShake::Create(tinyxml2::XMLElement* element)
 {
-	return s_eventRequestCameraShake;
-}
+	CameraShake* cameraShake = new (std::nothrow) CameraShake();
 
-CameraShake* CameraShake::Create(float velocity, float time, float shakeRadius)
-{
-	CameraShake* cameraShake = new (std::nothrow) CameraShake(velocity, time, shakeRadius);
-
-	if (cameraShake && cameraShake->Init() && cameraShake->init())
+	if (cameraShake && cameraShake->Init(element) && cameraShake->init())
 	{
 		cameraShake->autorelease();
 	}
@@ -73,12 +89,14 @@ void CameraShake::update(float deltaTime)
 	{
 		auto camera = getOwner();
 		const Vector3& cameraPos = camera->getPosition3D();
-		Vector2 randomPosition = Utils::GetRandomPositionWithinCircle(cameraPos, m_shakeRadius);
+		const float shakeRadius = m_curCameraShakeTrigger->GetShakeRadius();
+		Vector2 randomPosition = Utils::GetRandomPositionWithinCircle(cameraPos, shakeRadius);
 		const Vector3& targetPosition = Vector3(randomPosition.x, randomPosition.y, cameraPos.z);
 		
 		Vector3 toTargetPositionVec3 = targetPosition - cameraPos;
 		const Vector2& toTargetPositionVec2 = Vector2(toTargetPositionVec3.x, toTargetPositionVec3.y);
-		const float moveTime = toTargetPositionVec2.length() / m_moveSpeed;
+		const float moveSpeed = m_curCameraShakeTrigger->GetMoveSpeed();
+		const float moveTime = toTargetPositionVec2.length() / moveSpeed;
 
 		auto moveTo = cocos2d::MoveTo::create(moveTime, targetPosition);
 		auto callback = cocos2d::CallFunc::create(CC_CALLBACK_0(CameraShake::OnFinishedMoving, this));		

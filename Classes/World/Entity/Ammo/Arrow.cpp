@@ -30,8 +30,23 @@ void Arrow::update(float deltaTime)
 
 	if(currentPosition.distance(m_startPosition) >= m_maxFlyDistance)
 	{
-		getParent()->removeChild(this);		
+		getParent()->removeChild(this);
 	}
+}
+
+void Arrow::DispatchOnStaminaChangedEvent() const
+{
+
+}
+
+void Arrow::DispatchOnHealthChangedEvent() const
+{
+
+}
+
+void Arrow::DispatchOnGiveDamageEvent() const
+{
+
 }
 
 Arrow::Arrow(Vector2 startPosition, float maxFlyDistance) :

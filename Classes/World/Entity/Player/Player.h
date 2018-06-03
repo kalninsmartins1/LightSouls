@@ -18,6 +18,7 @@ public:
 public:
 	static const String& GetEventOnHealthChanged();
 	static const String& GetEventOnStaminaChanged();
+	static const String& GetEventOnGiveDamage();
 
 	void SetDodgeStaminaConsumption(float dodgeStaminaConumption);
 	void SetDodgeSpeed(float dodgeSpeed);
@@ -29,8 +30,9 @@ public:
 	virtual void	update(float deltaTime) override;
 
 protected:
-	virtual void DispatchOnHealthChangedEvent() override;
-	virtual void DispatchOnStaminaChangedEvent() override;
+	virtual void DispatchOnHealthChangedEvent() const override;
+	virtual void DispatchOnStaminaChangedEvent() const override;
+	virtual void DispatchOnGiveDamageEvent() const override;
 
 private:
 	void SetCollisionData(cocos2d::Node* otherNode);
@@ -53,6 +55,7 @@ private:
 private:
 	static const String			s_eventOnPlayerHealthChanged;
 	static const String			s_eventOnPlayerStaminaChanged;
+	static const String			s_eventOnPlayerGiveDamage;
 	AttackComponent*			m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
@@ -61,9 +64,6 @@ private:
 	float					m_dodgeTime;
 	float					m_timeBetweenComboInput;
 	float					m_dodgeStaminaConsumption;
-	int						m_curAttackAnimId;
-	const int				m_lastAttackAnimId;
-	const int				m_firstAttackAnimId;
 	cocos2d::Node*			m_lastCollisionNode;
 	
 	bool					m_isCollidedFromLeft;

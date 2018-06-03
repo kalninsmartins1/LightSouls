@@ -14,16 +14,29 @@ const std::map<String, int> LightSouls::AnimationUtils::s_animTypeToId =
 	{ ANIM_TYPE_DODGE, 2 },
 	{ ANIM_TYPE_HURT, 3 },
 	{ ANIM_TYPE_ATTACK, 4 },
-	{ ANIM_TYPE_ATTACK_COMBO_ONE, 5 },
-	{ ANIM_TYPE_ATTACK_COMBO_TWO, 6 },
-	{ ANIM_TYPE_ATTACK_COMBO_THREE, 7 },
-	{ ANIM_TYPE_ATTACK_COMBO_FOUR, 8 },
-	{ ANIM_TYPE_ATTACK_COMBO_FIVE, 9 },
+
+	{ ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD, 5 },
+	{ ANIM_TYPE_ATTACK_COMBO_TWO_FORWARD, 6 },
+	{ ANIM_TYPE_ATTACK_COMBO_THREE_FORWARD, 7 },
+	{ ANIM_TYPE_ATTACK_COMBO_FOUR_FORWARD, 8 },
+	{ ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD, 9 },
+
+	{ ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD, 10 },
+	{ ANIM_TYPE_ATTACK_COMBO_TWO_DOWNWARD, 11 },
+	{ ANIM_TYPE_ATTACK_COMBO_THREE_DOWNWARD, 12 },
+	{ ANIM_TYPE_ATTACK_COMBO_FOUR_DOWNWARD, 13 },
+	{ ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD, 14 },
+
+	{ ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD, 15 },
+	{ ANIM_TYPE_ATTACK_COMBO_TWO_UPWARD, 16 },
+	{ ANIM_TYPE_ATTACK_COMBO_THREE_UPWARD, 17 },
+	{ ANIM_TYPE_ATTACK_COMBO_FOUR_UPWARD, 18 },
+	{ ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD, 19 },
 };
 
 int AnimationUtils::GetAnimId(String animName)
 {
-	int animId = -1;	
+	int animId = -1;
 	if (Utils::ContainsKey(s_animTypeToId, animName))
 	{
 		animId = s_animTypeToId.at(animName);
@@ -66,7 +79,7 @@ void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const An
 	// Stop any previously started animation
 	sprite->stopActionByTag(ACTION_ANIM_TAG);
 
-	// Start character animation	
+	// Start character animation
 	const auto ccAnimation = cocos2d::Animation::createWithSpriteFrames(animation.frames,
 		animation.timeBetweenFrames);
 	const auto animateAction = Animate::create(ccAnimation);
@@ -77,20 +90,17 @@ void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const An
 	sprite->runAction(repeatAction);
 }
 
-void AnimationUtils::LoadAnimationFrames(const tinyxml2::XMLElement* pElem,
+void AnimationUtils::LoadAnimationFrames(const tinyxml2::XMLElement* animElement,
 	AnimationData& outAnimationData)
 {
-	auto spriteCache = cocos2d::SpriteFrameCache::getInstance();
-	const char* plistPath = pElem->Attribute(XML_ANIM_PLIST_PATH_ATTR);
-	spriteCache->addSpriteFramesWithFile(plistPath);
-
 	// Get template frame name
-	const char* spriteFrameName = pElem->Attribute(XML_ANIM_FRAME_NAME_PATTERN_ATTR);
+	const char* spriteFrameName = animElement->Attribute(XML_ANIM_FRAME_NAME_PATTERN_ATTR);
 
 	// Get total frame count
-	const int frameCount = pElem->IntAttribute(XML_ANIM_FRAME_COUNT_ATTR);
+	const int frameCount = animElement->IntAttribute(XML_ANIM_FRAME_COUNT_ATTR);
 
 	// Load all the frame for the animation
+	auto spriteCache = cocos2d::SpriteFrameCache::getInstance();
 	char curSpriteFrameName[MAX_SPRITE_NAME_LENGTH] = { 0 };
 	for (int i = 0; i < frameCount; i++)
 	{
@@ -100,7 +110,7 @@ void AnimationUtils::LoadAnimationFrames(const tinyxml2::XMLElement* pElem,
 	}
 
 	// Set the time between frames
-	outAnimationData.timeBetweenFrames = pElem->FloatAttribute(XML_ANIM_TIME_BETWEEN_FRAMES_ATTR);
+	outAnimationData.timeBetweenFrames = animElement->FloatAttribute(XML_ANIM_TIME_BETWEEN_FRAMES_ATTR);
 }
 
 NS_LIGHTSOULS_END
