@@ -43,7 +43,7 @@ bool GameControllerInput::Init()
 float GameControllerInput::GetAxisInput(const String& axisName) const
 {
 	float value = 0;
-	if (Utils::ContainsKey(m_controllerAxis, axisName))
+	if (HasAxisInput(axisName))
 	{
 		value = m_controllerAxis.at(axisName).curValue;
 	}
@@ -53,13 +53,13 @@ float GameControllerInput::GetAxisInput(const String& axisName) const
 
 bool GameControllerInput::HasAxisInput(const String& axisName) const
 {
-	bool bHasAxisInput = false;
+	bool hasAxisInput = false;
 	if (Utils::ContainsKey(m_controllerAxis, axisName))
 	{
-		bHasAxisInput = m_controllerAxis.at(axisName).isPressed;
+		hasAxisInput = true;
 	}
 
-	return bHasAxisInput;
+	return hasAxisInput;
 }
 
 void GameControllerInput::AddAxisButton(const String& actionName,

@@ -144,7 +144,9 @@ void AnimComponent::SetCurrentAnimId(int currentAnimId)
 void AnimComponent::UpdateAttackAnimState()
 {
 	const Vector2& heading = m_entity.GetHeading();
-	if (abs(heading.x) > 0.0f)
+	const float absoluteXValue = abs(heading.x);
+	const float absoluteYValue = abs(heading.y);
+	if (abs(heading.x) > 0.0f && absoluteXValue > absoluteYValue)
 	{
 		m_currentAttackStyle = AttackAnimStyle::FORWARD;
 		m_firstAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD);
