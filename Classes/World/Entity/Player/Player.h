@@ -69,7 +69,7 @@ private:
 	bool					m_isCollidedFromLeft;
 	bool					m_isCollidedFromRight;
 	bool					m_isCollidedFromTop;
-	bool					m_isCollidedFromBottom;
+	bool					m_isCollidedFromBottom;	
 };
 
 NS_LIGHTSOULS_END

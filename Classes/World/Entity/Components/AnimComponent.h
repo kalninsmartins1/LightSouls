@@ -55,6 +55,7 @@ private:
 	void SetCurrentAnimId(int currentAnimId);
 
 	void UpdateAttackAnimState();
+	void TransitionAttackAnimDirection(AttackAnimStyle style, int firstAttackAnimId, int lastAttackAnimId);
 
 private:
 	int								m_curAnimId;

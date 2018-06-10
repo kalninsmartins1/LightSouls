@@ -146,28 +146,35 @@ void AnimComponent::UpdateAttackAnimState()
 	const Vector2& heading = m_entity.GetHeading();
 	const float absoluteXValue = abs(heading.x);
 	const float absoluteYValue = abs(heading.y);
+
 	if (abs(heading.x) > 0.0f && absoluteXValue > absoluteYValue)
 	{
-		m_currentAttackStyle = AttackAnimStyle::FORWARD;
-		m_firstAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD);
-		m_lastAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD);
-		m_curAttackAnimId = m_firstAttackAnimId;
+		TransitionAttackAnimDirection(AttackAnimStyle::FORWARD,
+			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD),
+			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD));
 	}
 	else if (heading.y > 0.0f)
 	{
-		m_currentAttackStyle = AttackAnimStyle::UPWARD;
-		m_firstAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD);
-		m_lastAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD);
-		m_curAttackAnimId = m_firstAttackAnimId;
+		TransitionAttackAnimDirection(AttackAnimStyle::UPWARD,
+			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD),
+			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD));
 	}
 	else if (heading.y < 0.0f)
 	{
-		m_currentAttackStyle = AttackAnimStyle::DOWNWARD;
-		m_firstAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD);
-		m_lastAttackAnimId = AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD);
-		m_curAttackAnimId = m_firstAttackAnimId;
+		TransitionAttackAnimDirection(AttackAnimStyle::DOWNWARD,
+			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD),
+			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD));
 	}
 }
 
-NS_LIGHTSOULS_END
+void AnimComponent::TransitionAttackAnimDirection(AttackAnimStyle style, int firstAttackAnimId, int lastAttackAnimId)
+{
+	m_currentAttackStyle = style;
+	int curAttackIdDif = m_curAttackAnimId - m_firstAttackAnimId;
 
+	m_firstAttackAnimId = firstAttackAnimId;
+	m_curAttackAnimId = m_firstAttackAnimId + curAttackIdDif;
+	m_lastAttackAnimId = lastAttackAnimId;
+}
+
+NS_LIGHTSOULS_END
