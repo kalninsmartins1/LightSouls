@@ -73,7 +73,7 @@ void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& 
 	// ...
 }
 
-AIState StateChase::GetStateType()
+AIState StateChase::GetStateType() const
 {
 	return AIState::CHASE;
 }

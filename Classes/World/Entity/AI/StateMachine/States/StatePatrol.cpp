@@ -94,7 +94,7 @@ void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData&
 	}
 }
 
-AIState StatePatrol::GetStateType()
+AIState StatePatrol::GetStateType() const
 {
 	return AIState::PATROL;
 }

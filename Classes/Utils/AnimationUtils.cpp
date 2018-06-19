@@ -32,6 +32,7 @@ const std::map<String, int> LightSouls::AnimationUtils::s_animTypeToId =
 	{ ANIM_TYPE_ATTACK_COMBO_THREE_UPWARD, 17 },
 	{ ANIM_TYPE_ATTACK_COMBO_FOUR_UPWARD, 18 },
 	{ ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD, 19 },
+	{ ANIM_TYPE_SIGNAL,	20 },
 };
 
 int AnimationUtils::GetAnimId(String animName)

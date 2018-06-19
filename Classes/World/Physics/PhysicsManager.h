@@ -8,6 +8,7 @@ struct PhysicsContactInformation;
 class PhysicsBodyConfig;
 
 using ContactCallback = std::function<bool(const cocos2d::PhysicsBody* otherBody)>;
+using QueryRectCallback = cocos2d::PhysicsQueryRectCallbackFunc;
 
 struct PhysicsContactListener
 {
@@ -41,9 +42,9 @@ public:
 
 	void DebugDrawRect(const cocos2d::Rect& rect);
 
-	// Checks for overlapping entities in querried circle area
+	// Checks for overlapping entities in queried square area
 	static void QuerryRect(const cocos2d::Rect& rect,
-		const cocos2d::PhysicsQueryRectCallbackFunc& callback);
+		const QueryRectCallback& callback);
 
 private:
 	// Return true if all the listeners agree to collide

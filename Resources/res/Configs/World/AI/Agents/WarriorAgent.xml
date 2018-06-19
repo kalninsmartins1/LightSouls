@@ -14,11 +14,23 @@
 		<Scale x="0.5" y="0.5" z="0.5"/>
 	</Component>
 	
-	<Component type="AIControllerComponent"
-		patrolRadius="250"
-		patrolPauseInSeconds="2"
-		chaseStopDistance="60"
-		chaseRadius="150">
+	<Component  type="AIControllerComponent"
+				patrolRadius="250"
+				patrolPauseInSeconds="2"
+				chaseStopDistance="60"
+				chaseRadius="150"
+				startState="Patrol">
+		
+		<State  type="Patrol"
+				onSuccess="Chase"/>
+		
+		<State  type="Chase"
+				onSuccess="Attack"
+				onFailure="Patrol"/>
+
+		<State  type="Attack"
+				onSuccess="Patrol"
+				onFailure="Chase"/>
 	</Component>
 	
 	<Component 	type="LongSwordAttackComponent"

@@ -3,5 +3,6 @@
 		<AgentConfig type="ArcherAgent" path="res/Configs/World/AI/Agents/ArcherAgent.xml"/>
 		<AgentConfig type="DaggerAgent" path="res/Configs/World/AI/Agents/DaggerAgent.xml"/>
 		<AgentConfig type="WarriorAgent" path="res/Configs/World/AI/Agents/WarriorAgent.xml"/>
+		<AgentConfig type="Bomb" 		path="res/Configs/World/AI/Agents/Bomb.xml"/>
 	</AgentConfigList>
 </AIManager>

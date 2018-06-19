@@ -85,6 +85,9 @@
     <Filter Include="src\Camera\CameraShake">
       <UniqueIdentifier>{9c0c0689-c21f-4916-bd2d-528ee6f59996}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\World\Entity\Components\Attack">
+      <UniqueIdentifier>{87bcc9a2-7914-4a62-8ab7-8a85ef7f8fe5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -153,17 +156,8 @@
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\Components\RangedAttackComponent.cpp">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Ammo\Arrow.cpp">
       <Filter>src\World\Entity\Ammo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.cpp">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\Components\AttackComponent.cpp">
-      <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\Physics\PhysicsManager.cpp">
       <Filter>src\World\Physics</Filter>
@@ -203,6 +197,27 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.cpp">
       <Filter>src\Camera\CameraShake</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateIdle.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\AState.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\Attack\LongSwordAttackComponent.cpp">
+      <Filter>src\World\Entity\Components\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\Attack\RangedAttackComponent.cpp">
+      <Filter>src\World\Entity\Components\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\Attack\AttackComponent.cpp">
+      <Filter>src\World\Entity\Components\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.cpp">
+      <Filter>src\World\Entity\Components\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,9 +269,6 @@
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateChase.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\IState.h">
-      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Player\Player.h">
       <Filter>src\World\Entity\Player</Filter>
     </ClInclude>
@@ -281,17 +293,8 @@
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\Components\RangedAttackComponent.h">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Ammo\Arrow.h">
       <Filter>src\World\Entity\Ammo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\Components\AttackComponent.h">
-      <Filter>src\World\Entity\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\Components\LongSwordAttackComponent.h">
-      <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Physics\PhysicsManager.h">
       <Filter>src\World\Physics</Filter>
@@ -334,6 +337,27 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.h">
       <Filter>src\Camera\CameraShake</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateIdle.h">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\AState.h">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\Attack\LongSwordAttackComponent.h">
+      <Filter>src\World\Entity\Components\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\Attack\RangedAttackComponent.h">
+      <Filter>src\World\Entity\Components\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\Attack\AttackComponent.h">
+      <Filter>src\World\Entity\Components\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.h">
+      <Filter>src\World\Entity\Components\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.h">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

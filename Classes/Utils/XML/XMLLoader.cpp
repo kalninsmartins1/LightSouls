@@ -9,8 +9,9 @@
 #include "World/World.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "GameConsts.h"
-#include "World/Entity/Components/RangedAttackComponent.h"
-#include "World/Entity/Components/LongSwordAttackComponent.h"
+#include "World/Entity/Components/Attack/RangedAttackComponent.h"
+#include "World/Entity/Components/Attack/LongSwordAttackComponent.h"
+#include "World/Entity/Components/Attack/HitAttackComponent.h"
 #include "World/Physics/PhysicsBodyConfig.h"
 #include "World/Physics/PhysicsManager.h"
 #include "UI/InGameIndicators/ProgressBar.h"
@@ -192,13 +193,13 @@ void XMLLoader::LoadUIElement(const XMLElement* element, UIElementConfig& outUIE
 	const String& pathToSprite = spriteNode->Attribute(XML_PATH_ATTR);
 	
 	Vector2 anchorPos;
-	LoadVector2FromAttributes(anchorPositionNode, anchorPos);
+	GetVector2FromElement(anchorPositionNode, anchorPos);
 
 	Vector2 normalizedPos;
-	LoadVector2FromAttributes(normalizedPositionNode, normalizedPos);
+	GetVector2FromElement(normalizedPositionNode, normalizedPos);
 
 	Vector2 scale;
-	LoadVector2FromAttributes(scaleNode, scale);
+	GetVector2FromElement(scaleNode, scale);
 
 	outUIElement.SetPathToSprite(pathToSprite);
 	outUIElement.SetAnchorPosition(anchorPos);
@@ -249,13 +250,13 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				XMLElement* scaleNode = element->FirstChildElement(XML_NODE_SCALE);
 
 				Vector3 position;
-				LoadVector3FromAttributes(positionNode, position);
+				GetVector3FromElement(positionNode, position);
 
 				Vector3 rotation;
-				LoadVector3FromAttributes(rotationNode, rotation);
+				GetVector3FromElement(rotationNode, rotation);
 
 				Vector3 scale;
-				LoadVector3FromAttributes(scaleNode, scale);
+				GetVector3FromElement(scaleNode, scale);
 
 				entity.setPosition3D(position);
 				entity.setRotation3D(rotation);
@@ -274,22 +275,17 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			}
 			else if (componentType == AI_CONTROLLER_COMPONENT)
 			{
-				const float chaseRadius = element->FloatAttribute(XML_AI_CHASE_RADIUS_ATTR);
-				const float chaseStopDistance = element->FloatAttribute(XML_AI_CHASE_STOP_DISTANCE);
-				const float patrolRadius = element->FloatAttribute(XML_AI_PATROL_RADIUS_ATTR);
-				const float patrolPause = element->FloatAttribute(XML_AI_PATROL_PAUSE_ATTR);
-
-				CCASSERT(chaseRadius > 1, "AI chase radius is too small !");
-				CCASSERT(chaseStopDistance > 0, "AI chase distance cant be negative !");
-				CCASSERT(patrolRadius> 1, "AI patrol radius is too small !");
-
 				AIAgent* agent = static_cast<AIAgent*>(&entity);
-				const String& agentType = root->Attribute(XML_TYPE_ATTR);
-				agent->SetAgentType(agentType);
-				agent->SetChaseRadius(chaseRadius);
-				agent->SetChaseStopDistance(chaseStopDistance);
-				agent->SetPatrolRadius(patrolRadius);
-				agent->SetPatrolPause(patrolPause);
+				if (agent != nullptr)
+				{
+					const String& agentType = root->Attribute(XML_TYPE_ATTR);
+					agent->SetAgentType(agentType);
+					agent->Init(element);
+				}
+				else
+				{
+					CCASSERT(false, "Trying to add AIController component to entity that is not of type AIAgent !");
+				}				
 			}
 			else if (componentType == ANIM_COMPONENT)
 			{
@@ -310,14 +306,14 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 					element->FloatAttribute(
 						XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
 
-				RangedAttackComponent* pRangedAttack =
+				RangedAttackComponent* rangedAttack =
 					RangedAttackComponent::Create(
 						pathToAmmoSprite,
 						maxAmmoFlyDistance,
 						ammoMoveSpeed,
 						secondsBetweenAttacks);
-				pRangedAttack->setName(ATTACK_COMPONENT);
-				entity.addComponent(pRangedAttack);
+				rangedAttack->setName(ATTACK_COMPONENT);
+				entity.addComponent(rangedAttack);
 			}
 			else if (componentType == LONG_SWORD_ATTACK_COMPONENT)
 			{
@@ -334,8 +330,20 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				longSwordAttack->setName(ATTACK_COMPONENT);
 				longSwordAttack->SetStaminaConsumption(staminaConsumption);
 				longSwordAttack->SetComboExpireTime(comboExpireTime);
-
 				entity.addComponent(longSwordAttack);
+			}
+			else if (componentType == HIT_ATTACK_COMPONENT)
+			{
+				const float secondsBetweenAttacks = element->FloatAttribute(XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
+				const float attackRange = element->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);				
+				const float staminaConsumption = element->FloatAttribute(XML_ATTACK_STAMINA_CONSUMPTION_ATTR);
+				const float comboExpireTime = element->FloatAttribute(XML_ENTITY_COMBO_EXPIRE_TIME_ATTR);
+
+				HitAttackComponent* hitAttack = HitAttackComponent::Create(secondsBetweenAttacks, attackRange);
+				hitAttack->setName(ATTACK_COMPONENT);
+				hitAttack->SetStaminaConsumption(staminaConsumption);
+				hitAttack->SetComboExpireTime(comboExpireTime);
+				entity.addComponent(hitAttack);
 			}
 			else if (componentType == RIGID_BODY_COMPONENT)
 			{
@@ -343,9 +351,15 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				CreatePhysicsBodyFromAttributes(&entity, element, outBodySize);
 				
 				const XMLElement* physicsBodyElem = element->FirstChildElement(XML_NODE_PHYSICS_BODY);
+				const XMLElement* bodyAnchorElem = element->FirstChildElement(XML_NODE_ANCHOR_POSITION);
+
 				const float forceScale = physicsBodyElem->FloatAttribute(XML_PHYSICS_FORCE_SCALE_ATTR);
+				Vector2 anchorPosition;
+				GetVector2FromElement(bodyAnchorElem, anchorPosition);
+
 				entity.SetPhysicsBodyForceScale(forceScale);
 				entity.SetPhysicsBodySize(outBodySize);
+				entity.SetPhysicsBodyAnchor(anchorPosition);
 			}
 			else if (componentType == MIRROR_SPRITE_COMPONENT)
 			{
@@ -542,6 +556,15 @@ GameInputType XMLLoader::StrToGameInputType(const String& inputType)
 	return type;
 }
 
+void XMLLoader::ReadXMLAttribute(const XMLElement* element, const String& attributeName, String& outValue)
+{
+	const char* value = element->Attribute(attributeName.c_str());
+	if (value != nullptr)
+	{
+		outValue = value;
+	}
+}
+
 void XMLLoader::LoadPhysicsMaterialFromAttributes(const tinyxml2::XMLNode* pNode, cocos2d::PhysicsMaterial& outMaterial)
 {
 	const tinyxml2::XMLElement* pPhysicsMaterialElem = pNode->
@@ -555,14 +578,14 @@ void XMLLoader::LoadPhysicsMaterialFromAttributes(const tinyxml2::XMLNode* pNode
 	outMaterial.friction = friction;
 }
 
-void XMLLoader::LoadVector3FromAttributes(const XMLElement* element, Vector3& outResult)
+void XMLLoader::GetVector3FromElement(const XMLElement* element, Vector3& outResult)
 {
 	outResult.x = element->ToElement()->FloatAttribute(XML_AXIS_X_ATTR);
 	outResult.y = element->ToElement()->FloatAttribute(XML_AXIS_Y_ATTR);
 	outResult.z = element->ToElement()->FloatAttribute(XML_AXIS_Z_ATTR);
 }
 
-void XMLLoader::LoadVector2FromAttributes(const XMLElement* element, Vector2& outResult)
+void XMLLoader::GetVector2FromElement(const XMLElement* element, Vector2& outResult)
 {
 	outResult.x = element->ToElement()->FloatAttribute(XML_AXIS_X_ATTR);
 	outResult.y = element->ToElement()->FloatAttribute(XML_AXIS_Y_ATTR);

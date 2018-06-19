@@ -2,7 +2,7 @@
 
 #include "2d/CCSprite.h"
 #include "World/Entity/Entity.h"
-#include "World/Entity/Components/LongSwordAttackComponent.h"
+#include "World/Entity/Components/Attack/LongSwordAttackComponent.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -30,7 +30,7 @@ public:
 	virtual void	update(float deltaTime) override;
 
 protected:
-	virtual void DispatchOnHealthChangedEvent() const override;
+	virtual void DispatchOnHealthChangedEvent() override;
 	virtual void DispatchOnStaminaChangedEvent() const override;
 	virtual void DispatchOnGiveDamageEvent() const override;
 

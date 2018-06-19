@@ -154,6 +154,7 @@
 
 	<!-- Actually collision detection body -->
 	<Component type="RigidBodyComponent">
+		<AnchorPosition x="0" y="0" />
 		<PhysicsMaterial density="0.1" restitution="0" friction="0.3" />
 		<PhysicsBody
 			shape="box"
@@ -170,6 +171,7 @@
 	<!-- Used for sprite sorting layer detection -->
 	<Component type="NodeComponent">
 		<Component type="RigidBodyComponent">
+			<AnchorPosition x="0" y="0" />
 			<PhysicsMaterial density="0.1" restitution="0.1" friction="0.3" />
 			<PhysicsBody
 				shape="box"

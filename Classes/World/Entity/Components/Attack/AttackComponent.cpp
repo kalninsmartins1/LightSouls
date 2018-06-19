@@ -1,6 +1,7 @@
 #include "AttackComponent.h"
 #include "Utils/Utils.h"
 #include "World/Entity/Entity.h"
+#include "World/Physics/PhysicsManager.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -38,6 +39,43 @@ void AttackComponent::Attack(const Vector2& direction)
 {
 	m_lastTimeAttacked = Utils::GetTimeStampInMilliseconds();
 	m_ownerEntity->ConsumeStamina(m_staminaConsumption);
+}
+
+void AttackComponent::CheckAffectedObjects(const Entity& attacker,
+	const AttackComponent& attackComponent, const Vector2& direction,
+	float paddingFromBody, const QueryRectCallback& callback)
+{
+	// After attack finished check if we hit something	
+	const cocos2d::Size bodySize = attacker.GetPhysicsBodySizeScaled();
+	const float bodyWidthScaled = bodySize.width;
+
+	Vector2 rectOrgin = attacker.getPosition() + direction *
+		(bodyWidthScaled + paddingFromBody);
+
+	const float rectWidth = attackComponent.GetAttackRange();
+	const float rectHeight = rectWidth * 2;
+
+	// Move the rect anchor to middle
+	rectOrgin -= Vector2(rectWidth / 2, rectHeight / 2);
+
+	const cocos2d::Rect rect(rectOrgin,
+		cocos2d::Size(rectWidth, rectHeight));
+
+	// Debug attack collision
+	//PhysicsManager::GetInstance()->DebugDrawRect(rect);
+
+	PhysicsManager::QuerryRect(rect, callback);
+}
+
+void AttackComponent::TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) const
+{
+	Entity* hitEntity = dynamic_cast<Entity*>(physicsObject.getBody()->getNode());
+
+	// Ignore if hitting self
+	if (hitEntity != nullptr && hitEntity->GetId() != GetOwnerEntity()->GetId())
+	{
+		hitEntity->TakeDamage(*GetOwnerEntity());
+	}
 }
 
 float LightSouls::AttackComponent::GetSecondsSinceLastAttack() const

@@ -2,7 +2,7 @@
 #include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/AI/AIAgentManager.h"
 #include "GameConsts.h"
-#include "World/Entity/Components/AttackComponent.h"
+#include "World/Entity/Components/Attack/AttackComponent.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "Utils/AnimationUtils.h"
 #include "Utils/Utils.h"
@@ -81,7 +81,7 @@ void StateAttack::OnEventReceived(const String& receivedEvent, const AEventData&
 	// ...
 }
 
-AIState StateAttack::GetStateType()
+AIState StateAttack::GetStateType() const
 {
 	return AIState::ATTACK;
 }

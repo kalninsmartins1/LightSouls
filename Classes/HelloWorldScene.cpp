@@ -81,12 +81,12 @@ void HelloWorld::update(float deltaTime)
 	LightSouls::AIAgentManager::GetInstance()->Update(deltaTime);	
 
 	// Debug physics
-// 	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
-// 	if(world != nullptr)
-// 	{
-// 		world->setDebugDrawMask(0xFFFFFF);
-// 		world->setDebugDrawCameraMask(CameraFlag::USER1);
-// 	}
+	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
+	if(world != nullptr)
+	{
+		world->setDebugDrawMask(0xFFFFFF);
+		world->setDebugDrawCameraMask(CameraFlag::USER1);
+	}
 
 	if (m_healthBar != nullptr)
 	{
@@ -124,7 +124,7 @@ void HelloWorld::InitWolrdLayer()
 		agentManager->SetWorldLayer(worldLayer);
 
 		// Spawn agents in world
-		agentManager->SpawnAgent("WarriorAgent", Vec2(200, 200));
+		agentManager->SpawnAgent("Bomb", Vec2(200, 200));
 	}
 	else
 	{

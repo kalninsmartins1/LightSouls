@@ -3,6 +3,11 @@
 #include "World/Entity/Entity.h"
 #include "World/Entity/AI/StateMachine/StateMachine.h"
 
+namespace tinyxml2
+{
+	class XMLElement;
+};
+
 NS_LIGHTSOULS_BEGIN
 
 class AttackComponent;
@@ -10,15 +15,16 @@ class AttackComponent;
 class AIAgent : public Entity
 {
 public:
-	float				GetPatrolPause() const;
-	float				GetPatrolRadius() const;
-	float				GetChaseRadius() const;
-	float				GetChaseStopDistance() const;
-	float				GetAttackRange() const;
-	float				GetStoppingDistance() const;
-	const String&		GetType() const;
-	const Vector2&		GetBasePosition() const;
-	AttackComponent*	GetAttackComponent() const;	
+	static const String& GetEventAgentHealthChanged();
+	float				 GetPatrolPause() const;
+	float				 GetPatrolRadius() const;
+	float				 GetChaseRadius() const;
+	float				 GetChaseStopDistance() const;
+	float				 GetAttackRange() const;
+	float				 GetStoppingDistance() const;
+	const String&		 GetType() const;
+	const Vector2&		 GetBasePosition() const;
+	AttackComponent*	 GetAttackComponent() const;	
 
 	void SetPatrolPause(float pauseInSeconds);
 	void SetPatrolRadius(float radius);
@@ -28,10 +34,11 @@ public:
 	void SetAgentType(const String& type);
 
 	static AIAgent* Create(const String& pathToXML);
-	virtual void	update(float deltaTime) override;
+	void			Init(const tinyxml2::XMLElement* element);
+	virtual void	update(float deltaTime) override;	
 
 protected:
-	virtual void DispatchOnHealthChangedEvent() const override;
+	virtual void DispatchOnHealthChangedEvent() override;
 	virtual void DispatchOnStaminaChangedEvent() const override;
 	virtual void DispatchOnGiveDamageEvent() const override;
 
@@ -42,7 +49,8 @@ private:
 	bool Init(const String& pathToXML);
 	bool OnContactBegin(const cocos2d::PhysicsBody* otherBody);	
 
-private:	
+private:
+	static String		s_eventAgentHealthChanged;
 	StateMachine	    m_stateMachine;
 	AttackComponent*	m_attackComponent;
 	Vector2				m_basePosition;

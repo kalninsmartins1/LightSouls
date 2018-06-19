@@ -79,7 +79,7 @@ void PhysicsManager::DebugDrawRect(const cocos2d::Rect& rect)
 }
 
 void PhysicsManager::QuerryRect(const cocos2d::Rect& rect, 
-	const cocos2d::PhysicsQueryRectCallbackFunc& callback)
+	const QueryRectCallback& callback)
 {	
 	cocos2d::PhysicsWorld* pWorld = cocos2d::Director::getInstance()->
 		getRunningScene()->getPhysicsWorld();

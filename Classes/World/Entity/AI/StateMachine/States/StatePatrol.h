@@ -1,24 +1,22 @@
 #pragma once
 
-#include "IState.h"
+#include "AState.h"
 #include "World/Entity/Entity.h"
 
 NS_LIGHTSOULS_BEGIN
 
-class AIAgent;
-
-class StatePatrol: public IState
+class StatePatrol: public AState
 {
 public:
 	StatePatrol(AIAgent& agent);
 
 public:
-	AIState GetStateType() override;
-
+	AIState			GetStateType() const override;
+	
 	void			OnEnter(AnimComponent* animComponent) override;
 	StateProgress	OnStep() override;
 	void			OnExit() override;
-	virtual void	OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;
+	virtual void	OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;	
 
 private:	
 	bool	HasTargetBeenSpotted() const;	
@@ -33,7 +31,7 @@ private:
 	AIAgent&			m_agent;
 	StateProgress		m_curProgress;
 	AnimComponent*		m_animComponent;
-	Vector2				m_curTargetPosition;
+	Vector2				m_curTargetPosition;	
 	bool				m_isLookingAround;
 	bool				m_isCollided;
 };

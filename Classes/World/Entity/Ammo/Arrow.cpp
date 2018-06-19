@@ -39,7 +39,7 @@ void Arrow::DispatchOnStaminaChangedEvent() const
 
 }
 
-void Arrow::DispatchOnHealthChangedEvent() const
+void Arrow::DispatchOnHealthChangedEvent()
 {
 
 }

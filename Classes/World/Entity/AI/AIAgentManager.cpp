@@ -45,17 +45,17 @@ void AIAgentManager::SpawnAgent(const String& type, const Vector2& position)
 {
 	if(Utils::ContainsKey(m_agentConfigPathMap, type))
 	{
-		AIAgent* pAgent = AIAgent::Create(
+		AIAgent* agent = AIAgent::Create(
 			m_agentConfigPathMap.at(type));
-		m_allActiveAgents.push_back(pAgent);
+		m_allActiveAgents.push_back(agent);
 
 		// Set agents camera mask same as world layer so that it is visible to camera
-		pAgent->setCameraMask(m_worldLayer->getCameraMask());
-		m_worldLayer->addChild(pAgent);
-		pAgent->setPosition(position);
+		agent->setCameraMask(m_worldLayer->getCameraMask());
+		m_worldLayer->addChild(agent);
+		agent->setPosition(position);
 
 		// Actors spawn position is also his base position
-		pAgent->SetBasePosition(position);
+		agent->SetBasePosition(position);
 	}
 	else
 	{

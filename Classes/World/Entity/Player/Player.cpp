@@ -65,8 +65,7 @@ bool Player::Init(const String& pathToXML)
 	
 	OnEntityInitialized();
 	m_attackComponent = static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
-
-	SetPhysicsBodyAnchor(Vector2(0, 0));
+	
 	PhysicsManager::GetInstance()->AddContactBeginListener(getName(), 
 		CC_CALLBACK_1(Player::OnContactBegin, this));
 	PhysicsManager::GetInstance()->AddContactEndListener(getName(),
@@ -261,7 +260,7 @@ void Player::PlayRunOrIdleAnimation() const
 	}
 }
 
-void Player::DispatchOnHealthChangedEvent() const
+void Player::DispatchOnHealthChangedEvent()
 {
 	// Dispatch health changed event
 	float currentHealth = GetCurrentHealth();

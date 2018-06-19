@@ -1,6 +1,5 @@
 #pragma once
 
-#include "base/CCRef.h"
 #include "AIAgent.h"
 
 NS_LIGHTSOULS_BEGIN

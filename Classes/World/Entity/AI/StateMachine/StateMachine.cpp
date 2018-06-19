@@ -2,33 +2,101 @@
 #include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "Events/AEventData.h"
+#include "Utils/Utils.h"
+#include "States/StateAttack.h"
+#include "States/StateChase.h"
+#include "States/StatePatrol.h"
+#include "States/StateIdle.h"
+#include "States/StateSignaling.h"
 
 NS_LIGHTSOULS_BEGIN
 
-StateMachine::StateMachine(AIAgent& agent) :
-	m_agent(agent),	
-	m_curState(nullptr),
-	m_animComponent(nullptr),
-	m_attackState(agent),
-	m_chaseState(agent),
-	m_patrolState(agent)
+StateMachine::StateMachine(AIAgent& agent) 
+	: m_agent(agent)
+	, m_startState(AIState::NONE)
+	, m_curState(nullptr)
+	, m_animComponent(nullptr)
+	, m_availableStates()
 {
+}
+
+void StateMachine::SetStartState(AIState stateType)
+{
+	m_startState = stateType;
 }
 
 void StateMachine::Start(AnimComponent* animComponent)
 {
 	m_animComponent = animComponent;
-	SwitchState(m_patrolState);
+	if(Utils::ContainsKey(m_availableStates, m_startState))
+	{
+		SwitchState(m_availableStates.at(m_startState));
+	}
+	else
+	{
+		CCASSERT(false,"StateMachine invalid start state!");
+	}
 }
 
-void StateMachine::SwitchState(IState& newState)
+void StateMachine::AddAvailableState(AIState availableState, AIState stateOnSuccess, AIState stateOnFailure, float timeRestriction)
 {
+	AState* state = nullptr;
+	switch (availableState)
+	{
+	case AIState::CHASE:
+		state = AState::Create<StateChase>(m_agent);
+		break;
+
+	case AIState::ATTACK:
+		state = AState::Create<StateAttack>(m_agent);
+		break;
+
+	case AIState::PATROL:
+		state = AState::Create<StatePatrol>(m_agent);		
+		break;
+
+	case AIState::IDLE:
+		state = AState::Create<StateIdle>(m_agent);
+		break;
+
+	case AIState::SIGNALING:
+		state = AState::Create<StateSignaling>(m_agent);
+		auto signaling = static_cast<StateSignaling*>(state);
+		if (signaling != nullptr)
+		{
+			signaling->SetSignalingTime(timeRestriction);
+		}
+		break;
+	}
+
+	if (state != nullptr)
+	{
+		state->SetNextStateOnFailure(stateOnFailure);
+		state->SetNextStateOnSuccess(stateOnSuccess);
+		m_availableStates.insert(availableState, state);
+	}
+}
+
+void StateMachine::SwitchState(AState* newState)
+{	
 	if(m_curState != nullptr)
 	{
 		m_curState->OnExit();
 	}	
-	m_curState = &newState;
+	m_curState = newState;
 	m_curState->OnEnter(m_animComponent);	
+}
+
+void StateMachine::SwitchState(AIState newState)
+{	
+	if (Utils::ContainsKey(m_availableStates, newState))
+	{
+		SwitchState(m_availableStates.at(newState));
+	}
+	else
+	{
+		CCASSERT(false, "State is not available !");
+	}
 }
 
 void StateMachine::OnStep()
@@ -61,47 +129,27 @@ void StateMachine::DispatchEvent(const String& eventType, const AEventData& even
 
 void StateMachine::OnStateDone()
 {
-	// Switch state
-	switch (m_curState->GetStateType())
+	AIState nextState = m_curState->GetNextStateOnSuccess();
+	if (nextState != AIState::NONE)
 	{
-	case AIState::CHASE:
-		SwitchState(m_attackState);
-		break;
-
-	case AIState::ATTACK:
-		SwitchState(m_patrolState);
-		break;
-
-	case AIState::PATROL:
-		SwitchState(m_chaseState);
-		break;
-
-	default:
-		CCLOG("StateMachine: Error [onStateDone] invalid state type !");
-		break;
+		SwitchState(nextState);
+	}
+	else
+	{
+		CCLOG("State has no next state on success defined !");
 	}
 }
 
 void StateMachine::OnStateFailed()
-{
-	// Switch state
-	switch (m_curState->GetStateType())
+{	
+	AIState nextState = m_curState->GetNextStateOnFailure();
+	if (nextState != AIState::NONE)
 	{
-	case AIState::CHASE:
-		SwitchState(m_patrolState);
-		break;
-
-	case AIState::ATTACK:
-		SwitchState(m_chaseState);
-		break;
-
-	case AIState::PATROL:
-		SwitchState(m_patrolState);
-		break;
-
-	default:
-		CCLOG("StateMachine: Error [onStateFailed] invalid state type !");
-		break;
+		SwitchState(nextState);
+	}
+	else
+	{
+		CCLOG("State has no next state on failure defined !");
 	}
 }
 

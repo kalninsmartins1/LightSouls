@@ -4,7 +4,7 @@ namespace LightSouls
 {
 	// XML nodes
 	static constexpr char* XML_NODE_PHYSICS_MATERIAL = "PhysicsMaterial";
-	static constexpr char* XML_NODE_PHYSICS_BODY = "PhysicsBody";
+	static constexpr char* XML_NODE_PHYSICS_BODY = "PhysicsBody";	
 	static constexpr char* XML_NODE_AGENT_CONFIG_LIST = "AgentConfigList";
 	static constexpr char* XML_NODE_BACKGROUND = "Background";
 	static constexpr char* XML_NODE_FOREGROUND = "Foreground";
@@ -47,6 +47,9 @@ namespace LightSouls
 	static constexpr char* XML_AI_PATROL_RADIUS_ATTR = "patrolRadius";
 	static constexpr char* XML_AI_PATROL_PAUSE_ATTR = "patrolPauseInSeconds";
 	static constexpr char* XML_AI_MAX_FLY_DISTANCE = "maxFlyDistance";
+	static constexpr char* XML_AI_NEXT_STATE_ON_SUCCESS = "onSuccess";
+	static constexpr char* XML_AI_NEXT_STATE_ON_FAILURE = "onFailure";
+	static constexpr char* XML_AI_START_STATE = "startState";
 
 	// XML animation attributes
 	static constexpr char* XML_ANIM_PLIST_PATH_ATTR = "plistPath";

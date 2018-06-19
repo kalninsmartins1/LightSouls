@@ -30,6 +30,7 @@ namespace LightSouls
 	static constexpr char* ATTACK_COMPONENT = "AttackComponent";
 	static constexpr char* RANGED_ATTACK_COMPONENT = "RangedAttackComponent";
 	static constexpr char* LONG_SWORD_ATTACK_COMPONENT = "LongSwordAttackComponent";
+	static constexpr char* HIT_ATTACK_COMPONENT = "HitAttackComponent";
 
 	// Camera components
 	static constexpr char* CAMERA_SHAKE_COMPONENT = "CameraShake";
@@ -41,6 +42,7 @@ namespace LightSouls
 	static constexpr char* ANIM_TYPE_DODGE = "Dodge";
 	static constexpr char* ANIM_TYPE_HURT = "Hurt";
 	static constexpr char* ANIM_TYPE_ATTACK = "Attack";
+	static constexpr char* ANIM_TYPE_SIGNAL = "Signal";
 	
 	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD = "AttackForward1";
 	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_FORWARD = "AttackForward2";

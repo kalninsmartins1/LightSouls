@@ -19,8 +19,7 @@ private:
 
 private:
 	bool OnAttackHit(cocos2d::PhysicsWorld& world, 
-		cocos2d::PhysicsShape& shape, void* pMetaData) const;
-	void CheckAffectedObjects(const Vector2& direction) const;
+		cocos2d::PhysicsShape& physicsObject, void* metaData) const;
 
 private:
 	const float		m_paddingFromBody;

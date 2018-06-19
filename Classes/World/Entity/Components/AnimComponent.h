@@ -2,9 +2,11 @@
 
 #include "LightSoulsTypes.h"
 
-namespace tinyxml2 {
+
+namespace tinyxml2
+{
 	class XMLNode;
-}
+};
 
 NS_LIGHTSOULS_BEGIN
 

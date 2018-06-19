@@ -1,20 +1,20 @@
 #pragma once
 
-#include "IState.h"
+#include "AState.h"
 #include "LightSoulsTypes.h"
 
 NS_LIGHTSOULS_BEGIN
 
-class AIAgent;
 class Entity;
 class AttackComponent;
-class AnimComponent;
 
-class StateAttack: public IState
+class StateAttack: public AState
 {
 public:
 	StateAttack(AIAgent& agent);
-	AIState					GetStateType() override;
+
+public:		
+	AIState					GetStateType() const override;
 
 	virtual void			OnEnter(AnimComponent* animComponent) override;
 	virtual StateProgress	OnStep() override;

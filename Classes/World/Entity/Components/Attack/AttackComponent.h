@@ -11,6 +11,7 @@ class AttackComponent : public cocos2d::Component
 public:
 	AttackComponent(float secondsBetweenAttacks, float attackRange);
 
+public:
 	// Returns attack range
 	float			GetAttackRange() const;
 
@@ -35,6 +36,10 @@ public:
 
 	// Performs attack
 	virtual void	Attack(const Vector2& direction);
+
+protected:
+	static void CheckAffectedObjects(const Entity& attacker, const AttackComponent& attackComponent, const Vector2& direction, float paddingFromBody, const cocos2d::PhysicsQueryRectCallbackFunc& callback);
+	void		TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) const;
 
 private:
 	float			GetSecondsSinceLastAttack() const;
