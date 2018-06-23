@@ -32,6 +32,18 @@ void StateAttack::OnEnter(AnimComponent* animComponent)
 
 StateProgress StateAttack::OnStep()
 {
+	const Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
+	if (toTarget.length() > m_attackComponent->GetAttackRange() && m_isAnimFinished)
+	{
+		// Target run away cant attack
+		m_curProgress = StateProgress::FAILED;
+	}
+	else if (m_targetEntity.GetHealth() <= 0)
+	{
+		// Target extinguished
+		m_curProgress = StateProgress::DONE;
+	}
+
 	if(m_curProgress == StateProgress::IN_PROGRESS && m_isAnimFinished)
 	{
 		if(m_attackComponent->IsReadyToAttack())
@@ -54,13 +66,6 @@ StateProgress StateAttack::OnStep()
 			// Start attack animation
 			m_isAnimFinished = false;
 			m_animComponent->PlayAttackAnimation(CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
-		}
-		
-		const Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
-		if(toTarget.length() > m_attackComponent->GetAttackRange() && m_isAnimFinished)
-		{
-			// Target run away cant attack
-			m_curProgress = StateProgress::DONE;
 		}
 	}
 	return m_curProgress;
@@ -91,6 +96,7 @@ void StateAttack::OnAttackFinished()
 	m_isAnimFinished = true;
 	m_agent.StopAttacking();
 	PlayIdleAnimation();
+	m_curProgress = StateProgress::DONE;
 }
 
 void StateAttack::PlayIdleAnimation()

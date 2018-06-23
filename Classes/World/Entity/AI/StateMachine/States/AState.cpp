@@ -35,6 +35,10 @@ AIState AState::GetStateFromString(String stateType)
 	{
 		state = AIState::SIGNALING;
 	}
+	else if (stateType == "Pause")
+	{
+		state = AIState::PAUSE;
+	}
 	else
 	{
 		state = AIState::NONE;

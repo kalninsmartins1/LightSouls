@@ -18,24 +18,28 @@
 				patrolRadius="250"
 				patrolPauseInSeconds="2"
 				chaseStopDistance="60"
-				chaseRadius="150"
+				chaseRadius="1500"
 				startState="Idle">
 		
 		<State  type="Idle"				
-				onFailure="Chase"/>
+				onSuccess="Chase"/>
 		
 		<State  type="Chase"
-				onSuccess="Attack"
+				onSuccess="Signaling"
 				onFailure="Idle"/>
 
 		<State  type="Attack"
-				onSuccess="Signaling"
+				onSuccess="Pause"
 				onFailure="Chase"/>
 				
 		<State 	type="Signaling"
 				onSuccess="Attack"
 				onFailure="Chase" 
-				time="2.0"/>
+				time="1.0"/>
+
+		<State 	type="Pause"
+				onSuccess="Chase"				
+				time="1.0"/>				
 
 	</Component>
 

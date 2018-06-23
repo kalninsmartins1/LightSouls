@@ -23,7 +23,8 @@ enum class AIState
 	ATTACK,
 	PATROL,
 	IDLE,
-	SIGNALING
+	SIGNALING,
+	PAUSE
 };
 
 

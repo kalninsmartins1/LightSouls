@@ -182,6 +182,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateChase.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateIdle.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Ammo\Arrow.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\AttackComponent.cpp" />
@@ -230,6 +231,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateChase.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateIdle.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h" />
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.h" />
     <ClInclude Include="..\Classes\World\Entity\Ammo\Arrow.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\AttackComponent.h" />

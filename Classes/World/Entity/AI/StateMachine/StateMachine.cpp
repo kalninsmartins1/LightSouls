@@ -8,10 +8,11 @@
 #include "States/StatePatrol.h"
 #include "States/StateIdle.h"
 #include "States/StateSignaling.h"
+#include "States/StatePause.h"
 
 NS_LIGHTSOULS_BEGIN
 
-StateMachine::StateMachine(AIAgent& agent) 
+StateMachine::StateMachine(AIAgent& agent)
 	: m_agent(agent)
 	, m_startState(AIState::NONE)
 	, m_curState(nullptr)
@@ -28,13 +29,13 @@ void StateMachine::SetStartState(AIState stateType)
 void StateMachine::Start(AnimComponent* animComponent)
 {
 	m_animComponent = animComponent;
-	if(Utils::ContainsKey(m_availableStates, m_startState))
+	if (Utils::ContainsKey(m_availableStates, m_startState))
 	{
 		SwitchState(m_availableStates.at(m_startState));
 	}
 	else
 	{
-		CCASSERT(false,"StateMachine invalid start state!");
+		CCASSERT(false, "StateMachine invalid start state!");
 	}
 }
 
@@ -43,30 +44,43 @@ void StateMachine::AddAvailableState(AIState availableState, AIState stateOnSucc
 	AState* state = nullptr;
 	switch (availableState)
 	{
-	case AIState::CHASE:
-		state = AState::Create<StateChase>(m_agent);
-		break;
+		case AIState::CHASE:
+			state = AState::Create<StateChase>(m_agent);
+			break;
 
-	case AIState::ATTACK:
-		state = AState::Create<StateAttack>(m_agent);
-		break;
+		case AIState::ATTACK:
+			state = AState::Create<StateAttack>(m_agent);
+			break;
 
-	case AIState::PATROL:
-		state = AState::Create<StatePatrol>(m_agent);		
-		break;
+		case AIState::PATROL:
+			state = AState::Create<StatePatrol>(m_agent);
+			break;
 
-	case AIState::IDLE:
-		state = AState::Create<StateIdle>(m_agent);
-		break;
+		case AIState::IDLE:
+			state = AState::Create<StateIdle>(m_agent);
+			break;
 
-	case AIState::SIGNALING:
-		state = AState::Create<StateSignaling>(m_agent);
-		auto signaling = static_cast<StateSignaling*>(state);
-		if (signaling != nullptr)
-		{
-			signaling->SetSignalingTime(timeRestriction);
-		}
-		break;
+		case AIState::SIGNALING:
+			{
+				state = AState::Create<StateSignaling>(m_agent);
+				auto signaling = static_cast<StateSignaling*>(state);
+				if (signaling != nullptr)
+				{
+					signaling->SetSignalingTime(timeRestriction);
+				}
+			}
+			break;
+
+		case AIState::PAUSE:
+			{
+				state = AState::Create<StatePause>(m_agent);
+				auto pause = static_cast<StatePause*>(state);
+				if (pause != nullptr)
+				{
+					pause->SetPauseTime(timeRestriction);
+				}
+			}
+			break;
 	}
 
 	if (state != nullptr)
@@ -78,17 +92,17 @@ void StateMachine::AddAvailableState(AIState availableState, AIState stateOnSucc
 }
 
 void StateMachine::SwitchState(AState* newState)
-{	
-	if(m_curState != nullptr)
+{
+	if (m_curState != nullptr)
 	{
 		m_curState->OnExit();
-	}	
+	}
 	m_curState = newState;
-	m_curState->OnEnter(m_animComponent);	
+	m_curState->OnEnter(m_animComponent);
 }
 
 void StateMachine::SwitchState(AIState newState)
-{	
+{
 	if (Utils::ContainsKey(m_availableStates, newState))
 	{
 		SwitchState(m_availableStates.at(newState));
@@ -104,21 +118,21 @@ void StateMachine::OnStep()
 	const StateProgress& curProgress = m_curState->OnStep();
 	switch (curProgress)
 	{
-	case StateProgress::IN_PROGRESS:
-		// Wait for state to finish		
-		break;
-
-	case StateProgress::DONE:
-		OnStateDone();
+		case StateProgress::IN_PROGRESS:
+			// Wait for state to finish
 			break;
 
-	case StateProgress::FAILED:
-		OnStateFailed();
-		break;
+		case StateProgress::DONE:
+			OnStateDone();
+			break;
 
-	default:
-		CCLOGERROR("StateMachine: [update] invalid state progress !");
-		break;
+		case StateProgress::FAILED:
+			OnStateFailed();
+			break;
+
+		default:
+			CCLOGERROR("StateMachine: [update] invalid state progress !");
+			break;
 	}
 }
 
@@ -141,7 +155,7 @@ void StateMachine::OnStateDone()
 }
 
 void StateMachine::OnStateFailed()
-{	
+{
 	AIState nextState = m_curState->GetNextStateOnFailure();
 	if (nextState != AIState::NONE)
 	{

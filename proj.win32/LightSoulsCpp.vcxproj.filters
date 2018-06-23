@@ -219,6 +219,9 @@
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.cpp">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -357,6 +360,9 @@
       <Filter>src\World\Entity\Components\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.h">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClInclude>
   </ItemGroup>

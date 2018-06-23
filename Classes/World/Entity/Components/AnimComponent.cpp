@@ -76,8 +76,12 @@ void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallbac
 	}
 	else
 	{
-		CCLOGERROR("Animation id %d not found !", animationId);
-	}	
+		// Still call the callback
+		if (callback != nullptr)
+		{
+			callback();
+		}
+	}
 }
 
 void AnimComponent::PlayAttackAnimation(const AnimationCallback& callback)
@@ -111,10 +115,6 @@ void AnimComponent::PlayLoopingAnimation(int animationId)
 		AnimationUtils::StartSpriteFrameAnimation(&m_entity,
 			m_animations[animationId]);
 		SetCurrentAnimId(animationId);
-	}
-	else
-	{
-		CCLOGERROR("Animation id %d not found !", animationId);
 	}
 }
 
