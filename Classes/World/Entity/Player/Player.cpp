@@ -245,14 +245,14 @@ void Player::PlayRunOrIdleAnimation() const
 	{
 		if (IsRunning() && !m_isDodging)
 		{
-			if (!animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_RUN))
+			if (!animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_RUN))
 			{
 				animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 			}
 		}
 		else if (!IsRunning())
 		{
-			if (!animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_IDLE))
+			if (!animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_IDLE))
 			{
 				animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
 			}

@@ -67,7 +67,7 @@ void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallbac
 	CCLOG("PlayOneShotAnimation: %d %s", animationId, getOwner()->getName().c_str());
 #endif
 
-	if (Utils::ContainsKey(m_animations, animationId))
+	if (HasAnim(animationId))
 	{
 		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_entity,
 			m_animations[animationId],
@@ -110,7 +110,7 @@ void AnimComponent::PlayLoopingAnimation(int animationId)
 #if LIGHTSOULS_ANIM_DEBUG
 	CCLOG("PlayLoopingAnimation: %d %s", animationId, getOwner()->getName().c_str());
 #endif
-	if (Utils::ContainsKey(m_animations, animationId))
+	if (HasAnim(animationId))
 	{
 		AnimationUtils::StartSpriteFrameAnimation(&m_entity,
 			m_animations[animationId]);
@@ -118,10 +118,21 @@ void AnimComponent::PlayLoopingAnimation(int animationId)
 	}
 }
 
-bool AnimComponent::IsCurrrentlyPlayingAnimation(const String& animName) const
+bool AnimComponent::IsCurrrentlyPlayingAnim(const String& animName) const
 {
 	int animId = AnimationUtils::GetAnimId(animName);
 	return animId == m_curAnimId;
+}
+
+bool AnimComponent::HasAnim(const String& animName) const
+{
+	int animationId = AnimationUtils::GetAnimId(animName);
+	return HasAnim(animationId);
+}
+
+bool AnimComponent::HasAnim(int animId) const
+{
+	return Utils::ContainsKey(m_animations, animId);
 }
 
 void AnimComponent::PlayLoopingAnimation(const String& animName)

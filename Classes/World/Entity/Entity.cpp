@@ -143,11 +143,21 @@ void Entity::TakeDamage(const Entity& attackingEntity)
 	}
 
 	if (!m_isAttacking && 
-		!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_HURT))
+		!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_HURT))
 	{
 		m_isTakingDamage = true;
-		m_animComponent->PlayOneShotAnimation(ANIM_TYPE_HURT,
-			CC_CALLBACK_0(Entity::OnDamageTaken, this));
+		if (m_animComponent->HasAnim(ANIM_TYPE_HURT))
+		{
+			m_animComponent->PlayOneShotAnimation(ANIM_TYPE_HURT,
+				CC_CALLBACK_0(Entity::OnDamageTaken, this));
+		}
+		else
+		{
+			// If no animation then fallback to one second pause
+			Utils::StartTimerWithCallback(this, 
+				CC_CALLBACK_0(Entity::OnDamageTaken, this),
+				1.0f);
+		}
 	}
 }
 

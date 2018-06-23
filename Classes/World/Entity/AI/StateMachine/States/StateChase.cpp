@@ -38,7 +38,7 @@ StateProgress StateChase::OnStep()
 		float distanceToTarget = toTarget.length();
 
 		// Play run animation if not playing, might be that on enter entity was processing
-		if (!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_RUN))
+		if (!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_RUN))
 		{
 			m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 		}

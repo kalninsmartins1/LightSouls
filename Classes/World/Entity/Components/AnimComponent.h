@@ -32,23 +32,23 @@ enum class AttackAnimStyle
 class AnimComponent: public cocos2d::Component
 {
 public:
-	bool IsCurrrentlyPlayingAnimation(const String& animName) const;
+	bool					IsCurrrentlyPlayingAnim(const String& animName) const;
+	bool					HasAnim(const String& animName) const;
+	bool					HasAnim(int animId) const;
 
-	static AnimComponent* Create(Entity& entity);
+	static AnimComponent*	Create(Entity& entity);
 
 	// Load animation configuration from xml file
 	void LoadConfig(tinyxml2::XMLNode* node);
-
 	void PlayLoopingAnimation(const String& animName);
 	void PlayLoopingAnimation(int animationId);
 	void PlayOneShotAnimation(const String& animName, const AnimationCallback& callback);
 	void PlayOneShotAnimation(int animationId, const AnimationCallback& callback);
 	void PlayAttackAnimation(const AnimationCallback& callback);
 
-	void GoToNextAttackAnimation();
-	void ResetAttackAnimation();
-
-	virtual void update(float deltaTime) override;
+	void			GoToNextAttackAnimation();
+	void			ResetAttackAnimation();
+	virtual void	update(float deltaTime) override;
 
 private:
 	AnimComponent(Entity& sprite);

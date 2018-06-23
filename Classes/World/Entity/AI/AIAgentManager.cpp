@@ -5,7 +5,7 @@
 NS_LIGHTSOULS_BEGIN
 
 AIAgentManager::AIAgentManager() :
-	m_pTargetEntity(nullptr)
+	m_targetEntity(nullptr)
 {
 	// Private constructor
 }
@@ -18,20 +18,30 @@ AIAgentManager* AIAgentManager::GetInstance()
 
 void AIAgentManager::SetTargetEntity(const Entity* pEntity)
 {		
-	m_pTargetEntity = pEntity;
+	m_targetEntity = pEntity;
 }
 
 const Entity& AIAgentManager::GetTargetEntity() const
 {
-	return *m_pTargetEntity;
+	return *m_targetEntity;
 }
 
 void AIAgentManager::Update(float deltaTime)
 {
 	// Update all agents
-	for (AIAgent* agent : m_allActiveAgents)
+	for (unsigned int index = 0; index < m_allActiveAgents.size(); index++)
 	{
+		AIAgent* agent = m_allActiveAgents[index];
 		agent->update(deltaTime);
+		
+		// Agent went offline
+		if (agent->GetHealth() <= 0)
+		{
+			DespwanAgent(index);
+			index--;
+		}
+
+		index++;
 	}
 }
 
@@ -63,6 +73,12 @@ void AIAgentManager::SpawnAgent(const String& type, const Vector2& position)
 			"AIAgentManager: Trying to spawn agent of unknown type: %s",
 			type);
 	}	
+}
+
+void AIAgentManager::DespwanAgent(unsigned int agentIndex)
+{
+	m_worldLayer->removeChild(m_allActiveAgents[agentIndex]);
+	m_allActiveAgents.erase(m_allActiveAgents.begin() + agentIndex);
 }
 
 bool AIAgentManager::Init(const String& pathToXML)

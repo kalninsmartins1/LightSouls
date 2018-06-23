@@ -49,7 +49,7 @@ StateProgress StatePatrol::OnStep()
 			Vector2 toTargetPosition = m_curTargetPosition - m_agent.getPosition();
 			m_agent.SetMoveDirection(toTargetPosition.getNormalized());
 
-			if (!m_animComponent->IsCurrrentlyPlayingAnimation(ANIM_TYPE_RUN))
+			if (!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_RUN))
 			{
 				m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 			}
