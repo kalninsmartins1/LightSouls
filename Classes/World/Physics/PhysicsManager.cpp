@@ -37,6 +37,18 @@ bool PhysicsManager::Init(cocos2d::Node* context)
 	return context != nullptr;
 }
 
+void PhysicsManager::RemoveContactBeginListener(const String& bodyName)
+{
+	for (unsigned int index = 0; index < m_beginContactListeners.size(); index++)
+	{
+		if (m_beginContactListeners[index].name == bodyName)
+		{
+			m_beginContactListeners.erase(m_beginContactListeners.begin() + index);
+			break;
+		}
+	}	
+}
+
 void PhysicsManager::AddContactBeginListener(const String& bodyName,
 	ContactCallback onContactBegin)
 {

@@ -28,7 +28,7 @@ private:
 private:
 	StateProgress		m_curProgress;
 	AIAgent&			m_agent;
-	const Entity&		m_targetEntity;
+	const Entity*		m_targetEntity;
 	AttackComponent*	m_attackComponent;
 	AnimComponent*		m_animComponent;
 	bool				m_isAnimFinished;

@@ -67,6 +67,16 @@ void Entity::setScale(float scaleX, float scaleY)
 	SetBaseMoveSpeed(m_baseMoveSpeed * entityScale * Utils::SafeDevide(1.0f, Utils::GetScaleFactor()));
 }
 
+void Entity::ResetHealth()
+{
+	m_health = m_baseHealth;
+}
+
+void Entity::ResetStamina()
+{
+	m_stamina = m_baseStamina;
+}
+
 void Entity::SetBaseHealth(float baseHealth)
 {
 	m_baseHealth = baseHealth;
@@ -331,7 +341,7 @@ bool Entity::IsReadyToAttack() const
 	return !m_isAttacking && !m_isTakingDamage;
 }
 
-bool Entity::HasEnoughtStamina(float amount)
+bool Entity::HasEnoughtStamina(float amount) const
 {
 	return amount < m_stamina;
 }

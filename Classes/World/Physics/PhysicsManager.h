@@ -30,6 +30,8 @@ public:
 	
 	bool Init(cocos2d::Node* context);	
 	
+	void RemoveContactBeginListener(const String& bodyName);
+
 	// Register for begin contact events
 	void AddContactBeginListener(const String& bodyName, ContactCallback onContactBegin);
 

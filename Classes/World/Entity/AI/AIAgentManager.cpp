@@ -1,11 +1,15 @@
 #include "AIAgentManager.h"
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/Utils.h"
+#include "SpawnPoint.h"
 
 NS_LIGHTSOULS_BEGIN
 
-AIAgentManager::AIAgentManager() :
-	m_targetEntity(nullptr)
+AIAgentManager::AIAgentManager()
+	: m_worldLayer(nullptr)
+	, m_targetEntity(nullptr)
+	, m_allActiveSpawnPoints()
+	, m_agentConfigPathMap()
 {
 	// Private constructor
 }
@@ -28,68 +32,52 @@ const Entity& AIAgentManager::GetTargetEntity() const
 
 void AIAgentManager::Update(float deltaTime)
 {
-	// Update all agents
-	for (unsigned int index = 0; index < m_allActiveAgents.size(); index++)
+	for (auto spawnPoint : m_allActiveSpawnPoints)
 	{
-		AIAgent* agent = m_allActiveAgents[index];
-		agent->update(deltaTime);
-		
-		// Agent went offline
-		if (agent->GetHealth() <= 0)
-		{
-			DespwanAgent(index);
-			index--;
-		}
-
-		index++;
+		spawnPoint->Update(deltaTime);
 	}
 }
 
-void AIAgentManager::addAgentConfig(const String& type,
+void AIAgentManager::AddAgentConfig(const String& type,
 	const String& configPath)
 {
 	m_agentConfigPathMap[type] = configPath;
 }
 
-void AIAgentManager::SpawnAgent(const String& type, const Vector2& position)
+void AIAgentManager::AddSpawnPoint(const Vector2& position, const String& agentType, int spawnCount, float spawnDelay, int rowPlacementCount)
+{
+	auto spawnPoint = SpawnPoint::Create(position, agentType, spawnCount, spawnDelay, rowPlacementCount);
+	m_worldLayer->addChild(spawnPoint);
+	spawnPoint->SpawnAllAgents();
+	m_allActiveSpawnPoints.push_back(spawnPoint);
+}
+
+void AIAgentManager::GetPathToAgentType(const String& type, String& outPath) const
 {
 	if(Utils::ContainsKey(m_agentConfigPathMap, type))
 	{
-		AIAgent* agent = AIAgent::Create(
-			m_agentConfigPathMap.at(type));
-		m_allActiveAgents.push_back(agent);
-
-		// Set agents camera mask same as world layer so that it is visible to camera
-		agent->setCameraMask(m_worldLayer->getCameraMask());
-		m_worldLayer->addChild(agent);
-		agent->setPosition(position);
-
-		// Actors spawn position is also his base position
-		agent->SetBasePosition(position);
+		outPath = m_agentConfigPathMap.at(type);
 	}
 	else
 	{
+		outPath = "";
 		Utils::AssertWithStrFormat(false,
 			"AIAgentManager: Trying to spawn agent of unknown type: %s",
 			type);
 	}	
 }
 
-void AIAgentManager::DespwanAgent(unsigned int agentIndex)
+bool AIAgentManager::Init(cocos2d::Node* worldLayer, const String& pathToXML)
 {
-	m_worldLayer->removeChild(m_allActiveAgents[agentIndex]);
-	m_allActiveAgents.erase(m_allActiveAgents.begin() + agentIndex);
-}
+	bool isSuccessfullyInitialized = worldLayer != nullptr;
+	if (isSuccessfullyInitialized)
+	{
+		m_worldLayer = worldLayer;
+		isSuccessfullyInitialized = isSuccessfullyInitialized && XMLLoader::InitializeAIManagerUsingXMLFile(*this,
+			pathToXML);
+	}
 
-bool AIAgentManager::Init(const String& pathToXML)
-{	
-	return XMLLoader::InitializeAIManagerUsingXMLFile(*this,
-		pathToXML);
-}
-
-void AIAgentManager::SetWorldLayer(cocos2d::Node* pWorldLayer)
-{
-	m_worldLayer = pWorldLayer;
+	return isSuccessfullyInitialized;
 }
 
 NS_LIGHTSOULS_END

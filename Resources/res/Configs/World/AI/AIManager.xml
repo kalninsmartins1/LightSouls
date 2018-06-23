@@ -5,4 +5,8 @@
 		<AgentConfig type="WarriorAgent" path="res/Configs/World/AI/Agents/WarriorAgent.xml"/>
 		<AgentConfig type="Bomb" 		path="res/Configs/World/AI/Agents/Bomb.xml"/>
 	</AgentConfigList>
+	<SpawnPoints>
+		<SpawnPoint x="0" y="-100" type="Bomb" rowPlacementCount="5" spawnDelay="1.0" spawnCount="10">
+		</SpawnPoint>
+	</SpawnPoints>
 </AIManager>

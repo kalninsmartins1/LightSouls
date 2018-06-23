@@ -222,6 +222,9 @@
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.cpp">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\SpawnPoint.cpp">
+      <Filter>src\World\Entity\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\SpawnPoint.h">
+      <Filter>src\World\Entity\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

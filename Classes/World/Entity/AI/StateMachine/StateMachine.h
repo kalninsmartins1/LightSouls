@@ -21,13 +21,12 @@ public:
 	// Should be called once to turn on the state machine
 	void Start(AnimComponent* animComponent);
 	void AddAvailableState(AIState availableState, AIState stateOnSuccess, AIState stateOnFailure, float timeRestriction);
-
+	void Reset();
 	// Should be called periodically to update current state of state machine 
 	void OnStep();
-
 	void DispatchEvent(const String& eventType, const AEventData& eventData);
 
-private:	
+private:
 	void SwitchState(AState* newState);
 	void SwitchState(AIState newState);
 	void OnStateDone();

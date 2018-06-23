@@ -91,6 +91,11 @@ void StateMachine::AddAvailableState(AIState availableState, AIState stateOnSucc
 	}
 }
 
+void StateMachine::Reset()
+{
+	SwitchState(m_startState);
+}
+
 void StateMachine::SwitchState(AState* newState)
 {
 	if (m_curState != nullptr)

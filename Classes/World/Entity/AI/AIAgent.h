@@ -15,6 +15,9 @@ class AttackComponent;
 class AIAgent : public Entity
 {
 public:
+	~AIAgent();
+
+public:
 	static const String& GetEventAgentHealthChanged();
 	float				 GetPatrolPause() const;
 	float				 GetPatrolRadius() const;
@@ -36,6 +39,7 @@ public:
 	static AIAgent* Create(const String& pathToXML);
 	void			Init(const tinyxml2::XMLElement* element);
 	virtual void	update(float deltaTime) override;	
+	void			Reset();
 
 protected:
 	virtual void DispatchOnHealthChangedEvent() override;

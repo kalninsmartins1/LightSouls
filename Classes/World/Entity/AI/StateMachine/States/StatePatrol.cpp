@@ -11,7 +11,7 @@ NS_LIGHTSOULS_BEGIN
 
 StatePatrol::StatePatrol(AIAgent& agent)
 	: m_agent(agent)
-	, m_targetEntity(AIAgentManager::GetInstance()->GetTargetEntity())
+	, m_targetEntity(nullptr)
 	, m_curProgress(StateProgress::NONE)
 	, m_animComponent(nullptr)
 	, m_curTargetPosition(Vector2::ZERO)
@@ -22,6 +22,7 @@ StatePatrol::StatePatrol(AIAgent& agent)
 
 void StatePatrol::OnEnter(AnimComponent* animComponent)
 {
+	m_targetEntity = &AIAgentManager::GetInstance()->GetTargetEntity();
 	m_animComponent = animComponent;
 	m_curProgress = StateProgress::IN_PROGRESS;
 
@@ -103,7 +104,7 @@ bool StatePatrol::HasTargetBeenSpotted() const
 {		
 	// Check if target has been spotted
 	const Vector2& agentPosition = m_agent.getPosition();
-	const Vector2& targetEntityPosition = m_targetEntity.getPosition();
+	const Vector2& targetEntityPosition = m_targetEntity->getPosition();
 	const float distanceToTargetEntity = targetEntityPosition
 		.distance(agentPosition);
 

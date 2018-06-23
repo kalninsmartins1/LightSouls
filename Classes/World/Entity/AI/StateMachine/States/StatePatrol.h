@@ -19,7 +19,7 @@ public:
 	virtual void	OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;	
 
 private:	
-	bool	HasTargetBeenSpotted() const;	
+	bool	HasTargetBeenSpotted() const;
 	void	GetRandomPositionInRange(Vector2& outRandomPosition) const;
 
 	void	StartLookingAround();
@@ -27,11 +27,11 @@ private:
 	void	OnFinishedLookingAround();
 
 private:
-	const Entity&		m_targetEntity;
+	const Entity*		m_targetEntity;
 	AIAgent&			m_agent;
 	StateProgress		m_curProgress;
 	AnimComponent*		m_animComponent;
-	Vector2				m_curTargetPosition;	
+	Vector2				m_curTargetPosition;
 	bool				m_isLookingAround;
 	bool				m_isCollided;
 };

@@ -20,7 +20,7 @@ public:
 
 private:
 	StateProgress	m_curProgress;
-	const Entity&	m_targetEntity;
+	const Entity*	m_targetEntity;
 	AIAgent&		m_agent;
 	AnimComponent*	m_animComponent;
 };

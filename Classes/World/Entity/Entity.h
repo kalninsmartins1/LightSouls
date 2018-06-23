@@ -29,21 +29,23 @@ public:
 	unsigned int			GetId() const;
 	bool					IsRunning() const;	
 	bool					IsReadyToAttack() const;
-	bool					HasEnoughtStamina(float amount);
+	bool					HasEnoughtStamina(float amount) const;
 	
-	void SetPhysicsBodyForceScale(float scale);
-	void SetBaseDamage(float baseDamage);
-	void SetBaseHealth(float baseHealth);
-	void SetBaseStamina(float baseStamina);
-	void SetBaseMoveSpeed(float moveSpeed);
-	void SetMoveDirection(const Vector2& direction);
-	void SetPhysicsBodySize(const cocos2d::Size& size);
-	void SetPhysicsBodyAnchor(const Vector2& achorPos);	
-	void SetCurrentMoveSpeed(float moveSpeed);
-	void SetStaminaRegenerateSpeed(float regenerateSpeed);
-	void SetStaminaRegenerateDelay(float regenerateDelay);
-	virtual void setScale(float scaleX, float scaleY) override;
+	void			SetPhysicsBodyForceScale(float scale);
+	void			SetBaseDamage(float baseDamage);
+	void			SetBaseHealth(float baseHealth);
+	void			SetBaseStamina(float baseStamina);
+	void			SetBaseMoveSpeed(float moveSpeed);
+	void			SetMoveDirection(const Vector2& direction);
+	void			SetPhysicsBodySize(const cocos2d::Size& size);
+	void			SetPhysicsBodyAnchor(const Vector2& achorPos);	
+	void			SetCurrentMoveSpeed(float moveSpeed);
+	void			SetStaminaRegenerateSpeed(float regenerateSpeed);
+	void			SetStaminaRegenerateDelay(float regenerateDelay);
+	virtual void	setScale(float scaleX, float scaleY) override;
 
+	void ResetHealth();
+	void ResetStamina();
 	void ResetMoveSpeed();
 	void ConsumeStamina(float amount);
 	void TakeDamage(const Entity& attackingEntity);

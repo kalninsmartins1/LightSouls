@@ -9,13 +9,14 @@ NS_LIGHTSOULS_BEGIN
 
 StateChase::StateChase(AIAgent& agent) :
 	m_curProgress(StateProgress::NONE),
-	m_targetEntity(AIAgentManager::GetInstance()->GetTargetEntity()),
+	m_targetEntity(nullptr),
 	m_agent(agent)
 {
 }
 
 void StateChase::OnEnter(AnimComponent* animComponent)
 {
+	m_targetEntity = &AIAgentManager::GetInstance()->GetTargetEntity();
 	m_curProgress = StateProgress::IN_PROGRESS;
 	m_animComponent = animComponent;
 
@@ -30,7 +31,7 @@ StateProgress StateChase::OnStep()
 	{
 		// Move agent towards target location
 		const Vector2& currentPosition = m_agent.getPosition();
-		Vector2 toTarget = m_targetEntity.getPosition() - currentPosition;
+		Vector2 toTarget = m_targetEntity->getPosition() - currentPosition;
 		const Vector2& toTargetNormalized = toTarget.getNormalized();
 
 		// Update agent move direction

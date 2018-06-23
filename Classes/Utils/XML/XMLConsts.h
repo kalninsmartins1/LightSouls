@@ -6,6 +6,8 @@ namespace LightSouls
 	static constexpr char* XML_NODE_PHYSICS_MATERIAL = "PhysicsMaterial";
 	static constexpr char* XML_NODE_PHYSICS_BODY = "PhysicsBody";	
 	static constexpr char* XML_NODE_AGENT_CONFIG_LIST = "AgentConfigList";
+	static constexpr char* XML_NODE_SPAWN_POINTS = "SpawnPoints";
+	static constexpr char* XML_NODE_SPAWN_POINT = "SpawnPoint";
 	static constexpr char* XML_NODE_BACKGROUND = "Background";
 	static constexpr char* XML_NODE_FOREGROUND = "Foreground";
 	static constexpr char* XML_NODE_SPRITE = "Sprite";
@@ -50,6 +52,10 @@ namespace LightSouls
 	static constexpr char* XML_AI_NEXT_STATE_ON_SUCCESS = "onSuccess";
 	static constexpr char* XML_AI_NEXT_STATE_ON_FAILURE = "onFailure";
 	static constexpr char* XML_AI_START_STATE = "startState";
+	static constexpr char* XML_AI_SPAWN_DELAY = "spawnDelay";
+	static constexpr char* XML_AI_SPAWN_COUNT = "spawnCount";
+	static constexpr char* XML_AI_ROW_PLACEMENT_COUNT = "rowPlacementCount";
+
 
 	// XML animation attributes
 	static constexpr char* XML_ANIM_PLIST_PATH_ATTR = "plistPath";

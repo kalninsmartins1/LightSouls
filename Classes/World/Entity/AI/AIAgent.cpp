@@ -159,6 +159,15 @@ void AIAgent::update(float deltaTime)
 	m_stateMachine.OnStep();
 }
 
+void AIAgent::Reset()
+{
+	ResetMoveSpeed();
+	ResetStamina();
+	ResetHealth();
+	m_stateMachine.Reset();
+	setPosition(GetBasePosition());
+}
+
 void AIAgent::DispatchOnStaminaChangedEvent() const
 {
 
@@ -167,6 +176,11 @@ void AIAgent::DispatchOnStaminaChangedEvent() const
 void AIAgent::DispatchOnHealthChangedEvent()
 {
 	m_stateMachine.DispatchEvent(s_eventAgentHealthChanged, AEventData(GetId()));
+}
+
+AIAgent::~AIAgent()
+{
+	PhysicsManager::GetInstance()->RemoveContactBeginListener(getName());
 }
 
 const String& AIAgent::GetEventAgentHealthChanged()

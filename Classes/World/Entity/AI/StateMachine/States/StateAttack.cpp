@@ -12,7 +12,7 @@ NS_LIGHTSOULS_BEGIN
 StateAttack::StateAttack(AIAgent& agent)
 	: m_curProgress(StateProgress::NONE)
 	, m_agent(agent)
-	, m_targetEntity(AIAgentManager::GetInstance()->GetTargetEntity())
+	, m_targetEntity(nullptr)
 	, m_attackComponent(nullptr)
 	, m_animComponent(nullptr)
 	, m_isAnimFinished(true)
@@ -21,6 +21,7 @@ StateAttack::StateAttack(AIAgent& agent)
 
 void StateAttack::OnEnter(AnimComponent* animComponent)
 {
+	m_targetEntity = &AIAgentManager::GetInstance()->GetTargetEntity();
 	m_animComponent = animComponent;
 	m_attackComponent = m_agent.GetAttackComponent();
 	m_curProgress = StateProgress::IN_PROGRESS;
@@ -32,13 +33,13 @@ void StateAttack::OnEnter(AnimComponent* animComponent)
 
 StateProgress StateAttack::OnStep()
 {
-	const Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
+	const Vector2 toTarget = m_targetEntity->getPosition() - m_agent.getPosition();
 	if (toTarget.length() > m_attackComponent->GetAttackRange() && m_isAnimFinished)
 	{
 		// Target run away cant attack
 		m_curProgress = StateProgress::FAILED;
 	}
-	else if (m_targetEntity.GetHealth() <= 0)
+	else if (m_targetEntity->GetHealth() <= 0)
 	{
 		// Target extinguished
 		m_curProgress = StateProgress::DONE;
@@ -49,7 +50,7 @@ StateProgress StateAttack::OnStep()
 		if(m_attackComponent->IsReadyToAttack())
 		{
 			// Direction to target
-			Vector2 toTarget = m_targetEntity.getPosition() - m_agent.getPosition();
+			Vector2 toTarget = m_targetEntity->getPosition() - m_agent.getPosition();
 			m_attackComponent->Attack(toTarget.getNormalized());
 			m_agent.StartAttacking();
 			

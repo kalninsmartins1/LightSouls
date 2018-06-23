@@ -47,19 +47,34 @@ bool XMLLoader::InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager, const
 	if (isSuccessful)
 	{
 		XMLElement* pData = doc.RootElement();
-		for (XMLElement* pNode = pData->FirstChildElement(); pNode;
-			pNode = pNode->NextSiblingElement())
+		for (XMLElement* node = pData->FirstChildElement(); node;
+			node = node->NextSiblingElement())
 		{
-			const String& elementName = pNode->Value();
+			const String& elementName = node->Value();
 			if (elementName == XML_NODE_AGENT_CONFIG_LIST)
 			{
 				// Load all agent configurations
-				for (XMLElement* pChild = pNode->FirstChildElement(); pChild;
-					pChild = pChild->NextSiblingElement())
+				for (XMLElement* child = node->FirstChildElement(); child != nullptr;
+					child = child->NextSiblingElement())
 				{
-					const String& path = pChild->Attribute(XML_PATH_ATTR);
-					const String& type = pChild->Attribute(XML_TYPE_ATTR);
-					aiManager.addAgentConfig(type, path);
+					const String& path = child->Attribute(XML_PATH_ATTR);
+					const String& type = child->Attribute(XML_TYPE_ATTR);
+					aiManager.AddAgentConfig(type, path);
+				}
+			}
+			else if (elementName == XML_NODE_SPAWN_POINTS)
+			{
+				// Load all agent spawn points
+				for (XMLElement* child = node->FirstChildElement(); child != nullptr;
+					child = child->NextSiblingElement())
+				{
+					Vector2 position;
+					GetVector2FromElement(child, position);
+					String agentType = child->Attribute(XML_TYPE_ATTR);
+					int spawnCount = child->IntAttribute(XML_AI_SPAWN_COUNT);
+					int rowPlacementCount = child->IntAttribute(XML_AI_ROW_PLACEMENT_COUNT);
+					float spawnDelay = child->FloatAttribute(XML_AI_SPAWN_DELAY);
+					aiManager.AddSpawnPoint(position, agentType, spawnCount, spawnDelay, rowPlacementCount);
 				}
 			}
 		}
