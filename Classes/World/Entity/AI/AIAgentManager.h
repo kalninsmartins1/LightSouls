@@ -5,6 +5,7 @@
 NS_LIGHTSOULS_BEGIN
 
 class SpawnPoint;
+class SpawnPointConfig;
 
 class AIAgentManager
 {
@@ -18,7 +19,7 @@ public:
 	bool Init(cocos2d::Node* worldLayer, const String& pathToXML);
 	void Update(float deltaTime);
 	void AddAgentConfig(const String& type, const String& configPath);
-	void AddSpawnPoint(const Vector2& position, const String& agentType, int spawnCount, float spawnDelay, int rowPlacementCount);
+	void AddSpawnPoint(const SpawnPointConfig& config);
 
 private:
 	AIAgentManager();

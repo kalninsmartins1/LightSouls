@@ -44,9 +44,9 @@ void AIAgentManager::AddAgentConfig(const String& type,
 	m_agentConfigPathMap[type] = configPath;
 }
 
-void AIAgentManager::AddSpawnPoint(const Vector2& position, const String& agentType, int spawnCount, float spawnDelay, int rowPlacementCount)
+void AIAgentManager::AddSpawnPoint(const SpawnPointConfig& config)
 {
-	auto spawnPoint = SpawnPoint::Create(position, agentType, spawnCount, spawnDelay, rowPlacementCount);
+	auto spawnPoint = SpawnPoint::Create(config);
 	m_worldLayer->addChild(spawnPoint);
 	spawnPoint->SpawnAllAgents();
 	m_allActiveSpawnPoints.push_back(spawnPoint);

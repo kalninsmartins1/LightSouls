@@ -3,45 +3,45 @@
 #include "AIAgentManager.h"
 #include "Utils/Utils.h"
 
+
 NS_LIGHTSOULS_BEGIN
 
-SpawnPoint::SpawnPoint(const Vector2& position, const String& agentType, int spawnCount, float spawnDelay, int rowPlacementCount)
+SpawnPoint::SpawnPoint(const SpawnPointConfig& config)
 	: m_respawnIndexQueue()
 	, m_spawnedAgents()
-	, m_agentType(agentType)
-	, m_spawnCount(spawnCount)
-	, m_spawnDelay(spawnDelay)
-	, m_rowPlacementCount(rowPlacementCount)
+	, m_config(config)
 	, m_curRowCount(0)
 	, m_lastAgentPos(Vector2::ZERO)	
 	, m_curRespawnIndex(-1)
 {
-	setPosition(position);	
+	setPosition(config.GetPosition());
 }
 
 void SpawnPoint::GetNextSpawnPosition(const cocos2d::Size& agentSize, Vector2& outPosition)
 {
 	if (m_lastAgentPos == Vector2::ZERO) 
 	{
-		getPosition(&outPosition.x, &outPosition.y);		
+		getPosition(&outPosition.x, &outPosition.y);
 		m_curRowCount++;
 	}
-	else if(m_curRowCount < m_rowPlacementCount)
+	else if(m_curRowCount < m_config.GetNumAgentsInRow())
 	{
-		outPosition = m_lastAgentPos + Vector2::UNIT_X * agentSize.width;
+		outPosition = m_lastAgentPos + Vector2::UNIT_X * 
+			(agentSize.width + m_config.GetAgentRowPadding());
 		m_curRowCount++;
 	}
 	else
 	{
 		m_curRowCount = 0;
-		outPosition = Vector2(getPositionX(), m_lastAgentPos.y + agentSize.height);		
+		outPosition = Vector2(getPositionX(), m_lastAgentPos.y + 
+			(agentSize.height + m_config.GetAgentColumnPadding()));
 	}
 	m_lastAgentPos = outPosition;
 }
 
-SpawnPoint* SpawnPoint::Create(const Vector2& position, const String& agentType, int spawnCount, float spawnDelay, int rowPlacementCount)
+SpawnPoint* SpawnPoint::Create(const SpawnPointConfig& config)
 {
-	SpawnPoint* spawnPoint = new (std::nothrow) SpawnPoint(position, agentType, spawnCount, spawnDelay, rowPlacementCount);
+	SpawnPoint* spawnPoint = new (std::nothrow) SpawnPoint(config);
 	if (spawnPoint != nullptr)
 	{
 		spawnPoint->autorelease();
@@ -59,10 +59,10 @@ void SpawnPoint::Update(float deltaTime)
 	// Update all agents
 	int index = 0;
 	for (auto agent : m_spawnedAgents)
-	{		
+	{
 		agent->update(deltaTime);
 
-		// Agent went offline		
+		// Agent went offline
 		if (agent->GetHealth() <= 0 && agent->isVisible())
 		{
 			DespawnAgent(index);
@@ -82,7 +82,7 @@ void SpawnPoint::DespawnAgent(unsigned int agentIndex)
 void SpawnPoint::SpawnAgent(bool isRespawn)
 {
 	String pathToXML;
-	AIAgentManager::GetInstance()->GetPathToAgentType(m_agentType, pathToXML);
+	AIAgentManager::GetInstance()->GetPathToAgentType(m_config.GetAgentType(), pathToXML);
 
 	if (!pathToXML.empty())
 	{
@@ -110,13 +110,13 @@ void SpawnPoint::ManageAgentRespawning()
 		m_curRespawnIndex = m_respawnIndexQueue.front();
 		m_respawnIndexQueue.pop();
 		Utils::StartTimerWithCallback(this, CC_CALLBACK_0(SpawnPoint::RespawnAgent, this),
-			m_spawnDelay);		
+			m_config.GetSpawnDelay());
 	}
 }
 
 void SpawnPoint::SpawnAllAgents()
 {
-	for (int spawnedCount = 0; spawnedCount < m_spawnCount; spawnedCount++)
+	for (int spawnedCount = 0; spawnedCount < m_config.GetSpawnCount(); spawnedCount++)
 	{
 		SpawnAgent();
 	}

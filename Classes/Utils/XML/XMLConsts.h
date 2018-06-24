@@ -54,8 +54,9 @@ namespace LightSouls
 	static constexpr char* XML_AI_START_STATE = "startState";
 	static constexpr char* XML_AI_SPAWN_DELAY = "spawnDelay";
 	static constexpr char* XML_AI_SPAWN_COUNT = "spawnCount";
-	static constexpr char* XML_AI_ROW_PLACEMENT_COUNT = "rowPlacementCount";
-
+	static constexpr char* XML_AI_NUM_AGENTS_IN_ROW = "numAgentsInRow";
+	static constexpr char* XML_AI_ROW_PADDING = "rowPadding";
+	static constexpr char* XML_AI_COLUMN_PADDING = "columnPadding";
 
 	// XML animation attributes
 	static constexpr char* XML_ANIM_PLIST_PATH_ATTR = "plistPath";

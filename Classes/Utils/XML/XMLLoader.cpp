@@ -19,6 +19,7 @@
 #include "UI/UIElementConfig.h"
 #include "Camera/Camera.h"
 #include "Camera/Components/CameraShake.h"
+#include "World/Entity/AI/SpawnPointConfig.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -72,9 +73,21 @@ bool XMLLoader::InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager, const
 					GetVector2FromElement(child, position);
 					String agentType = child->Attribute(XML_TYPE_ATTR);
 					int spawnCount = child->IntAttribute(XML_AI_SPAWN_COUNT);
-					int rowPlacementCount = child->IntAttribute(XML_AI_ROW_PLACEMENT_COUNT);
+					int numAgentsInRow = child->IntAttribute(XML_AI_NUM_AGENTS_IN_ROW);
 					float spawnDelay = child->FloatAttribute(XML_AI_SPAWN_DELAY);
-					aiManager.AddSpawnPoint(position, agentType, spawnCount, spawnDelay, rowPlacementCount);
+					float rowPadding = child->FloatAttribute(XML_AI_ROW_PADDING);
+					float columnPadding = child->FloatAttribute(XML_AI_COLUMN_PADDING);
+
+					SpawnPointConfig config;
+					config.SetAgentType(agentType);
+					config.SetPosition(position);
+					config.SetSpawnCount(spawnCount);
+					config.SetNumAgentsInRow(numAgentsInRow);
+					config.SetSpawnDelay(spawnDelay);
+					config.SetAgentRowPadding(rowPadding);
+					config.SetAgentColumnPadding(columnPadding);
+
+					aiManager.AddSpawnPoint(config);
 				}
 			}
 		}

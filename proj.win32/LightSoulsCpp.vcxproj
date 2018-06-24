@@ -177,6 +177,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\AI\AIAgent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\AIAgentManager.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\SpawnPoint.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\AI\SpawnPointConfig.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\StateMachine.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\AState.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateAttack.cpp" />
@@ -227,6 +228,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\AI\AIAgent.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\AIAgentManager.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\SpawnPoint.h" />
+    <ClInclude Include="..\Classes\World\Entity\AI\SpawnPointConfig.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\StateMachine.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\AState.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateAttack.h" />

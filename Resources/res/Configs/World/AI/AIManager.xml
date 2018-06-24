@@ -6,7 +6,11 @@
 		<AgentConfig type="Bomb" 		path="res/Configs/World/AI/Agents/Bomb.xml"/>
 	</AgentConfigList>
 	<SpawnPoints>
-		<SpawnPoint x="0" y="-100" type="Bomb" rowPlacementCount="5" spawnDelay="1.0" spawnCount="10">
+		<SpawnPoint type="Bomb" x="0" y="-100" 
+					numAgentsInRow="5"
+					rowPadding="10" columnPadding="10"
+					spawnDelay="1.0" 
+					spawnCount="10">
 		</SpawnPoint>
 	</SpawnPoints>
 </AIManager>

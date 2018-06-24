@@ -225,6 +225,9 @@
     <ClCompile Include="..\Classes\World\Entity\AI\SpawnPoint.cpp">
       <Filter>src\World\Entity\AI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\SpawnPointConfig.cpp">
+      <Filter>src\World\Entity\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -369,6 +372,9 @@
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\SpawnPoint.h">
+      <Filter>src\World\Entity\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\SpawnPointConfig.h">
       <Filter>src\World\Entity\AI</Filter>
     </ClInclude>
   </ItemGroup>
