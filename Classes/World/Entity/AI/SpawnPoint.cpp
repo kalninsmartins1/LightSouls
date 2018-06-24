@@ -27,14 +27,14 @@ void SpawnPoint::GetNextSpawnPosition(const cocos2d::Size& agentSize, Vector2& o
 	else if(m_curRowCount < m_config.GetNumAgentsInRow())
 	{
 		outPosition = m_lastAgentPos + Vector2::UNIT_X * 
-			(agentSize.width + m_config.GetAgentRowPadding());
+			(agentSize.width + m_config.GetAgentColumnPadding());
 		m_curRowCount++;
 	}
 	else
 	{
 		m_curRowCount = 0;
 		outPosition = Vector2(getPositionX(), m_lastAgentPos.y + 
-			(agentSize.height + m_config.GetAgentColumnPadding()));
+			(agentSize.height + m_config.GetAgentRowPadding()));
 	}
 	m_lastAgentPos = outPosition;
 }

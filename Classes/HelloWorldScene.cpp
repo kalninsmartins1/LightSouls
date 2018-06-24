@@ -80,13 +80,13 @@ void HelloWorld::update(float deltaTime)
 	// Update AI
 	LightSouls::AIAgentManager::GetInstance()->Update(deltaTime);	
 
-	// Debug physics
-	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
-	if(world != nullptr)
-	{
-		world->setDebugDrawMask(0xFFFFFF);
-		world->setDebugDrawCameraMask(CameraFlag::USER1);
-	}
+	// Debug physics 
+// 	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
+// 	if(world != nullptr)
+// 	{
+// 		world->setDebugDrawMask(0xFFFFFF);
+// 		world->setDebugDrawCameraMask(CameraFlag::USER1);
+// 	}
 
 	if (m_healthBar != nullptr)
 	{
@@ -128,8 +128,7 @@ void HelloWorld::InitWolrdLayer()
 	}
 
 	// Set world camera mask
-	worldLayer->setCameraMask(static_cast<unsigned short int>(
-		CameraFlag::USER1));
+	worldLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER1));
 	addChild(worldLayer);
 
 	// Create world camera and set it to follow player
