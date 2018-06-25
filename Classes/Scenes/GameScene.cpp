@@ -9,8 +9,17 @@
 #include "UI/InGameIndicators/ProgressBar.h"
 #include "Events/ProgressBarChangedEventData.h"
 #include "Camera/Camera.h"
+#include "GameOverScene.h"
 
 USING_NS_CC;
+
+GameScene::~GameScene()
+{
+	LightSouls::AIAgentManager::GetInstance()->Cleanup();
+	EventDispatcher* eventDispather = getEventDispatcher();
+	eventDispather->removeEventListener(m_healthListener);
+	eventDispather->removeEventListener(m_staminaListener);
+}
 
 Scene* GameScene::CreateScene()
 {
@@ -111,9 +120,9 @@ void GameScene::InitWolrdLayer()
 	m_player = LightSouls::Player::Create("res/Configs/World/Player/Player.xml");
 	worldLayer->addChild(m_player);
 	
-	getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnHealthChanged(),
+	m_healthListener = getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnHealthChanged(),
 		CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
-	getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
+	m_staminaListener = getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
 		CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
 
 	// Init AI
@@ -180,7 +189,11 @@ void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 	if (healthData != nullptr && m_healthBar != nullptr)
 	{
 		m_healthBar->SetCurrentValue(healthData->GetPercentage());
-	}	
+		if (healthData->GetNewValue() <= 0)
+		{
+			Director::getInstance()->replaceScene(GameOverScene::create());
+		}
+	}
 }
 
 void GameScene::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)

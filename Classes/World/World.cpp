@@ -8,6 +8,7 @@
 NS_LIGHTSOULS_BEGIN
 
 const String World::s_nodeName = "World";
+bool World::s_isShapeCacheInitialized = false;
 
 const String& World::GetNodeName()
 {
@@ -37,9 +38,13 @@ bool World::Init(const String& pathToXML)
 bool World::Init(const String& pathToSprite, const String& bodyName, const String& pathToCollisionData)
 {
 	bool isSuccessful = initWithFile(pathToSprite);;
-	
-	PhysicsShapeCache* physicsShapeCache = PhysicsShapeCache::getInstance();
-	isSuccessful = isSuccessful && physicsShapeCache->addShapesWithFile(pathToCollisionData);
+	auto physicsShapeCache = PhysicsShapeCache::getInstance();
+	if (!s_isShapeCacheInitialized)
+	{
+		isSuccessful = isSuccessful && physicsShapeCache->addShapesWithFile(pathToCollisionData);
+		s_isShapeCacheInitialized = true;
+	}	
+
 	isSuccessful = isSuccessful && physicsShapeCache->setBodyOnSprite(bodyName, this);
 	setName(s_nodeName);
 	setLocalZOrder(WORLD_LAYER);

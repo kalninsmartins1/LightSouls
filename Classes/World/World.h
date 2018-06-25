@@ -17,6 +17,7 @@ private:
 
 private:
 	static const String s_nodeName;
+	static bool			s_isShapeCacheInitialized;
 };
 
 NS_LIGHTSOULS_END

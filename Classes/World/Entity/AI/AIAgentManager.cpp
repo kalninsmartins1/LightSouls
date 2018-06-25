@@ -52,6 +52,14 @@ void AIAgentManager::AddSpawnPoint(const SpawnPointConfig& config)
 	m_allActiveSpawnPoints.push_back(spawnPoint);
 }
 
+void LightSouls::AIAgentManager::Cleanup()
+{
+	m_allActiveSpawnPoints.clear();
+	m_agentConfigPathMap.clear();
+	m_worldLayer = nullptr;
+	m_targetEntity = nullptr;
+}
+
 void AIAgentManager::GetPathToAgentType(const String& type, String& outPath) const
 {
 	if(Utils::ContainsKey(m_agentConfigPathMap, type))

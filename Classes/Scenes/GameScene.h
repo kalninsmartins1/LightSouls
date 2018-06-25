@@ -12,6 +12,9 @@ namespace LightSouls
 class GameScene : public cocos2d::Scene
 {
 public:
+	~GameScene();
+
+public:
     static cocos2d::Scene* CreateScene();
 	
 	// implement the "static create()" method manually
@@ -27,9 +30,12 @@ private:
 	void OnPlayerStaminaChanged(cocos2d::EventCustom* eventData);
 
 private:
-	LightSouls::Player*			m_player;
-	LightSouls::ProgressBar*	m_healthBar;
-	LightSouls::ProgressBar*	m_staminaBar;
+	LightSouls::Player*				m_player;
+	LightSouls::ProgressBar*		m_healthBar;
+	LightSouls::ProgressBar*		m_staminaBar;
+	cocos2d::EventListenerCustom*	m_healthListener;
+	cocos2d::EventListenerCustom*	m_staminaListener;
+
 };
 
 #endif // __HELLOWORLD_SCENE_H__

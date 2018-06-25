@@ -20,6 +20,7 @@ public:
 	void Update(float deltaTime);
 	void AddAgentConfig(const String& type, const String& configPath);
 	void AddSpawnPoint(const SpawnPointConfig& config);
+	void Cleanup();
 
 private:
 	AIAgentManager();

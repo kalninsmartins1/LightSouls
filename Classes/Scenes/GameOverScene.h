@@ -11,6 +11,9 @@ public:
 	// implement the "static create()" method manually
 	CREATE_FUNC(GameOverScene);
 
-    virtual bool init() override;    
-	virtual void update(float deltaTime) override;
+    virtual bool init() override;
+
+private:
+	void OnTryAgainPressed();
+	void OnGoToMenuPressed();
 };
