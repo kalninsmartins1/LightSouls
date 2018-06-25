@@ -9,13 +9,13 @@ namespace LightSouls
 	class ProgressBar;
 };
 
-class HelloWorld : public cocos2d::Scene
+class GameScene : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene* createScene();
+    static cocos2d::Scene* CreateScene();
 	
 	// implement the "static create()" method manually
-	CREATE_FUNC(HelloWorld);
+	CREATE_FUNC(GameScene);
 
     virtual bool init() override;    
 	virtual void update(float deltaTime) override;

@@ -88,15 +88,15 @@
     <Filter Include="src\World\Entity\Components\Attack">
       <UniqueIdentifier>{87bcc9a2-7914-4a62-8ab7-8a85ef7f8fe5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Scenes">
+      <UniqueIdentifier>{eaeac63c-d628-47f7-8e87-e3ce011e8e72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Utils\Utils.cpp">
@@ -228,15 +228,21 @@
     <ClCompile Include="..\Classes\World\Entity\AI\SpawnPointConfig.cpp">
       <Filter>src\World\Entity\AI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Scenes\GameScene.cpp">
+      <Filter>src\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scenes\MainMenuScene.cpp">
+      <Filter>src\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scenes\GameOverScene.cpp">
+      <Filter>src\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\HelloWorldScene.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Utils\Utils.h">
@@ -376,6 +382,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\SpawnPointConfig.h">
       <Filter>src\World\Entity\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scenes\GameScene.h">
+      <Filter>src\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scenes\MainMenuScene.h">
+      <Filter>src\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scenes\GameOverScene.h">
+      <Filter>src\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

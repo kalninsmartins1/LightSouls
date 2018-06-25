@@ -1,4 +1,4 @@
-#include "HelloWorldScene.h"
+#include "GameScene.h"
 #include "World/Entity/Player/Player.h"
 #include "Input/GameInput.h"
 #include "World/World.h"
@@ -12,7 +12,7 @@
 
 USING_NS_CC;
 
-Scene* HelloWorld::createScene()
+Scene* GameScene::CreateScene()
 {
 	// create the scene with physics enabled
 	auto scene = createWithPhysics();
@@ -31,7 +31,7 @@ static void problemLoading(const char* filename)
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
+bool GameScene::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -66,7 +66,7 @@ bool HelloWorld::init()
     return true;
 }
 
-void HelloWorld::update(float deltaTime)
+void GameScene::update(float deltaTime)
 {	
 	// Keep input events up to date
 	auto gameInput = LightSouls::GameInput::GetInstance();
@@ -99,7 +99,7 @@ void HelloWorld::update(float deltaTime)
 	}
 }
 
-void HelloWorld::InitWolrdLayer()
+void GameScene::InitWolrdLayer()
 {
 	Node* worldLayer = Node::create();
 
@@ -112,9 +112,9 @@ void HelloWorld::InitWolrdLayer()
 	worldLayer->addChild(m_player);
 	
 	getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnHealthChanged(),
-		CC_CALLBACK_1(HelloWorld::OnPlayerHealthChanged, this));
+		CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
 	getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
-		CC_CALLBACK_1(HelloWorld::OnPlayerStaminaChanged, this));
+		CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
 
 	// Init AI
 	LightSouls::AIAgentManager* agentManager = LightSouls::AIAgentManager::GetInstance();
@@ -138,7 +138,7 @@ void HelloWorld::InitWolrdLayer()
 	addChild(worldCamera);	
 }
 
-void HelloWorld::InitUILayer()
+void GameScene::InitUILayer()
 {
 	// Init UI
 	Node* uiLayer = Node::create();
@@ -173,7 +173,7 @@ void HelloWorld::InitUILayer()
 	addChild(pUICamera);
 }
 
-void HelloWorld::OnPlayerHealthChanged(EventCustom* eventData)
+void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 {
 	auto healthData = static_cast<LightSouls::ProgressBarChangedEventData*>(eventData->getUserData());
 	
@@ -183,7 +183,7 @@ void HelloWorld::OnPlayerHealthChanged(EventCustom* eventData)
 	}	
 }
 
-void HelloWorld::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
+void GameScene::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
 {
 	auto staminaData = static_cast<LightSouls::ProgressBarChangedEventData*>(eventData->getUserData());
 
