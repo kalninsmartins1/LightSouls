@@ -46,7 +46,7 @@ bool MainMenuScene::init()
 	title->setTextHorizontalAlignment(TextHAlignment::CENTER);
 
 	auto layout = ui::Layout::create();	
-	layout->setNormalizedPosition(Vec2(0.43f, 0.5f));
+	layout->setNormalizedPosition(Vec2(0.43f, 0.75f));
 	layout->setLayoutType(ui::Layout::Type::VERTICAL);
 	auto linearLayoutParam = ui::LinearLayoutParameter::create();
 	linearLayoutParam->setGravity(ui::LinearGravity::CENTER_VERTICAL);

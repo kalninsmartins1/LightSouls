@@ -18,6 +18,7 @@ public:
 	~AIAgent();
 
 public:
+	static const String& GetEventAgentDestroyed();
 	static const String& GetEventAgentHealthChanged();
 	float				 GetPatrolPause() const;
 	float				 GetPatrolRadius() const;
@@ -55,6 +56,7 @@ private:
 
 private:
 	static String		s_eventAgentHealthChanged;
+	static String		s_eventAgentDestroyed;
 	StateMachine	    m_stateMachine;
 	AttackComponent*	m_attackComponent;
 	Vector2				m_basePosition;

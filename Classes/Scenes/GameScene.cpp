@@ -10,15 +10,32 @@
 #include "Events/ProgressBarChangedEventData.h"
 #include "Camera/Camera.h"
 #include "GameOverScene.h"
+#include "ScoringSystem/ScoringSystem.h"
+#include "ui/CocosGUI.h"
 
 USING_NS_CC;
+
+GameScene::GameScene()
+	: m_player(nullptr)
+	, m_healthBar(nullptr)
+	, m_staminaBar(nullptr)
+	, m_eventListeners()
+	, m_scoreText(nullptr)
+{
+	// Reset player score upon new game
+	LightSouls::ScoringSystem::GetInstance()->Reset();
+}
 
 GameScene::~GameScene()
 {
 	LightSouls::AIAgentManager::GetInstance()->Cleanup();
 	EventDispatcher* eventDispather = getEventDispatcher();
-	eventDispather->removeEventListener(m_healthListener);
-	eventDispather->removeEventListener(m_staminaListener);
+
+	for (auto eventListener : m_eventListeners)
+	{
+		eventDispather->removeEventListener(eventListener);
+	}
+	m_eventListeners.clear();
 }
 
 Scene* GameScene::CreateScene()
@@ -120,10 +137,15 @@ void GameScene::InitWolrdLayer()
 	m_player = LightSouls::Player::Create("res/Configs/World/Player/Player.xml");
 	worldLayer->addChild(m_player);
 	
-	m_healthListener = getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnHealthChanged(),
+	EventListenerCustom* healthListener = getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnHealthChanged(),
 		CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
-	m_staminaListener = getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
+	EventListenerCustom* staminaListener = getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
 		CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
+	EventListenerCustom* agentDestroyListener = getEventDispatcher()->addCustomEventListener(LightSouls::AIAgent::GetEventAgentDestroyed(),
+		CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
+	m_eventListeners.push_back(healthListener);
+	m_eventListeners.push_back(staminaListener);
+	m_eventListeners.push_back(agentDestroyListener);
 
 	// Init AI
 	LightSouls::AIAgentManager* agentManager = LightSouls::AIAgentManager::GetInstance();
@@ -169,10 +191,15 @@ void GameScene::InitUILayer()
 	{
 		CCLOG("HelloWorldScene: Failed to initialize stamina bar!");
 	}
+
+	m_scoreText = ui::Text::create(StringUtils::format("Score: %d", LightSouls::ScoringSystem::GetInstance()->GetScore()),
+		"Arial", 100);
+	m_scoreText->setNormalizedPosition(Vec2(0.5f, 0.82f)); 
 		
 	uiLayer->addChild(screenOverlay);
 	uiLayer->addChild(m_healthBar);
 	uiLayer->addChild(m_staminaBar);
+	uiLayer->addChild(m_scoreText);
 	uiLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));
 	addChild(uiLayer);
 
@@ -204,4 +231,12 @@ void GameScene::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
 	{
 		m_staminaBar->SetCurrentValue(staminaData->GetPercentage());
 	}
+}
+
+void GameScene::OnAgentDestroyed(cocos2d::EventCustom* eventData)
+{
+	using namespace LightSouls;
+	ScoringSystem* scoringSystem = ScoringSystem::GetInstance();
+	scoringSystem->IncreaseScore();
+	m_scoreText->setString(StringUtils::format("Score: %d", scoringSystem->GetScore()));
 }

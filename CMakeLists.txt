@@ -157,13 +157,13 @@ endif ()
 set(GAME_SRC
         ${PLATFORM_SPECIFIC_SRC}
         Classes/AppDelegate.cpp
-        Classes/HelloWorldScene.cpp
+        Classes/Scenes/MainMenuScene.cpp
         )
 
 set(GAME_HEADERS
         ${PLATFORM_SPECIFIC_HEADERS}
         Classes/AppDelegate.h
-        Classes/HelloWorldScene.h
+        Classes/Scenes/MainMenuScene.h
         )
 
 # add the executable

@@ -1,5 +1,4 @@
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#pragma once
 
 #include "cocos2d.h"
 
@@ -9,9 +8,18 @@ namespace LightSouls
 	class ProgressBar;
 };
 
+namespace cocos2d
+{
+	namespace ui
+	{
+		class Text;
+	};
+};
+
 class GameScene : public cocos2d::Scene
 {
 public:
+	GameScene();
 	~GameScene();
 
 public:
@@ -28,14 +36,12 @@ private:
 	void InitUILayer();
 	void OnPlayerHealthChanged(cocos2d::EventCustom* eventData);
 	void OnPlayerStaminaChanged(cocos2d::EventCustom* eventData);
+	void OnAgentDestroyed(cocos2d::EventCustom* eventData);
 
 private:
-	LightSouls::Player*				m_player;
-	LightSouls::ProgressBar*		m_healthBar;
-	LightSouls::ProgressBar*		m_staminaBar;
-	cocos2d::EventListenerCustom*	m_healthListener;
-	cocos2d::EventListenerCustom*	m_staminaListener;
-
+	LightSouls::Player*							m_player;
+	LightSouls::ProgressBar*					m_healthBar;
+	LightSouls::ProgressBar*					m_staminaBar;
+	std::vector<cocos2d::EventListenerCustom*>	m_eventListeners;
+	cocos2d::ui::Text*							m_scoreText;
 };
-
-#endif // __HELLOWORLD_SCENE_H__

@@ -2,6 +2,7 @@
 #include "MainMenuScene.h"
 #include "GameScene.h"
 #include "ui/CocosGUI.h"
+#include "ScoringSystem/ScoringSystem.h"
 
 USING_NS_CC;
 
@@ -44,16 +45,17 @@ bool GameOverScene::init()
 	goToMenuButton->addClickEventListener(CC_CALLBACK_0(GameOverScene::OnGoToMenuPressed, this));
 
 	auto title = ui::Text::create("Game over !", "Arial", 80);
-	title->setTextHorizontalAlignment(TextHAlignment::CENTER);
+	auto scoreText = ui::Text::create(StringUtils::format("Score: %d", LightSouls::ScoringSystem::GetInstance()->GetScore()), "Arial", 40);
 
 	auto layout = ui::Layout::create();
-	layout->setNormalizedPosition(Vec2(0.43f, 0.5f));
+	layout->setNormalizedPosition(Vec2(0.43f, 0.70f));
 	layout->setLayoutType(ui::Layout::Type::VERTICAL);
 	auto linearLayoutParam = ui::LinearLayoutParameter::create();
 	linearLayoutParam->setGravity(ui::LinearGravity::CENTER_VERTICAL);
 	layout->setLayoutParameter(linearLayoutParam);
 
 	layout->addChild(title);
+	layout->addChild(scoreText);
 	layout->addChild(tryAgainButton);
 	layout->addChild(goToMenuButton);
 

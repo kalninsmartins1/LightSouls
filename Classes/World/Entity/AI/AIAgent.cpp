@@ -13,6 +13,7 @@
 NS_LIGHTSOULS_BEGIN
 
 String AIAgent::s_eventAgentHealthChanged = "EVENT_AGENT_HEALTH_CHANGED";
+String LightSouls::AIAgent::s_eventAgentDestroyed = "EVENT_AGENT_DESTROYED";
 
 AIAgent* AIAgent::Create(const String& pathToXML)
 {
@@ -176,11 +177,20 @@ void AIAgent::DispatchOnStaminaChangedEvent() const
 void AIAgent::DispatchOnHealthChangedEvent()
 {
 	m_stateMachine.DispatchEvent(s_eventAgentHealthChanged, AEventData(GetId()));
+	if (GetHealth() <= 0)
+	{
+		getEventDispatcher()->dispatchCustomEvent(s_eventAgentDestroyed);
+	}
 }
 
 AIAgent::~AIAgent()
 {
 	PhysicsManager::GetInstance()->RemoveContactBeginListener(getName());
+}
+
+const String& AIAgent::GetEventAgentDestroyed()
+{
+	return s_eventAgentDestroyed;
 }
 
 const String& AIAgent::GetEventAgentHealthChanged()
