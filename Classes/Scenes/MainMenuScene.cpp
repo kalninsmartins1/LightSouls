@@ -37,27 +37,29 @@ bool MainMenuScene::init()
 	startButton->setTitleText("Start");
 	startButton->setTitleFontSize(18.0f);
 	exitButton->setTitleText("Quit");
-	exitButton->setTitleFontSize(18.0f);
+	exitButton->setTitleFontSize(18.0f);	
 
 	startButton->addClickEventListener(CC_CALLBACK_0(MainMenuScene::OnStartPressed, this));
-	exitButton->addClickEventListener(CC_CALLBACK_0(MainMenuScene::OnQuitPressed, this));	
-
-	auto title = ui::Text::create("Best title ever !", "Arial", 80);
-	title->setTextHorizontalAlignment(TextHAlignment::CENTER);
+	exitButton->addClickEventListener(CC_CALLBACK_0(MainMenuScene::OnQuitPressed, this));
 
 	auto layout = ui::Layout::create();	
-	layout->setNormalizedPosition(Vec2(0.43f, 0.75f));
+	layout->setNormalizedPosition(Vec2(0.43f, 0.6f));
 	layout->setLayoutType(ui::Layout::Type::VERTICAL);
-	auto linearLayoutParam = ui::LinearLayoutParameter::create();
-	linearLayoutParam->setGravity(ui::LinearGravity::CENTER_VERTICAL);
-	layout->setLayoutParameter(linearLayoutParam);
+	layout->setSizeType(ui::Widget::SizeType::PERCENT);
+	auto relativeParam = ui::RelativeLayoutParameter::create();
+	relativeParam->setAlign(ui::RelativeAlign::CENTER_IN_PARENT);	
+	
+	layout->setLayoutParameter(relativeParam);
 
-	layout->addChild(title);
 	layout->addChild(startButton);
 	layout->addChild(exitButton);
 
-	addChild(layout);
-	
+	auto title = ui::Text::create("Best title ever !", "Arial", 80);
+	title->setTextHorizontalAlignment(TextHAlignment::LEFT);
+	title->setNormalizedPosition(Vec2(0.52f, 0.8f));
+
+	addChild(title);
+	addChild(layout);	
     
     return true;
 }

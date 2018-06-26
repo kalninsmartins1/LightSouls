@@ -44,21 +44,23 @@ bool GameOverScene::init()
 	tryAgainButton->addClickEventListener(CC_CALLBACK_0(GameOverScene::OnTryAgainPressed, this));
 	goToMenuButton->addClickEventListener(CC_CALLBACK_0(GameOverScene::OnGoToMenuPressed, this));
 
-	auto title = ui::Text::create("Game over !", "Arial", 80);
-	auto scoreText = ui::Text::create(StringUtils::format("Score: %d", LightSouls::ScoringSystem::GetInstance()->GetScore()), "Arial", 40);
-
 	auto layout = ui::Layout::create();
-	layout->setNormalizedPosition(Vec2(0.43f, 0.70f));
+	layout->setNormalizedPosition(Vec2(0.43f, 0.60f));
 	layout->setLayoutType(ui::Layout::Type::VERTICAL);
 	auto linearLayoutParam = ui::LinearLayoutParameter::create();
 	linearLayoutParam->setGravity(ui::LinearGravity::CENTER_VERTICAL);
 	layout->setLayoutParameter(linearLayoutParam);
 
-	layout->addChild(title);
-	layout->addChild(scoreText);
 	layout->addChild(tryAgainButton);
 	layout->addChild(goToMenuButton);
 
+	auto title = ui::Text::create("Game over !", "Arial", 80);
+	title->setNormalizedPosition(Vec2(0.52f, 0.8f));
+	auto scoreText = ui::Text::create(StringUtils::format("Score: %d", LightSouls::ScoringSystem::GetInstance()->GetScore()), "Arial", 40);
+	scoreText->setNormalizedPosition(Vec2(0.5f, 0.7f));
+
+	addChild(title);
+	addChild(scoreText);
 	addChild(layout);
 
 
