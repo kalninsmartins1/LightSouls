@@ -72,11 +72,11 @@
 	
 	<Component type="RigidBodyComponent">
 		<PhysicsMaterial density="0.1" restitution="0" friction="0.3" />
-		<AnchorPosition x="0" y="1" />
+		<AnchorPosition x="0" y="0" />
 		<PhysicsBody
 			shape="box"
 			width="250"
-			height="200"
+			height="100"
 			isDynamic="true" 
 			isGravityEnabled="false"
 			isRotationEnabled="false"
