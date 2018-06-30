@@ -28,7 +28,8 @@ public:
 	float				 GetStoppingDistance() const;
 	const String&		 GetType() const;
 	const Vector2&		 GetBasePosition() const;
-	AttackComponent*	 GetAttackComponent() const;	
+	AttackComponent*	 GetAttackComponent() const;
+	virtual EntityType	 GetEntityType() const override;
 
 	void SetPatrolPause(float pauseInSeconds);
 	void SetPatrolRadius(float radius);

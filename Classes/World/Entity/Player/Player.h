@@ -19,6 +19,7 @@ public:
 	static const String& GetEventOnHealthChanged();
 	static const String& GetEventOnStaminaChanged();
 	static const String& GetEventOnGiveDamage();
+	virtual EntityType	 GetEntityType() const override;
 
 	void SetDodgeStaminaConsumption(float dodgeStaminaConumption);
 	void SetDodgeSpeed(float dodgeSpeed);

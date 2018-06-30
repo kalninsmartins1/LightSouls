@@ -102,6 +102,11 @@ const String& Player::GetEventOnGiveDamage()
 	return s_eventOnPlayerGiveDamage;
 }
 
+EntityType Player::GetEntityType() const
+{
+	return EntityType::PLAYER;
+}
+
 void Player::SetDodgeStaminaConsumption(float dodgeStaminaConumption)
 {
 	m_dodgeStaminaConsumption = dodgeStaminaConumption;

@@ -243,6 +243,11 @@ AttackComponent* AIAgent::GetAttackComponent() const
 	return m_attackComponent;
 }
 
+EntityType AIAgent::GetEntityType() const
+{
+	return EntityType::AIAGENT;
+}
+
 void AIAgent::SetPatrolPause(float pauseInSeconds)
 {
 	m_patrolPauseInSeconds = pauseInSeconds;

@@ -70,9 +70,11 @@ void AttackComponent::CheckAffectedObjects(const Entity& attacker,
 void AttackComponent::TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) const
 {
 	Entity* hitEntity = dynamic_cast<Entity*>(physicsObject.getBody()->getNode());
-
-	// Ignore if hitting self
-	if (hitEntity != nullptr && hitEntity->GetId() != GetOwnerEntity()->GetId())
+	const Entity* ownerEntity = GetOwnerEntity();
+	
+	if (hitEntity != nullptr &&
+		hitEntity->GetId() != ownerEntity->GetId() && // Ignore if hitting self	
+		hitEntity->GetEntityType() != ownerEntity->GetEntityType()) // Ignore hitting self kind
 	{
 		hitEntity->TakeDamage(*GetOwnerEntity());
 	}

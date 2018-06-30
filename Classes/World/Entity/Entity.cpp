@@ -35,6 +35,11 @@ Entity::~Entity()
 
 }
 
+EntityType LightSouls::Entity::GetEntityType() const
+{
+	return EntityType::NONE;
+}
+
 void Entity::SetBaseDamage(float baseDamage)
 {
 	m_baseDamage = baseDamage;

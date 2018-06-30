@@ -6,6 +6,13 @@ NS_LIGHTSOULS_BEGIN
 
 class AnimComponent;
 
+enum class EntityType
+{
+	NONE,
+	PLAYER,
+	AIAGENT
+};
+
 class Entity: public cocos2d::Sprite
 {
 public:
@@ -13,6 +20,7 @@ public:
 	virtual ~Entity();
 
 public:
+	virtual EntityType		GetEntityType() const;
 	float					GetCurrentMoveSpeed() const;
 	const Vector2&			GetHeading() const;
 	const cocos2d::Size&	GetPhysicsBodySizeScaled() const;

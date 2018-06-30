@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "Scenes/MainMenuScene.h"
+#include "Scenes/GameScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -97,9 +98,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    // create a scene. it's an autorelease object
-    auto scene = MainMenuScene::CreateScene();
-
+	// create a scene. it's an autorelease object
+	Scene* scene = nullptr;
+#if LIGHTSOULS_RELEASE
+	scene = MainMenuScene::CreateScene();
+#else
+	scene = GameScene::CreateScene();
+#endif
     // run
     director->runWithScene(scene);
 
