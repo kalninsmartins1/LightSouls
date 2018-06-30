@@ -52,16 +52,15 @@ public:
 	void			SetStaminaRegenerateDelay(float regenerateDelay);
 	virtual void	setScale(float scaleX, float scaleY) override;
 
-	void ResetHealth();
-	void ResetStamina();
-	void ResetMoveSpeed();
-	void ConsumeStamina(float amount);
-	void TakeDamage(const Entity& attackingEntity);
-	void StartAttacking();
-	void StopAttacking();
-	void ApplyKnockbackEffect(const Entity& attackingEntity);
-
-	virtual void update(float deltaTime) override;
+	void			ResetHealth();
+	void			ResetStamina();
+	void			ResetMoveSpeed();
+	void			ConsumeStamina(float amount);
+	void			TakeDamage(const Entity& attackingEntity);
+	void			StartAttacking();
+	void			StopAttacking();
+	void			ApplyKnockbackEffect(const Entity& attackingEntity);
+	virtual void	update(float deltaTime) override;
 
 protected:
 	virtual void DispatchOnHealthChangedEvent() = 0;
@@ -74,6 +73,7 @@ private:
 	void		StartStaminaRegenerateDelayTimer();
 	void		OnStaminaRegenerateDelayExpired();
 
+	void		UpdateSortingLayer();
 	void		Move();	
 	void		RegenerateStamina(float regenerateSpeedASecond);
 	void		OnDamageTaken();
@@ -81,7 +81,7 @@ private:
 private:	
 	static unsigned int			s_uniqueId;
 	unsigned int				m_id;
-	
+
 	AnimComponent*			m_animComponent;
 	Vector2					m_moveDirection;
 	cocos2d::Size			m_physicsBodyScaledSize;

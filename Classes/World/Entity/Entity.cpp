@@ -40,6 +40,12 @@ EntityType LightSouls::Entity::GetEntityType() const
 	return EntityType::NONE;
 }
 
+void Entity::UpdateSortingLayer()
+{
+	// Invert the y since higher y values should be closer
+	setLocalZOrder(-_position.y);
+}
+
 void Entity::SetBaseDamage(float baseDamage)
 {
 	m_baseDamage = baseDamage;
@@ -206,6 +212,7 @@ void Entity::update(float deltaTime)
 	}
 
 	RegenerateStamina(m_staminaRegenerateSpeed * deltaTime);
+	UpdateSortingLayer();
 }
 
 void Entity::StartStaminaRegenerateDelayTimer()

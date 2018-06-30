@@ -74,8 +74,6 @@ bool AIAgent::Init(const String& pathToXML)
 {	
 	bool isInitializedSuccessfully = 
 		XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
-	
-	setLocalZOrder(AGENT_LAYER);
 
 	if(isInitializedSuccessfully)
 	{

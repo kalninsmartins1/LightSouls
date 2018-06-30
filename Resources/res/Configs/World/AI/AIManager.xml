@@ -8,7 +8,7 @@
 	<SpawnPoints>
 		<SpawnPoint type="Bomb" x="0" y="-100" 
 					numAgentsInRow="5"
-					rowPadding="20" columnPadding="50"
+					rowPadding="100" columnPadding="80"
 					spawnDelay="1.0" 
 					spawnCount="10">
 		</SpawnPoint>

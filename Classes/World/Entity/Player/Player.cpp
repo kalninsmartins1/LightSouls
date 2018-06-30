@@ -40,7 +40,6 @@ Player::Player()
 	, m_dodgeTime(0.0f)
 	, m_timeBetweenComboInput(0.0f)
 	, m_dodgeStaminaConsumption(0.0f)
-	, m_lastCollisionNode(nullptr)
 	, m_isCollidedFromLeft(false)
 	, m_isCollidedFromRight(false)
 	, m_isCollidedFromTop(false)
@@ -71,9 +70,6 @@ bool Player::Init(const String& pathToXML)
 	PhysicsManager::GetInstance()->AddContactEndListener(getName(),
 		CC_CALLBACK_1(Player::OnContactEnd, this));
 
-	PhysicsManager::GetInstance()->AddContactBeginListener(getName()+NODE_COMPONENT,
-		CC_CALLBACK_1(Player::OnSortingLayerContactBegin, this));
-
 	return true;
 }
 
@@ -93,8 +89,6 @@ void Player::update(float deltaTime)
 	{
 		PlayRunOrIdleAnimation();
 	}
-
-	UpdateSortingLayer();
 }
 
 const String& Player::GetEventOnGiveDamage()
@@ -125,24 +119,6 @@ void Player::SetDodgeTime(float dodgeTime)
 void Player::OnDodgeFinished()
 {
 	StopDodging();
-}
-
-void Player::UpdateSortingLayer()
-{
-	if (m_lastCollisionNode != nullptr)
-	{
-		// Sprite that is lower on Y should appear on top
-		Vector2 otherPosition = m_lastCollisionNode->getParent()->getPosition();
-		Vector2 playerPosition = getPosition();
-		if (otherPosition.y > playerPosition.y)
-		{
-			setLocalZOrder(PLAYER_ON_TOP_LAYER);
-		}
-		else
-		{
-			setLocalZOrder(PLAYER_UNDER_LAYER);
-		}
-	}
 }
 
 void Player::ManageInput()
@@ -304,14 +280,6 @@ bool Player::OnContactEnd(const cocos2d::PhysicsBody* otherBody)
 {
 	ResetCollisionData();
 	return true;
-}
-
-bool Player::OnSortingLayerContactBegin(const cocos2d::PhysicsBody* otherBody)
-{
-	m_lastCollisionNode = otherBody->getNode();
-
-	// Don't collide with sorting layer
-	return false;
 }
 
 void Player::ResetCollisionData()

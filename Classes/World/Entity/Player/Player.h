@@ -41,8 +41,7 @@ private:
 	void StartDodging();
 	void StopDodging();
 	void OnDodgeFinished();
-	
-	void UpdateSortingLayer();
+
 	void ManageInput();
 	void FilterMovementDirectionBasedOnCollisionData(Vector2& moveDirection);
 	void LightAttack();
@@ -50,7 +49,6 @@ private:
 	void PlayRunOrIdleAnimation() const;
 	bool OnContactBegin(const cocos2d::PhysicsBody* otherBody);
 	bool OnContactEnd(const cocos2d::PhysicsBody* otherBody);
-	bool OnSortingLayerContactBegin(const cocos2d::PhysicsBody* otherBody);	
 	void ResetCollisionData();
 
 private:
@@ -65,7 +63,6 @@ private:
 	float					m_dodgeTime;
 	float					m_timeBetweenComboInput;
 	float					m_dodgeStaminaConsumption;
-	cocos2d::Node*			m_lastCollisionNode;
 	
 	bool					m_isCollidedFromLeft;
 	bool					m_isCollidedFromRight;
