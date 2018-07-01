@@ -102,6 +102,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	Scene* scene = nullptr;
 #if LIGHTSOULS_RELEASE
 	scene = MainMenuScene::CreateScene();
+	Director::getInstance()->setDisplayStats(false);
 #else
 	scene = GameScene::CreateScene();
 #endif

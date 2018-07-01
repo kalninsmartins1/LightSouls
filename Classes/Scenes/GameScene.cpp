@@ -66,10 +66,6 @@ bool GameScene::init()
 		return false;
 	}
 
-	#if LIGHTSOULS_RELEASE
-	Director::getInstance()->setDisplayStats(false);
-	#endif
-
 	InitWolrdLayer();
 	InitUILayer();
 	
