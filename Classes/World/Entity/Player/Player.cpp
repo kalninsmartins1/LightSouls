@@ -294,22 +294,28 @@ void Player::ResetCollisionData()
 
 void Player::SetCollisionData(cocos2d::Node* otherNode)
 {
-	if (m_lastValidMoveDirection.x < 0)
+	if (abs(m_lastValidMoveDirection.x) > abs(m_lastValidMoveDirection.y))
 	{
-		m_isCollidedFromLeft = true;
+		if (m_lastValidMoveDirection.x < 0)
+		{
+			m_isCollidedFromLeft = true;
+		}
+		else
+		{
+			m_isCollidedFromRight = true;
+		}
 	}
-	else if (m_lastValidMoveDirection.x > 0)
+	else
 	{
-		m_isCollidedFromRight = true;
-	}
-	else if (m_lastValidMoveDirection.y < 0)
-	{
-		m_isCollidedFromBottom = true;
-	}
-	else if (m_lastValidMoveDirection.y > 0)
-	{
-		m_isCollidedFromTop = true;
-	}
+		if (m_lastValidMoveDirection.y < 0)
+		{
+			m_isCollidedFromBottom = true;
+		}
+		else
+		{
+			m_isCollidedFromTop = true;
+		}
+	}	
 }
 
 NS_LIGHTSOULS_END
