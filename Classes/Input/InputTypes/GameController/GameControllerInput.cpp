@@ -72,8 +72,11 @@ void GameControllerInput::AddAxisButton(const String& actionName,
 void GameControllerInput::ResetInputState()
 {
 	AInputDevice::ResetInputState();
-	m_controllerAxis.clear();
-	m_buttonCodeToAxisAction.clear();
+	for (auto& axis : m_controllerAxis)
+	{
+		axis.second.isPressed = false;
+		axis.second.curValue = 0;
+	}
 }
 
 bool GameControllerInput::IsConnected() const
