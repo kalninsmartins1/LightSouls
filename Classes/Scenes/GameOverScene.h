@@ -16,4 +16,5 @@ public:
 private:
 	void OnTryAgainPressed();
 	void OnGoToMenuPressed();
+	void SwitchToGameScene();
 };

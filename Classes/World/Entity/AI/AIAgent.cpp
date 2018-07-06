@@ -9,6 +9,7 @@
 #include "Events/OnCollisionBeginEventData.h"
 #include "Utils/XML/XMLConsts.h"
 #include "World/Entity/AI/StateMachine/States/AState.h"
+#include "Scenes/GameScene.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -83,10 +84,10 @@ bool AIAgent::Init(const String& pathToXML)
 		AttackComponent* attackComponent = dynamic_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
 		const bool isAttackComponentFound = attackComponent != nullptr;
 		CCASSERT(isAttackComponentFound, "AIAgent: AIAttackComponent not found !");
-		m_attackComponent = attackComponent;		
+		m_attackComponent = attackComponent;
 
 		// Register for physics events
-		PhysicsManager::GetInstance()->AddContactBeginListener(getName(),
+		GameScene::GetPhysicsManager()->AddContactBeginListener(getName(),
 			CC_CALLBACK_1(AIAgent::OnContactBegin, this));
 
 		// init was successful only if the attack component are found
@@ -183,7 +184,7 @@ void AIAgent::DispatchOnHealthChangedEvent()
 
 AIAgent::~AIAgent()
 {
-	PhysicsManager::GetInstance()->RemoveContactBeginListener(getName());
+
 }
 
 const String& AIAgent::GetEventAgentDestroyed()

@@ -1,8 +1,16 @@
 #include "MainMenuScene.h"
 #include "GameScene.h"
+#include "Input/GameInput.h"
 #include "ui/CocosGUI.h"
+#include "Utils/Utils.h"
+#include "GameConsts.h"
 
 USING_NS_CC;
+
+MainMenuScene::MainMenuScene()	
+{
+
+}
 
 Scene* MainMenuScene::CreateScene()
 {
@@ -65,11 +73,18 @@ bool MainMenuScene::init()
 }
 
 void MainMenuScene::OnStartPressed()
-{
-	Director::getInstance()->replaceScene(GameScene::CreateScene());
+{	
+	LightSouls::Utils::StartTimerWithCallback(this,
+		CC_CALLBACK_0(MainMenuScene::SwitchToGameScene, this),
+		LightSouls::LOADING_TIME);
 }
 
 void MainMenuScene::OnQuitPressed()
 {
 	Director::getInstance()->end();
+}
+
+void MainMenuScene::SwitchToGameScene()
+{	
+	Director::getInstance()->replaceScene(GameScene::CreateScene());
 }

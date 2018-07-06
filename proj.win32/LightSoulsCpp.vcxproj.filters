@@ -91,6 +91,9 @@
     <Filter Include="src\Scenes">
       <UniqueIdentifier>{eaeac63c-d628-47f7-8e87-e3ce011e8e72}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ScoringSystem">
+      <UniqueIdentifier>{0dc95cfd-26aa-4df9-8db4-bf9e9e4beb4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -237,7 +240,9 @@
     <ClCompile Include="..\Classes\Scenes\GameOverScene.cpp">
       <Filter>src\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ScoringSystem\ScoringSystem.cpp" />
+    <ClCompile Include="..\Classes\ScoringSystem\ScoringSystem.cpp">
+      <Filter>src\ScoringSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -393,7 +398,9 @@
     <ClInclude Include="..\Classes\Scenes\GameOverScene.h">
       <Filter>src\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ScoringSystem\ScoringSystem.h" />
+    <ClInclude Include="..\Classes\ScoringSystem\ScoringSystem.h">
+      <Filter>src\ScoringSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

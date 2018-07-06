@@ -5,18 +5,27 @@
 
 NS_LIGHTSOULS_BEGIN
 
+const String PhysicsManager::s_onCollisionBeginEvent = "EVENT_ON_COLLISION_BEGIN";
 
-const LightSouls::String LightSouls::PhysicsManager::s_onCollisionBeginEvent = "EVENT_ON_COLLISION_BEGIN";
-
-PhysicsManager* PhysicsManager::GetInstance()
+PhysicsManager::~PhysicsManager()
 {
-	static PhysicsManager instance;
-	return &instance;
+
 }
 
-const String& LightSouls::PhysicsManager::GetEventOnCollisionBegin()
+const String& PhysicsManager::GetEventOnCollisionBegin()
 {
 	return s_onCollisionBeginEvent;
+}
+
+PhysicsManager* PhysicsManager::Create(cocos2d::Node* context)
+{
+	PhysicsManager* manager = new (std::nothrow) PhysicsManager();
+	if (manager == nullptr || !manager->Init(context))
+	{
+		CC_SAFE_DELETE(manager);
+	}	
+
+	return manager;
 }
 
 bool PhysicsManager::Init(cocos2d::Node* context)

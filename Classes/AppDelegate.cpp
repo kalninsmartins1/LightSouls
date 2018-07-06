@@ -54,11 +54,14 @@ static int register_all_packages()
     return 0; //flag for packages manager
 }
 
-bool AppDelegate::applicationDidFinishLaunching() {
+bool AppDelegate::applicationDidFinishLaunching() 
+{
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
-    if(!glview) {
+	
+    if(glview == nullptr) 
+	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 		#if LIGHTSOULS_RELEASE		
 			glview = GLViewImpl::createWithFullScreen("LightSoulsCpp");
@@ -68,8 +71,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #else
         glview = GLViewImpl::create("LightSoulsCpp");
 #endif
-        director->setOpenGLView(glview);
-    }
+       director->setOpenGLView(glview);
+    }	
 
     // turn on display FPS
     director->setDisplayStats(true);
@@ -106,6 +109,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #else
 	scene = GameScene::CreateScene();
 #endif
+
     // run
     director->runWithScene(scene);
 

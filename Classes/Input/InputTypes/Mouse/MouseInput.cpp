@@ -14,16 +14,16 @@ MouseInput::MouseInput()
 bool MouseInput::Init()
 {	
 	using namespace cocos2d;
-	EventListenerMouse* pMouseListener = EventListenerMouse::create();
-	pMouseListener->onMouseUp = CC_CALLBACK_1(MouseInput::OnMouseButtonUp,
+	EventListenerMouse* mouseListener = EventListenerMouse::create();
+	mouseListener->onMouseUp = CC_CALLBACK_1(MouseInput::OnMouseButtonUp,
 		this);
-	pMouseListener->onMouseDown = CC_CALLBACK_1(MouseInput::OnMouseButtonDown,
+	mouseListener->onMouseDown = CC_CALLBACK_1(MouseInput::OnMouseButtonDown,
 		this);
 
-	auto pEventDispatcher = Director::getInstance()->getEventDispatcher();
-	pEventDispatcher->addEventListenerWithFixedPriority(pMouseListener, 1);
+	auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+	eventDispatcher->addEventListenerWithFixedPriority(mouseListener, 1);
 		
-	return pEventDispatcher != nullptr;
+	return eventDispatcher != nullptr;
 }
 
 float MouseInput::GetAxisInput(const String& axisName) const

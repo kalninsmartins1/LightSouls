@@ -41,6 +41,15 @@ void KeyboardInput::Update(float deltaTime)
 	UpdateAxisKeyState(deltaTime);
 }
 
+void KeyboardInput::ResetInputState()
+{
+	AInputDevice::ResetInputState();
+	for (auto& keyboardAxis : m_keyboardAxis)
+	{
+		keyboardAxis.second.currentValue = 0;
+	}
+}
+
 void KeyboardInput::OnKeyboardKeyUp(cocos2d::EventKeyboard::KeyCode keyCode,
 	cocos2d::Event* pEvent)
 {

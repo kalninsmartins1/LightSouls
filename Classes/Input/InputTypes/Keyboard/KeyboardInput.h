@@ -55,6 +55,7 @@ public:
 		
 	void			AddKeyboardAxis(const String& actionName, const KeyboardAxis& axisKey);
 	virtual void	Update(float deltaTime) override;	
+	virtual void	ResetInputState() override;
 
 private:
 	void SetActionKeyState(bool isActive, KeyCode keyCode);

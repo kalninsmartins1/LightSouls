@@ -6,6 +6,7 @@ namespace LightSouls
 {
 	class Player;
 	class ProgressBar;
+	class PhysicsManager;
 };
 
 namespace cocos2d
@@ -23,7 +24,9 @@ public:
 	~GameScene();
 
 public:
-    static cocos2d::Scene* CreateScene();
+	static LightSouls::PhysicsManager* GetPhysicsManager();
+
+	static cocos2d::Scene* CreateScene();
 	
 	// implement the "static create()" method manually
 	CREATE_FUNC(GameScene);
@@ -39,6 +42,7 @@ private:
 	void OnAgentDestroyed(cocos2d::EventCustom* eventData);
 
 private:
+	static LightSouls::PhysicsManager*			s_physicsManager;
 	LightSouls::Player*							m_player;
 	LightSouls::ProgressBar*					m_healthBar;
 	LightSouls::ProgressBar*					m_staminaBar;

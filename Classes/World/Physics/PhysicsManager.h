@@ -22,15 +22,18 @@ struct PhysicsContactListener
 	}
 };
 
-class PhysicsManager
+class PhysicsManager : public cocos2d::Ref
 {
 public:
-	static PhysicsManager*	GetInstance();
+	~PhysicsManager();
+
+public:
 	static const String&	GetEventOnCollisionBegin();
 	
-	bool Init(cocos2d::Node* context);	
+	static PhysicsManager*	Create(cocos2d::Node* context);
+	bool					Init(cocos2d::Node* context);
+	void					RemoveContactBeginListener(const String& bodyName);
 	
-	void RemoveContactBeginListener(const String& bodyName);
 
 	// Register for begin contact events
 	void AddContactBeginListener(const String& bodyName, ContactCallback onContactBegin);

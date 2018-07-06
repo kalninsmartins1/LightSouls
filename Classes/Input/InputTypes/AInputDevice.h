@@ -69,6 +69,8 @@ public:
 	// Binds state button to specified action name
 	void			AddStateButton(const String& actionName, const StateButton& stateButton);
 
+	virtual void	ResetInputState();
+
 protected:
 	void SetActionButtonState(bool isActive, int inputCode);
 	void SetStateButtonState(bool isPressed, int inputCode);

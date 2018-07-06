@@ -36,11 +36,12 @@ public:
 
 	bool LoadInputConfiguration(const String& pathToConfigFile);
 	void Update(float deltaTime);
-	void addAxisActionInput(GameInputType inputType, const String& actionName,
+	void AddAxisActionInput(GameInputType inputType, const String& actionName,
 		const String& keyCodeFromStr, const String& keyCodeToStr,
 		float valueFrom, float valueTo) const;
 	void AddActionInput(GameInputType inputType, const String& actionName, const String& buttonCode) const;
 	void AddStateInput(GameInputType inputType, const String& actionName, const String& buttonCode) const;
+	void ResetInputState();
 
 private:
 	GameInput();
@@ -65,6 +66,7 @@ private:
 	std::unique_ptr<KeyboardInput>			m_keyboard;
 	std::unique_ptr<MouseInput>				m_mouseInput;
 	std::unique_ptr<GameControllerInput>	m_gameControllerInput;
+	bool									m_isConfigLoaded;
 };
 
 NS_LIGHTSOULS_END

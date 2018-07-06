@@ -69,6 +69,13 @@ void GameControllerInput::AddAxisButton(const String& actionName,
 	m_controllerAxis.insert(std::make_pair(actionName, axisButton));
 }
 
+void GameControllerInput::ResetInputState()
+{
+	AInputDevice::ResetInputState();
+	m_controllerAxis.clear();
+	m_buttonCodeToAxisAction.clear();
+}
+
 bool GameControllerInput::IsConnected() const
 {
 	return m_isConnected;

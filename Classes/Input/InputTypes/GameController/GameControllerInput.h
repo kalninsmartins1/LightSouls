@@ -77,6 +77,7 @@ public:
 
 	bool			Init();	
 	void			AddAxisButton(const String& actionName, const ControllerAxis& axisButton);
+	virtual void	ResetInputState() override;
 
 private:	
 	void SetAxisInputState(float value, int buttonCode);

@@ -3,6 +3,8 @@
 #include "GameScene.h"
 #include "ui/CocosGUI.h"
 #include "ScoringSystem/ScoringSystem.h"
+#include "Utils/Utils.h"
+#include "GameConsts.h"
 
 USING_NS_CC;
 
@@ -63,16 +65,22 @@ bool GameOverScene::init()
 	addChild(scoreText);
 	addChild(layout);
 
-
     return true;
 }
 
 void GameOverScene::OnTryAgainPressed()
 {
-	Director::getInstance()->replaceScene(GameScene::CreateScene());
+	LightSouls::Utils::StartTimerWithCallback(this,
+		CC_CALLBACK_0(GameOverScene::SwitchToGameScene, this),
+		LightSouls::LOADING_TIME);	
 }
 
 void GameOverScene::OnGoToMenuPressed()
 {
-	Director::getInstance()->replaceScene(MainMenuScene::CreateScene());
+	Director::getInstance()->replaceScene(MainMenuScene::CreateScene());	
+}
+
+void GameOverScene::SwitchToGameScene()
+{
+	Director::getInstance()->replaceScene(GameScene::CreateScene());
 }

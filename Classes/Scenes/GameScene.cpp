@@ -15,27 +15,36 @@
 
 USING_NS_CC;
 
+LightSouls::PhysicsManager* GameScene::s_physicsManager = nullptr;
+
 GameScene::GameScene()
 	: m_player(nullptr)
 	, m_healthBar(nullptr)
-	, m_staminaBar(nullptr)
+	, m_staminaBar(nullptr)	
 	, m_eventListeners()
 	, m_scoreText(nullptr)
 {
 	// Reset player score upon new game
-	LightSouls::ScoringSystem::GetInstance()->Reset();
+	LightSouls::ScoringSystem::GetInstance()->Reset();		
 }
 
 GameScene::~GameScene()
-{
+{	
 	LightSouls::AIAgentManager::GetInstance()->Cleanup();
-	EventDispatcher* eventDispather = getEventDispatcher();
+	s_physicsManager->release();
+	s_physicsManager = nullptr;
 
+	EventDispatcher* eventDispather = getEventDispatcher();
 	for (auto eventListener : m_eventListeners)
 	{
 		eventDispather->removeEventListener(eventListener);
 	}
 	m_eventListeners.clear();
+}
+
+LightSouls::PhysicsManager* GameScene::GetPhysicsManager()
+{
+	return s_physicsManager;
 }
 
 Scene* GameScene::CreateScene()
@@ -66,24 +75,26 @@ bool GameScene::init()
 		return false;
 	}
 
-	InitWolrdLayer();
-	InitUILayer();
-	
-	// Init Input
-	if(!LightSouls::GameInput::GetInstance()->LoadInputConfiguration("res/Configs/Input/Input.xml"))
-	{
-		// Halt the game when in debug mode
-		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
-	}
-
 	// Init physics manager
-	if(!LightSouls::PhysicsManager::GetInstance()->Init(this))
+	s_physicsManager = LightSouls::PhysicsManager::Create(this);
+	if (s_physicsManager == nullptr)
 	{
 		CCASSERT(false, "HelloWorldScene: Failed to initialize PhysicsManager !");
 	}
 
+	InitWolrdLayer();
+	InitUILayer();
+
+	// Init Input
+	if (!LightSouls::GameInput::GetInstance()->LoadInputConfiguration("res/Configs/Input/Input.xml"))
+	{
+		// Halt the game when in debug mode
+		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
+	}
+	LightSouls::GameInput::GetInstance()->ResetInputState();
+
 	// Call update for this scene
-	scheduleUpdate(); 
+	scheduleUpdate();
     
     return true;
 }
@@ -91,7 +102,7 @@ bool GameScene::init()
 void GameScene::update(float deltaTime)
 {	
 	// Keep input events up to date
-	auto gameInput = LightSouls::GameInput::GetInstance();
+	auto gameInput = LightSouls::GameInput::GetInstance();	
 	gameInput->Update(deltaTime);
 	if (gameInput->HasAction("ExitGame"))
 	{
@@ -200,9 +211,9 @@ void GameScene::InitUILayer()
 	addChild(uiLayer);
 
 	// Create UI camera
-	Camera* pUICamera = Camera::create();
-	pUICamera->setCameraFlag(CameraFlag::USER2);
-	addChild(pUICamera);
+	Camera* uiCamera = Camera::create();
+	uiCamera->setCameraFlag(CameraFlag::USER2);
+	addChild(uiCamera);
 }
 
 void GameScene::OnPlayerHealthChanged(EventCustom* eventData)

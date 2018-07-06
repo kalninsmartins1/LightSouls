@@ -17,7 +17,7 @@ public:
 	virtual bool	HasAxisInput(const String& axisName) const override;
 	virtual float	GetAxisInput(const String& axisName) const override;
 
-	bool			Init();	
+	bool			Init();
 	
 private:
 	void SetActionButtonState(bool isActive, const MouseButtonCode& keyCode);

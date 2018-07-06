@@ -8,6 +8,7 @@
 NS_LIGHTSOULS_BEGIN
 
 GameInput::GameInput()
+	: m_isConfigLoaded(false)
 {
 	if (!Init())
 	{
@@ -79,21 +80,25 @@ float GameInput::GetInputAxis(const String& axisAction) const
 
 bool GameInput::LoadInputConfiguration(const String& pathToConfigFile)
 {
-	return XMLLoader::LoadInputSettings(*this, pathToConfigFile);
+	if (!m_isConfigLoaded)
+	{
+		m_isConfigLoaded = XMLLoader::LoadInputSettings(*this, pathToConfigFile);
+	}
+	return m_isConfigLoaded;
 }
 
 bool GameInput::HasAction(const String& action) const
 {
-	bool bHasAction = false;
+	bool hasAction = false;
 	if (!m_gameControllerInput->IsConnected())
 	{
 		if (m_mouseInput->HasAction(action))
 		{
-			bHasAction = true;
+			hasAction = true;
 		}
 		else if (m_keyboard->HasAction(action))
 		{
-			bHasAction = true;
+			hasAction = true;
 		}
 		else
 		{
@@ -102,24 +107,24 @@ bool GameInput::HasAction(const String& action) const
 	}
 	else if (m_gameControllerInput->HasAction(action))
 	{
-		bHasAction = true;
+		hasAction = true;
 	}
 
-	return bHasAction;
+	return hasAction;
 }
 
 bool GameInput::HasActionState(const String& action) const
 {
-	bool bHasActionState = false;
+	bool hasActionState = false;
 	if (!m_gameControllerInput->IsConnected())
 	{
 		if (m_mouseInput->HasActionState(action))
 		{
-			bHasActionState = true;
+			hasActionState = true;
 		}
 		else if (m_keyboard->HasAction(action))
 		{
-			bHasActionState = true;
+			hasActionState = true;
 		}
 		else
 		{
@@ -130,7 +135,7 @@ bool GameInput::HasActionState(const String& action) const
 	}
 	else if (m_gameControllerInput->HasAction(action))
 	{
-		bHasActionState = true;
+		hasActionState = true;
 	}
 	else
 	{
@@ -139,10 +144,10 @@ bool GameInput::HasActionState(const String& action) const
 			action);
 	}
 
-	return bHasActionState;
+	return hasActionState;
 }
 
-void GameInput::addAxisActionInput(GameInputType inputType, const String& actionName, const String& keyCodeFromStr,
+void GameInput::AddAxisActionInput(GameInputType inputType, const String& actionName, const String& keyCodeFromStr,
 	const String& keyCodeToStr, float valueFrom, float valueTo) const
 {
 	switch (inputType)
@@ -209,6 +214,13 @@ void GameInput::AddStateInput(GameInputType inputType, const String& actionName,
 		CCASSERT(false, "GameInput: [addActionInput] unsupported input type !");
 		break;
 	}
+}
+
+void GameInput::ResetInputState()
+{
+	m_keyboard->ResetInputState();
+	m_mouseInput->ResetInputState();
+	m_gameControllerInput->ResetInputState();
 }
 
 void GameInput::AddKeyboardActionKey(const String& actionName, const String& inputCode) const

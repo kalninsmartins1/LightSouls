@@ -54,6 +54,20 @@ void AInputDevice::AddStateButton(const String& actionName, const StateButton& s
 	m_buttonCodeToStateAction[stateButton.buttonCode] = actionName;
 }
 
+void AInputDevice::ResetInputState()
+{
+	// Clear all the input data
+	for (auto& stateButton : m_stateButtons)
+	{
+		stateButton.second.isPressed = false;
+	}
+	
+	for (auto& actionButton : m_actionButtons)
+	{		
+		actionButton.second.isActive = false;
+	}	
+}
+
 bool AInputDevice::HasAction(const String& action) const
 {
 	bool isActive = false;

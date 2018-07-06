@@ -10,6 +10,7 @@
 #include "cocos2d/cocos/base/CCEventDispatcher.h"
 #include "Utils/AnimationUtils.h"
 #include "Camera/Components/CameraShake.h"
+#include "Scenes/GameScene.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -65,9 +66,10 @@ bool Player::Init(const String& pathToXML)
 	OnEntityInitialized();
 	m_attackComponent = static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
 	
-	PhysicsManager::GetInstance()->AddContactBeginListener(getName(), 
+	PhysicsManager* physicsManager = GameScene::GetPhysicsManager();
+	physicsManager->AddContactBeginListener(getName(), 
 		CC_CALLBACK_1(Player::OnContactBegin, this));
-	PhysicsManager::GetInstance()->AddContactEndListener(getName(),
+	physicsManager->AddContactEndListener(getName(),
 		CC_CALLBACK_1(Player::OnContactEnd, this));
 
 	return true;

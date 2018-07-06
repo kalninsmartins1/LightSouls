@@ -15,6 +15,7 @@ namespace LightSouls
 	static constexpr int ACTION_CAMERA_SHAKE = 4;
 
 	static constexpr int WORLD_LAYER = -32768;
+	static constexpr float LOADING_TIME = 0.1f;
 
 	// Entity components
 	static constexpr char* ANIM_COMPONENT = "AnimComponent";

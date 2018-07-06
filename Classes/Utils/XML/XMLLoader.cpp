@@ -173,7 +173,7 @@ void XMLLoader::LoadKeyboardAxis(GameInput& gameInput, const XMLElement* pElemen
 		const float valueFrom = pChild->FloatAttribute(XML_INPUT_VALUE_FROM_ATTR);
 		const float valueTo = pChild->FloatAttribute(XML_INPUT_VALUE_TO_ATTR);
 
-		gameInput.addAxisActionInput(GameInputType::KEYBOARD,
+		gameInput.AddAxisActionInput(GameInputType::KEYBOARD,
 			actionName, keyCodeFrom, keyCodeTo, valueFrom, valueTo);
 	}
 }
@@ -187,7 +187,7 @@ void XMLLoader::LoadGameControllerAxis(GameInput& gameInput, const XMLElement* p
 		const float valueFrom = pChild->FloatAttribute(XML_INPUT_VALUE_FROM_ATTR);
 		const float valueTo = pChild->FloatAttribute(XML_INPUT_VALUE_TO_ATTR);
 
-		gameInput.addAxisActionInput(GameInputType::GAME_CONTROLLER,
+		gameInput.AddAxisActionInput(GameInputType::GAME_CONTROLLER,
 			actionName, axisName, axisName, valueFrom, valueTo);
 	}
 }
