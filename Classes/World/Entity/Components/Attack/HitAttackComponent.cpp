@@ -4,7 +4,7 @@ NS_LIGHTSOULS_BEGIN
 
 
 HitAttackComponent::HitAttackComponent(float secondsBetweenAttacks, float attackRange)
-	: AttackComponent(secondsBetweenAttacks, attackRange)
+	: GenericAttackComponent(secondsBetweenAttacks, attackRange)
 {
 
 }
@@ -34,8 +34,8 @@ void HitAttackComponent::Attack(const Vector2& direction)
 {
 	if (IsReadyToAttack())
 	{
-		AttackComponent::Attack(direction);
-		AttackComponent::CheckAffectedObjects(*GetOwnerEntity(), *this, direction, 10.0f,
+		GenericAttackComponent::Attack(direction);
+		GenericAttackComponent::CheckAffectedObjects(*GetOwnerEntity(), *this, direction, 10.0f,
 			CC_CALLBACK_3(HitAttackComponent::OnAttackHit, this));
 	}
 }

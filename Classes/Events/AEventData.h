@@ -3,7 +3,7 @@
 class AEventData
 {
 public:
-	AEventData(unsigned int receiversId);
+	AEventData(unsigned int receiverId);
 	virtual ~AEventData();
 
 	unsigned int GetReceiversId() const;

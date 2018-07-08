@@ -1,10 +1,10 @@
 #pragma once
 
-#include "AttackComponent.h"
+#include "GenericAttackComponent.h"
 
 NS_LIGHTSOULS_BEGIN
 
-class RangedAttackComponent: public AttackComponent
+class RangedAttackComponent: public GenericAttackComponent
 {
 public:
 	static RangedAttackComponent* Create(const String& pathToAmmo,

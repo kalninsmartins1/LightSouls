@@ -1,16 +1,16 @@
 #pragma once
 
-#include "AttackComponent.h"
+#include "GenericAttackComponent.h"
 #include "LightSoulsTypes.h"
 
 NS_LIGHTSOULS_BEGIN
 
 class Entity;
 
-class HitAttackComponent : public AttackComponent
+class HitAttackComponent : public GenericAttackComponent
 {
 public:
-	static HitAttackComponent*	Create(float secondsBetweenAttacks, float attackRange);
+	static HitAttackComponent*		Create(float secondsBetweenAttacks, float attackRange);
 	virtual void					Attack(const Vector2& direction) override;
 
 private:

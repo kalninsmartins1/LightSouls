@@ -1,13 +1,13 @@
 #pragma once
 
-#include "AttackComponent.h"
+#include "GenericAttackComponent.h"
 #include "LightSoulsTypes.h"
 
 NS_LIGHTSOULS_BEGIN
 
 class Entity;
 
-class LongSwordAttackComponent : public AttackComponent
+class LongSwordAttackComponent : public GenericAttackComponent
 {
 public:
 	static LongSwordAttackComponent*	Create(float secondsBetweenAttacks, float attackRange, float paddingFromBody);	

@@ -43,6 +43,9 @@ public:
 	static T Avg(T a, T b);
 
 	template <typename T, typename K>
+	static bool FindKeyByValue(const std::map<T, K>& map, const K& value, T& outKey);
+
+	template <typename T, typename K>
 	static bool ContainsKey(const std::map<T, K>& map, const T& key);
 
 	template <typename T, typename K>
@@ -62,6 +65,22 @@ template <typename T>
 static T Utils::Avg(T a, T b)
 {
 	return a + b / 2.0f;
+}
+
+template <typename T, typename K>
+bool Utils::FindKeyByValue(const std::map<T, K>& map, const K& value, T& outKey)
+{
+	bool hasFound = false;
+	for (auto& pair : map)
+	{
+		if (pair.second == value)
+		{
+			outKey = pair.first;
+			hasFound = true;
+		}
+	}
+
+	return hasFound;
 }
 
 template <typename T, typename K>

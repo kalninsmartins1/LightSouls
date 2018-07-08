@@ -94,6 +94,9 @@
     <Filter Include="src\ScoringSystem">
       <UniqueIdentifier>{0dc95cfd-26aa-4df9-8db4-bf9e9e4beb4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\World\Entity\AI\StateMachine\States\Attack">
+      <UniqueIdentifier>{8b094665-2a2a-4607-aa73-b27d32a85614}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -131,9 +134,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\StateMachine.cpp">
       <Filter>src\World\Entity\AI\StateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateAttack.cpp">
-      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateChase.cpp">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
@@ -213,9 +213,6 @@
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\RangedAttackComponent.cpp">
       <Filter>src\World\Entity\Components\Attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\Components\Attack\AttackComponent.cpp">
-      <Filter>src\World\Entity\Components\Attack</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.cpp">
       <Filter>src\World\Entity\Components\Attack</Filter>
     </ClCompile>
@@ -242,6 +239,15 @@
     </ClCompile>
     <ClCompile Include="..\Classes\ScoringSystem\ScoringSystem.cpp">
       <Filter>src\ScoringSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\Attack\StateLineAttack.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\Attack\StateAttack.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.cpp">
+      <Filter>src\World\Entity\Components\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,9 +289,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\StateMachine.h">
       <Filter>src\World\Entity\AI\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateAttack.h">
-      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateChase.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
@@ -371,9 +374,6 @@
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\RangedAttackComponent.h">
       <Filter>src\World\Entity\Components\Attack</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\Components\Attack\AttackComponent.h">
-      <Filter>src\World\Entity\Components\Attack</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.h">
       <Filter>src\World\Entity\Components\Attack</Filter>
     </ClInclude>
@@ -400,6 +400,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\ScoringSystem\ScoringSystem.h">
       <Filter>src\ScoringSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\Attack\StateAttack.h">
+      <Filter>src\World\Entity\AI\StateMachine\States\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\Attack\StateLineAttack.h">
+      <Filter>src\World\Entity\AI\StateMachine\States\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.h">
+      <Filter>src\World\Entity\Components\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

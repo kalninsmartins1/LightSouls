@@ -8,7 +8,7 @@
 NS_LIGHTSOULS_BEGIN
 
 StateChase::StateChase(AIAgent& agent) :
-	m_curProgress(StateProgress::NONE),
+	m_curProgress(EStateProgress::NONE),
 	m_targetEntity(nullptr),
 	m_agent(agent)
 {
@@ -16,8 +16,8 @@ StateChase::StateChase(AIAgent& agent) :
 
 void StateChase::OnEnter(AnimComponent* animComponent)
 {
-	m_targetEntity = &AIAgentManager::GetInstance()->GetTargetEntity();
-	m_curProgress = StateProgress::IN_PROGRESS;
+	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
+	m_curProgress = EStateProgress::IN_PROGRESS;
 	m_animComponent = animComponent;
 
 #if LIGHTSOULS_DEBUG_AI
@@ -25,7 +25,7 @@ void StateChase::OnEnter(AnimComponent* animComponent)
 #endif
 }
 
-StateProgress StateChase::OnStep()
+EStateProgress StateChase::OnStep()
 {
 	if (!m_agent.IsProcessing())
 	{
@@ -47,7 +47,7 @@ StateProgress StateChase::OnStep()
 		if (distanceToTarget <= m_agent.GetChaseStopDistance() ||	// Target has been caught
 			distanceToTarget >= m_agent.GetChaseRadius())			// Target run off 
 		{
-			m_curProgress = StateProgress::DONE;
+			m_curProgress = EStateProgress::DONE;
 		}
 	}
 
@@ -56,7 +56,7 @@ StateProgress StateChase::OnStep()
 
 void StateChase::OnExit()
 {
-	m_curProgress = StateProgress::NONE;
+	m_curProgress = EStateProgress::NONE;
 	m_agent.SetMoveDirection(Vector2::ZERO);
 
 	if (!m_agent.IsProcessing())
@@ -74,9 +74,9 @@ void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& 
 	// ...
 }
 
-AIState StateChase::GetStateType() const
+EAIState StateChase::GetStateType() const
 {
-	return AIState::CHASE;
+	return EAIState::CHASE;
 }
 
 NS_LIGHTSOULS_END

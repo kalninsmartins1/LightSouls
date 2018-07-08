@@ -24,7 +24,7 @@ LongSwordAttackComponent* LongSwordAttackComponent::Create(float secondsBetweenA
 
 LongSwordAttackComponent::LongSwordAttackComponent(float secondsBetweenAttacks,
 		float attackRange, float paddingFromBody) 
-	: AttackComponent(secondsBetweenAttacks, attackRange)
+	: GenericAttackComponent(secondsBetweenAttacks, attackRange)
 	, m_paddingFromBody(paddingFromBody)
 {
 }
@@ -41,8 +41,8 @@ void LongSwordAttackComponent::Attack(const Vector2& direction)
 {
 	if (IsReadyToAttack())
 	{
-		AttackComponent::Attack(direction);
-		AttackComponent::CheckAffectedObjects(*GetOwnerEntity(), *this, direction, m_paddingFromBody,
+		GenericAttackComponent::Attack(direction);
+		GenericAttackComponent::CheckAffectedObjects(*GetOwnerEntity(), *this, direction, m_paddingFromBody,
 			CC_CALLBACK_3(LongSwordAttackComponent::OnAttackHit, this));
 	}
 }

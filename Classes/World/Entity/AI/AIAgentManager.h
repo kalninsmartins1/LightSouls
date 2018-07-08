@@ -11,10 +11,10 @@ class AIAgentManager
 {
 public:
 	static AIAgentManager*  GetInstance();
-	const Entity&			GetTargetEntity() const;
+	Entity*					GetTargetEntity() const;
 	void					GetPathToAgentType(const String& type, String& outPath) const;
 		
-	void SetTargetEntity(const Entity* entity);
+	void SetTargetEntity(Entity* entity);
 	
 	bool Init(cocos2d::Node* worldLayer, const String& pathToXML);
 	void Update(float deltaTime);
@@ -27,7 +27,7 @@ private:
 
 private:
 	cocos2d::Node*			 m_worldLayer;
-	const Entity*			 m_targetEntity;
+	Entity*					 m_targetEntity;
 	std::vector<SpawnPoint*> m_allActiveSpawnPoints;
 	std::map<String, String> m_agentConfigPathMap;
 };

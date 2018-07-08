@@ -29,7 +29,7 @@ RangedAttackComponent* RangedAttackComponent::Create(
 RangedAttackComponent::RangedAttackComponent(const String& pathToAmmo,
 		float attackRange, float ammoMoveSpeed,
 		float secondsBetweenAttacks) 
-	: AttackComponent(secondsBetweenAttacks, attackRange)
+	: GenericAttackComponent(secondsBetweenAttacks, attackRange)
 	, m_pathToAmmo(pathToAmmo)
 	, m_ammoMoveSpeed(ammoMoveSpeed)
 {
@@ -38,7 +38,7 @@ RangedAttackComponent::RangedAttackComponent(const String& pathToAmmo,
 void RangedAttackComponent::Attack(const Vector2& direction)
 {	
 	// Allow base class to perform its actions
-	AttackComponent::Attack(direction);
+	GenericAttackComponent::Attack(direction);
 
 	Arrow* pArrow = Arrow::Create(m_pathToAmmo, cocos2d::Vec2(
 		_owner->getPosition()),

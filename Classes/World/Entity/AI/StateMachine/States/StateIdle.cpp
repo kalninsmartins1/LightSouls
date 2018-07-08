@@ -6,23 +6,23 @@
 NS_LIGHTSOULS_BEGIN
 
 StateIdle::StateIdle(AIAgent& aiAgent)
-	: m_curProgress(StateProgress::IN_PROGRESS)	
+	: m_curProgress(EStateProgress::IN_PROGRESS)
 {
 
 }
 
-AIState StateIdle::GetStateType() const
+EAIState StateIdle::GetStateType() const
 {
-	return AIState::IDLE;
+	return EAIState::IDLE;
 }
 
 void StateIdle::OnEnter(AnimComponent * animComponent)
 {
-	m_curProgress = StateProgress::IN_PROGRESS;
+	m_curProgress = EStateProgress::IN_PROGRESS;
 	animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
 }
 
-StateProgress StateIdle::OnStep()
+EStateProgress StateIdle::OnStep()
 {
 	return m_curProgress;
 }
@@ -36,7 +36,7 @@ void StateIdle::OnEventReceived(const String& receivedEvent, const AEventData & 
 {
 	if (receivedEvent == AIAgent::GetEventAgentHealthChanged())
 	{
-		m_curProgress = StateProgress::DONE;
+		m_curProgress = EStateProgress::DONE;
 	}
 }
 

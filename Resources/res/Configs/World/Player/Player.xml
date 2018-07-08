@@ -2,10 +2,11 @@
 <Entity type="Player"
 			moveSpeed="360"
 			baseHealth="100"
-			baseStamina="200"
+			baseStamina="99999999"
 			baseDamage="10"
 			staminaRegenerateSpeed="20"
 			staminaRegenerateDelay="2"
+			knockBackStrenght="50"
 	>
 	
 	<Component type="TransformComponent">

@@ -8,7 +8,7 @@ NS_LIGHTSOULS_BEGIN
 class AnimComponent;
 class AIAgent;
 
-enum class StateProgress
+enum class EStateProgress
 {
 	NONE,
 	IN_PROGRESS,
@@ -16,11 +16,12 @@ enum class StateProgress
 	FAILED,
 };
 
-enum class AIState
+enum class EAIState
 {
 	NONE,
 	CHASE,
 	ATTACK,
+	LINE_ATTACK,
 	PATROL,
 	IDLE,
 	SIGNALING,
@@ -31,19 +32,19 @@ enum class AIState
 class AState : public cocos2d::Ref
 {
 public:	
-	virtual AIState GetStateType() const = 0;
-	AIState			GetNextStateOnSuccess() const;
-	AIState			GetNextStateOnFailure() const;
-	static AIState	GetStateFromString(String stateType);
+	virtual EAIState	GetStateType() const = 0;
+	EAIState			GetNextStateOnSuccess() const;
+	EAIState			GetNextStateOnFailure() const;
+	static EAIState		GetStateFromString(String stateType);
 
-	void			SetNextStateOnSuccess(const AIState& state);
-	void			SetNextStateOnFailure(const AIState& state);
+	void			SetNextStateOnSuccess(const EAIState& state);
+	void			SetNextStateOnFailure(const EAIState& state);
 
 	// Called when state is first entered
 	virtual void			OnEnter(AnimComponent* animComponent) = 0;
 
 	// Called to progress the state, returns current state progress
-	virtual StateProgress	OnStep() = 0;
+	virtual EStateProgress	OnStep() = 0;
 
 	// Called when state is exited
 	virtual void			OnExit() = 0;
@@ -51,11 +52,12 @@ public:
 	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData) = 0;
 
 	template<typename T>
-	static T*		Create(AIAgent& agent);
+	static T*				Create(AIAgent& agent);
 
 private:
-	AIState m_nextStateOnSuccess;
-	AIState m_nextStateOnFailure;
+	static std::map<EAIState, String>	s_stateToString;
+	EAIState							m_nextStateOnSuccess;
+	EAIState							m_nextStateOnFailure;
 };
 
 template<typename T>

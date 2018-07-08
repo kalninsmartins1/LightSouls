@@ -8,7 +8,7 @@ NS_LIGHTSOULS_BEGIN
 class AnimComponent;
 class AIAgent;
 class AState;
-enum class AIState;
+enum class EAIState;
 
 class StateMachine
 {
@@ -16,11 +16,11 @@ public:
 	StateMachine(AIAgent& agent);
 
 public:
-	void SetStartState(AIState stateType);
+	void SetStartState(EAIState stateType);
 
 	// Should be called once to turn on the state machine
 	void Start(AnimComponent* animComponent);
-	void AddAvailableState(AIState availableState, AIState stateOnSuccess, AIState stateOnFailure, float timeRestriction);
+	void AddAvailableState(EAIState availableState, EAIState stateOnSuccess, EAIState stateOnFailure, float timeRestriction);
 	void Reset();
 	// Should be called periodically to update current state of state machine 
 	void OnStep();
@@ -28,16 +28,16 @@ public:
 
 private:
 	void SwitchState(AState* newState);
-	void SwitchState(AIState newState);
+	void SwitchState(EAIState newState);
 	void OnStateDone();
 	void OnStateFailed();
 
 private:
 	AIAgent&									m_agent;
-	AIState										m_startState;
+	EAIState										m_startState;
 	AState*										m_curState;
-	AnimComponent*								m_animComponent;	
-	cocos2d::Map<AIState, AState*>				m_availableStates;
+	AnimComponent*								m_animComponent;
+	cocos2d::Map<EAIState, AState*>				m_availableStates;
 };
 
 NS_LIGHTSOULS_END

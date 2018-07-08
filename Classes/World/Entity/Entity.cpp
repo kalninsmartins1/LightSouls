@@ -27,6 +27,7 @@ Entity::Entity()
 	, m_physicsBodyForceScale(1.0f)
 	, m_staminaRegenerateSpeed(0.0f)
 	, m_staminaRegenerateDelay(0.0f)
+	, m_knockBackStrenght(0.0f)
 {
 }
 
@@ -69,6 +70,11 @@ void Entity::SetStaminaRegenerateSpeed(float regenerateSpeed)
 void Entity::SetStaminaRegenerateDelay(float regenerateDelay)
 {
 	m_staminaRegenerateDelay = regenerateDelay;
+}
+
+void Entity::SetKnockBackStrenght(float strenght)
+{
+	m_knockBackStrenght = strenght;
 }
 
 void Entity::setScale(float scaleX, float scaleY)
@@ -198,7 +204,8 @@ void Entity::ApplyKnockbackEffect(const Entity& attackingEntity)
 {	
 	float damage = attackingEntity.GetDamage();
 	Vector2 awayFromAttacker = getPosition() - attackingEntity.getPosition();
-	_physicsBody->applyImpulse(awayFromAttacker.getNormalized() * m_moveSpeed *
+	_physicsBody->applyImpulse(awayFromAttacker.getNormalized() * 
+		attackingEntity.m_knockBackStrenght *
 		m_physicsBodyForceScale);
 }
 

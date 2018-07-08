@@ -11,10 +11,10 @@ public:
 	StatePatrol(AIAgent& agent);
 
 public:
-	AIState			GetStateType() const override;
+	EAIState			GetStateType() const override;
 	
 	void			OnEnter(AnimComponent* animComponent) override;
-	StateProgress	OnStep() override;
+	EStateProgress	OnStep() override;
 	void			OnExit() override;
 	virtual void	OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;	
 
@@ -29,7 +29,7 @@ private:
 private:
 	const Entity*		m_targetEntity;
 	AIAgent&			m_agent;
-	StateProgress		m_curProgress;
+	EStateProgress		m_curProgress;
 	AnimComponent*		m_animComponent;
 	Vector2				m_curTargetPosition;
 	bool				m_isLookingAround;

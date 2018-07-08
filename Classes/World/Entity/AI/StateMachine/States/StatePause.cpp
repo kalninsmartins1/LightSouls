@@ -8,7 +8,7 @@ NS_LIGHTSOULS_BEGIN
 
 StatePause::StatePause(AIAgent& aiAgent)
 	: m_agent(aiAgent)
-	, m_curProgress(StateProgress::IN_PROGRESS)
+	, m_curProgress(EStateProgress::IN_PROGRESS)
 	, m_pauseTime(0.0f)
 {
 
@@ -17,13 +17,13 @@ StatePause::StatePause(AIAgent& aiAgent)
 void StatePause::OnEnter(AnimComponent* animComponent)
 {
 	animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
-	m_curProgress = StateProgress::IN_PROGRESS;
+	m_curProgress = EStateProgress::IN_PROGRESS;
 
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(StatePause::OnPauseExpired, this), m_pauseTime);
 }
 
-StateProgress StatePause::OnStep()
+EStateProgress StatePause::OnStep()
 {
 	return m_curProgress;
 }
@@ -40,12 +40,12 @@ void StatePause::OnEventReceived(const String & receivedEvent, const AEventData 
 
 void StatePause::OnPauseExpired()
 {
-	m_curProgress = StateProgress::DONE;
+	m_curProgress = EStateProgress::DONE;
 }
 
-AIState StatePause::GetStateType() const
+EAIState StatePause::GetStateType() const
 {
-	return AIState::PAUSE;
+	return EAIState::PAUSE;
 }
 
 void StatePause::SetPauseTime(float time)

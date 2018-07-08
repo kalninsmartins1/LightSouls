@@ -55,7 +55,7 @@ private:
 	static const String			s_eventOnPlayerHealthChanged;
 	static const String			s_eventOnPlayerStaminaChanged;
 	static const String			s_eventOnPlayerGiveDamage;
-	AttackComponent*			m_attackComponent;
+	GenericAttackComponent*			m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
 	bool					m_isDodging;

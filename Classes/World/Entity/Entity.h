@@ -50,6 +50,7 @@ public:
 	void			SetCurrentMoveSpeed(float moveSpeed);
 	void			SetStaminaRegenerateSpeed(float regenerateSpeed);
 	void			SetStaminaRegenerateDelay(float regenerateDelay);
+	void			SetKnockBackStrenght(float strenght);
 	virtual void	setScale(float scaleX, float scaleY) override;
 
 	void			ResetHealth();
@@ -102,6 +103,7 @@ private:
 	float m_physicsBodyForceScale;
 	float m_staminaRegenerateSpeed;
 	float m_staminaRegenerateDelay;
+	float m_knockBackStrenght;
 };
 
 NS_LIGHTSOULS_END

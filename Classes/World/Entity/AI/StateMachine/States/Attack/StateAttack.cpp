@@ -2,7 +2,7 @@
 #include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/AI/AIAgentManager.h"
 #include "GameConsts.h"
-#include "World/Entity/Components/Attack/AttackComponent.h"
+#include "World/Entity/Components/Attack/GenericAttackComponent.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "Utils/AnimationUtils.h"
 #include "Utils/Utils.h"
@@ -10,7 +10,7 @@
 NS_LIGHTSOULS_BEGIN
 
 StateAttack::StateAttack(AIAgent& agent)
-	: m_curProgress(StateProgress::NONE)
+	: m_curProgress(EStateProgress::NONE)
 	, m_agent(agent)
 	, m_targetEntity(nullptr)
 	, m_attackComponent(nullptr)
@@ -21,31 +21,31 @@ StateAttack::StateAttack(AIAgent& agent)
 
 void StateAttack::OnEnter(AnimComponent* animComponent)
 {
-	m_targetEntity = &AIAgentManager::GetInstance()->GetTargetEntity();
+	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_animComponent = animComponent;
 	m_attackComponent = m_agent.GetAttackComponent();
-	m_curProgress = StateProgress::IN_PROGRESS;
+	m_curProgress = EStateProgress::IN_PROGRESS;
 
 #if LIGHTSOULS_DEBUG_AI
 	CCLOG("StateAttack: OnEnter !");
 #endif
 }
 
-StateProgress StateAttack::OnStep()
+EStateProgress StateAttack::OnStep()
 {
 	const Vector2 toTarget = m_targetEntity->getPosition() - m_agent.getPosition();
 	if (toTarget.length() > m_attackComponent->GetAttackRange() && m_isAnimFinished)
 	{
 		// Target run away cant attack
-		m_curProgress = StateProgress::FAILED;
+		m_curProgress = EStateProgress::FAILED;
 	}
 	else if (m_targetEntity->GetHealth() <= 0)
 	{
 		// Target extinguished
-		m_curProgress = StateProgress::DONE;
+		m_curProgress = EStateProgress::DONE;
 	}
 
-	if(m_curProgress == StateProgress::IN_PROGRESS && m_isAnimFinished)
+	if(m_curProgress == EStateProgress::IN_PROGRESS && m_isAnimFinished)
 	{
 		if(m_attackComponent->IsReadyToAttack())
 		{
@@ -74,7 +74,7 @@ StateProgress StateAttack::OnStep()
 
 void StateAttack::OnExit()
 {
-	m_curProgress = StateProgress::NONE;
+	m_curProgress = EStateProgress::NONE;
 	m_isAnimFinished = true;
 
 #if LIGHTSOULS_DEBUG_AI
@@ -87,9 +87,9 @@ void StateAttack::OnEventReceived(const String& receivedEvent, const AEventData&
 	// ...
 }
 
-AIState StateAttack::GetStateType() const
+EAIState StateAttack::GetStateType() const
 {
-	return AIState::ATTACK;
+	return EAIState::ATTACK;
 }
 
 void StateAttack::OnAttackFinished()
@@ -97,7 +97,7 @@ void StateAttack::OnAttackFinished()
 	m_isAnimFinished = true;
 	m_agent.StopAttacking();
 	PlayIdleAnimation();
-	m_curProgress = StateProgress::DONE;
+	m_curProgress = EStateProgress::DONE;
 }
 
 void StateAttack::PlayIdleAnimation()

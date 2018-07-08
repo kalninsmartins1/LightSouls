@@ -1,7 +1,7 @@
 #include "AIAgent.h"
 #include "Utils/XML/XMLLoader.h"
 #include "GameConsts.h"
-#include "World/Entity/Components/Attack/AttackComponent.h"
+#include "World/Entity/Components/Attack/GenericAttackComponent.h"
 #include "Utils/Utils.h"
 #include "World/Entity/AI/StateMachine/StateMachine.h"
 #include "World/Entity/Components/AnimComponent.h"
@@ -81,7 +81,7 @@ bool AIAgent::Init(const String& pathToXML)
 		OnEntityInitialized();
 		m_stateMachine.Start(GetAnimComponent());
 
-		AttackComponent* attackComponent = dynamic_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
+		GenericAttackComponent* attackComponent = dynamic_cast<GenericAttackComponent*>(getComponent(ATTACK_COMPONENT));
 		const bool isAttackComponentFound = attackComponent != nullptr;
 		CCASSERT(isAttackComponentFound, "AIAgent: AIAttackComponent not found !");
 		m_attackComponent = attackComponent;
@@ -106,10 +106,10 @@ void AIAgent::Init(const XMLElement* element)
 	
 	String startStateType;
 	XMLLoader::ReadXMLAttribute(element, XML_AI_START_STATE, startStateType);
-	AIState startState = AState::GetStateFromString(startStateType);
+	EAIState startState = AState::GetStateFromString(startStateType);
 	m_stateMachine.SetStartState(startState);
 
-	CCASSERT(startState != AIState::NONE, "AI start state is not set !");
+	CCASSERT(startState != EAIState::NONE, "AI start state is not set !");
 	CCASSERT(chaseRadius > 1, "AI chase radius is too small !");
 	CCASSERT(chaseStopDistance > 0, "AI chase distance cant be negative !");
 	CCASSERT(patrolRadius > 1, "AI patrol radius is too small !");
@@ -124,8 +124,8 @@ void AIAgent::Init(const XMLElement* element)
 		stateXML = stateXML->NextSiblingElement())
 	{
 		String type = stateXML->Attribute(XML_TYPE_ATTR);
-		AIState state = AState::GetStateFromString(type);
-		if (state != AIState::NONE)
+		EAIState state = AState::GetStateFromString(type);
+		if (state != EAIState::NONE)
 		{
 			String nextSuccessType;
 			XMLLoader::ReadXMLAttribute(stateXML, XML_AI_NEXT_STATE_ON_SUCCESS, nextSuccessType);
@@ -133,8 +133,8 @@ void AIAgent::Init(const XMLElement* element)
 			XMLLoader::ReadXMLAttribute(stateXML, XML_AI_NEXT_STATE_ON_FAILURE, nextFailureType);
 			
 			float timeRestriction = stateXML->FloatAttribute(XML_TIME_ATTR);
-			AIState nextSuccessState = AState::GetStateFromString(nextSuccessType);
-			AIState nextFailureState = AState::GetStateFromString(nextFailureType);
+			EAIState nextSuccessState = AState::GetStateFromString(nextSuccessType);
+			EAIState nextFailureState = AState::GetStateFromString(nextFailureType);
 
 			m_stateMachine.AddAvailableState(state, nextSuccessState, nextFailureState, timeRestriction);
 		}
@@ -237,7 +237,7 @@ const Vector2& AIAgent::GetBasePosition() const
 	return m_basePosition;
 }
 
-AttackComponent* AIAgent::GetAttackComponent() const
+GenericAttackComponent* AIAgent::GetAttackComponent() const
 {
 	return m_attackComponent;
 }

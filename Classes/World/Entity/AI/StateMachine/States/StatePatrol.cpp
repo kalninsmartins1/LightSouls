@@ -12,7 +12,7 @@ NS_LIGHTSOULS_BEGIN
 StatePatrol::StatePatrol(AIAgent& agent)
 	: m_agent(agent)
 	, m_targetEntity(nullptr)
-	, m_curProgress(StateProgress::NONE)
+	, m_curProgress(EStateProgress::NONE)
 	, m_animComponent(nullptr)
 	, m_curTargetPosition(Vector2::ZERO)
 	, m_isLookingAround(false)
@@ -22,9 +22,9 @@ StatePatrol::StatePatrol(AIAgent& agent)
 
 void StatePatrol::OnEnter(AnimComponent* animComponent)
 {
-	m_targetEntity = &AIAgentManager::GetInstance()->GetTargetEntity();
+	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_animComponent = animComponent;
-	m_curProgress = StateProgress::IN_PROGRESS;
+	m_curProgress = EStateProgress::IN_PROGRESS;
 
 	if (!m_agent.IsProcessing())
 	{
@@ -36,14 +36,14 @@ void StatePatrol::OnEnter(AnimComponent* animComponent)
 #endif
 }
 
-StateProgress StatePatrol::OnStep()
+EStateProgress StatePatrol::OnStep()
 {
-	if(m_curProgress == StateProgress::IN_PROGRESS)
+	if(m_curProgress == EStateProgress::IN_PROGRESS)
 	{
 		// First check if player has been spotted
 		if (HasTargetBeenSpotted())
 		{
-			m_curProgress = StateProgress::DONE;
+			m_curProgress = EStateProgress::DONE;
 		}
 		else if(!m_isLookingAround && !m_agent.IsProcessing())
 		{
@@ -72,7 +72,7 @@ StateProgress StatePatrol::OnStep()
 
 void StatePatrol::OnExit()
 {
-	m_curProgress = StateProgress::NONE;
+	m_curProgress = EStateProgress::NONE;
 	m_isLookingAround = false;
 
 	// Clear any looking around timers
@@ -95,9 +95,9 @@ void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData&
 	}
 }
 
-AIState StatePatrol::GetStateType() const
+EAIState StatePatrol::GetStateType() const
 {
-	return AIState::PATROL;
+	return EAIState::PATROL;
 }
 
 bool StatePatrol::HasTargetBeenSpotted() const

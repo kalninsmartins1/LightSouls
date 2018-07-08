@@ -10,14 +10,14 @@ namespace tinyxml2
 
 NS_LIGHTSOULS_BEGIN
 
-class AttackComponent;
+class GenericAttackComponent;
 
 class AIAgent : public Entity
 {
 public:
 	~AIAgent();
 
-public:
+public:	
 	static const String& GetEventAgentDestroyed();
 	static const String& GetEventAgentHealthChanged();
 	float				 GetPatrolPause() const;
@@ -28,7 +28,7 @@ public:
 	float				 GetStoppingDistance() const;
 	const String&		 GetType() const;
 	const Vector2&		 GetBasePosition() const;
-	AttackComponent*	 GetAttackComponent() const;
+	GenericAttackComponent*	 GetAttackComponent() const;
 	virtual EntityType	 GetEntityType() const override;
 
 	void SetPatrolPause(float pauseInSeconds);
@@ -55,16 +55,17 @@ private:
 	bool Init(const String& pathToXML);
 	bool OnContactBegin(const cocos2d::PhysicsBody* otherBody);	
 
-private:
-	static String		s_eventAgentHealthChanged;
-	static String		s_eventAgentDestroyed;
-	StateMachine	    m_stateMachine;
-	AttackComponent*	m_attackComponent;
-	Vector2				m_basePosition;
-	Vector2				m_previousPosition;
-	String				m_agentType;
+private:	
+	static String			s_eventAgentHealthChanged;
+	static String			s_eventAgentDestroyed;
+	StateMachine			m_stateMachine;
+	GenericAttackComponent*	m_attackComponent;
+	Vector2					m_basePosition;
+	Vector2					m_previousPosition;
+	String					m_agentType;
+
 	float				m_chaseRadius;
-	float			    m_patrolRadius;	
+	float				m_patrolRadius;	
 	float				m_patrolPauseInSeconds;
 	float				m_chaseStopDistance;
 };

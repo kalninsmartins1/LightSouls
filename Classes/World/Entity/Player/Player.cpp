@@ -64,7 +64,7 @@ bool Player::Init(const String& pathToXML)
 	XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
 	
 	OnEntityInitialized();
-	m_attackComponent = static_cast<AttackComponent*>(getComponent(ATTACK_COMPONENT));
+	m_attackComponent = static_cast<GenericAttackComponent*>(getComponent(ATTACK_COMPONENT));
 	
 	PhysicsManager* physicsManager = GameScene::GetPhysicsManager();
 	physicsManager->AddContactBeginListener(getName(), 

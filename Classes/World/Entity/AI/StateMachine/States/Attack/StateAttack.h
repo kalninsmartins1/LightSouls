@@ -1,12 +1,11 @@
 #pragma once
 
-#include "AState.h"
-#include "LightSoulsTypes.h"
+#include "../AState.h"
 
 NS_LIGHTSOULS_BEGIN
 
 class Entity;
-class AttackComponent;
+class GenericAttackComponent;
 
 class StateAttack: public AState
 {
@@ -14,10 +13,10 @@ public:
 	StateAttack(AIAgent& agent);
 
 public:		
-	AIState					GetStateType() const override;
+	EAIState					GetStateType() const override;
 
 	virtual void			OnEnter(AnimComponent* animComponent) override;
-	virtual StateProgress	OnStep() override;
+	virtual EStateProgress	OnStep() override;
 	virtual void			OnExit() override;
 	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;
 
@@ -26,10 +25,10 @@ private:
 	void					PlayIdleAnimation();
 
 private:
-	StateProgress		m_curProgress;
+	EStateProgress		m_curProgress;
 	AIAgent&			m_agent;
 	const Entity*		m_targetEntity;
-	AttackComponent*	m_attackComponent;
+	GenericAttackComponent*	m_attackComponent;
 	AnimComponent*		m_animComponent;
 	bool				m_isAnimFinished;
 };

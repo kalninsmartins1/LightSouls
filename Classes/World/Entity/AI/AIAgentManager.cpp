@@ -20,14 +20,14 @@ AIAgentManager* AIAgentManager::GetInstance()
 	return &instace;
 }
 
-void AIAgentManager::SetTargetEntity(const Entity* pEntity)
-{		
+void AIAgentManager::SetTargetEntity(Entity* pEntity)
+{
 	m_targetEntity = pEntity;
 }
 
-const Entity& AIAgentManager::GetTargetEntity() const
+Entity* AIAgentManager::GetTargetEntity() const
 {
-	return *m_targetEntity;
+	return m_targetEntity;
 }
 
 void AIAgentManager::Update(float deltaTime)

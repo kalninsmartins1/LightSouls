@@ -254,6 +254,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 		const float baseDamage = root->FloatAttribute(XML_ENTITY_BASE_DAMAGE_ATTR);
 		const float staminaRegenerateSpeed = root->FloatAttribute(XML_ENTITY_STAMINA_REGENARATE_SPEED_ATTR);
 		const float staminaRegenerateDelay = root->FloatAttribute(XML_ENTITY_STAMINA_REGENARATE_DELAY_ATTR);
+		const float	knockBackStrenght = root->FloatAttribute(XML_ENTITY_KNOCK_BACK_STRENGHT);
 
 		entity.setName(actorType);
 		entity.SetBaseMoveSpeed(moveSpeed);
@@ -262,6 +263,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 		entity.SetBaseStamina(baseStamina);
 		entity.SetStaminaRegenerateSpeed(staminaRegenerateSpeed);
 		entity.SetStaminaRegenerateDelay(staminaRegenerateDelay);
+		entity.SetKnockBackStrenght(knockBackStrenght);
 
 		// Load entity components
 		for (XMLElement* element = root->FirstChildElement(); element;
@@ -342,6 +344,19 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 						secondsBetweenAttacks);
 				rangedAttack->setName(ATTACK_COMPONENT);
 				entity.addComponent(rangedAttack);
+			}
+			else if (componentType == GENERIC_ATTACK_COMPONENT)
+			{
+				const float secondsBetweenAttacks = element->FloatAttribute(XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
+				const float attackRange = element->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);				
+				const float staminaConsumption = element->FloatAttribute(XML_ATTACK_STAMINA_CONSUMPTION_ATTR);
+				const float comboExpireTime = element->FloatAttribute(XML_ENTITY_COMBO_EXPIRE_TIME_ATTR);
+
+				auto attackComponent = GenericAttackComponent::Create(secondsBetweenAttacks, attackRange);
+				attackComponent->SetStaminaConsumption(staminaConsumption);
+				attackComponent->SetComboExpireTime(comboExpireTime);
+				attackComponent->setName(ATTACK_COMPONENT);
+				entity.addComponent(attackComponent);
 			}
 			else if (componentType == LONG_SWORD_ATTACK_COMPONENT)
 			{

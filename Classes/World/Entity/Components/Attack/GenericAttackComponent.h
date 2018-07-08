@@ -6,12 +6,12 @@ NS_LIGHTSOULS_BEGIN
 
 class Entity;
 
-class AttackComponent : public cocos2d::Component
+class GenericAttackComponent : public cocos2d::Component
 {
 public:
-	AttackComponent(float secondsBetweenAttacks, float attackRange);
+	GenericAttackComponent(float secondsBetweenAttacks, float attackRange);
 
-public:
+public:	
 	// Returns attack range
 	float			GetAttackRange() const;
 
@@ -34,11 +34,12 @@ public:
 	void			SetStaminaConsumption(float staminaConsumption);
 	virtual void	setOwner(cocos2d::Node* owner);
 
+	static GenericAttackComponent*	Create(float secondsBetweenAttacks, float attackRange);
 	// Performs attack
-	virtual void	Attack(const Vector2& direction);
+	virtual void					Attack(const Vector2& direction);
 
 protected:
-	static void CheckAffectedObjects(const Entity& attacker, const AttackComponent& attackComponent, const Vector2& direction, float paddingFromBody, const cocos2d::PhysicsQueryRectCallbackFunc& callback);
+	static void CheckAffectedObjects(const Entity& attacker, const GenericAttackComponent& attackComponent, const Vector2& direction, float paddingFromBody, const cocos2d::PhysicsQueryRectCallbackFunc& callback);
 	void		TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) const;
 
 private:

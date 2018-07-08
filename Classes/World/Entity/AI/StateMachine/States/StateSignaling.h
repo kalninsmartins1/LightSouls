@@ -8,12 +8,12 @@ public:
 	StateSignaling(AIAgent& aiAgent);
 
 public:
-	virtual AIState			GetStateType() const override;
+	virtual EAIState		GetStateType() const override;
 	
 	void					SetSignalingTime(float time);
 
 	virtual void			OnEnter(AnimComponent * animComponent) override;
-	virtual StateProgress	OnStep() override;
+	virtual EStateProgress	OnStep() override;
 	virtual void			OnExit() override;
 	virtual void			OnEventReceived(const String & receivedEvent, const AEventData & eventData) override;
 
@@ -23,7 +23,7 @@ private:
 private:
 	AIAgent&		m_agent;
 	AnimComponent*  m_animComponent;
-	StateProgress	m_curProgress;
+	EStateProgress	m_curProgress;
 	float			m_signalTime;
 };
 

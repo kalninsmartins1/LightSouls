@@ -3,7 +3,8 @@
 #include "World/Entity/Components/AnimComponent.h"
 #include "Events/AEventData.h"
 #include "Utils/Utils.h"
-#include "States/StateAttack.h"
+#include "States/Attack/StateAttack.h"
+#include "States/Attack/StateLineAttack.h"
 #include "States/StateChase.h"
 #include "States/StatePatrol.h"
 #include "States/StateIdle.h"
@@ -14,14 +15,14 @@ NS_LIGHTSOULS_BEGIN
 
 StateMachine::StateMachine(AIAgent& agent)
 	: m_agent(agent)
-	, m_startState(AIState::NONE)
+	, m_startState(EAIState::NONE)
 	, m_curState(nullptr)
 	, m_animComponent(nullptr)
 	, m_availableStates()
 {
 }
 
-void StateMachine::SetStartState(AIState stateType)
+void StateMachine::SetStartState(EAIState stateType)
 {
 	m_startState = stateType;
 }
@@ -39,28 +40,32 @@ void StateMachine::Start(AnimComponent* animComponent)
 	}
 }
 
-void StateMachine::AddAvailableState(AIState availableState, AIState stateOnSuccess, AIState stateOnFailure, float timeRestriction)
+void StateMachine::AddAvailableState(EAIState availableState, EAIState stateOnSuccess, EAIState stateOnFailure, float timeRestriction)
 {
 	AState* state = nullptr;
 	switch (availableState)
 	{
-		case AIState::CHASE:
+		case EAIState::CHASE:
 			state = AState::Create<StateChase>(m_agent);
 			break;
 
-		case AIState::ATTACK:
+		case EAIState::ATTACK:
 			state = AState::Create<StateAttack>(m_agent);
 			break;
 
-		case AIState::PATROL:
+		case EAIState::LINE_ATTACK:
+			state = AState::Create<StateLineAttack>(m_agent);
+			break;
+
+		case EAIState::PATROL:
 			state = AState::Create<StatePatrol>(m_agent);
 			break;
 
-		case AIState::IDLE:
+		case EAIState::IDLE:
 			state = AState::Create<StateIdle>(m_agent);
 			break;
 
-		case AIState::SIGNALING:
+		case EAIState::SIGNALING:
 			{
 				state = AState::Create<StateSignaling>(m_agent);
 				auto signaling = static_cast<StateSignaling*>(state);
@@ -71,7 +76,7 @@ void StateMachine::AddAvailableState(AIState availableState, AIState stateOnSucc
 			}
 			break;
 
-		case AIState::PAUSE:
+		case EAIState::PAUSE:
 			{
 				state = AState::Create<StatePause>(m_agent);
 				auto pause = static_cast<StatePause*>(state);
@@ -106,7 +111,7 @@ void StateMachine::SwitchState(AState* newState)
 	m_curState->OnEnter(m_animComponent);
 }
 
-void StateMachine::SwitchState(AIState newState)
+void StateMachine::SwitchState(EAIState newState)
 {
 	if (Utils::ContainsKey(m_availableStates, newState))
 	{
@@ -120,18 +125,18 @@ void StateMachine::SwitchState(AIState newState)
 
 void StateMachine::OnStep()
 {
-	const StateProgress& curProgress = m_curState->OnStep();
+	const EStateProgress& curProgress = m_curState->OnStep();
 	switch (curProgress)
 	{
-		case StateProgress::IN_PROGRESS:
+		case EStateProgress::IN_PROGRESS:
 			// Wait for state to finish
 			break;
 
-		case StateProgress::DONE:
+		case EStateProgress::DONE:
 			OnStateDone();
 			break;
 
-		case StateProgress::FAILED:
+		case EStateProgress::FAILED:
 			OnStateFailed();
 			break;
 
@@ -148,8 +153,8 @@ void StateMachine::DispatchEvent(const String& eventType, const AEventData& even
 
 void StateMachine::OnStateDone()
 {
-	AIState nextState = m_curState->GetNextStateOnSuccess();
-	if (nextState != AIState::NONE)
+	EAIState nextState = m_curState->GetNextStateOnSuccess();
+	if (nextState != EAIState::NONE)
 	{
 		SwitchState(nextState);
 	}
@@ -161,8 +166,8 @@ void StateMachine::OnStateDone()
 
 void StateMachine::OnStateFailed()
 {
-	AIState nextState = m_curState->GetNextStateOnFailure();
-	if (nextState != AIState::NONE)
+	EAIState nextState = m_curState->GetNextStateOnFailure();
+	if (nextState != EAIState::NONE)
 	{
 		SwitchState(nextState);
 	}

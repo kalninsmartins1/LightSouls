@@ -1,11 +1,12 @@
 <?xml version="1.0" ?>
 <Entity type="Bomb"
-			moveSpeed="160"
+			moveSpeed="400"
 			baseHealth="100"
 			baseStamina="100"
 			baseDamage="10"
 			staminaRegenerateSpeed="2"
 			staminaRegenerateDelay="1"
+			knockBackStrenght="100"
 			>
 			
 	<Component type="TransformComponent">
@@ -21,25 +22,21 @@
 				chaseRadius="1500"
 				startState="Idle">
 		
-		<State  type="Idle"				
-				onSuccess="Chase"/>
-		
-		<State  type="Chase"
-				onSuccess="Signaling"
-				onFailure="Idle"/>
+		<State  type="Idle"
+				onSuccess="Signaling"/>
 
-		<State  type="Attack"
+		<State  type="LineAttack"
 				onSuccess="Pause"
-				onFailure="Chase"/>
+				onFailure="Pause"/>
 				
 		<State 	type="Signaling"
-				onSuccess="Attack"
-				onFailure="Chase" 
+				onSuccess="LineAttack"
+				onFailure="Pause" 
 				time="1.0"/>
 
 		<State 	type="Pause"
-				onSuccess="Chase"				
-				time="1.0"/>				
+				onSuccess="Signaling"
+				time="1.0"/>
 
 	</Component>
 
@@ -49,7 +46,7 @@
 			path="res/Graphics/World/AI/Bomb/bombAnims.png" 
 			plistPath="res/Graphics/World/AI/Bomb/bombAnims.plist">
 			
-			<Anim 	type="Idle"			
+			<Anim 	type="Idle"
 					frameNamePattern="bomb_idle%d.png"
 					frameCount="1"
 					timeBetweenFrames="0.1"
@@ -60,13 +57,13 @@
 					frameCount="2"
 					timeBetweenFrames="0.1"
 			/>
-		</SpriteSheet>						
+		</SpriteSheet>
 	</Component>
 	
-	<Component 	type="HitAttackComponent"
+	<Component 	type="GenericAttackComponent"
 				secondsBetweenAttacks="0.2" 
 				comboExpireTime="0.6"
-				attackRange="60"				
+				attackRange="60"
 				staminaConsumption="20">
 	</Component>
 	
@@ -81,7 +78,7 @@
 			isGravityEnabled="false"
 			isRotationEnabled="false"
 			collisionBitMask="1"
-			forceScale="60"		
+			forceScale="60"
 			/>
 	</Component>
 	

@@ -2,20 +2,30 @@
 
 namespace LightSouls
 {
-	static constexpr float PI = 3.14159265359f;
-	static constexpr int FULL_CIRCLE_DEGREES = 360;
-	static constexpr int HALF_CIRCLE_DEGREES = 180;
-	static constexpr int MAX_SPRITE_NAME_LENGTH = 100;
-	static constexpr int DEFAULT_COLLISION_MASK = 1;
+	// Default values
+	static constexpr float	PI = 3.14159265359f;
+	static constexpr int	FULL_CIRCLE_DEGREES = 360;
+	static constexpr int	HALF_CIRCLE_DEGREES = 180;
+	static constexpr int	MAX_SPRITE_NAME_LENGTH = 100;
+	static constexpr int	DEFAULT_COLLISION_MASK = 1;	
+	static constexpr int	WORLD_LAYER = -32768;
+	static constexpr float	LOADING_TIME = 0.1f;
 
+	// Action tag ids
 	static constexpr int ACTION_MOVE_TAG = 0;
 	static constexpr int ACTION_ANIM_TAG = 1;
 	static constexpr int ACTION_TIMER_TAG = 2;
 	static constexpr int ACTION_STAMINA_DELAY_TIMER = 3;
 	static constexpr int ACTION_CAMERA_SHAKE = 4;
 
-	static constexpr int WORLD_LAYER = -32768;
-	static constexpr float LOADING_TIME = 0.1f;
+	// AI states
+	static constexpr const char* AI_STATE_ATTACK = "Attack";
+	static constexpr const char* AI_STATE_CHASE = "Chase";
+	static constexpr const char* AI_STATE_IDLE = "Idle";
+	static constexpr const char* AI_STATE_LINE_ATTACK = "LineAttack";
+	static constexpr const char* AI_STATE_PATROL = "Patrol";
+	static constexpr const char* AI_STATE_PAUSE = "Pause";
+	static constexpr const char* AI_STATE_SIGNALING = "Signaling";	
 
 	// Entity components
 	static constexpr char* ANIM_COMPONENT = "AnimComponent";
@@ -29,6 +39,7 @@ namespace LightSouls
 	static constexpr char* RANGED_ATTACK_COMPONENT = "RangedAttackComponent";
 	static constexpr char* LONG_SWORD_ATTACK_COMPONENT = "LongSwordAttackComponent";
 	static constexpr char* HIT_ATTACK_COMPONENT = "HitAttackComponent";
+	static constexpr char* GENERIC_ATTACK_COMPONENT = "GenericAttackComponent";
 
 	// Camera components
 	static constexpr char* CAMERA_SHAKE_COMPONENT = "CameraShake";

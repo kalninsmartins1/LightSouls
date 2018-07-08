@@ -1,11 +1,26 @@
-#include "AttackComponent.h"
+#include "GenericAttackComponent.h"
 #include "Utils/Utils.h"
 #include "World/Entity/Entity.h"
 #include "World/Physics/PhysicsManager.h"
 
 NS_LIGHTSOULS_BEGIN
 
-AttackComponent::AttackComponent(float secondsBetweenAttacks, float attackRange)
+GenericAttackComponent* GenericAttackComponent::Create(float secondsBetweenAttacks, float attackRange)
+{
+	auto attackComponent = new (std::nothrow) GenericAttackComponent(secondsBetweenAttacks, attackRange);
+	if (attackComponent != nullptr)
+	{
+		attackComponent->autorelease();
+	}
+	else
+	{
+		CC_SAFE_DELETE(attackComponent);
+	}
+
+	return attackComponent;
+}
+
+GenericAttackComponent::GenericAttackComponent(float secondsBetweenAttacks, float attackRange)
 	: m_ownerEntity(nullptr)
 	, m_lastTimeAttacked(0.0f)
 	, m_secondsBetweenAttacks(secondsBetweenAttacks)
@@ -15,34 +30,34 @@ AttackComponent::AttackComponent(float secondsBetweenAttacks, float attackRange)
 {
 }
 
-float AttackComponent::GetAttackRange() const
+float GenericAttackComponent::GetAttackRange() const
 {
 	return m_attackRange;
 }
 
-float LightSouls::AttackComponent::GetComboExpireTime() const
+float LightSouls::GenericAttackComponent::GetComboExpireTime() const
 {
 	return m_comboExpireTime;
 }
 
-float AttackComponent::GetStaminaConsumption() const
+float GenericAttackComponent::GetStaminaConsumption() const
 {
 	return m_staminaConsumption;
 }
 
-bool LightSouls::AttackComponent::IsComboExpired() const
+bool LightSouls::GenericAttackComponent::IsComboExpired() const
 {
 	return GetSecondsSinceLastAttack() > m_comboExpireTime;
 }
 
-void AttackComponent::Attack(const Vector2& direction)
+void GenericAttackComponent::Attack(const Vector2& direction)
 {
 	m_lastTimeAttacked = Utils::GetTimeStampInMilliseconds();
 	m_ownerEntity->ConsumeStamina(m_staminaConsumption);
 }
 
-void AttackComponent::CheckAffectedObjects(const Entity& attacker,
-	const AttackComponent& attackComponent, const Vector2& direction,
+void GenericAttackComponent::CheckAffectedObjects(const Entity& attacker,
+	const GenericAttackComponent& attackComponent, const Vector2& direction,
 	float paddingFromBody, const QueryRectCallback& callback)
 {
 	// After attack finished check if we hit something	
@@ -67,7 +82,7 @@ void AttackComponent::CheckAffectedObjects(const Entity& attacker,
 	PhysicsManager::QuerryRect(rect, callback);
 }
 
-void AttackComponent::TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) const
+void GenericAttackComponent::TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) const
 {
 	Entity* hitEntity = dynamic_cast<Entity*>(physicsObject.getBody()->getNode());
 	const Entity* ownerEntity = GetOwnerEntity();
@@ -80,13 +95,13 @@ void AttackComponent::TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) cons
 	}
 }
 
-float LightSouls::AttackComponent::GetSecondsSinceLastAttack() const
+float LightSouls::GenericAttackComponent::GetSecondsSinceLastAttack() const
 {
 	const long long millisecondsSinceLastAttack = Utils::GetTimeStampInMilliseconds() - m_lastTimeAttacked;	
 	return Utils::ConvertMillisecondsToSeconds(millisecondsSinceLastAttack);
 }
 
-bool AttackComponent::IsReadyToAttack() const
+bool GenericAttackComponent::IsReadyToAttack() const
 {
 	// Check if attack cooldown has passed
 	bool isAttackCooledDown = GetSecondsSinceLastAttack() > m_secondsBetweenAttacks;
@@ -100,35 +115,34 @@ bool AttackComponent::IsReadyToAttack() const
 	return isAttackCooledDown && hasEnoughStamina && isEntityReady;
 }
 
-const Entity* LightSouls::AttackComponent::GetOwnerEntity() const
+const Entity* LightSouls::GenericAttackComponent::GetOwnerEntity() const
 {
 	return m_ownerEntity;
 }
 
-void AttackComponent::SetComboExpireTime(float expireTime)
+void GenericAttackComponent::SetComboExpireTime(float expireTime)
 {
 	m_comboExpireTime = expireTime;
 }
 
-void AttackComponent::SetStaminaConsumption(float staminaConsumption)
+void GenericAttackComponent::SetStaminaConsumption(float staminaConsumption)
 {
 	m_staminaConsumption = staminaConsumption;
 }
 
-void AttackComponent::setOwner(cocos2d::Node* owner)
+void GenericAttackComponent::setOwner(cocos2d::Node* owner)
 {
 	if (owner != nullptr)
 	{
 		m_ownerEntity = dynamic_cast<Entity*>(owner);
 		CCASSERT(m_ownerEntity != nullptr,
-			"LongSwordAttackComponent: Owner is not an Entity !");
+			"GenericAttackComponent: Owner is not an Entity !");
 	}
 	else
 	{
-		CCLOGERROR("LongSwordAttackComponent: Setting nullptr as owner !");
+		CCLOGERROR("GenericAttackComponent: Setting nullptr as owner !");
 	}
 }
 
 NS_LIGHTSOULS_END
-
 
