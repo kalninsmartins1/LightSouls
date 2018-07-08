@@ -11,8 +11,15 @@ CameraShake::CameraShake()
 	, m_curCameraShakeTrigger(nullptr)
 	, m_isCameraShakeActive(false)
 	, m_isMovingToNewPosition(false)
+	, m_onStartCameraShakeEventListener(nullptr)
 {
 
+}
+
+CameraShake::~CameraShake()
+{
+	cocos2d::Director::getInstance()->
+		getEventDispatcher()->removeEventListener(m_onStartCameraShakeEventListener);
 }
 
 bool CameraShake::Init(tinyxml2::XMLElement* element)
@@ -31,7 +38,7 @@ bool CameraShake::Init(tinyxml2::XMLElement* element)
 		m_cameraShakeTriggers[triggerEvent] = trigger;
 
 		// Register for event
-		cocos2d::Director::getInstance()->
+		m_onStartCameraShakeEventListener = cocos2d::Director::getInstance()->
 		 	getEventDispatcher()->
 		 	addCustomEventListener(triggerEvent,
 		 		CC_CALLBACK_1(CameraShake::OnStartCameraShake, this));

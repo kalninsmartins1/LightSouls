@@ -20,6 +20,7 @@ public:
 
 private:
 	CameraShake();
+	~CameraShake();
 
 private:
 	bool Init(tinyxml2::XMLElement* element);
@@ -33,6 +34,7 @@ private:
 	CameraShakeTrigger*						m_curCameraShakeTrigger;
 	bool									m_isCameraShakeActive;
 	bool									m_isMovingToNewPosition;
+	cocos2d::EventListener*					m_onStartCameraShakeEventListener;
 };
 
 NS_LIGHTSOULS_END
