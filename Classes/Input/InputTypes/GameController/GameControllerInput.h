@@ -89,7 +89,7 @@ private:
 	void OnAxisInput(cocos2d::Controller* pController, int axisCode, cocos2d::Event* pEvent);
 
 private:
-	bool								m_isConnected;
+	static bool							s_isConnected;
 	std::map<String, ControllerAxis>	m_controllerAxis;
 	std::map<int, String>				m_buttonCodeToAxisAction;
 };

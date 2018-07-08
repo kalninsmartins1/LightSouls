@@ -7,6 +7,7 @@ namespace LightSouls
 	class Player;
 	class ProgressBar;
 	class PhysicsManager;
+	class GameInput;
 };
 
 namespace cocos2d
@@ -25,6 +26,7 @@ public:
 
 public:
 	static LightSouls::PhysicsManager* GetPhysicsManager();
+	static LightSouls::GameInput*	   GetGameInput();
 
 	static cocos2d::Scene* CreateScene();
 	
@@ -40,12 +42,13 @@ private:
 	void OnPlayerHealthChanged(cocos2d::EventCustom* eventData);
 	void OnPlayerStaminaChanged(cocos2d::EventCustom* eventData);
 	void OnAgentDestroyed(cocos2d::EventCustom* eventData);
+	void SwitchToGameOverScene();
 
 private:
 	static LightSouls::PhysicsManager*			s_physicsManager;
+	static LightSouls::GameInput*				s_gameInput;
 	LightSouls::Player*							m_player;
 	LightSouls::ProgressBar*					m_healthBar;
 	LightSouls::ProgressBar*					m_staminaBar;
-	std::vector<cocos2d::EventListenerCustom*>	m_eventListeners;
 	cocos2d::ui::Text*							m_scoreText;
 };

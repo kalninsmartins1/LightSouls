@@ -17,14 +17,12 @@ enum class GameInputType
 	GAME_CONTROLLER,
 };
 
-class GameInput : cocos2d::Ref
+class GameInput : public cocos2d::Ref
 {
 public:
 	~GameInput();
 
 public:
-	static GameInput*	GetInstance();
-	
 	// Returns true for action once when input is released
 	bool				HasAction(const String& action) const;
 
@@ -34,7 +32,7 @@ public:
 	// Return current normalized axis value
 	float				GetInputAxis(const String& axis) const;
 
-	bool LoadInputConfiguration(const String& pathToConfigFile);
+	static GameInput* Create(const String& pathToConfig);
 	void Update(float deltaTime);
 	void AddAxisActionInput(GameInputType inputType, const String& actionName,
 		const String& keyCodeFromStr, const String& keyCodeToStr,
@@ -48,6 +46,7 @@ private:
 
 private:
 	bool Init();
+	bool Init(const String& pathToConfigFile);
 
 	void AddKeyboardActionKey(const String& actionName, const String& inputCode) const;
 	void AddKeyboardStateKey(const String& actionName, const String& inputCode) const;
@@ -66,7 +65,6 @@ private:
 	std::unique_ptr<KeyboardInput>			m_keyboard;
 	std::unique_ptr<MouseInput>				m_mouseInput;
 	std::unique_ptr<GameControllerInput>	m_gameControllerInput;
-	bool									m_isConfigLoaded;
 };
 
 NS_LIGHTSOULS_END

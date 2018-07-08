@@ -8,21 +8,16 @@
 NS_LIGHTSOULS_BEGIN
 
 GameInput::GameInput()
-	: m_isConfigLoaded(false)
+	: m_keyboard(nullptr)
+	, m_mouseInput(nullptr)
+	, m_gameControllerInput(nullptr)
 {
-	if (!Init())
-	{
-		CCASSERT(false, "GameInput: Failed to initilize !");
-	}
-}
-GameInput* GameInput::GetInstance()
-{
-	static GameInput instance;
-	return &instance;
+
 }
 
 GameInput::~GameInput()
 {
+	m_gameControllerInput.release();
 	m_mouseInput.release();
 	m_keyboard.release();
 }
@@ -78,13 +73,21 @@ float GameInput::GetInputAxis(const String& axisAction) const
 	return value;
 }
 
-bool GameInput::LoadInputConfiguration(const String& pathToConfigFile)
+GameInput* GameInput::Create(const String& pathToConfig)
 {
-	if (!m_isConfigLoaded)
+	GameInput* input = new (std::nothrow) GameInput();
+	if (input == nullptr || !input->Init(pathToConfig))
 	{
-		m_isConfigLoaded = XMLLoader::LoadInputSettings(*this, pathToConfigFile);
+		CC_SAFE_DELETE(input);
 	}
-	return m_isConfigLoaded;
+
+	return input;
+}
+
+bool GameInput::Init(const String& pathToConfigFile)
+{
+	bool isLoadedSuccessfully = Init() && XMLLoader::LoadInputSettings(*this, pathToConfigFile);
+	return isLoadedSuccessfully;
 }
 
 bool GameInput::HasAction(const String& action) const

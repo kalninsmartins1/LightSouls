@@ -16,16 +16,16 @@
 USING_NS_CC;
 
 LightSouls::PhysicsManager* GameScene::s_physicsManager = nullptr;
+LightSouls::GameInput* GameScene::s_gameInput = nullptr;
 
 GameScene::GameScene()
 	: m_player(nullptr)
 	, m_healthBar(nullptr)
-	, m_staminaBar(nullptr)	
-	, m_eventListeners()
+	, m_staminaBar(nullptr)
 	, m_scoreText(nullptr)
 {
 	// Reset player score upon new game
-	LightSouls::ScoringSystem::GetInstance()->Reset();		
+	LightSouls::ScoringSystem::GetInstance()->Reset();
 }
 
 GameScene::~GameScene()
@@ -33,18 +33,18 @@ GameScene::~GameScene()
 	LightSouls::AIAgentManager::GetInstance()->Cleanup();
 	s_physicsManager->release();
 	s_physicsManager = nullptr;
-
-	EventDispatcher* eventDispather = getEventDispatcher();
-	for (auto eventListener : m_eventListeners)
-	{
-		eventDispather->removeEventListener(eventListener);
-	}
-	m_eventListeners.clear();
+	s_gameInput->release();
+	s_gameInput = nullptr;
 }
 
 LightSouls::PhysicsManager* GameScene::GetPhysicsManager()
 {
 	return s_physicsManager;
+}
+
+LightSouls::GameInput* GameScene::GetGameInput()
+{
+	return s_gameInput;
 }
 
 Scene* GameScene::CreateScene()
@@ -86,12 +86,12 @@ bool GameScene::init()
 	InitUILayer();
 
 	// Init Input
-	if (!LightSouls::GameInput::GetInstance()->LoadInputConfiguration("res/Configs/Input/Input.xml"))
+	s_gameInput = LightSouls::GameInput::Create("res/Configs/Input/Input.xml");
+	if (s_gameInput == nullptr)
 	{
 		// Halt the game when in debug mode
 		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
 	}
-	LightSouls::GameInput::GetInstance()->ResetInputState();
 
 	// Call update for this scene
 	scheduleUpdate();
@@ -102,9 +102,8 @@ bool GameScene::init()
 void GameScene::update(float deltaTime)
 {	
 	// Keep input events up to date
-	auto gameInput = LightSouls::GameInput::GetInstance();	
-	gameInput->Update(deltaTime);
-	if (gameInput->HasAction("ExitGame"))
+	s_gameInput->Update(deltaTime);
+	if (s_gameInput->HasAction("ExitGame"))
 	{
 		Director::getInstance()->end();
 		return;
@@ -144,15 +143,13 @@ void GameScene::InitWolrdLayer()
 	m_player = LightSouls::Player::Create("res/Configs/World/Player/Player.xml");
 	worldLayer->addChild(m_player);
 	
-	EventListenerCustom* healthListener = getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnHealthChanged(),
+	EventDispatcher* eventDispatcher = getEventDispatcher();
+	eventDispatcher->addCustomEventListener(LightSouls::Player::GetEventOnHealthChanged(),
 		CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
-	EventListenerCustom* staminaListener = getEventDispatcher()->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
+	eventDispatcher->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
 		CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
-	EventListenerCustom* agentDestroyListener = getEventDispatcher()->addCustomEventListener(LightSouls::AIAgent::GetEventAgentDestroyed(),
+	eventDispatcher->addCustomEventListener(LightSouls::AIAgent::GetEventAgentDestroyed(),
 		CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
-	m_eventListeners.push_back(healthListener);
-	m_eventListeners.push_back(staminaListener);
-	m_eventListeners.push_back(agentDestroyListener);
 
 	// Init AI
 	LightSouls::AIAgentManager* agentManager = LightSouls::AIAgentManager::GetInstance();
@@ -225,7 +222,7 @@ void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 		m_healthBar->SetCurrentValue(healthData->GetPercentage());
 		if (healthData->GetNewValue() <= 0)
 		{
-			Director::getInstance()->replaceScene(GameOverScene::create());
+			SwitchToGameOverScene();
 		}
 	}
 }
@@ -246,4 +243,10 @@ void GameScene::OnAgentDestroyed(cocos2d::EventCustom* eventData)
 	ScoringSystem* scoringSystem = ScoringSystem::GetInstance();
 	scoringSystem->IncreaseScore();
 	m_scoreText->setString(StringUtils::format("Score: %d", scoringSystem->GetScore()));
+}
+
+void GameScene::SwitchToGameOverScene()
+{
+	getEventDispatcher()->removeAllEventListeners();
+	Director::getInstance()->replaceScene(GameOverScene::create());
 }

@@ -3,10 +3,10 @@
 
 NS_LIGHTSOULS_BEGIN
 
+bool GameControllerInput::s_isConnected = false;
+
 GameControllerInput::GameControllerInput()
 {
-	m_isConnected = false;
-
 	if (!Init())
 	{
 		CCASSERT(false, "GameControllerInput: Failed to initialize !");
@@ -34,10 +34,10 @@ bool GameControllerInput::Init()
 	controllerListener->onKeyUp = CC_CALLBACK_3(GameControllerInput::OnButtonUp, this);
 	controllerListener->onAxisEvent = CC_CALLBACK_3(GameControllerInput::OnAxisInput, this);
 
-	EventDispatcher* pEventDispatcher = Director::getInstance()->getEventDispatcher();
-	pEventDispatcher->addEventListenerWithFixedPriority(controllerListener, 1);
+	EventDispatcher* eventDispatcher = Director::getInstance()->getEventDispatcher();
+	eventDispatcher->addEventListenerWithFixedPriority(controllerListener, 1);
 
-	return pEventDispatcher != nullptr;
+	return eventDispatcher != nullptr;
 }
 
 float GameControllerInput::GetAxisInput(const String& axisName) const
@@ -81,17 +81,17 @@ void GameControllerInput::ResetInputState()
 
 bool GameControllerInput::IsConnected() const
 {
-	return m_isConnected;
+	return s_isConnected;
 }
 
 void GameControllerInput::OnControllerConnected()
 {
-	m_isConnected = true;
+	s_isConnected = true;
 }
 
 void GameControllerInput::OnControllerDisconnected()
 {
-	m_isConnected = false;
+	s_isConnected = false;
 }
 
 void GameControllerInput::OnButtonDown(cocos2d::Controller* pController, int buttonCode,

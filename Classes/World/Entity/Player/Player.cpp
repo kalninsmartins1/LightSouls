@@ -125,7 +125,7 @@ void Player::OnDodgeFinished()
 
 void Player::ManageInput()
 {
-	GameInput* input = GameInput::GetInstance();
+	GameInput* input = GameScene::GetGameInput();
 	if (input->HasAction("LightAttackInput"))
 	{
 		LightAttack();
