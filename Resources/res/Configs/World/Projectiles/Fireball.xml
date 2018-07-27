@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<Projectile type="Fireball"
+			moveSpeed="300"			
+	>
+	
+	<Component 	type="SpriteComponent" 
+				path="res/Graphics/World/Projectiles/flame.png">
+	</Component>
+	
+	<Component type="RigidBodyComponent">
+		<AnchorPosition x="0" y="0" />
+		<PhysicsMaterial density="0.1" restitution="0" friction="0.3" />
+		<PhysicsBody
+			shape="box"
+			width="110"
+			height="70"
+			isDynamic="true" 
+			isGravityEnabled="false" 
+			isRotationEnabled="false"
+			collisionBitMask="4"
+			forceScale="60"
+			/>
+	</Component>
+	
+</Projectile>

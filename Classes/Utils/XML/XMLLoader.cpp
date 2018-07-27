@@ -20,6 +20,7 @@
 #include "Camera/Camera.h"
 #include "Camera/Components/CameraShake.h"
 #include "World/Entity/AI/SpawnPointConfig.h"
+#include "World/Projectiles/ProjectileConfig.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -96,6 +97,39 @@ bool XMLLoader::InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager, const
 	return isSuccessful;
 }
 
+bool XMLLoader::InitializeProjectileConfig(ProjectileConfig& config, const String& pathToXML)
+{
+	XMLDoc doc;
+	const bool isSuccessful = LoadXMLFile(pathToXML, doc);
+	if (isSuccessful)
+	{
+		XMLElement* data = doc.RootElement();
+
+		const float moveSpeed = data->FloatAttribute(XML_MOVE_SPEED_ATTR);
+		config.SetMoveSpeed(moveSpeed);
+
+		// Loop components
+		for (XMLElement* element = data->FirstChildElement(); element;
+			element = element->NextSiblingElement())
+		{
+			const String& componentType = element->Attribute(XML_TYPE_ATTR);
+			if (componentType == RIGID_BODY_COMPONENT)
+			{
+				PhysicsBodyConfig rigidBodyConfig;
+				CreatePhysicsBodyFromAttributes(element, rigidBodyConfig);
+				config.SetPhysicsBodyConfig(rigidBodyConfig);
+			}
+			else if (componentType == SPRITE_COMPONENT)
+			{
+				const String& pathToSprite = element->Attribute(XML_PATH_ATTR);
+				config.SetPathToSprite(pathToSprite);
+			}
+		}
+	}
+
+	return isSuccessful;
+}
+
 bool XMLLoader::InitializeCamera(Camera& camera, const String& pathToXML)
 {
 	XMLDoc doc;
@@ -105,7 +139,7 @@ bool XMLLoader::InitializeCamera(Camera& camera, const String& pathToXML)
 		XMLElement* data = doc.RootElement();
 		for (XMLElement* element = data->FirstChildElement(); element;
 			element = element->NextSiblingElement())
-		{ 
+		{
 			const String& type = element->Attribute(XML_TYPE_ATTR);
 
 			if (type == CAMERA_SHAKE_COMPONENT)
@@ -219,7 +253,7 @@ void XMLLoader::LoadUIElement(const XMLElement* element, UIElementConfig& outUIE
 	const XMLElement* scaleNode = element->FirstChildElement(XML_NODE_SCALE);
 
 	const String& pathToSprite = spriteNode->Attribute(XML_PATH_ATTR);
-	
+
 	Vector2 anchorPos;
 	GetVector2FromElement(anchorPositionNode, anchorPos);
 
@@ -315,7 +349,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				else
 				{
 					CCASSERT(false, "Trying to add AIController component to entity that is not of type AIAgent !");
-				}				
+				}
 			}
 			else if (componentType == ANIM_COMPONENT)
 			{
@@ -323,32 +357,25 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				animComponent->setName(ANIM_COMPONENT);
 				animComponent->LoadConfig(element);
 				entity.addComponent(animComponent);
-			}			
+			}
 			else if (componentType == RANGED_ATTACK_COMPONENT)
 			{
-				const String& pathToAmmoSprite =
-					element->Attribute(XML_PATH_ATTR);
-				const float maxAmmoFlyDistance =
-					element->FloatAttribute(XML_AI_MAX_FLY_DISTANCE);
-				const float ammoMoveSpeed =
-					element->FloatAttribute(XML_MOVE_SPEED_ATTR);
-				const float secondsBetweenAttacks =
-					element->FloatAttribute(
-						XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
+				const float range = element->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);
+				const float secondsBetweenAttacks = element->FloatAttribute(XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
 
-				RangedAttackComponent* rangedAttack =
-					RangedAttackComponent::Create(
-						pathToAmmoSprite,
-						maxAmmoFlyDistance,
-						ammoMoveSpeed,
-						secondsBetweenAttacks);
+				XMLElement* projectileElem = element->FirstChildElement(XML_NODE_PROJECTILE);
+				const String& pathToProjectile = projectileElem->Attribute(XML_PATH_ATTR);
+				ProjectileConfig config;
+				config.Init(pathToProjectile);
+
+				RangedAttackComponent* rangedAttack = RangedAttackComponent::Create(config, range, secondsBetweenAttacks);
 				rangedAttack->setName(ATTACK_COMPONENT);
 				entity.addComponent(rangedAttack);
 			}
 			else if (componentType == GENERIC_ATTACK_COMPONENT)
 			{
 				const float secondsBetweenAttacks = element->FloatAttribute(XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
-				const float attackRange = element->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);				
+				const float attackRange = element->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);
 				const float staminaConsumption = element->FloatAttribute(XML_ATTACK_STAMINA_CONSUMPTION_ATTR);
 				const float comboExpireTime = element->FloatAttribute(XML_ENTITY_COMBO_EXPIRE_TIME_ATTR);
 
@@ -378,7 +405,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			else if (componentType == HIT_ATTACK_COMPONENT)
 			{
 				const float secondsBetweenAttacks = element->FloatAttribute(XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
-				const float attackRange = element->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);				
+				const float attackRange = element->FloatAttribute(XML_ENTITY_ATTACK_RANGE_ATTR);
 				const float staminaConsumption = element->FloatAttribute(XML_ATTACK_STAMINA_CONSUMPTION_ATTR);
 				const float comboExpireTime = element->FloatAttribute(XML_ENTITY_COMBO_EXPIRE_TIME_ATTR);
 
@@ -390,9 +417,10 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			}
 			else if (componentType == RIGID_BODY_COMPONENT)
 			{
-				cocos2d::Size outBodySize;
-				CreatePhysicsBodyFromAttributes(&entity, element, outBodySize);
-				
+				PhysicsBodyConfig config;
+				CreatePhysicsBodyFromAttributes(element, config);
+				PhysicsManager::AddPhysicsBody(entity, config);
+
 				const XMLElement* physicsBodyElem = element->FirstChildElement(XML_NODE_PHYSICS_BODY);
 				const XMLElement* bodyAnchorElem = element->FirstChildElement(XML_NODE_ANCHOR_POSITION);
 
@@ -401,7 +429,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				GetVector2FromElement(bodyAnchorElem, anchorPosition);
 
 				entity.SetPhysicsBodyForceScale(forceScale);
-				entity.SetPhysicsBodySize(outBodySize);
+				entity.SetPhysicsBodySize(config.GetSize());
 				entity.SetPhysicsBodyAnchor(anchorPosition);
 			}
 			else if (componentType == MIRROR_SPRITE_COMPONENT)
@@ -527,8 +555,7 @@ bool XMLLoader::LoadWorld(World& world, const String& pathToXML)
 	return isSuccessful;
 }
 
-void XMLLoader::CreatePhysicsBodyFromAttributes(cocos2d::Node* node, const XMLNode* xmlNode,
-	cocos2d::Size& outSize)
+void XMLLoader::CreatePhysicsBodyFromAttributes(const XMLNode* xmlNode, PhysicsBodyConfig& outConfig)
 {
 	const XMLElement* physicsBodyElem = xmlNode->FirstChildElement(XML_NODE_PHYSICS_BODY);
 	const String bodyType = physicsBodyElem->Attribute(XML_SHAPE_ATTR);
@@ -547,19 +574,14 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(cocos2d::Node* node, const XMLNo
 		cocos2d::PhysicsMaterial material;
 		LoadPhysicsMaterialFromAttributes(xmlNode, material);
 
-		PhysicsBodyConfig bodyConfig = PhysicsBodyConfig(
-			bodySize,
-			material,
-			BodyType::Box,
-			collisionBitMask,
-			isBodyDynamic,
-			isGravityEnabled);
-		bodyConfig.SetRotationEnabled(isRotationEnabled);
-
-		PhysicsManager::AddPhysicsBody(*node, bodyConfig);
+		outConfig.SetSize(bodySize);
+		outConfig.SetPhysicsMaterial(material);
+		outConfig.SetBodyType(BodyType::BOX);
+		outConfig.SetCollisionBitMask(collisionBitMask);
+		outConfig.SetIsDynamic(isBodyDynamic);
+		outConfig.SetIsGravityEnabled(isGravityEnabled);
+		outConfig.SetRotationEnabled(isRotationEnabled);
 	}
-
-	outSize = bodySize;
 }
 
 void XMLLoader::LoadNodeComponents(cocos2d::Node* node, const XMLElement* root)
@@ -569,8 +591,9 @@ void XMLLoader::LoadNodeComponents(cocos2d::Node* node, const XMLElement* root)
 		const String& componentType = element->Attribute(XML_TYPE_ATTR);
 		if (componentType == RIGID_BODY_COMPONENT)
 		{
-			cocos2d::Size outSize;
-			CreatePhysicsBodyFromAttributes(node, element, outSize);
+			PhysicsBodyConfig config;
+			CreatePhysicsBodyFromAttributes(element, config);
+			PhysicsManager::AddPhysicsBody(*node, config);
 		}
 	}
 }
@@ -615,7 +638,7 @@ void XMLLoader::LoadPhysicsMaterialFromAttributes(const tinyxml2::XMLNode* pNode
 	const float density = pPhysicsMaterialElem->FloatAttribute(XML_PHYSICS_DESITY_ATTR);
 	const float restitution = pPhysicsMaterialElem->FloatAttribute(XML_PHYSICS_RESTITUTION_ATTR);
 	const float friction = pPhysicsMaterialElem->FloatAttribute(XML_PHYSICS_FRICTION_ATTR);
-	
+
 	outMaterial.density = density;
 	outMaterial.restitution = restitution;
 	outMaterial.friction = friction;

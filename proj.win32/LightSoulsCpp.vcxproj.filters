@@ -55,9 +55,6 @@
     <Filter Include="src\Utils\XML">
       <UniqueIdentifier>{db420575-c042-44ec-a9e9-970536e6c990}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\World\Entity\Ammo">
-      <UniqueIdentifier>{522ed146-dc0a-4cea-beb5-3e0cb6494630}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\World\Physics">
       <UniqueIdentifier>{6e0cdc4d-6d35-4890-a1fd-7ed05b502dd0}</UniqueIdentifier>
     </Filter>
@@ -96,6 +93,9 @@
     </Filter>
     <Filter Include="src\World\Entity\AI\StateMachine\States\Attack">
       <UniqueIdentifier>{8b094665-2a2a-4607-aa73-b27d32a85614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\World\Projectiles">
+      <UniqueIdentifier>{876d494f-1c61-4cb7-afbc-f03392f32742}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +158,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\Ammo\Arrow.cpp">
-      <Filter>src\World\Entity\Ammo</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\Physics\PhysicsManager.cpp">
       <Filter>src\World\Physics</Filter>
@@ -249,6 +246,12 @@
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.cpp">
       <Filter>src\World\Entity\Components\Attack</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\Projectiles\Projectile.cpp">
+      <Filter>src\World\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Projectiles\ProjectileConfig.cpp">
+      <Filter>src\World\Projectiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -316,9 +319,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\Ammo\Arrow.h">
-      <Filter>src\World\Entity\Ammo</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Physics\PhysicsManager.h">
       <Filter>src\World\Physics</Filter>
@@ -409,6 +409,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.h">
       <Filter>src\World\Entity\Components\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Projectiles\Projectile.h">
+      <Filter>src\World\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Projectiles\ProjectileConfig.h">
+      <Filter>src\World\Projectiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

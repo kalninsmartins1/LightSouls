@@ -1,19 +1,14 @@
 #include "RangedAttackComponent.h"
 #include "2d/CCNode.h"
-#include "World/Entity/Ammo/Arrow.h"
 #include "Utils/Utils.h"
+#include "World/Entity/Entity.h"
+#include "World/Projectiles/Projectile.h"
 
 NS_LIGHTSOULS_BEGIN
 
-RangedAttackComponent* RangedAttackComponent::Create(
-	const String& pathToAmmo,
-	float maxAmmoFlyDistance,
-	float ammoMoveSpeed,
-	float secondsBetweenAttacks)
+RangedAttackComponent* RangedAttackComponent::Create(const ProjectileConfig& config, float range, float secondsBetweenAttacks)
 {
-	RangedAttackComponent *component =
-		new (std::nothrow) RangedAttackComponent(pathToAmmo,
-			maxAmmoFlyDistance, ammoMoveSpeed, secondsBetweenAttacks);
+	RangedAttackComponent *component = new (std::nothrow) RangedAttackComponent(config, range, secondsBetweenAttacks);
 	if (component != nullptr)
 	{
 		component->autorelease();
@@ -26,12 +21,9 @@ RangedAttackComponent* RangedAttackComponent::Create(
 	return component;
 }
 
-RangedAttackComponent::RangedAttackComponent(const String& pathToAmmo,
-		float attackRange, float ammoMoveSpeed,
-		float secondsBetweenAttacks) 
+RangedAttackComponent::RangedAttackComponent(const ProjectileConfig& config, float attackRange, float secondsBetweenAttacks) 
 	: GenericAttackComponent(secondsBetweenAttacks, attackRange)
-	, m_pathToAmmo(pathToAmmo)
-	, m_ammoMoveSpeed(ammoMoveSpeed)
+	, m_projectileConfig(config)
 {
 }
 
@@ -40,18 +32,17 @@ void RangedAttackComponent::Attack(const Vector2& direction)
 	// Allow base class to perform its actions
 	GenericAttackComponent::Attack(direction);
 
-	Arrow* pArrow = Arrow::Create(m_pathToAmmo, cocos2d::Vec2(
-		_owner->getPosition()),
-		direction,
-		GetAttackRange(),
-		m_ammoMoveSpeed);
+	const Entity* ownerEntity = GetOwnerEntity();
+	Vector2 startPosition = ownerEntity->getPosition();
+	Projectile* projectile = Projectile::Create(*ownerEntity, m_projectileConfig,
+		direction, GetAttackRange());
 	
 	// Spawn arrow in world
-	cocos2d::Node* pParent = _owner->getParent();
+	cocos2d::Node* parent = _owner->getParent();
 
 	// Set the same camera mask to make arrow visible to camera
-	pArrow->setCameraMask(pParent->getCameraMask());
-	pParent->addChild(pArrow);	
+	projectile->setCameraMask(parent->getCameraMask());
+	parent->addChild(projectile);	
 }
 
 NS_LIGHTSOULS_END

@@ -2,13 +2,13 @@
 
 NS_LIGHTSOULS_BEGIN
 
-PhysicsBodyConfig::PhysicsBodyConfig(const cocos2d::Size& size, const cocos2d::PhysicsMaterial& physicsMaterial, BodyType bodyType, int collisionMask, bool isDynamic, bool isGravityEnabled)
-	: m_bodySize(size)
-	, m_physicsMaterial(physicsMaterial)
-	, m_bodyType(bodyType)
-	, m_collisionBitMask(collisionMask)
-	, m_isDynamic(isDynamic)
-	, m_isGravityEnabled(isGravityEnabled)
+PhysicsBodyConfig::PhysicsBodyConfig()
+	: m_bodySize(cocos2d::Size::ZERO)
+	, m_physicsMaterial()
+	, m_bodyType(BodyType::NONE)
+	, m_collisionBitMask(-1)
+	, m_isDynamic(false)
+	, m_isGravityEnabled(false)
 {
 
 }
@@ -51,6 +51,36 @@ bool PhysicsBodyConfig::IsRotationEnabled() const
 void PhysicsBodyConfig::SetRotationEnabled(bool isEnabled)
 {
 	m_isRotationEnabled = isEnabled;
+}
+
+void PhysicsBodyConfig::SetSize(const cocos2d::Size& size)
+{
+	m_bodySize = size;
+}
+
+void PhysicsBodyConfig::SetPhysicsMaterial(const cocos2d::PhysicsMaterial& material)
+{
+	m_physicsMaterial = material;
+}
+
+void PhysicsBodyConfig::SetBodyType(const BodyType& type)
+{
+	m_bodyType = type;
+}
+
+void PhysicsBodyConfig::SetCollisionBitMask(int collisionBitMask)
+{
+	m_collisionBitMask = collisionBitMask;
+}
+
+void PhysicsBodyConfig::SetIsDynamic(bool isDynamic)
+{
+	m_isDynamic = isDynamic;
+}
+
+void PhysicsBodyConfig::SetIsGravityEnabled(bool isGravityEnabled)
+{
+	m_isGravityEnabled = isGravityEnabled;
 }
 
 NS_LIGHTSOULS_END

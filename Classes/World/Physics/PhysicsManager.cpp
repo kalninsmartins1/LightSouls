@@ -112,21 +112,28 @@ bool PhysicsManager::DispatchContactEventsToListeners(const cocos2d::PhysicsBody
 	cocos2d::Node* bodyANode = bodyA->getNode();
 	cocos2d::Node* bodyBNode = bodyB->getNode();
 
-	const String& bodyAName = bodyANode->getName();
-	const String& bodyBName = bodyBNode->getName();
-
-	// If contact contains some of the listener names then inform the listeners
 	bool shouldCollide = true;
-	for (auto& listener : listeners)
+	if (bodyANode != nullptr && bodyBNode != nullptr)
 	{
-		if (bodyAName == listener.name)
+		const String& bodyAName = bodyANode->getName();
+		const String& bodyBName = bodyBNode->getName();
+
+		// If contact contains some of the listener names then inform the listeners		
+		for (auto& listener : listeners)
 		{
-			shouldCollide = shouldCollide && listener.onContactCallback(bodyB);
+			if (bodyAName == listener.name)
+			{
+				shouldCollide = shouldCollide && listener.onContactCallback(bodyB);
+			}
+			else if (bodyBName == listener.name)
+			{
+				shouldCollide = shouldCollide && listener.onContactCallback(bodyA);
+			}
 		}
-		else if (bodyBName == listener.name)
-		{
-			shouldCollide = shouldCollide && listener.onContactCallback(bodyA);
-		}
+	}
+	else
+	{
+		shouldCollide = false;
 	}
 
 	return shouldCollide;

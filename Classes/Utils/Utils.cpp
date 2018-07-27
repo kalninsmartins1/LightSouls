@@ -42,7 +42,7 @@ void Utils::LogVector3(const Vector3& v)
 void Utils::AssertWithStrFormat(bool condition, const String& msg,
 	const String& param)
 {
-	CCASSERT(condition, cocos2d::StringUtils::format(msg.c_str(), param).c_str());
+	CCASSERT(condition, cocos2d::StringUtils::format(msg.c_str(), param.c_str()).c_str());
 }
 
 Vector2 Utils::GetScreenFillScale(const cocos2d::Size& curSize)

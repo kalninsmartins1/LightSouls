@@ -4,13 +4,20 @@
 		<AgentConfig type="DaggerAgent" path="res/Configs/World/AI/Agents/DaggerAgent.xml"/>
 		<AgentConfig type="WarriorAgent" path="res/Configs/World/AI/Agents/WarriorAgent.xml"/>
 		<AgentConfig type="Bomb" 		path="res/Configs/World/AI/Agents/Bomb.xml"/>
+		<AgentConfig type="RangeBomb" 		path="res/Configs/World/AI/Agents/RangeBomb.xml"/>
 	</AgentConfigList>
 	<SpawnPoints>
 		<SpawnPoint type="Bomb" x="0" y="-100" 
 					numAgentsInRow="5"
 					rowPadding="100" columnPadding="80"
 					spawnDelay="1.0" 
-					spawnCount="10">
+					spawnCount="5">
+		</SpawnPoint>
+		<SpawnPoint type="RangeBomb" x="0" y="100" 
+					numAgentsInRow="1"
+					rowPadding="100" columnPadding="80"
+					spawnDelay="1.0" 
+					spawnCount="1">
 		</SpawnPoint>
 	</SpawnPoints>
 </AIManager>

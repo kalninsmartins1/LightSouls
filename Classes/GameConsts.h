@@ -40,6 +40,7 @@ namespace LightSouls
 	static constexpr char* LONG_SWORD_ATTACK_COMPONENT = "LongSwordAttackComponent";
 	static constexpr char* HIT_ATTACK_COMPONENT = "HitAttackComponent";
 	static constexpr char* GENERIC_ATTACK_COMPONENT = "GenericAttackComponent";
+	static constexpr char* SPRITE_COMPONENT = "SpriteComponent";
 
 	// Camera components
 	static constexpr char* CAMERA_SHAKE_COMPONENT = "CameraShake";

@@ -49,13 +49,14 @@ private:
 	void PlayRunOrIdleAnimation() const;
 	bool OnContactBegin(const cocos2d::PhysicsBody* otherBody);
 	bool OnContactEnd(const cocos2d::PhysicsBody* otherBody);
+	bool OnProjectileHit(const cocos2d::PhysicsBody* otherBody);
 	void ResetCollisionData();
 
 private:
 	static const String			s_eventOnPlayerHealthChanged;
 	static const String			s_eventOnPlayerStaminaChanged;
 	static const String			s_eventOnPlayerGiveDamage;
-	GenericAttackComponent*			m_attackComponent;
+	GenericAttackComponent*		m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
 	bool					m_isDodging;

@@ -57,7 +57,7 @@ public:
 	void			ResetStamina();
 	void			ResetMoveSpeed();
 	void			ConsumeStamina(float amount);
-	void			TakeDamage(const Entity& attackingEntity);
+	void			TakeDamage(const Entity& attackingEntity);	
 	void			StartAttacking();
 	void			StopAttacking();
 	void			ApplyKnockbackEffect(const Entity& attackingEntity);

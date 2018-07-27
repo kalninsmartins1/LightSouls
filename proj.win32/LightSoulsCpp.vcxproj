@@ -183,7 +183,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.cpp" />
-    <ClCompile Include="..\Classes\World\Entity\Ammo\Arrow.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\LongSwordAttackComponent.cpp" />
@@ -196,6 +195,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\Player\Player.cpp" />
     <ClCompile Include="..\Classes\World\Physics\PhysicsBodyConfig.cpp" />
     <ClCompile Include="..\Classes\World\Physics\PhysicsManager.cpp" />
+    <ClCompile Include="..\Classes\World\Projectiles\Projectile.cpp" />
+    <ClCompile Include="..\Classes\World\Projectiles\ProjectileConfig.cpp" />
     <ClCompile Include="..\Classes\World\World.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -238,7 +239,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.h" />
-    <ClInclude Include="..\Classes\World\Entity\Ammo\Arrow.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\LongSwordAttackComponent.h" />
@@ -251,6 +251,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\Player\Player.h" />
     <ClInclude Include="..\Classes\World\Physics\PhysicsBodyConfig.h" />
     <ClInclude Include="..\Classes\World\Physics\PhysicsManager.h" />
+    <ClInclude Include="..\Classes\World\Projectiles\Projectile.h" />
+    <ClInclude Include="..\Classes\World\Projectiles\ProjectileConfig.h" />
     <ClInclude Include="..\Classes\World\World.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

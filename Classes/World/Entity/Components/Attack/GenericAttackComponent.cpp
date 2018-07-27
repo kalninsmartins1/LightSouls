@@ -132,6 +132,9 @@ void GenericAttackComponent::SetStaminaConsumption(float staminaConsumption)
 
 void GenericAttackComponent::setOwner(cocos2d::Node* owner)
 {
+	// Call base class
+	Component::setOwner(owner);
+
 	if (owner != nullptr)
 	{
 		m_ownerEntity = dynamic_cast<Entity*>(owner);

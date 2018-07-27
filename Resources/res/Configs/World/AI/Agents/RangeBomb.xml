@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Entity type="Bomb"
+<Entity type="RangeBomb"
 			moveSpeed="400"
 			baseHealth="100"
 			baseStamina="100"
@@ -25,12 +25,12 @@
 		<State  type="Idle"
 				onSuccess="Signaling"/>
 
-		<State  type="LineAttack"
+		<State  type="Attack"
 				onSuccess="Pause"
 				onFailure="Pause"/>
 				
 		<State 	type="Signaling"
-				onSuccess="LineAttack"
+				onSuccess="Attack"
 				onFailure="Pause" 
 				time="1.0"/>
 
@@ -43,28 +43,30 @@
 	
 	<Component type="AnimComponent">
 		<SpriteSheet
-			path="res/Graphics/World/AI/Bomb/bombAnims.png" 
-			plistPath="res/Graphics/World/AI/Bomb/bombAnims.plist">
+			path="res/Graphics/World/AI/RangeBomb/rangeBombAnims.png" 
+			plistPath="res/Graphics/World/AI/RangeBomb/rangeBombAnims.plist">
 			
 			<Anim 	type="Idle"
-					frameNamePattern="bomb_idle%d.png"
+					frameNamePattern="rangeBomb_idle%d.png"
 					frameCount="1"
 					timeBetweenFrames="0.1"
 			/>
 			
 			<Anim	type="Signal"
-					frameNamePattern="bomb_signal%d.png"
+					frameNamePattern="rangeBomb_signal%d.png"
 					frameCount="2"
 					timeBetweenFrames="0.1"
 			/>
 		</SpriteSheet>
 	</Component>
 	
-	<Component 	type="GenericAttackComponent"
-				secondsBetweenAttacks="0.2" 
-				comboExpireTime="0.6"
-				attackRange="60"
-				staminaConsumption="20">
+	<Component 	type="RangedAttackComponent"
+				secondsBetweenAttacks="5"
+				attackRange="500">
+			
+		<Projectile path="res/Configs/World/Projectiles/Fireball.xml">
+		</Projectile>
+			
 	</Component>
 	
 	<Component type="RigidBodyComponent">
@@ -80,6 +82,5 @@
 			collisionBitMask="1"
 			forceScale="60"
 			/>
-	</Component>
-	
+	</Component>	
 </Entity>

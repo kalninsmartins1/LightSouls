@@ -6,15 +6,16 @@ NS_LIGHTSOULS_BEGIN
 
 enum class BodyType
 {
-	Box,
+	NONE,
+	BOX,
 };
 
 class PhysicsBodyConfig
 {
 public:
-	PhysicsBodyConfig(const cocos2d::Size& size, const cocos2d::PhysicsMaterial&  physicsMaterial, BodyType bodyType,
-		int collisionMask, bool isDynamic, bool isGravityEnabled);
+	PhysicsBodyConfig();
 
+public:
 	const cocos2d::Size&			GetSize() const;
 	const cocos2d::PhysicsMaterial& GetPhysicsMaterial() const;
 	BodyType						GetBodyType() const;
@@ -23,7 +24,13 @@ public:
 	bool							IsGravityEnabled() const;
 	bool							IsRotationEnabled() const;
 
-	void							SetRotationEnabled(bool isEnabled);
+	void			SetRotationEnabled(bool isEnabled);
+	void			SetSize(const cocos2d::Size& size);
+	void			SetPhysicsMaterial(const cocos2d::PhysicsMaterial& material);
+	void			SetBodyType(const BodyType& type);
+	void			SetCollisionBitMask(int collisionBitMask);
+	void			SetIsDynamic(bool isDynamic);
+	void			SetIsGravityEnabled(bool isGravityEnabled);
 
 private:
 	cocos2d::Size				m_bodySize;

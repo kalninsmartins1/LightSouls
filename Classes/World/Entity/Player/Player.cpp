@@ -11,6 +11,7 @@
 #include "Utils/AnimationUtils.h"
 #include "Camera/Components/CameraShake.h"
 #include "Scenes/GameScene.h"
+#include "World/Projectiles/Projectile.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -71,6 +72,8 @@ bool Player::Init(const String& pathToXML)
 		CC_CALLBACK_1(Player::OnContactBegin, this));
 	physicsManager->AddContactEndListener(getName(),
 		CC_CALLBACK_1(Player::OnContactEnd, this));
+	physicsManager->AddContactBeginListener(getName() + NODE_COMPONENT,
+		CC_CALLBACK_1(Player::OnProjectileHit, this));
 
 	return true;
 }
@@ -282,6 +285,18 @@ bool Player::OnContactEnd(const cocos2d::PhysicsBody* otherBody)
 {
 	ResetCollisionData();
 	return true;
+}
+
+bool Player::OnProjectileHit(const cocos2d::PhysicsBody* otherBody)
+{
+	auto projectile = static_cast<Projectile*>(otherBody->getNode());
+	if (projectile != nullptr)
+	{
+		TakeDamage(projectile->GetShooterEntity());
+		projectile->Destroy();
+	}
+
+	return false;
 }
 
 void Player::ResetCollisionData()

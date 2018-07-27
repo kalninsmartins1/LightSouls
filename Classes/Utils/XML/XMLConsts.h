@@ -18,6 +18,7 @@ namespace LightSouls
 	static constexpr char* XML_NODE_SCALE = "Scale";
 	static constexpr char* XML_NODE_POSITION = "Position";
 	static constexpr char* XML_NODE_ROTATION = "Rotation";
+	static constexpr char* XML_NODE_PROJECTILE = "Projectile";
 
 	// XML entity attributes	
 	static constexpr char* XML_ENTITY_SECONDS_BETWEEN_ATTACK_ATTR = "secondsBetweenAttacks";
@@ -48,8 +49,7 @@ namespace LightSouls
 	static constexpr char* XML_AI_CHASE_RADIUS_ATTR = "chaseRadius";
 	static constexpr char* XML_AI_CHASE_STOP_DISTANCE = "chaseStopDistance";
 	static constexpr char* XML_AI_PATROL_RADIUS_ATTR = "patrolRadius";
-	static constexpr char* XML_AI_PATROL_PAUSE_ATTR = "patrolPauseInSeconds";
-	static constexpr char* XML_AI_MAX_FLY_DISTANCE = "maxFlyDistance";
+	static constexpr char* XML_AI_PATROL_PAUSE_ATTR = "patrolPauseInSeconds";	
 	static constexpr char* XML_AI_NEXT_STATE_ON_SUCCESS = "onSuccess";
 	static constexpr char* XML_AI_NEXT_STATE_ON_FAILURE = "onFailure";
 	static constexpr char* XML_AI_START_STATE = "startState";
