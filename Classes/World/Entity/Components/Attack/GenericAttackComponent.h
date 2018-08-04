@@ -15,6 +15,9 @@ public:
 	// Returns attack range
 	float			GetAttackRange() const;
 
+	// Returns attack range sqr
+	float			GetAttackRangeSqr() const;
+
 	// Returns amount of time before combo expires
 	float			GetComboExpireTime() const;
 

@@ -16,11 +16,13 @@ public:
 	StateMachine(AIAgent& agent);
 
 public:
+	EAIState GetCurrentState() const;
+
 	void SetStartState(EAIState stateType);
 
 	// Should be called once to turn on the state machine
 	void Start(AnimComponent* animComponent);
-	void AddAvailableState(EAIState availableState, EAIState stateOnSuccess, EAIState stateOnFailure, float timeRestriction);
+	void AddAvailableState(EAIState availableState, const XMLElement* xmlElement);
 	void Reset();
 	// Should be called periodically to update current state of state machine 
 	void OnStep();
@@ -34,7 +36,7 @@ private:
 
 private:
 	AIAgent&									m_agent;
-	EAIState										m_startState;
+	EAIState									m_startState;
 	AState*										m_curState;
 	AnimComponent*								m_animComponent;
 	cocos2d::Map<EAIState, AState*>				m_availableStates;

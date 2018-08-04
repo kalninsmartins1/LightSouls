@@ -97,6 +97,9 @@
     <Filter Include="src\World\Projectiles">
       <UniqueIdentifier>{876d494f-1c61-4cb7-afbc-f03392f32742}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\World\Entity\CustomActions\AI">
+      <UniqueIdentifier>{91f8a333-82b9-4d93-a3b6-bf04aea74fe0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -170,9 +173,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\UI\InGameIndicators\ProgressBar.cpp">
       <Filter>src\UI\InGameIndicators</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\World\Entity\CustomActions\ActionSequence.cpp">
-      <Filter>src\World\Entity\CustomActions</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.cpp">
       <Filter>src\3rdParty\Physics</Filter>
@@ -251,6 +251,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\World\Projectiles\ProjectileConfig.cpp">
       <Filter>src\World\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\CustomActions\ActionSequence.cpp">
+      <Filter>src\World\Entity\CustomActions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\CustomActions\AI\AIAvoidTargetAction.cpp">
+      <Filter>src\World\Entity\CustomActions\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,9 +338,6 @@
     <ClInclude Include="..\Classes\UI\InGameIndicators\ProgressBar.h">
       <Filter>src\UI\InGameIndicators</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\World\Entity\CustomActions\ActionSequence.h">
-      <Filter>src\World\Entity\CustomActions</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.h">
       <Filter>src\3rdParty\Physics</Filter>
     </ClInclude>
@@ -415,6 +418,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Projectiles\ProjectileConfig.h">
       <Filter>src\World\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\CustomActions\ActionSequence.h">
+      <Filter>src\World\Entity\CustomActions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\CustomActions\AI\AIAvoidTargetAction.h">
+      <Filter>src\World\Entity\CustomActions\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

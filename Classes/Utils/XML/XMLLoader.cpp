@@ -21,6 +21,7 @@
 #include "Camera/Components/CameraShake.h"
 #include "World/Entity/AI/SpawnPointConfig.h"
 #include "World/Projectiles/ProjectileConfig.h"
+#include "World/Entity/AI/StateMachine/States/AIAvoidTargetAction.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -194,6 +195,24 @@ void XMLLoader::LoadActionTriggers(GameInput& gameInput, const XMLElement* pElem
 	}
 }
 
+void XMLLoader::LoadBackgroundActions(Entity& entity, const XMLElement* xmlElement)
+{
+	for (auto element = xmlElement->FirstChildElement(); element != nullptr; 
+		element = element->NextSiblingElement())
+	{
+		const String& type = element->Attribute(XML_TYPE_ATTR);		
+		if (type == AVOID_TARGET_ACTION)
+		{
+			AIAgent* agent = static_cast<AIAgent*>(&entity);
+			CCASSERT(agent != nullptr, "Avoid action added to entity that is not AIAgent !");
+
+			auto avoidAction = AIAvoidTargetAction::Create(*agent);
+			avoidAction->LoadXMLData(element);
+			entity.runAction(avoidAction);
+		}
+	}
+}
+
 void XMLLoader::LoadKeyboardAxis(GameInput& gameInput, const XMLElement* pElement,
 	const String& actionName)
 {
@@ -350,6 +369,10 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				{
 					CCASSERT(false, "Trying to add AIController component to entity that is not of type AIAgent !");
 				}
+			}
+			else if (componentType == BACKGROUND_ACTION_COMPONENT)
+			{
+				LoadBackgroundActions(entity, element);
 			}
 			else if (componentType == ANIM_COMPONENT)
 			{

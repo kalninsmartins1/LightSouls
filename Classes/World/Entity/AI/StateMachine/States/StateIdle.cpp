@@ -6,7 +6,8 @@
 NS_LIGHTSOULS_BEGIN
 
 StateIdle::StateIdle(AIAgent& aiAgent)
-	: m_curProgress(EStateProgress::IN_PROGRESS)
+	: AState(aiAgent)
+	, m_curProgress(EStateProgress::IN_PROGRESS)
 {
 
 }

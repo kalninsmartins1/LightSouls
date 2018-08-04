@@ -21,8 +21,7 @@ public:
 	virtual void			OnEventReceived(const String & receivedEvent, const AEventData & eventData) override;	
 
 private:
-	EStateProgress			m_curProgress;
-	AIAgent&				m_agent;
+	EStateProgress			m_curProgress;	
 	Entity*					m_targetEntity;
 	Vector2					m_targetPosition;
 	GenericAttackComponent*	m_attackComponent;

@@ -38,27 +38,9 @@ void AIAgent::DispatchOnGiveDamageEvent() const
 
 AIAgent::AIAgent()
 	: m_stateMachine(*this)
-	, m_basePosition(Vector2::ZERO)
-	, m_chaseRadius(0)
-	, m_patrolRadius(0)
-	, m_patrolPauseInSeconds(0)
-	, m_chaseStopDistance(0)	
+	, m_basePosition(Vector2::ZERO)	
 {
-}
 
-void AIAgent::SetPatrolRadius(float radius)
-{
-	m_patrolRadius = radius;
-}
-
-void AIAgent::SetChaseRadius(float radius)
-{
-	m_chaseRadius = radius;
-}
-
-void AIAgent::SetChaseStopDistance(float distance)
-{
-	m_chaseStopDistance = distance;
 }
 
 void AIAgent::SetBasePosition(const Vector2& position)
@@ -98,26 +80,13 @@ bool AIAgent::Init(const String& pathToXML)
 }
 
 void AIAgent::Init(const XMLElement* element)
-{
-	const float chaseRadius = element->FloatAttribute(XML_AI_CHASE_RADIUS_ATTR);
-	const float chaseStopDistance = element->FloatAttribute(XML_AI_CHASE_STOP_DISTANCE);
-	const float patrolRadius = element->FloatAttribute(XML_AI_PATROL_RADIUS_ATTR);
-	const float patrolPause = element->FloatAttribute(XML_AI_PATROL_PAUSE_ATTR);
-	
+{	
 	String startStateType;
 	XMLLoader::ReadXMLAttribute(element, XML_AI_START_STATE, startStateType);
 	EAIState startState = AState::GetStateFromString(startStateType);
 	m_stateMachine.SetStartState(startState);
 
 	CCASSERT(startState != EAIState::NONE, "AI start state is not set !");
-	CCASSERT(chaseRadius > 1, "AI chase radius is too small !");
-	CCASSERT(chaseStopDistance > 0, "AI chase distance cant be negative !");
-	CCASSERT(patrolRadius > 1, "AI patrol radius is too small !");
-
-	SetChaseRadius(chaseRadius);
-	SetChaseStopDistance(chaseStopDistance);
-	SetPatrolRadius(patrolRadius);
-	SetPatrolPause(patrolPause);
 	
 	// Initialize states
 	for (const XMLElement* stateXML = element->FirstChildElement(); stateXML != nullptr;
@@ -126,17 +95,8 @@ void AIAgent::Init(const XMLElement* element)
 		String type = stateXML->Attribute(XML_TYPE_ATTR);
 		EAIState state = AState::GetStateFromString(type);
 		if (state != EAIState::NONE)
-		{
-			String nextSuccessType;
-			XMLLoader::ReadXMLAttribute(stateXML, XML_AI_NEXT_STATE_ON_SUCCESS, nextSuccessType);
-			String nextFailureType;
-			XMLLoader::ReadXMLAttribute(stateXML, XML_AI_NEXT_STATE_ON_FAILURE, nextFailureType);
-			
-			float timeRestriction = stateXML->FloatAttribute(XML_TIME_ATTR);
-			EAIState nextSuccessState = AState::GetStateFromString(nextSuccessType);
-			EAIState nextFailureState = AState::GetStateFromString(nextFailureType);
-
-			m_stateMachine.AddAvailableState(state, nextSuccessState, nextFailureState, timeRestriction);
+		{			
+			m_stateMachine.AddAvailableState(state, stateXML);
 		}
 	}
 }
@@ -197,26 +157,6 @@ const String& AIAgent::GetEventAgentHealthChanged()
 	return s_eventAgentHealthChanged;
 }
 
-float AIAgent::GetPatrolPause() const
-{
-	return m_patrolPauseInSeconds;
-}
-
-float AIAgent::GetPatrolRadius() const
-{
-	return m_patrolRadius;
-}
-
-float AIAgent::GetChaseRadius() const
-{
-	return m_chaseRadius;
-}
-
-float AIAgent::GetChaseStopDistance() const
-{
-	return m_chaseStopDistance;
-}
-
 float AIAgent::GetAttackRange() const
 {
 	return m_attackComponent->GetAttackRange();
@@ -247,9 +187,9 @@ EntityType AIAgent::GetEntityType() const
 	return EntityType::AIAGENT;
 }
 
-void AIAgent::SetPatrolPause(float pauseInSeconds)
+EAIState AIAgent::GetCurrentAIState() const
 {
-	m_patrolPauseInSeconds = pauseInSeconds;
+	return m_stateMachine.GetCurrentState();
 }
 
 NS_LIGHTSOULS_END

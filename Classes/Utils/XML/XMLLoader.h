@@ -1,7 +1,6 @@
 #pragma once
 
 #include "LightSoulsTypes.h"
-#include "tinyxml2/tinyxml2.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -16,10 +15,6 @@ class ProjectileConfig;
 class PhysicsBodyConfig;
 enum class GameInputType;
 
-using XMLNode = tinyxml2::XMLNode;
-using XMLElement = tinyxml2::XMLElement;
-using XMLDoc = tinyxml2::XMLDocument;
-using XMLError = tinyxml2::XMLError;
 using LoadInputCallback = std::function<void(GameInput&, const XMLElement*,
 	const String&)>;
 
@@ -42,12 +37,14 @@ public:
 private:
 	XMLLoader();
 
+private:	
 	static bool						LoadXMLFile(const String& pathToXML, XMLDoc& outDoc);
 
 	static void						LoadActionTriggers(GameInput& gameInput,
 		const XMLElement* pElement, LoadInputCallback onKeyboardInput,
 		LoadInputCallback onMouseInput, LoadInputCallback onGameControllerInput);
 
+	static void						LoadBackgroundActions(Entity& entity, const XMLElement* xmlElement);
 	static void						LoadKeyboardAxis(GameInput& gameInput,
 		const XMLElement* pElement, const String& actionName);
 	static void						LoadGameControllerAxis(GameInput& gameInput,

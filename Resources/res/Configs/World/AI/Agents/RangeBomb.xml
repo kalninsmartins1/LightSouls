@@ -18,7 +18,7 @@
 	<Component  type="AIControllerComponent"
 				patrolRadius="250"
 				patrolPauseInSeconds="2"
-				chaseStopDistance="60"
+				stopDistance="60"
 				chaseRadius="1500"
 				startState="Idle">
 		
@@ -36,10 +36,26 @@
 
 		<State 	type="Pause"
 				onSuccess="Signaling"
+				onFailure="Avoid"
+				shouldCheckDistanceToTarget="true"
+				minDistanceToTarget="100"
 				time="1.0"/>
+				
+		<State 	type="Avoid"
+			    onSuccess="Signaling"
+				stopDistance="400"
+				/>
 
 	</Component>
-
+	
+	<Component type="BackgroundAction">
+		<Action type="AIAvoidTarget"
+				startAvoidDistance="100"
+				stopAvoidDistance="350"
+				collisionCheckTimeInterval="1"
+				skipAvoidStates="Idle"
+				/>
+	</Component>
 	
 	<Component type="AnimComponent">
 		<SpriteSheet

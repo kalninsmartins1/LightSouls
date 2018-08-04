@@ -10,8 +10,8 @@
 NS_LIGHTSOULS_BEGIN
 
 StateLineAttack::StateLineAttack(AIAgent& aiAgent)	
-	: m_curProgress(EStateProgress::NONE)
-	, m_agent(aiAgent)
+	: AState(aiAgent)	
+	, m_curProgress(EStateProgress::NONE)
 	, m_targetEntity(nullptr)
 	, m_targetPosition(Vector2::ZERO)
 	, m_attackComponent(nullptr)
@@ -28,19 +28,20 @@ void StateLineAttack::OnEnter(AnimComponent * animComponent)
 {
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_targetPosition = m_targetEntity->getPosition();
-	m_attackComponent = m_agent.GetAttackComponent();
+	m_attackComponent = GetAgent().GetAttackComponent();
 	m_curProgress = EStateProgress::IN_PROGRESS;
 }
 
 EStateProgress StateLineAttack::OnStep()
 {
+	AIAgent& agent = GetAgent();
 
 	// Move to target
-	Vector2 toTarget = m_targetPosition - m_agent.getPosition();
-	m_agent.SetMoveDirection(toTarget.getNormalized());
+	Vector2 toTarget = m_targetPosition - agent.getPosition();
+	agent.SetMoveDirection(toTarget.getNormalized());
 
 	// Check if we are already there
-	if (toTarget.length() <= (m_agent.GetCurrentMoveSpeed()/10.0f))
+	if (toTarget.length() <= (agent.GetCurrentMoveSpeed()/10.0f))
 	{
 		m_curProgress = EStateProgress::DONE;
 	}
@@ -50,7 +51,7 @@ EStateProgress StateLineAttack::OnStep()
 
 void StateLineAttack::OnExit()
 {
-	m_agent.SetMoveDirection(Vector2::ZERO);
+	GetAgent().SetMoveDirection(Vector2::ZERO);
 }
 
 void StateLineAttack::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
@@ -61,9 +62,9 @@ void StateLineAttack::OnEventReceived(const String& receivedEvent, const AEventD
 		if (colData.GetCollidedWithName() == m_targetEntity->getName())
 		{
 			m_curProgress = EStateProgress::DONE;
-			m_attackComponent->Attack(m_agent.getPosition() -
+			m_attackComponent->Attack(GetAgent().getPosition() -
 				m_targetEntity->getPosition());
-			m_targetEntity->TakeDamage(m_agent);
+			m_targetEntity->TakeDamage(GetAgent());
 		}
 	}
 }

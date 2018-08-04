@@ -47,17 +47,25 @@ namespace LightSouls
 
 	// XML AI attributes
 	static constexpr char* XML_AI_CHASE_RADIUS_ATTR = "chaseRadius";
-	static constexpr char* XML_AI_CHASE_STOP_DISTANCE = "chaseStopDistance";
+	static constexpr char* XML_AI_STOP_DISTANCE = "stopDistance";
 	static constexpr char* XML_AI_PATROL_RADIUS_ATTR = "patrolRadius";
 	static constexpr char* XML_AI_PATROL_PAUSE_ATTR = "patrolPauseInSeconds";	
 	static constexpr char* XML_AI_NEXT_STATE_ON_SUCCESS = "onSuccess";
 	static constexpr char* XML_AI_NEXT_STATE_ON_FAILURE = "onFailure";
+	static constexpr char* XML_AI_SHOULD_CHECK_DISTANCE_TO_TARGET = "shouldCheckDistanceToTarget";
+	static constexpr char* XML_AI_MIN_DISTANCE_TO_TARGET = "minDistanceToTarget";
 	static constexpr char* XML_AI_START_STATE = "startState";
 	static constexpr char* XML_AI_SPAWN_DELAY = "spawnDelay";
 	static constexpr char* XML_AI_SPAWN_COUNT = "spawnCount";
 	static constexpr char* XML_AI_NUM_AGENTS_IN_ROW = "numAgentsInRow";
 	static constexpr char* XML_AI_ROW_PADDING = "rowPadding";
 	static constexpr char* XML_AI_COLUMN_PADDING = "columnPadding";
+	static constexpr char* XML_AI_SKIP_AVOID_STATES = "skipAvoidStates";
+
+	// XML action attributes
+	static constexpr char* XML_START_AVOID_DISTANCE_ATTR = "startAvoidDistance";
+	static constexpr char* XML_STOP_AVOID_DISTANCE_ATTR = "stopAvoidDistance";	
+	static constexpr char* XML_COLLISION_CHECK_TIME_INTERVAL_ATTR = "collisionCheckTimeInterval";
 
 	// XML animation attributes
 	static constexpr char* XML_ANIM_PLIST_PATH_ATTR = "plistPath";

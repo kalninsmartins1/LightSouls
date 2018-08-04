@@ -25,12 +25,11 @@ private:
 	void					PlayIdleAnimation();
 
 private:
-	EStateProgress		m_curProgress;
-	AIAgent&			m_agent;
-	const Entity*		m_targetEntity;
+	EStateProgress			m_curProgress;	
+	const Entity*			m_targetEntity;
 	GenericAttackComponent*	m_attackComponent;
-	AnimComponent*		m_animComponent;
-	bool				m_isAnimFinished;
+	AnimComponent*			m_animComponent;
+	bool					m_isAnimFinished;
 };
 
 NS_LIGHTSOULS_END

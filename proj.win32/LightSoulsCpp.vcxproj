@@ -190,6 +190,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\AnimComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\ActionSequence.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\CustomActions\AI\AIAvoidTargetAction.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\CameraFallow.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Entity.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Player\Player.cpp" />
@@ -246,6 +247,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\AnimComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\ActionSequence.h" />
+    <ClInclude Include="..\Classes\World\Entity\CustomActions\AI\AIAvoidTargetAction.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\CameraFallow.h" />
     <ClInclude Include="..\Classes\World\Entity\Entity.h" />
     <ClInclude Include="..\Classes\World\Entity\Player\Player.h" />

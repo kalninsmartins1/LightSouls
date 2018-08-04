@@ -17,6 +17,7 @@ public:
 	EStateProgress	OnStep() override;
 	void			OnExit() override;
 	virtual void	OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;	
+	virtual void	LoadXMLData(const XMLElement* xmlElement) override;
 
 private:	
 	bool	HasTargetBeenSpotted() const;
@@ -27,13 +28,14 @@ private:
 	void	OnFinishedLookingAround();
 
 private:
-	const Entity*		m_targetEntity;
-	AIAgent&			m_agent;
+	const Entity*		m_targetEntity;	
 	EStateProgress		m_curProgress;
 	AnimComponent*		m_animComponent;
 	Vector2				m_curTargetPosition;
 	bool				m_isLookingAround;
 	bool				m_isCollided;
+	float				m_patrolRadius;
+	float				m_patrolPause;
 };
 
 NS_LIGHTSOULS_END

@@ -28,11 +28,17 @@ GenericAttackComponent::GenericAttackComponent(float secondsBetweenAttacks, floa
 	, m_attackRange(attackRange)
 	, m_staminaConsumption(0.0f)
 {
+
 }
 
 float GenericAttackComponent::GetAttackRange() const
 {
 	return m_attackRange;
+}
+
+float GenericAttackComponent::GetAttackRangeSqr() const
+{
+	return m_attackRange * m_attackRange;
 }
 
 float LightSouls::GenericAttackComponent::GetComboExpireTime() const

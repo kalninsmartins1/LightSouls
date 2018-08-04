@@ -25,7 +25,7 @@ namespace LightSouls
 	static constexpr const char* AI_STATE_LINE_ATTACK = "LineAttack";
 	static constexpr const char* AI_STATE_PATROL = "Patrol";
 	static constexpr const char* AI_STATE_PAUSE = "Pause";
-	static constexpr const char* AI_STATE_SIGNALING = "Signaling";	
+	static constexpr const char* AI_STATE_SIGNALING = "Signaling";
 
 	// Entity components
 	static constexpr char* ANIM_COMPONENT = "AnimComponent";
@@ -41,6 +41,10 @@ namespace LightSouls
 	static constexpr char* HIT_ATTACK_COMPONENT = "HitAttackComponent";
 	static constexpr char* GENERIC_ATTACK_COMPONENT = "GenericAttackComponent";
 	static constexpr char* SPRITE_COMPONENT = "SpriteComponent";
+	static constexpr char* BACKGROUND_ACTION_COMPONENT = "BackgroundAction";
+
+	// Entity actions
+	static constexpr char* AVOID_TARGET_ACTION = "AIAvoidTarget";
 
 	// Camera components
 	static constexpr char* CAMERA_SHAKE_COMPONENT = "CameraShake";

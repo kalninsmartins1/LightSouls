@@ -10,20 +10,21 @@
 NS_LIGHTSOULS_BEGIN
 
 StateAttack::StateAttack(AIAgent& agent)
-	: m_curProgress(EStateProgress::NONE)
-	, m_agent(agent)
+	: AState(agent)	
+	, m_curProgress(EStateProgress::NONE)
 	, m_targetEntity(nullptr)
 	, m_attackComponent(nullptr)
 	, m_animComponent(nullptr)
 	, m_isAnimFinished(true)
 {
+
 }
 
 void StateAttack::OnEnter(AnimComponent* animComponent)
-{
+{	
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_animComponent = animComponent;
-	m_attackComponent = m_agent.GetAttackComponent();
+	m_attackComponent = GetAgent().GetAttackComponent();
 	m_curProgress = EStateProgress::IN_PROGRESS;
 
 #if LIGHTSOULS_DEBUG_AI
@@ -33,8 +34,8 @@ void StateAttack::OnEnter(AnimComponent* animComponent)
 
 EStateProgress StateAttack::OnStep()
 {
-	const Vector2 toTarget = m_targetEntity->getPosition() - m_agent.getPosition();
-	if (toTarget.length() > m_attackComponent->GetAttackRange() && m_isAnimFinished)
+	const Vector2 toTarget = m_targetEntity->getPosition() - GetAgent().getPosition();
+	if (toTarget.lengthSquared() > m_attackComponent->GetAttackRangeSqr() && m_isAnimFinished)
 	{
 		// Target run away cant attack
 		m_curProgress = EStateProgress::FAILED;
@@ -50,9 +51,9 @@ EStateProgress StateAttack::OnStep()
 		if(m_attackComponent->IsReadyToAttack())
 		{
 			// Direction to target
-			Vector2 toTarget = m_targetEntity->getPosition() - m_agent.getPosition();
+			Vector2 toTarget = m_targetEntity->getPosition() - GetAgent().getPosition();
 			m_attackComponent->Attack(toTarget.getNormalized());
-			m_agent.StartAttacking();
+			GetAgent().StartAttacking();
 			
 			// Check for combo
 			if (!m_attackComponent->IsComboExpired())
@@ -95,14 +96,14 @@ EAIState StateAttack::GetStateType() const
 void StateAttack::OnAttackFinished()
 {
 	m_isAnimFinished = true;
-	m_agent.StopAttacking();
+	GetAgent().StopAttacking();
 	PlayIdleAnimation();
 	m_curProgress = EStateProgress::DONE;
 }
 
 void StateAttack::PlayIdleAnimation()
 {
-	if (!m_agent.IsProcessing())
+	if (!GetAgent().IsProcessing())
 	{
 		m_animComponent->PlayLoopingAnimation(AnimationUtils::GetAnimId(ANIM_TYPE_IDLE));
 	}

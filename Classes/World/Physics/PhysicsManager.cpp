@@ -102,9 +102,18 @@ void PhysicsManager::DebugDrawRect(const cocos2d::Rect& rect)
 void PhysicsManager::QuerryRect(const cocos2d::Rect& rect, 
 	const QueryRectCallback& callback)
 {	
-	cocos2d::PhysicsWorld* pWorld = cocos2d::Director::getInstance()->
+	cocos2d::PhysicsWorld* world = cocos2d::Director::getInstance()->
 		getRunningScene()->getPhysicsWorld();
-	pWorld->queryRect(callback, rect, nullptr);
+	world->queryRect(callback, rect, nullptr);
+}
+
+void PhysicsManager::Raycast(RaycastCallback callback, const Vector2& startPoint, const Vector2& endPoint, void* data)
+{
+	using namespace cocos2d;
+	Director* director = Director::getInstance();
+	PhysicsWorld* world = director->getRunningScene()->getPhysicsWorld();
+
+	world->rayCast(callback, startPoint, endPoint, data);	
 }
 
 bool PhysicsManager::DispatchContactEventsToListeners(const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners)

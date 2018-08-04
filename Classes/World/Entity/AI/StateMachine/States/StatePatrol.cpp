@@ -6,18 +6,23 @@
 #include "World/Physics/PhysicsManager.h"
 #include "Events/OnCollisionBeginEventData.h"
 #include "World/World.h"
+#include "Utils/XML/XMLLoader.h"
+#include "Utils/XML/XMLConsts.h"
 
 NS_LIGHTSOULS_BEGIN
 
 StatePatrol::StatePatrol(AIAgent& agent)
-	: m_agent(agent)
+	: AState(agent)
 	, m_targetEntity(nullptr)
 	, m_curProgress(EStateProgress::NONE)
 	, m_animComponent(nullptr)
 	, m_curTargetPosition(Vector2::ZERO)
 	, m_isLookingAround(false)
 	, m_isCollided(false)
+	, m_patrolRadius(0.0f)
+	, m_patrolPause(0.0f)
 {
+
 }
 
 void StatePatrol::OnEnter(AnimComponent* animComponent)
@@ -26,7 +31,7 @@ void StatePatrol::OnEnter(AnimComponent* animComponent)
 	m_animComponent = animComponent;
 	m_curProgress = EStateProgress::IN_PROGRESS;
 
-	if (!m_agent.IsProcessing())
+	if (!GetAgent().IsProcessing())
 	{
 		StartMovingToNewPosition();
 	}
@@ -40,22 +45,24 @@ EStateProgress StatePatrol::OnStep()
 {
 	if(m_curProgress == EStateProgress::IN_PROGRESS)
 	{
+		AIAgent& agent = GetAgent();
+
 		// First check if player has been spotted
 		if (HasTargetBeenSpotted())
 		{
 			m_curProgress = EStateProgress::DONE;
 		}
-		else if(!m_isLookingAround && !m_agent.IsProcessing())
+		else if(!m_isLookingAround && !agent.IsProcessing())
 		{
-			Vector2 toTargetPosition = m_curTargetPosition - m_agent.getPosition();
-			m_agent.SetMoveDirection(toTargetPosition.getNormalized());
+			Vector2 toTargetPosition = m_curTargetPosition - agent.getPosition();
+			agent.SetMoveDirection(toTargetPosition.getNormalized());
 
 			if (!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_RUN))
 			{
 				m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 			}
 			
-			float stoppingDistance = m_agent.GetStoppingDistance();
+			float stoppingDistance = agent.GetStoppingDistance();
 			if (toTargetPosition.length() <= stoppingDistance || m_isCollided)
 			{
 				// Target position reached
@@ -76,7 +83,7 @@ void StatePatrol::OnExit()
 	m_isLookingAround = false;
 
 	// Clear any looking around timers
-	m_agent.stopAllActionsByTag(ACTION_TIMER_TAG);
+	GetAgent().stopAllActionsByTag(ACTION_TIMER_TAG);
 
 #if LIGHTSOULS_DEBUG_AI
 	CCLOG("StatePatrol: OnExit!");
@@ -95,6 +102,13 @@ void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData&
 	}
 }
 
+void StatePatrol::LoadXMLData(const XMLElement* xmlElement)
+{
+	AState::LoadXMLData(xmlElement);
+	m_patrolRadius = xmlElement->FloatAttribute(XML_AI_PATROL_RADIUS_ATTR);
+	m_patrolPause = xmlElement->FloatAttribute(XML_AI_PATROL_PAUSE_ATTR);
+}
+
 EAIState StatePatrol::GetStateType() const
 {
 	return EAIState::PATROL;
@@ -103,28 +117,28 @@ EAIState StatePatrol::GetStateType() const
 bool StatePatrol::HasTargetBeenSpotted() const
 {		
 	// Check if target has been spotted
-	const Vector2& agentPosition = m_agent.getPosition();
+	const Vector2& agentPosition = GetAgent().getPosition();
 	const Vector2& targetEntityPosition = m_targetEntity->getPosition();
 	const float distanceToTargetEntity = targetEntityPosition
 		.distance(agentPosition);
 
-	return distanceToTargetEntity < m_agent.GetChaseRadius();
+	return distanceToTargetEntity < m_patrolRadius;
 }
 
 void StatePatrol::GetRandomPositionInRange(Vector2& outRandomPosition) const
 {	
-	outRandomPosition = Utils::GetRandomPositionWithinCircle(m_agent.getPosition(),
-		m_agent.GetPatrolRadius());	
+	outRandomPosition = Utils::GetRandomPositionWithinCircle(GetAgent().getPosition(),
+		m_patrolRadius);	
 }
 
 void StatePatrol::StartLookingAround()
 {	
 	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
-	m_agent.SetMoveDirection(Vector2::ZERO); // We are not moving while looking around
+	GetAgent().SetMoveDirection(Vector2::ZERO); // We are not moving while looking around
 
-	Utils::StartTimerWithCallback(&m_agent, 
+	Utils::StartTimerWithCallback(&GetAgent(), 
 		CC_CALLBACK_0(StatePatrol::OnFinishedLookingAround, this),
-		m_agent.GetPatrolPause(),
+		m_patrolPause,
 		ACTION_TIMER_TAG);
 }
 
@@ -136,7 +150,7 @@ void StatePatrol::StartMovingToNewPosition()
 	}
 	else
 	{
-		m_curTargetPosition = m_agent.GetBasePosition();
+		m_curTargetPosition = GetAgent().GetBasePosition();
 		m_isCollided = false;
 	}
 	

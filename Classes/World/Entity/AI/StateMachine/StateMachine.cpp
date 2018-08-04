@@ -10,6 +10,7 @@
 #include "States/StateIdle.h"
 #include "States/StateSignaling.h"
 #include "States/StatePause.h"
+#include "States/AIAvoidTargetAction.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -20,6 +21,12 @@ StateMachine::StateMachine(AIAgent& agent)
 	, m_animComponent(nullptr)
 	, m_availableStates()
 {
+
+}
+
+EAIState StateMachine::GetCurrentState() const
+{
+	return m_curState->GetStateType();
 }
 
 void StateMachine::SetStartState(EAIState stateType)
@@ -40,7 +47,7 @@ void StateMachine::Start(AnimComponent* animComponent)
 	}
 }
 
-void StateMachine::AddAvailableState(EAIState availableState, EAIState stateOnSuccess, EAIState stateOnFailure, float timeRestriction)
+void StateMachine::AddAvailableState(EAIState availableState, const XMLElement* xmlElement)
 {
 	AState* state = nullptr;
 	switch (availableState)
@@ -68,30 +75,19 @@ void StateMachine::AddAvailableState(EAIState availableState, EAIState stateOnSu
 		case EAIState::SIGNALING:
 			{
 				state = AState::Create<StateSignaling>(m_agent);
-				auto signaling = static_cast<StateSignaling*>(state);
-				if (signaling != nullptr)
-				{
-					signaling->SetSignalingTime(timeRestriction);
-				}
 			}
 			break;
 
 		case EAIState::PAUSE:
 			{
 				state = AState::Create<StatePause>(m_agent);
-				auto pause = static_cast<StatePause*>(state);
-				if (pause != nullptr)
-				{
-					pause->SetPauseTime(timeRestriction);
-				}
 			}
 			break;
 	}
 
 	if (state != nullptr)
 	{
-		state->SetNextStateOnFailure(stateOnFailure);
-		state->SetNextStateOnSuccess(stateOnSuccess);
+		state->LoadXMLData(xmlElement);
 		m_availableStates.insert(availableState, state);
 	}
 }

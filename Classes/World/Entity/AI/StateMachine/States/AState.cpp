@@ -1,5 +1,7 @@
 #include "AState.h"
 #include "Utils/Utils.h"
+#include "Utils/XML/XMLLoader.h"
+#include "Utils/XML/XMLConsts.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -11,8 +13,14 @@ std::map<LightSouls::EAIState, LightSouls::String> LightSouls::AState::s_stateTo
 	{EAIState::LINE_ATTACK, AI_STATE_LINE_ATTACK},
 	{EAIState::PATROL,		AI_STATE_PATROL		},
 	{EAIState::PAUSE,		AI_STATE_PAUSE		},
-	{EAIState::SIGNALING,	AI_STATE_SIGNALING	},
+	{EAIState::SIGNALING,	AI_STATE_SIGNALING	},	
 };
+
+AState::AState(AIAgent& aiAgent)
+	: m_agent(aiAgent)
+{
+
+}
 
 EAIState AState::GetNextStateOnSuccess() const
 {
@@ -35,6 +43,27 @@ EAIState AState::GetStateFromString(String stateTypeStr)
 void AState::SetNextStateOnFailure(const EAIState& state)
 {
 	m_nextStateOnFailure = state;
+}
+
+void AState::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
+{
+
+}
+
+void AState::LoadXMLData(const XMLElement* xmlElement)
+{
+	String nextSuccessType;
+	XMLLoader::ReadXMLAttribute(xmlElement, XML_AI_NEXT_STATE_ON_SUCCESS, nextSuccessType);
+	String nextFailureType;
+	XMLLoader::ReadXMLAttribute(xmlElement, XML_AI_NEXT_STATE_ON_FAILURE, nextFailureType);
+
+	m_nextStateOnSuccess = AState::GetStateFromString(nextSuccessType);
+	m_nextStateOnFailure = AState::GetStateFromString(nextFailureType);
+}
+
+AIAgent& AState::GetAgent() const
+{
+	return m_agent;
 }
 
 void AState::SetNextStateOnSuccess(const EAIState& state)

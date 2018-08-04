@@ -4,14 +4,19 @@
 #include "World/Entity/CustomActions/ActionSequence.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "GameConsts.h"
+#include "Utils/XML/XMLLoader.h"
+#include "Utils/XML/XMLConsts.h"
 
 NS_LIGHTSOULS_BEGIN
 
-StateChase::StateChase(AIAgent& agent) :
-	m_curProgress(EStateProgress::NONE),
-	m_targetEntity(nullptr),
-	m_agent(agent)
+StateChase::StateChase(AIAgent& agent) 
+	: AState(agent)	
+	, m_curProgress(EStateProgress::NONE)	
+	, m_targetEntity(nullptr)
+	, m_chaseRadius(0.0f)
+	, m_chaseStopDistance(0.0f)
 {
+
 }
 
 void StateChase::OnEnter(AnimComponent* animComponent)
@@ -27,15 +32,16 @@ void StateChase::OnEnter(AnimComponent* animComponent)
 
 EStateProgress StateChase::OnStep()
 {
-	if (!m_agent.IsProcessing())
+	AIAgent& agent = GetAgent();
+	if (!agent.IsProcessing())
 	{
 		// Move agent towards target location
-		const Vector2& currentPosition = m_agent.getPosition();
+		const Vector2& currentPosition = agent.getPosition();
 		Vector2 toTarget = m_targetEntity->getPosition() - currentPosition;
 		const Vector2& toTargetNormalized = toTarget.getNormalized();
 
 		// Update agent move direction
-		m_agent.SetMoveDirection(toTargetNormalized);
+		agent.SetMoveDirection(toTargetNormalized);
 		float distanceToTarget = toTarget.length();
 
 		// Play run animation if not playing, might be that on enter entity was processing
@@ -44,8 +50,8 @@ EStateProgress StateChase::OnStep()
 			m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
 		}
 
-		if (distanceToTarget <= m_agent.GetChaseStopDistance() ||	// Target has been caught
-			distanceToTarget >= m_agent.GetChaseRadius())			// Target run off 
+		if (distanceToTarget <= m_chaseStopDistance ||	// Target has been caught
+			distanceToTarget >= m_chaseRadius)			// Target run off 
 		{
 			m_curProgress = EStateProgress::DONE;
 		}
@@ -56,10 +62,11 @@ EStateProgress StateChase::OnStep()
 
 void StateChase::OnExit()
 {
+	AIAgent& agent = GetAgent();
 	m_curProgress = EStateProgress::NONE;
-	m_agent.SetMoveDirection(Vector2::ZERO);
+	agent.SetMoveDirection(Vector2::ZERO);
 
-	if (!m_agent.IsProcessing())
+	if (!agent.IsProcessing())
 	{
 		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
 	}
@@ -72,6 +79,12 @@ void StateChase::OnExit()
 void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
 {
 	// ...
+}
+
+void StateChase::LoadXMLData(const XMLElement* xmlElement)
+{
+	m_chaseRadius = xmlElement->FloatAttribute(XML_AI_CHASE_RADIUS_ATTR);
+	m_chaseStopDistance = xmlElement->FloatAttribute(XML_AI_STOP_DISTANCE);
 }
 
 EAIState StateChase::GetStateType() const

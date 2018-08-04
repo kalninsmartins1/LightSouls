@@ -4,11 +4,13 @@
 #include "World/Entity/Components/Attack/GenericAttackComponent.h"
 #include "GameConsts.h"
 #include "Utils/Utils.h"
+#include "Utils/XML/XMLLoader.h"
+#include "Utils/XML/XMLConsts.h"
 
 NS_LIGHTSOULS_BEGIN
 
 StateSignaling::StateSignaling(AIAgent& aiAgent)
-	: m_agent(aiAgent)
+	: AState(aiAgent)
 	, m_animComponent(nullptr)
 	, m_curProgress(EStateProgress::IN_PROGRESS)
 {
@@ -17,13 +19,14 @@ StateSignaling::StateSignaling(AIAgent& aiAgent)
 
 void StateSignaling::OnEnter(AnimComponent* animComponent)
 {
-	if (m_agent.GetAttackComponent()->IsReadyToAttack())
+	AIAgent& agent = GetAgent();
+	if (agent.GetAttackComponent()->IsReadyToAttack())
 	{
 		m_animComponent = animComponent;
 		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_SIGNAL);
 		m_curProgress = EStateProgress::IN_PROGRESS;
 
-		Utils::StartTimerWithCallback(&m_agent,
+		Utils::StartTimerWithCallback(&agent,
 			CC_CALLBACK_0(StateSignaling::OnFinishedSignaling, this), m_signalTime);
 	}
 	else
@@ -45,9 +48,10 @@ void StateSignaling::OnExit()
 	}
 }
 
-void StateSignaling::OnEventReceived(const String & receivedEvent, const AEventData & eventData)
+void StateSignaling::LoadXMLData(const XMLElement* xmlElement)
 {
-
+	AState::LoadXMLData(xmlElement);
+	m_signalTime = xmlElement->FloatAttribute(XML_TIME_ATTR);
 }
 
 void StateSignaling::OnFinishedSignaling()
@@ -58,11 +62,6 @@ void StateSignaling::OnFinishedSignaling()
 EAIState StateSignaling::GetStateType() const
 {
 	return EAIState::SIGNALING;
-}
-
-void StateSignaling::SetSignalingTime(float time)
-{
-	m_signalTime = time;
 }
 
 NS_LIGHTSOULS_END
