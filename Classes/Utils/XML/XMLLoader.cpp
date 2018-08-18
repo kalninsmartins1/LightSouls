@@ -21,7 +21,7 @@
 #include "Camera/Components/CameraShake.h"
 #include "World/Entity/AI/SpawnPointConfig.h"
 #include "World/Projectiles/ProjectileConfig.h"
-#include "World/Entity/AI/StateMachine/States/AIAvoidTargetAction.h"
+#include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
 
 NS_LIGHTSOULS_BEGIN
 

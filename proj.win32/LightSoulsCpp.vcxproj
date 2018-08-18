@@ -163,6 +163,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Input\InputTypes\Mouse\MouseInput.cpp" />
     <ClCompile Include="..\Classes\Scenes\GameOverScene.cpp" />
     <ClCompile Include="..\Classes\Scenes\GameScene.cpp" />
+    <ClCompile Include="..\Classes\Scenes\LoadingScreenScene.cpp" />
     <ClCompile Include="..\Classes\Scenes\MainMenuScene.cpp" />
     <ClCompile Include="..\Classes\ScoringSystem\ScoringSystem.cpp" />
     <ClCompile Include="..\Classes\UI\InGameIndicators\ProgressBar.cpp" />
@@ -217,8 +218,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Input\InputTypes\Keyboard\KeyboardInput.h" />
     <ClInclude Include="..\Classes\Input\InputTypes\Mouse\MouseInput.h" />
     <ClInclude Include="..\Classes\LightSoulsTypes.h" />
+    <ClInclude Include="..\Classes\Scenes\ENextScene.h" />
     <ClInclude Include="..\Classes\Scenes\GameOverScene.h" />
     <ClInclude Include="..\Classes\Scenes\GameScene.h" />
+    <ClInclude Include="..\Classes\Scenes\LoadingScreenScene.h" />
     <ClInclude Include="..\Classes\Scenes\MainMenuScene.h" />
     <ClInclude Include="..\Classes\ScoringSystem\ScoringSystem.h" />
     <ClInclude Include="..\Classes\UI\InGameIndicators\ProgressBar.h" />

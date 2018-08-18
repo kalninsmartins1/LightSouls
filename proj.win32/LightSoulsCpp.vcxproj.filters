@@ -258,6 +258,9 @@
     <ClCompile Include="..\Classes\World\Entity\CustomActions\AI\AIAvoidTargetAction.cpp">
       <Filter>src\World\Entity\CustomActions\AI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Scenes\LoadingScreenScene.cpp">
+      <Filter>src\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -424,6 +427,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\CustomActions\AI\AIAvoidTargetAction.h">
       <Filter>src\World\Entity\CustomActions\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scenes\LoadingScreenScene.h">
+      <Filter>src\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scenes\ENextScene.h">
+      <Filter>src\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

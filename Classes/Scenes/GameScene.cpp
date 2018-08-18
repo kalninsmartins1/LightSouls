@@ -9,7 +9,8 @@
 #include "UI/InGameIndicators/ProgressBar.h"
 #include "Events/ProgressBarChangedEventData.h"
 #include "Camera/Camera.h"
-#include "GameOverScene.h"
+#include "LoadingScreenScene.h"
+#include "ENextScene.h"
 #include "ScoringSystem/ScoringSystem.h"
 #include "ui/CocosGUI.h"
 
@@ -248,5 +249,5 @@ void GameScene::OnAgentDestroyed(cocos2d::EventCustom* eventData)
 void GameScene::SwitchToGameOverScene()
 {
 	getEventDispatcher()->removeAllEventListeners();
-	Director::getInstance()->replaceScene(GameOverScene::create());
+	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(LightSouls::ENextScene::GAME_OVER));
 }

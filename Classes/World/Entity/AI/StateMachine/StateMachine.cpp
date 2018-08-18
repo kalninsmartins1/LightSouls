@@ -10,7 +10,7 @@
 #include "States/StateIdle.h"
 #include "States/StateSignaling.h"
 #include "States/StatePause.h"
-#include "States/AIAvoidTargetAction.h"
+#include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
 
 NS_LIGHTSOULS_BEGIN
 

@@ -1,9 +1,10 @@
 #include "MainMenuScene.h"
-#include "GameScene.h"
+#include "LoadingScreenScene.h"
 #include "Input/GameInput.h"
 #include "ui/CocosGUI.h"
 #include "Utils/Utils.h"
 #include "GameConsts.h"
+#include "ENextScene.h"
 
 USING_NS_CC;
 
@@ -14,13 +15,7 @@ MainMenuScene::MainMenuScene()
 
 Scene* MainMenuScene::CreateScene()
 {
-	// create the scene with physics enabled
-	auto scene = createWithPhysics();
-
-	Node* layer = create();
-	scene->addChild(layer);
-
-	return scene;
+	return create();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
@@ -86,5 +81,5 @@ void MainMenuScene::OnQuitPressed()
 
 void MainMenuScene::SwitchToGameScene()
 {	
-	Director::getInstance()->replaceScene(GameScene::CreateScene());
+	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(LightSouls::ENextScene::GAME));	
 }
