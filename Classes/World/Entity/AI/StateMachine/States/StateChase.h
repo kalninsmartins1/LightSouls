@@ -11,7 +11,7 @@ public:
 	StateChase(AIAgent& agent);
 
 public:
-	virtual EAIState			GetStateType() const override;
+	virtual EAIState		GetStateType() const override;
 	
 	virtual void			OnEnter(AnimComponent* animComponent) override;
 	virtual EStateProgress	OnStep() override;

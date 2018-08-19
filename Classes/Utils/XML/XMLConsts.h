@@ -54,6 +54,7 @@ namespace LightSouls
 	static constexpr char* XML_AI_NEXT_STATE_ON_FAILURE = "onFailure";
 	static constexpr char* XML_AI_SHOULD_CHECK_DISTANCE_TO_TARGET = "shouldCheckDistanceToTarget";
 	static constexpr char* XML_AI_MIN_DISTANCE_TO_TARGET = "minDistanceToTarget";
+	static constexpr char* XML_AI_MAX_DISTANCE_TO_TARGET = "maxDistanceToTarget";
 	static constexpr char* XML_AI_START_STATE = "startState";
 	static constexpr char* XML_AI_SPAWN_DELAY = "spawnDelay";
 	static constexpr char* XML_AI_SPAWN_COUNT = "spawnCount";

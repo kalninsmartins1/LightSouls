@@ -63,7 +63,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     if(glview == nullptr) 
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-		#if !LIGHTSOULS_RELEASE		
+		#if LIGHTSOULS_RELEASE		
 			glview = GLViewImpl::createWithFullScreen("LightSoulsCpp");
 		#else				
 			glview = GLViewImpl::createWithRect("LightSoulsCpp", cocos2d::Rect(0, 0, mediumResolutionSize.width, mediumResolutionSize.height), 1.0f, false);

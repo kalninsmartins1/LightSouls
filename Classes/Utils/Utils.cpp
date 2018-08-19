@@ -94,6 +94,11 @@ void Utils::StartTimerWithCallback(cocos2d::Node* node, std::function<void()> ca
 	node->runAction(sequence);
 }
 
+void Utils::ClearCallbackTimers(cocos2d::Node* node, int timerTag)
+{
+	node->stopActionByTag(timerTag);
+}
+
 Vector2 Utils::GetRandomPositionWithinCircle(const Vector2& centerPos, float radius)
 {
 	// Get random position within range

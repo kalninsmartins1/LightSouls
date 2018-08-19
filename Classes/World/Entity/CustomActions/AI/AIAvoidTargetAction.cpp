@@ -47,7 +47,7 @@ void AIAvoidTargetAction::OnCollisionCheck()
 		// Keep checking collision
 		Utils::StartTimerWithCallback(&m_agent,
 			CC_CALLBACK_0(AIAvoidTargetAction::OnCollisionCheck, this),
-			m_collisionCheckInterval);
+			m_collisionCheckInterval, ACTION_COLLISION_CHECK);
 		
 		const Vector2& curPosition = m_agent.getPosition();		
 		PhysicsManager::Raycast(CC_CALLBACK_3(AIAvoidTargetAction::OnRayCastCallback, this),
@@ -76,7 +76,7 @@ void AIAvoidTargetAction::StartAvoiding(const Entity* targetEntity)
 	m_isAvoiding = true;
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(AIAvoidTargetAction::OnCollisionCheck, this),
-		m_collisionCheckInterval);
+		m_collisionCheckInterval, ACTION_COLLISION_CHECK);
 
 	Vector2 awayFromTarget = targetEntity->getPosition() - m_agent.getPosition();
 	awayFromTarget.normalize();

@@ -29,6 +29,7 @@ public:
 	static float		ConvertMillisecondsToSeconds(long long milliseconds);
 	static void			StartTimerWithCallback(cocos2d::Node* node,
 							std::function<void()> callback, float time, int tag = ACTION_TIMER_TAG);
+	static void			ClearCallbackTimers(cocos2d::Node* node, int timerTag);
 
 	static void LogVector2(const Vector2& v);
 	static void LogVector3(const Vector3& v);

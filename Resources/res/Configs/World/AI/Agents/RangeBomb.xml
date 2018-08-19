@@ -16,18 +16,19 @@
 	</Component>
 	
 	<Component  type="AIControllerComponent"
-				patrolRadius="250"
-				patrolPauseInSeconds="2"
-				stopDistance="60"
-				chaseRadius="1500"
 				startState="Idle">
 		
 		<State  type="Idle"
 				onSuccess="Signaling"/>
+				
+		<State type="Chase"
+				onSuccess="Signaling"
+				chaseRadius="1000"
+				stopDistance="250"/>
 
 		<State  type="Attack"
 				onSuccess="Pause"
-				onFailure="Pause"/>
+				onFailure="Chase"/>
 				
 		<State 	type="Signaling"
 				onSuccess="Attack"
@@ -36,15 +37,9 @@
 
 		<State 	type="Pause"
 				onSuccess="Signaling"
-				onFailure="Avoid"
-				shouldCheckDistanceToTarget="true"
-				minDistanceToTarget="100"
+				onFailure="Chase"
+				maxDistanceToTarget="400"
 				time="1.0"/>
-				
-		<State 	type="Avoid"
-			    onSuccess="Signaling"
-				stopDistance="400"
-				/>
 
 	</Component>
 	
@@ -78,7 +73,7 @@
 	
 	<Component 	type="RangedAttackComponent"
 				secondsBetweenAttacks="5"
-				attackRange="500">
+				attackRange="400">
 			
 		<Projectile path="res/Configs/World/Projectiles/Fireball.xml">
 		</Projectile>

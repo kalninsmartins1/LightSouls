@@ -83,6 +83,7 @@ void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& 
 
 void StateChase::LoadXMLData(const XMLElement* xmlElement)
 {
+	AState::LoadXMLData(xmlElement);
 	m_chaseRadius = xmlElement->FloatAttribute(XML_AI_CHASE_RADIUS_ATTR);
 	m_chaseStopDistance = xmlElement->FloatAttribute(XML_AI_STOP_DISTANCE);
 }
