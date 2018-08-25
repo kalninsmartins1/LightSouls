@@ -113,6 +113,16 @@ void GameScene::update(float deltaTime)
 	// Update AI
 	LightSouls::AIAgentManager::GetInstance()->Update(deltaTime);	
 
+#if !defined(LIGHTSOULS_RELEASE)
+	if (s_gameInput->HasAction("ReloadGame"))
+	{
+		removeAllChildren();
+		LightSouls::AIAgentManager::GetInstance()->Cleanup();
+		InitWolrdLayer();
+		InitUILayer();
+	}
+#endif
+
 	// Debug physics 
 // 	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
 // 	if(world != nullptr)

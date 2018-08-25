@@ -31,6 +31,12 @@
 		</Keyboard>	
 	</ActionButton>
 	
+	<ActionButton name="ReloadGame">
+		<Keyboard>
+			<KeyboardButton keyCode="F2"/>
+		</Keyboard>	
+	</ActionButton>
+	
 	<ActionButton name="StrongAttackInput">
 		<Mouse>
 			<MouseButton buttonCode="RightButton"/>

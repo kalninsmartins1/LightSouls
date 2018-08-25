@@ -29,6 +29,7 @@ private:
 	Vector2			 m_shootDirection;
 	Vector2			 m_startPosition;
 	float			 m_attackRange;
+	bool m_once;
 };
 
 NS_LIGHTSOULS_END

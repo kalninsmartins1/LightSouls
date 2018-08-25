@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <Entity type="RangeBomb"
 			moveSpeed="400"
-			baseHealth="100"
+			baseHealth="40"
 			baseStamina="100"
 			baseDamage="10"
 			staminaRegenerateSpeed="2"
@@ -16,7 +16,7 @@
 	</Component>
 	
 	<Component  type="AIControllerComponent"
-				startState="Idle">
+				startState="Signaling">
 		
 		<State  type="Idle"
 				onSuccess="Signaling"/>
@@ -91,7 +91,8 @@
 			isDynamic="true" 
 			isGravityEnabled="false"
 			isRotationEnabled="false"
-			collisionBitMask="1"
+			collisionBitMask="2"
+			collisionCategory="2"
 			forceScale="60"
 			/>
 	</Component>	

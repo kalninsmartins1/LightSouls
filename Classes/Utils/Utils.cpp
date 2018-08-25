@@ -177,6 +177,10 @@ KeyCode Utils::ConvertStringToKeyCode(const String& keyCodeStr)
 	{
 		result = KeyCode::KEY_ESCAPE;
 	}
+	else if (keyCodeStr == "F2")
+	{
+		result = KeyCode::KEY_F2;
+	}
 	else
 	{
 		AssertWithStrFormat(false, "Utils: Invalid key code keyCodeStr %s", keyCodeStr);

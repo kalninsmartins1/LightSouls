@@ -10,7 +10,7 @@
 	>
 	
 	<Component type="TransformComponent">
-		<Position x="-100" y="200" z="0" />
+		<Position x="0" y="0" z="0" />
 		<Rotation x="0" y="0" z="0" />
 		<Scale x="0.5" y="0.5" z="0.5"/>
 	</Component>
@@ -165,11 +165,12 @@
 			isGravityEnabled="false" 
 			isRotationEnabled="false"
 			collisionBitMask="1"
+			collisionCategory="1"
 			forceScale="60"
 			/>
 	</Component>
 	
-	<!-- Used for taking damage from projectiles -->
+	<!-- Used for taking damage from projectiles "collisionBitMask - I collide with" "collisionCategory - I am a ..."-->
 	<Component type="NodeComponent">
 		<Component type="RigidBodyComponent">
 			<AnchorPosition x="0" y="0" />
@@ -182,6 +183,7 @@
 				isGravityEnabled="false" 
 				isRotationEnabled="false"
 				collisionBitMask="4"
+				collisionCategory="8"
 				forceScale="0"
 				/>
 		</Component>

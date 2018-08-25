@@ -61,7 +61,6 @@ bool AIAgent::Init(const String& pathToXML)
 	if(isInitializedSuccessfully)
 	{
 		OnEntityInitialized();
-		m_stateMachine.Start(GetAnimComponent());
 
 		GenericAttackComponent* attackComponent = dynamic_cast<GenericAttackComponent*>(getComponent(ATTACK_COMPONENT));
 		const bool isAttackComponentFound = attackComponent != nullptr;
@@ -71,6 +70,8 @@ bool AIAgent::Init(const String& pathToXML)
 		// Register for physics events
 		GameScene::GetPhysicsManager()->AddContactBeginListener(getName(),
 			CC_CALLBACK_1(AIAgent::OnContactBegin, this));
+		
+		m_stateMachine.Start(GetAnimComponent());
 
 		// init was successful only if the attack component are found
 		isInitializedSuccessfully = isInitializedSuccessfully &&  isAttackComponentFound;

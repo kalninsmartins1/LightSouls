@@ -20,6 +20,7 @@ public:
 	const cocos2d::PhysicsMaterial& GetPhysicsMaterial() const;
 	BodyType						GetBodyType() const;
 	int								GetCollisionBitMask() const;
+	int								GetCollisionCategory() const;
 	bool							IsBodyDynamic() const;
 	bool							IsGravityEnabled() const;
 	bool							IsRotationEnabled() const;
@@ -29,6 +30,7 @@ public:
 	void			SetPhysicsMaterial(const cocos2d::PhysicsMaterial& material);
 	void			SetBodyType(const BodyType& type);
 	void			SetCollisionBitMask(int collisionBitMask);
+	void			SetCollisionCategory(int collisionCategory);
 	void			SetIsDynamic(bool isDynamic);
 	void			SetIsGravityEnabled(bool isGravityEnabled);
 
@@ -37,6 +39,7 @@ private:
 	cocos2d::PhysicsMaterial	m_physicsMaterial;
 	BodyType					m_bodyType;
 	int							m_collisionBitMask;
+	int							m_collisionCategory;
 	bool						m_isDynamic;
 	bool						m_isGravityEnabled;
 	bool						m_isRotationEnabled;

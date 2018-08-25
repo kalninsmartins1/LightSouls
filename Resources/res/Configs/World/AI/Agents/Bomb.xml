@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <Entity type="Bomb"
 			moveSpeed="400"
-			baseHealth="100"
+			baseHealth="50"
 			baseStamina="100"
 			baseDamage="10"
 			staminaRegenerateSpeed="2"
@@ -20,7 +20,7 @@
 				patrolPauseInSeconds="2"
 				chaseStopDistance="60"
 				chaseRadius="1500"
-				startState="Idle">
+				startState="Signaling">
 		
 		<State  type="Idle"
 				onSuccess="Signaling"/>
@@ -77,6 +77,7 @@
 			isDynamic="true" 
 			isGravityEnabled="false"
 			isRotationEnabled="false"
+			collisionCategory="1"
 			collisionBitMask="1"
 			forceScale="60"
 			/>

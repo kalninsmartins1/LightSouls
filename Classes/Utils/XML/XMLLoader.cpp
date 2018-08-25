@@ -591,6 +591,7 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(const XMLNode* xmlNode, PhysicsB
 	const bool isBodyDynamic = physicsBodyElem->BoolAttribute(XML_PHYSICS_DYNAMIC_BODY_ATTR);
 	const bool isRotationEnabled = physicsBodyElem->BoolAttribute(XML_PHYSICS_ROTATION_ENABLED_ATTR);
 	const int collisionBitMask = physicsBodyElem->IntAttribute(XML_PHYSICS_BIT_MASK_ATTR);
+	const int collisonCategory = physicsBodyElem->IntAttribute(XML_PHYSICS_COLLISION_CATEGORY);
 
 	if (bodyType == XML_PHYSICS_BODY_BOX_ATTR)
 	{
@@ -601,6 +602,7 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(const XMLNode* xmlNode, PhysicsB
 		outConfig.SetPhysicsMaterial(material);
 		outConfig.SetBodyType(BodyType::BOX);
 		outConfig.SetCollisionBitMask(collisionBitMask);
+		outConfig.SetCollisionCategory(collisonCategory);
 		outConfig.SetIsDynamic(isBodyDynamic);
 		outConfig.SetIsGravityEnabled(isGravityEnabled);
 		outConfig.SetRotationEnabled(isRotationEnabled);

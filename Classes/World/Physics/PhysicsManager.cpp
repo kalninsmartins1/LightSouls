@@ -80,7 +80,7 @@ void PhysicsManager::AddPhysicsBody(cocos2d::Node& attachmentNode,
 
 	physicsBody->setCollisionBitmask(bodyConfig.GetCollisionBitMask());
 	physicsBody->setContactTestBitmask(bodyConfig.GetCollisionBitMask());
-	physicsBody->setCategoryBitmask(bodyConfig.GetCollisionBitMask());
+	physicsBody->setCategoryBitmask(bodyConfig.GetCollisionCategory());
 
 	physicsBody->setName(RIGID_BODY_COMPONENT);
 	physicsBody->setRotationEnable(bodyConfig.IsRotationEnabled());

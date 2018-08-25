@@ -7,6 +7,7 @@ PhysicsBodyConfig::PhysicsBodyConfig()
 	, m_physicsMaterial()
 	, m_bodyType(BodyType::NONE)
 	, m_collisionBitMask(-1)
+	, m_collisionCategory(-1)
 	, m_isDynamic(false)
 	, m_isGravityEnabled(false)
 {
@@ -31,6 +32,11 @@ BodyType PhysicsBodyConfig::GetBodyType() const
 int PhysicsBodyConfig::GetCollisionBitMask() const
 {
 	return m_collisionBitMask;
+}
+
+int PhysicsBodyConfig::GetCollisionCategory() const
+{
+	return m_collisionCategory;
 }
 
 bool PhysicsBodyConfig::IsBodyDynamic() const
@@ -71,6 +77,11 @@ void PhysicsBodyConfig::SetBodyType(const BodyType& type)
 void PhysicsBodyConfig::SetCollisionBitMask(int collisionBitMask)
 {
 	m_collisionBitMask = collisionBitMask;
+}
+
+void PhysicsBodyConfig::SetCollisionCategory(int collisionCategory)
+{
+	m_collisionCategory = collisionCategory;
 }
 
 void PhysicsBodyConfig::SetIsDynamic(bool isDynamic)

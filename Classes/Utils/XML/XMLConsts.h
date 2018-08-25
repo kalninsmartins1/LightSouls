@@ -90,6 +90,7 @@ namespace LightSouls
 
 	// XML physics attributes
 	static constexpr char* XML_PHYSICS_BIT_MASK_ATTR = "collisionBitMask";
+	static constexpr char* XML_PHYSICS_COLLISION_CATEGORY = "collisionCategory";
 	static constexpr char* XML_PHYSICS_DYNAMIC_BODY_ATTR = "isDynamic";
 	static constexpr char* XML_PHYSICS_ROTATION_ENABLED_ATTR = "isRotationEnabled";
 	static constexpr char* XML_PHYSICS_FORCE_SCALE_ATTR = "forceScale";

@@ -52,7 +52,7 @@ void AIAgentManager::AddSpawnPoint(const SpawnPointConfig& config)
 	m_allActiveSpawnPoints.push_back(spawnPoint);
 }
 
-void LightSouls::AIAgentManager::Cleanup()
+void AIAgentManager::Cleanup()
 {
 	m_allActiveSpawnPoints.clear();
 	m_agentConfigPathMap.clear();

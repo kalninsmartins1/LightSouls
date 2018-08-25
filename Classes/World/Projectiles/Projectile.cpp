@@ -11,6 +11,7 @@ Projectile::Projectile(const Entity& shooter, const ProjectileConfig& config, co
 	, m_shootDirection(shootDirection)
 	, m_startPosition(shooter.getPosition())
 	, m_attackRange(attackRange)
+	, m_once(false)
 {
 	
 }
@@ -37,9 +38,11 @@ Projectile* Projectile::Create(const Entity& shooter, const ProjectileConfig& co
 
 bool Projectile::Init()
 {
+	bool isSuccessfull = initWithFile(m_config.GetPathToSprite());
 	PhysicsManager::AddPhysicsBody(*this, m_config.GetPhysicsBodyConfig());
 	setPosition(m_startPosition);
-	return initWithFile(m_config.GetPathToSprite());
+
+	return isSuccessfull;
 }
 
 void Projectile::update(float deltaTime)
@@ -67,6 +70,7 @@ void Projectile::RotateProjectileInDirectionOfMovement()
 {	
 	const float angleBetweenVectors = CC_RADIANS_TO_DEGREES(acos(
 		Vector2(0, 1).dot(m_shootDirection) / m_shootDirection.length()));
+	_physicsBody->setRotationOffset(angleBetweenVectors);
 	setRotation(angleBetweenVectors);
 }
 

@@ -12,12 +12,13 @@
 		<PhysicsMaterial density="0.1" restitution="0" friction="0.3" />
 		<PhysicsBody
 			shape="box"
-			width="110"
-			height="70"
+			width="50"
+			height="20"
 			isDynamic="true" 
 			isGravityEnabled="false" 
 			isRotationEnabled="false"
-			collisionBitMask="4"
+			collisionCategory="4"
+			collisionBitMask="8"
 			forceScale="60"
 			/>
 	</Component>
