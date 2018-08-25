@@ -14,6 +14,7 @@ StatePause::StatePause(AIAgent& aiAgent)
 	, m_targetEntity(nullptr)
 	, m_curProgress(EStateProgress::IN_PROGRESS)
 	, m_pauseTime(0.0f)
+	, m_shouldCheckDistanceToTarget(false)
 {
 
 }
@@ -31,7 +32,7 @@ void StatePause::OnEnter(AnimComponent* animComponent)
 
 EStateProgress StatePause::OnStep()
 {	
-	if (IsTargetTooFar())
+	if (m_shouldCheckDistanceToTarget && IsTargetTooFar())
 	{
 		m_curProgress = EStateProgress::FAILED;
 	}
@@ -49,6 +50,7 @@ void StatePause::LoadXMLData(const XMLElement* xmlElement)
 	AState::LoadXMLData(xmlElement);
 	m_pauseTime = xmlElement->FloatAttribute(XML_TIME_ATTR);
 	m_maxDistaneceToTarget = xmlElement->FloatAttribute(XML_AI_MAX_DISTANCE_TO_TARGET);
+	m_shouldCheckDistanceToTarget = xmlElement->BoolAttribute(XML_AI_IS_CHECKING_DISTANCE_TO_TARGET);
 }
 
 bool StatePause::IsTargetTooFar() const

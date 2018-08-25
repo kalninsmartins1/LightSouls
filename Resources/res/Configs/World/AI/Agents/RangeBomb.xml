@@ -39,6 +39,7 @@
 				onSuccess="Signaling"
 				onFailure="Chase"
 				maxDistanceToTarget="400"
+				isCheckingDistanceToTarget="true"
 				time="1.0"/>
 
 	</Component>

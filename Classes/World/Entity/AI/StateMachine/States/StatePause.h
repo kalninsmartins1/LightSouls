@@ -27,6 +27,7 @@ private:
 	EStateProgress	m_curProgress;
 	float			m_pauseTime;
 	float			m_maxDistaneceToTarget;
+	bool			m_shouldCheckDistanceToTarget;
 };
 
 NS_LIGHTSOULS_END
