@@ -37,6 +37,12 @@
 		</Keyboard>	
 	</ActionButton>
 	
+	<ActionButton name="DebugPhysics">
+		<Keyboard>
+			<KeyboardButton keyCode="F3"/>
+		</Keyboard>	
+	</ActionButton>
+	
 	<ActionButton name="StrongAttackInput">
 		<Mouse>
 			<MouseButton buttonCode="RightButton"/>

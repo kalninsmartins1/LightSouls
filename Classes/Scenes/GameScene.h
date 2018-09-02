@@ -43,6 +43,7 @@ private:
 	void OnPlayerStaminaChanged(cocos2d::EventCustom* eventData);
 	void OnAgentDestroyed(cocos2d::EventCustom* eventData);
 	void SwitchToGameOverScene();
+	void ProcessDebugPhysicsDraw();
 
 private:
 	static LightSouls::PhysicsManager*			s_physicsManager;
@@ -51,4 +52,5 @@ private:
 	LightSouls::ProgressBar*					m_healthBar;
 	LightSouls::ProgressBar*					m_staminaBar;
 	cocos2d::ui::Text*							m_scoreText;
+	bool										m_physicsDebugEnabled;
 };

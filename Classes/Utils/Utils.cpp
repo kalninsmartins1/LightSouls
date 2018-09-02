@@ -181,6 +181,10 @@ KeyCode Utils::ConvertStringToKeyCode(const String& keyCodeStr)
 	{
 		result = KeyCode::KEY_F2;
 	}
+	else if (keyCodeStr == "F3")
+	{
+		result = KeyCode::KEY_F3;
+	}
 	else
 	{
 		AssertWithStrFormat(false, "Utils: Invalid key code keyCodeStr %s", keyCodeStr);

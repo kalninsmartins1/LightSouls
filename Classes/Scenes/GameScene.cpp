@@ -24,6 +24,7 @@ GameScene::GameScene()
 	, m_healthBar(nullptr)
 	, m_staminaBar(nullptr)
 	, m_scoreText(nullptr)
+	, m_physicsDebugEnabled(false)
 {
 	// Reset player score upon new game
 	LightSouls::ScoringSystem::GetInstance()->Reset();
@@ -50,7 +51,7 @@ LightSouls::GameInput* GameScene::GetGameInput()
 
 Scene* GameScene::CreateScene()
 {
-	// create the scene with physics enabled
+	// Create the scene with physics enabled
 	auto scene = createWithPhysics();
 
 	Node* layer = create();
@@ -121,15 +122,9 @@ void GameScene::update(float deltaTime)
 		InitWolrdLayer();
 		InitUILayer();
 	}
+	
+	ProcessDebugPhysicsDraw();
 #endif
-
-	// Debug physics 
-// 	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
-// 	if(world != nullptr)
-// 	{
-// 		world->setDebugDrawMask(0xFFFFFF);
-// 		world->setDebugDrawCameraMask(CameraFlag::USER1);
-// 	}
 
 	if (m_healthBar != nullptr)
 	{
@@ -260,4 +255,27 @@ void GameScene::SwitchToGameOverScene()
 {
 	getEventDispatcher()->removeAllEventListeners();
 	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(LightSouls::ENextScene::GAME_OVER));
+}
+
+void GameScene::ProcessDebugPhysicsDraw()
+{
+	if (s_gameInput->HasAction("DebugPhysics"))
+	{
+		m_physicsDebugEnabled = !m_physicsDebugEnabled;
+	}
+	
+	PhysicsWorld* world = Director::getInstance()->getRunningScene()->getPhysicsWorld();
+	if (world != nullptr)
+	{
+		if (m_physicsDebugEnabled)
+		{
+			world->setDebugDrawMask(0xFFFFFF);
+			world->setDebugDrawCameraMask(CameraFlag::USER1);
+		}
+		else
+		{
+			world->setDebugDrawMask(0);
+			world->setDebugDrawCameraMask(CameraFlag::USER8);
+		}
+	}	
 }
