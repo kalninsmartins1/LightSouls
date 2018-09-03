@@ -25,8 +25,9 @@ void StatePause::OnEnter(AnimComponent* animComponent)
 	m_curProgress = EStateProgress::IN_PROGRESS;
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	
+	float pauseTime = m_pauseTime + Utils::GetRandValueWithinRange(0.0f, 5.0f);
 	Utils::StartTimerWithCallback(&GetAgent(),
-			CC_CALLBACK_0(StatePause::OnPauseExpired, this), m_pauseTime, ACTION_PAUSE);
+			CC_CALLBACK_0(StatePause::OnPauseExpired, this), pauseTime, ACTION_PAUSE);
 
 }
 
@@ -55,7 +56,8 @@ void StatePause::LoadXMLData(const XMLElement* xmlElement)
 
 bool StatePause::IsTargetTooFar() const
 {
-	Vector2 toTarget = m_targetEntity->getPosition() - GetAgent().getPosition();
+	Entity* targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
+	Vector2 toTarget = targetEntity->getPosition() - GetAgent().getPosition();
 	return  toTarget.lengthSquared() >= m_maxDistaneceToTarget * m_maxDistaneceToTarget;
 }
 

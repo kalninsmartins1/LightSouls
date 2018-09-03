@@ -16,7 +16,7 @@
 	</Component>
 	
 	<Component  type="AIControllerComponent"
-				startState="Signaling">
+				startState="Pause">
 		
 		<State  type="Idle"
 				onSuccess="Signaling"/>

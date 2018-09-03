@@ -20,7 +20,7 @@
 				patrolPauseInSeconds="2"
 				chaseStopDistance="60"
 				chaseRadius="1500"
-				startState="Signaling">
+				startState="Pause">
 		
 		<State  type="Idle"
 				onSuccess="Signaling"/>

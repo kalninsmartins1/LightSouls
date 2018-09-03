@@ -118,10 +118,19 @@ Vector2 Utils::GetRandomPositionWithinCircle(const Vector3& centerPos, float rad
 	return GetRandomPositionWithinCircle(Vector2(centerPos.x, centerPos.y), radius);
 }
 
-float Utils::GetRandValueWithinRange(int minValue, int maxValue)
+int Utils::GetRandValueWithinRange(int minValue, int maxValue)
 {
 	int range = maxValue - minValue;
 	return minValue + (rand() % range);
+}
+
+float Utils::GetRandValueWithinRange(float minValue, int maxValue)
+{
+	float range = maxValue - minValue;
+	int rangeScaled = static_cast<int>(range * 1000.0f);
+	float randValue = (rand() % rangeScaled) / 1000.0f;
+
+	return minValue + randValue;
 }
 
 float Utils::GetRandAngleInRadians()

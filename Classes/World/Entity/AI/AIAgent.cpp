@@ -10,6 +10,7 @@
 #include "Utils/XML/XMLConsts.h"
 #include "World/Entity/AI/StateMachine/States/AState.h"
 #include "Scenes/GameScene.h"
+#include "World/Entity/AI/AIAgentManager.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -116,8 +117,11 @@ bool AIAgent::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 
 void AIAgent::update(float deltaTime)
 {
-	Entity::update(deltaTime);
-	m_stateMachine.OnStep();
+	if (AIAgentManager::GetInstance()->GetTargetEntity() != nullptr)
+	{
+		Entity::update(deltaTime);
+		m_stateMachine.OnStep();
+	}
 }
 
 void AIAgent::Reset()

@@ -32,10 +32,13 @@ Entity* AIAgentManager::GetTargetEntity() const
 
 void AIAgentManager::Update(float deltaTime)
 {
-	for (auto spawnPoint : m_allActiveSpawnPoints)
+	if (m_targetEntity != nullptr)
 	{
-		spawnPoint->Update(deltaTime);
-	}
+		for (auto spawnPoint : m_allActiveSpawnPoints)
+		{
+			spawnPoint->Update(deltaTime);
+		}
+	}	
 }
 
 void AIAgentManager::AddAgentConfig(const String& type,
