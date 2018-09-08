@@ -24,7 +24,6 @@ GameScene::GameScene()
 	, m_healthBar(nullptr)
 	, m_staminaBar(nullptr)
 	, m_scoreText(nullptr)
-	, m_infoPlayerText(nullptr)
 	, m_physicsDebugEnabled(false)
 {
 	// Reset player score upon new game
@@ -76,9 +75,7 @@ bool GameScene::init()
 	if (!Scene::init())
 	{
 		return false;
-	}
-
-	setCascadeOpacityEnabled(true);
+	}	
 
 	// Init physics manager
 	s_physicsManager = LightSouls::PhysicsManager::Create(this);
@@ -88,7 +85,7 @@ bool GameScene::init()
 	}
 
 	InitWolrdLayer();
-	InitUILayer();
+	InitUILayer();	
 
 	// Init Input
 	s_gameInput = LightSouls::GameInput::Create("res/Configs/Input/Input.xml");
@@ -207,30 +204,44 @@ void GameScene::InitUILayer()
 	}
 
 	m_scoreText = ui::Text::create(StringUtils::format("Score: %d", LightSouls::ScoringSystem::GetInstance()->GetScore()),
-		"Arial", 100);
+		LightSouls::DEFAULT_FONT, 100);
 	m_scoreText->setNormalizedPosition(Vec2(0.5f, 0.82f)); 
-
-	m_infoPlayerText = ui::Text::create("Died !", "Arial", 100);
-	m_infoPlayerText->setTextColor(Color4B::RED);
-	m_infoPlayerText->setVisible(false);
-	Node* infoContainer = Node::create();
-	infoContainer->addChild(m_infoPlayerText);
-	infoContainer->setNormalizedPosition(Vec2(0.5f, 0.65f));
-	infoContainer->setCascadeOpacityEnabled(false);
 
 	uiLayer->addChild(screenOverlay);
 	uiLayer->addChild(m_healthBar);
 	uiLayer->addChild(m_staminaBar);
-	uiLayer->addChild(m_scoreText);
-	uiLayer->addChild(infoContainer);
-	uiLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));
-	uiLayer->setCascadeOpacityEnabled(true);
+	uiLayer->addChild(m_scoreText);	
+	uiLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));	
 	addChild(uiLayer);
 
 	// Create UI camera
 	Camera* uiCamera = Camera::create();
 	uiCamera->setCameraFlag(CameraFlag::USER2);
 	addChild(uiCamera);
+}
+
+void GameScene::StartGameOverFadeIn(float time)
+{
+	Sprite* fadeSprite = Sprite::create("res/Graphics/pixel.png");
+	const Vec2& scale = LightSouls::Utils::GetScreenFillScale(fadeSprite->getContentSize());
+	fadeSprite->setScale(scale.x, scale.y);
+	fadeSprite->setColor(Color3B::BLACK);
+	fadeSprite->setAnchorPoint(Vec2::ZERO);
+	fadeSprite->setOpacity(0);
+	fadeSprite->runAction(FadeIn::create(time));
+
+	auto infoText = ui::Text::create("Died !", LightSouls::DEFAULT_FONT, 100);
+	infoText->setTextColor(Color4B::RED);
+	infoText->setNormalizedPosition(Vec2(0.5f, 0.65f));
+
+	Node* fadeContainer = Node::create();
+	fadeContainer->setContentSize(LightSouls::Utils::GetScreenSize());
+	fadeContainer->addChild(fadeSprite);
+	fadeContainer->addChild(infoText);
+
+	// Needs to be called once all the children has been added
+	fadeContainer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));
+	addChild(fadeContainer);
 }
 
 void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
@@ -242,11 +253,10 @@ void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 		m_healthBar->SetCurrentValue(healthData->GetPercentage());
 		if (healthData->GetNewValue() <= 0)
 		{
-			m_healthBar->MultiplyAnimationSpeed(2.0f);
-			m_infoPlayerText->setVisible(true);
+			m_healthBar->MultiplyAnimationSpeed(2.0f);			
 
 			float toNextSceneTime = 2.0f;
-			runAction(FadeOut::create(toNextSceneTime));
+			StartGameOverFadeIn(toNextSceneTime);
 			LightSouls::Utils::StartTimerWithCallback(this,
 				CC_CALLBACK_0(GameScene::SwitchToGameOverScene, this),
 				toNextSceneTime);

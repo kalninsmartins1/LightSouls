@@ -39,6 +39,7 @@ public:
 private:
 	void InitWolrdLayer();
 	void InitUILayer();
+	void StartGameOverFadeIn(float time);
 	void SwitchToGameOverScene();
 	void ProcessDebugPhysicsDraw();
 	void OnPlayerHealthChanged(cocos2d::EventCustom* eventData);
@@ -52,6 +53,5 @@ private:
 	LightSouls::ProgressBar*					m_healthBar;
 	LightSouls::ProgressBar*					m_staminaBar;
 	cocos2d::ui::Text*							m_scoreText;
-	cocos2d::ui::Text*							m_infoPlayerText;
 	bool										m_physicsDebugEnabled;
 };
