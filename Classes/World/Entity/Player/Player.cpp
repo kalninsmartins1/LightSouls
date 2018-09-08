@@ -97,6 +97,10 @@ void Player::update(float deltaTime)
 			PlayRunOrIdleAnimation();
 		}
 	}
+	else
+	{
+		SetMoveDirection(Vector2::ZERO);
+	}
 }
 
 const String& Player::GetEventOnGiveDamage()

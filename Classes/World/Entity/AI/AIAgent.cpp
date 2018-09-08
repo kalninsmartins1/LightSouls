@@ -123,6 +123,10 @@ void AIAgent::update(float deltaTime)
 		Entity::update(deltaTime);
 		m_stateMachine.OnStep();
 	}
+	else
+	{
+		SetMoveDirection(Vector2::ZERO);
+	}
 }
 
 void AIAgent::Reset()
