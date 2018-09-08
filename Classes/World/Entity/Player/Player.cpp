@@ -80,19 +80,22 @@ bool Player::Init(const String& pathToXML)
 
 void Player::update(float deltaTime)
 {
-	// Call base update
-	Entity::update(deltaTime);
-
-	// We can move only when we are not attacking
-	if (IsReadyToAttack() && !m_isDodging)
+	if (GetCurrentHealth() > 0)
 	{
-		ManageInput();
-	}
+		// Call base update
+		Entity::update(deltaTime);
 
-	// If still not attacking
-	if (IsReadyToAttack())
-	{
-		PlayRunOrIdleAnimation();
+		// We can move only when we are not attacking
+		if (IsReadyToAttack() && !m_isDodging)
+		{
+			ManageInput();
+		}
+
+		// If still not attacking
+		if (IsReadyToAttack())
+		{
+			PlayRunOrIdleAnimation();
+		}
 	}
 }
 

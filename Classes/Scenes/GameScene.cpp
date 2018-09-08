@@ -24,6 +24,7 @@ GameScene::GameScene()
 	, m_healthBar(nullptr)
 	, m_staminaBar(nullptr)
 	, m_scoreText(nullptr)
+	, m_infoPlayerText(nullptr)
 	, m_physicsDebugEnabled(false)
 {
 	// Reset player score upon new game
@@ -76,6 +77,8 @@ bool GameScene::init()
 	{
 		return false;
 	}
+
+	setCascadeOpacityEnabled(true);
 
 	// Init physics manager
 	s_physicsManager = LightSouls::PhysicsManager::Create(this);
@@ -170,12 +173,13 @@ void GameScene::InitWolrdLayer()
 
 	// Set world camera mask
 	worldLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER1));
+	worldLayer->setCascadeOpacityEnabled(true);
 	addChild(worldLayer);
 
 	// Create world camera and set it to follow player
 	LightSouls::Camera* worldCamera = LightSouls::Camera::Create("res/Configs/Camera/Camera.xml");
 	worldCamera->setCameraFlag(CameraFlag::USER1);
-	worldCamera->runAction(LightSouls::CameraFollow::Create(m_player));
+	worldCamera->runAction(LightSouls::CameraFollow::Create(m_player));	
 	addChild(worldCamera);	
 }
 
@@ -205,12 +209,22 @@ void GameScene::InitUILayer()
 	m_scoreText = ui::Text::create(StringUtils::format("Score: %d", LightSouls::ScoringSystem::GetInstance()->GetScore()),
 		"Arial", 100);
 	m_scoreText->setNormalizedPosition(Vec2(0.5f, 0.82f)); 
-		
+
+	m_infoPlayerText = ui::Text::create("Died !", "Arial", 100);
+	m_infoPlayerText->setTextColor(Color4B::RED);
+	m_infoPlayerText->setVisible(false);
+	Node* infoContainer = Node::create();
+	infoContainer->addChild(m_infoPlayerText);
+	infoContainer->setNormalizedPosition(Vec2(0.5f, 0.65f));
+	infoContainer->setCascadeOpacityEnabled(false);
+
 	uiLayer->addChild(screenOverlay);
 	uiLayer->addChild(m_healthBar);
 	uiLayer->addChild(m_staminaBar);
 	uiLayer->addChild(m_scoreText);
+	uiLayer->addChild(infoContainer);
 	uiLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));
+	uiLayer->setCascadeOpacityEnabled(true);
 	addChild(uiLayer);
 
 	// Create UI camera
@@ -228,7 +242,14 @@ void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 		m_healthBar->SetCurrentValue(healthData->GetPercentage());
 		if (healthData->GetNewValue() <= 0)
 		{
-			SwitchToGameOverScene();
+			m_healthBar->MultiplyAnimationSpeed(2.0f);
+			m_infoPlayerText->setVisible(true);
+
+			float toNextSceneTime = 2.0f;
+			runAction(FadeOut::create(toNextSceneTime));
+			LightSouls::Utils::StartTimerWithCallback(this,
+				CC_CALLBACK_0(GameScene::SwitchToGameOverScene, this),
+				toNextSceneTime);
 		}
 	}
 }

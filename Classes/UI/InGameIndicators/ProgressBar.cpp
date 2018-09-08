@@ -17,6 +17,11 @@ void ProgressBar::SetCurrentValue(float value)
 	}	
 }
 
+void ProgressBar::MultiplyAnimationSpeed(float multiplier)
+{
+	m_animationSpeed *= multiplier;
+}
+
 void ProgressBar::SetAnimationSpeed(float animationSpeed)
 {
 	m_animationSpeed = animationSpeed;
@@ -72,6 +77,7 @@ bool ProgressBar::Init(const UIElementConfig& backgroundConfig,
 	initWithFile(backgroundConfig.GetPathToSprite());
 	setAnchorPoint(backgroundConfig.GetAnchorPosition());
 	setNormalizedPosition(backgroundConfig.GetNormalizedPosition());
+	setCascadeOpacityEnabled(true);
 
 	const cocos2d::Vec2& bgScale = backgroundConfig.GetScale();
 	setScale(bgScale.x, bgScale.y);

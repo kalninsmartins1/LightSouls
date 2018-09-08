@@ -117,7 +117,8 @@ bool AIAgent::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 
 void AIAgent::update(float deltaTime)
 {
-	if (AIAgentManager::GetInstance()->GetTargetEntity() != nullptr)
+	Entity* targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
+	if (targetEntity != nullptr && targetEntity->GetCurrentHealth() > 0)
 	{
 		Entity::update(deltaTime);
 		m_stateMachine.OnStep();

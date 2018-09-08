@@ -16,6 +16,7 @@ public:
 	void SetAnimationSpeed(float animationSpeed);
 	void SetCurrentValue(float currentValue);
 
+	void				MultiplyAnimationSpeed(float multiplier);
 	static ProgressBar* Create(const String& pathToXML);
 	bool				Init(const UIElementConfig& backgroundConfig,
 								const UIElementConfig& foregroundConfig);
