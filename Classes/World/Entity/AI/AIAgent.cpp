@@ -134,6 +134,7 @@ void AIAgent::Reset()
 	ResetMoveSpeed();
 	ResetStamina();
 	ResetHealth();
+	ResetIsTakingDamage();
 	m_stateMachine.Reset();
 	setPosition(GetBasePosition());
 }

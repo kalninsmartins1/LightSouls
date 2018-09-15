@@ -48,12 +48,13 @@ EStateProgress StateAttack::OnStep()
 
 	if(m_curProgress == EStateProgress::IN_PROGRESS && m_isAnimFinished)
 	{
-		if(m_attackComponent->IsReadyToAttack())
+		AIAgent& agent = GetAgent();
+		if(agent.IsReadyToAttack() && m_attackComponent->IsReadyToAttack())
 		{
 			// Direction to target
 			Vector2 toTarget = m_targetEntity->getPosition() - GetAgent().getPosition();
 			m_attackComponent->Attack(toTarget.getNormalized());
-			GetAgent().StartAttacking();
+			agent.StartAttacking();
 			
 			// Check for combo
 			if (!m_attackComponent->IsComboExpired())
@@ -83,9 +84,12 @@ void StateAttack::OnExit()
 #endif
 }
 
-void StateAttack::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
+void StateAttack::OnEventReceived(const String & receivedEvent, const AEventData & eventData)
 {
-	// ...
+	if (receivedEvent == AIAgent::GetEventAgentHealthChanged())
+	{
+		m_curProgress = EStateProgress::FAILED;
+	}
 }
 
 EAIState StateAttack::GetStateType() const

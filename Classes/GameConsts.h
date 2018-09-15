@@ -20,6 +20,7 @@ namespace LightSouls
 	static constexpr int ACTION_CAMERA_SHAKE = 4;
 	static constexpr int ACTION_COLLISION_CHECK = 5;
 	static constexpr int ACTION_PAUSE = 6;
+	static constexpr int ACTION_AI_AVOID_TIMER = 7;
 
 	// AI states
 	static constexpr const char* AI_STATE_ATTACK = "Attack";

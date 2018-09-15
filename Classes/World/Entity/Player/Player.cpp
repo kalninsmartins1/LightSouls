@@ -299,7 +299,7 @@ bool Player::OnProjectileHit(const cocos2d::PhysicsBody* otherBody)
 	auto projectile = static_cast<Projectile*>(otherBody->getNode());
 	if (projectile != nullptr)
 	{
-		TakeDamage(projectile->GetShooterEntity());
+		TakeDamage(projectile->GetDamage());
 		projectile->Destroy();
 	}
 

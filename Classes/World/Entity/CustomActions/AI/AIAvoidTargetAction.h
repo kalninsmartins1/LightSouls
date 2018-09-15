@@ -26,6 +26,8 @@ private:
 
 	void						OnCollisionCheck();
 	bool						OnRayCastCallback(cocos2d::PhysicsWorld& world, const cocos2d::PhysicsRayCastInfo& info, void* data);
+	void						OnAvoidCooldownExpired();
+	void						OnAvoidTimerFinished();
 	void						StopAvoiding();
 	void						StartAvoiding(const Entity* targetEntity);
 
@@ -35,7 +37,11 @@ private:
 	float			m_startAvoidingDistance;
 	float			m_collisionCheckInterval;
 	bool			m_isAvoiding;
-	EAIState		m_skipAvoidState;
+	EAIState		m_skipAvoidState;	
+	bool			m_isAvoidCooldownActive;
+	bool			m_isAvoidTime;
+	float			m_activeTime;
+	float			m_cooldownTime;
 };
 
 NS_LIGHTSOULS_END

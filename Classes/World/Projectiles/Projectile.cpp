@@ -11,7 +11,7 @@ Projectile::Projectile(const Entity& shooter, const ProjectileConfig& config, co
 	, m_shootDirection(shootDirection)
 	, m_startPosition(shooter.getPosition())
 	, m_attackRange(attackRange)
-	, m_once(false)
+	, m_damage(shooter.GetDamage())
 {
 	
 }
@@ -19,6 +19,11 @@ Projectile::Projectile(const Entity& shooter, const ProjectileConfig& config, co
 const Entity& Projectile::GetShooterEntity() const
 {
 	return m_shooterEntity;
+}
+
+float Projectile::GetDamage() const
+{
+	return m_damage;
 }
 
 Projectile* Projectile::Create(const Entity& shooter, const ProjectileConfig& config, const Vector2& shootDirection, float attackRange)

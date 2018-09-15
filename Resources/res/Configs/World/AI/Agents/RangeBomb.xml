@@ -40,7 +40,7 @@
 				onFailure="Chase"
 				maxDistanceToTarget="400"
 				isCheckingDistanceToTarget="true"
-				time="1.0"/>
+				time="0"/>
 
 	</Component>
 	
@@ -79,7 +79,7 @@
 	</Component>
 	
 	<Component 	type="RangedAttackComponent"
-				secondsBetweenAttacks="5"
+				secondsBetweenAttacks="2"
 				attackRange="400">
 			
 		<Projectile path="res/Configs/World/Projectiles/Fireball.xml">
@@ -97,8 +97,8 @@
 			isDynamic="true" 
 			isGravityEnabled="false"
 			isRotationEnabled="false"
-			collisionBitMask="2"
-			collisionCategory="2"
+			collisionBitMask="1"
+			collisionCategory="1"
 			forceScale="60"
 			/>
 	</Component>	

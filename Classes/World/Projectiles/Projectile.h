@@ -14,6 +14,7 @@ public:
 
 public:
 	const Entity&		GetShooterEntity() const;
+	float				GetDamage() const;
 
 	static Projectile*  Create(const Entity& shooter, const ProjectileConfig& config, const Vector2& shootDirection, float attackRange);
 	void				update(float deltaTime) override;
@@ -29,7 +30,7 @@ private:
 	Vector2			 m_shootDirection;
 	Vector2			 m_startPosition;
 	float			 m_attackRange;
-	bool m_once;
+	float			 m_damage;
 };
 
 NS_LIGHTSOULS_END

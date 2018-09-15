@@ -403,7 +403,6 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				const float comboExpireTime = element->FloatAttribute(XML_ENTITY_COMBO_EXPIRE_TIME_ATTR);
 
 				auto attackComponent = GenericAttackComponent::Create(secondsBetweenAttacks, attackRange);
-				attackComponent->SetStaminaConsumption(staminaConsumption);
 				attackComponent->SetComboExpireTime(comboExpireTime);
 				attackComponent->setName(ATTACK_COMPONENT);
 				entity.addComponent(attackComponent);
@@ -421,7 +420,6 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 						paddingFromBody);
 
 				longSwordAttack->setName(ATTACK_COMPONENT);
-				longSwordAttack->SetStaminaConsumption(staminaConsumption);
 				longSwordAttack->SetComboExpireTime(comboExpireTime);
 				entity.addComponent(longSwordAttack);
 			}
@@ -434,7 +432,6 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 
 				HitAttackComponent* hitAttack = HitAttackComponent::Create(secondsBetweenAttacks, attackRange);
 				hitAttack->setName(ATTACK_COMPONENT);
-				hitAttack->SetStaminaConsumption(staminaConsumption);
 				hitAttack->SetComboExpireTime(comboExpireTime);
 				entity.addComponent(hitAttack);
 			}

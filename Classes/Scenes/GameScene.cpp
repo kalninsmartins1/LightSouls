@@ -303,7 +303,7 @@ void GameScene::ProcessDebugPhysicsDraw()
 			world->setDebugDrawMask(0xFFFFFF);
 			world->setDebugDrawCameraMask(CameraFlag::USER1);
 		}
-		else
+		else if(world->getDebugDrawMask() != 0)
 		{
 			world->setDebugDrawMask(0);
 			world->setDebugDrawCameraMask(CameraFlag::USER8);

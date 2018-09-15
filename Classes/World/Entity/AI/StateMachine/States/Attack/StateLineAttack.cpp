@@ -26,26 +26,36 @@ EAIState StateLineAttack::GetStateType() const
 
 void StateLineAttack::OnEnter(AnimComponent * animComponent)
 {
-	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	m_targetPosition = m_targetEntity->getPosition();
-	m_attackComponent = GetAgent().GetAttackComponent();
-	m_curProgress = EStateProgress::IN_PROGRESS;
+	if (GetAgent().IsReadyToAttack())
+	{
+		m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
+		m_targetPosition = m_targetEntity->getPosition();
+		m_attackComponent = GetAgent().GetAttackComponent();
+		m_curProgress = EStateProgress::IN_PROGRESS;
+	}
+	else
+	{
+		m_curProgress = EStateProgress::FAILED;
+	}	
 }
 
 EStateProgress StateLineAttack::OnStep()
 {
-	AIAgent& agent = GetAgent();
-
-	// Move to target
-	Vector2 toTarget = m_targetPosition - agent.getPosition();
-	agent.SetMoveDirection(toTarget.getNormalized());
-
-	// Check if we are already there
-	if (toTarget.length() <= (agent.GetCurrentMoveSpeed()/10.0f))
+	if (m_curProgress == EStateProgress::IN_PROGRESS)
 	{
-		m_curProgress = EStateProgress::DONE;
+		AIAgent& agent = GetAgent();
+
+		// Move to target
+		Vector2 toTarget = m_targetPosition - agent.getPosition();
+		agent.SetMoveDirection(toTarget.getNormalized());
+
+		// Check if we are already there
+		if (toTarget.length() <= (agent.GetCurrentMoveSpeed() / 10.0f))
+		{
+			m_curProgress = EStateProgress::DONE;
+		}
 	}
-	
+		
 	return m_curProgress;
 }
 
@@ -66,6 +76,10 @@ void StateLineAttack::OnEventReceived(const String& receivedEvent, const AEventD
 				m_targetEntity->getPosition());
 			m_targetEntity->TakeDamage(GetAgent());
 		}
+	}
+	else if (receivedEvent == AIAgent::GetEventAgentHealthChanged())
+	{
+		m_curProgress = EStateProgress::FAILED;
 	}
 }
 

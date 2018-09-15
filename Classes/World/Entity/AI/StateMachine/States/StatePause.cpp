@@ -25,7 +25,7 @@ void StatePause::OnEnter(AnimComponent* animComponent)
 	m_curProgress = EStateProgress::IN_PROGRESS;
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	
-	float pauseTime = m_pauseTime + Utils::GetRandValueWithinRange(0.0f, 5.0f);
+	float pauseTime = m_pauseTime + Utils::GetRandValueWithinRange(0.0f, 4.0f);
 	Utils::StartTimerWithCallback(&GetAgent(),
 			CC_CALLBACK_0(StatePause::OnPauseExpired, this), pauseTime, ACTION_PAUSE);
 

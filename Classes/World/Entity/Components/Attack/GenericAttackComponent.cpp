@@ -25,8 +25,7 @@ GenericAttackComponent::GenericAttackComponent(float secondsBetweenAttacks, floa
 	, m_lastTimeAttacked(0.0f)
 	, m_secondsBetweenAttacks(secondsBetweenAttacks)
 	, m_comboExpireTime(0.0f)
-	, m_attackRange(attackRange)
-	, m_staminaConsumption(0.0f)
+	, m_attackRange(attackRange)	
 {
 
 }
@@ -46,11 +45,6 @@ float LightSouls::GenericAttackComponent::GetComboExpireTime() const
 	return m_comboExpireTime;
 }
 
-float GenericAttackComponent::GetStaminaConsumption() const
-{
-	return m_staminaConsumption;
-}
-
 bool LightSouls::GenericAttackComponent::IsComboExpired() const
 {
 	return GetSecondsSinceLastAttack() > m_comboExpireTime;
@@ -58,8 +52,7 @@ bool LightSouls::GenericAttackComponent::IsComboExpired() const
 
 void GenericAttackComponent::Attack(const Vector2& direction)
 {
-	m_lastTimeAttacked = Utils::GetTimeStampInMilliseconds();
-	m_ownerEntity->ConsumeStamina(m_staminaConsumption);
+	m_lastTimeAttacked = Utils::GetTimeStampInMilliseconds();	
 }
 
 void GenericAttackComponent::CheckAffectedObjects(const Entity& attacker,
@@ -110,15 +103,14 @@ float LightSouls::GenericAttackComponent::GetSecondsSinceLastAttack() const
 bool GenericAttackComponent::IsReadyToAttack() const
 {
 	// Check if attack cooldown has passed
-	bool isAttackCooledDown = GetSecondsSinceLastAttack() > m_secondsBetweenAttacks;
-	bool hasEnoughStamina = m_ownerEntity->HasEnoughtStamina(m_staminaConsumption);
+	bool isAttackCooledDown = GetSecondsSinceLastAttack() > (m_secondsBetweenAttacks - Utils::GetRandValueWithinRange(0.0f, 2.0f));	
 	bool isEntityReady = m_ownerEntity->IsReadyToAttack();
 
 #if LIGHTSOULS_ATTACK_DEBUG
 	CCLOG("AttackComponent entity %s | isAttackCooleddown %d | hasEnoughStamina %d | isEntityReady %d |", m_ownerEntity->getName().c_str(), isAttackCooledDown, hasEnoughStamina, isEntityReady);
 #endif
 
-	return isAttackCooledDown && hasEnoughStamina && isEntityReady;
+	return isAttackCooledDown && isEntityReady;
 }
 
 const Entity* LightSouls::GenericAttackComponent::GetOwnerEntity() const
@@ -129,11 +121,6 @@ const Entity* LightSouls::GenericAttackComponent::GetOwnerEntity() const
 void GenericAttackComponent::SetComboExpireTime(float expireTime)
 {
 	m_comboExpireTime = expireTime;
-}
-
-void GenericAttackComponent::SetStaminaConsumption(float staminaConsumption)
-{
-	m_staminaConsumption = staminaConsumption;
 }
 
 void GenericAttackComponent::setOwner(cocos2d::Node* owner)

@@ -138,6 +138,11 @@ void Entity::ResetMoveSpeed()
 	SetCurrentMoveSpeed(m_baseMoveSpeed);
 }
 
+void Entity::ResetIsTakingDamage()
+{
+	m_isTakingDamage = false;
+}
+
 void Entity::ConsumeStamina(float amount)
 {
 	if (HasEnoughtStamina(amount))
@@ -156,18 +161,21 @@ void Entity::ConsumeStamina(float amount)
 void Entity::TakeDamage(const Entity& attackingEntity)
 {	
 	if (m_health > 0)
-	{
-		float damage = attackingEntity.GetDamage();
-		m_health -= damage;
-		if (m_health < 0)
-		{
-			m_health = 0;
-		}
-
-		attackingEntity.DispatchOnGiveDamageEvent();
-		DispatchOnHealthChangedEvent();
+	{		
+		TakeDamage(attackingEntity.GetDamage());
+		attackingEntity.DispatchOnGiveDamageEvent();		
 		ApplyKnockbackEffect(attackingEntity);
 	}
+}
+
+void Entity::TakeDamage(float damage)
+{
+	m_health -= damage;
+	if (m_health < 0)
+	{
+		m_health = 0;
+	}
+	DispatchOnHealthChangedEvent();
 
 	if (!m_isAttacking &&
 		!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_HURT))
@@ -180,7 +188,7 @@ void Entity::TakeDamage(const Entity& attackingEntity)
 		}
 		else
 		{
-			// If no animation then fallback to one second pause
+			// If no animation then fall-back to one second pause
 			Utils::StartTimerWithCallback(this,
 				CC_CALLBACK_0(Entity::OnDamageTaken, this),
 				1.0f);

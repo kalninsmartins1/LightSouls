@@ -2,10 +2,10 @@
 <Entity type="Player"
 			moveSpeed="360"
 			baseHealth="100"
-			baseStamina="99999999"
+			baseStamina="80"
 			baseDamage="10"
-			staminaRegenerateSpeed="20"
-			staminaRegenerateDelay="2"
+			staminaRegenerateSpeed="30"
+			staminaRegenerateDelay="1"
 			knockBackStrenght="50"
 	>
 	
@@ -27,8 +27,7 @@
 				secondsBetweenAttacks="0.2" 
 				comboExpireTime="0.6" 
 				attackRange="60"
-				paddingFromBody="5"
-				staminaConsumption="10">
+				paddingFromBody="5">
 	</Component>
 	
 	<Component type="AnimComponent">

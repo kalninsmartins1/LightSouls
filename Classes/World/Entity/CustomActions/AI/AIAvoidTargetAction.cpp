@@ -14,17 +14,24 @@ AIAvoidTargetAction::AIAvoidTargetAction(AIAgent& agent)
 	, m_startAvoidingDistance(0.0f)
 	, m_stopAvoidingDistance(0.0f)
 	, m_isAvoiding(false)
+	, m_isAvoidCooldownActive(false)
+	, m_isAvoidTime(true)
+	, m_activeTime(2.0f)
+	, m_cooldownTime(1.0f)
 {
-
+	// Start avoid timer
+	Utils::StartTimerWithCallback(&m_agent,
+		CC_CALLBACK_0(AIAvoidTargetAction::OnAvoidTimerFinished, this),
+		m_activeTime, ACTION_AI_AVOID_TIMER);
 }
 
 AIAvoidTargetAction::~AIAvoidTargetAction()
 {
-	
+
 }
 
 bool AIAvoidTargetAction::IsTargetTooClose(const Entity* target) const
-{	
+{
 	float startDistSqr = m_startAvoidingDistance * m_startAvoidingDistance;
 	float currDistSqr = m_agent.getPosition().distanceSquared(target->getPosition());
 
@@ -32,7 +39,7 @@ bool AIAvoidTargetAction::IsTargetTooClose(const Entity* target) const
 }
 
 bool AIAvoidTargetAction::IsTargetFarEnough(const Entity* target) const
-{	
+{
 	float stopDistSqrt = m_stopAvoidingDistance * m_stopAvoidingDistance;
 	float curDistSqrt = m_agent.getPosition().distanceSquared(target->getPosition());
 
@@ -41,19 +48,16 @@ bool AIAvoidTargetAction::IsTargetFarEnough(const Entity* target) const
 
 void AIAvoidTargetAction::OnCollisionCheck()
 {
+	// Keep checking for collision
+	Utils::StartTimerWithCallback(&m_agent,
+		CC_CALLBACK_0(AIAvoidTargetAction::OnCollisionCheck, this),
+		m_collisionCheckInterval, ACTION_COLLISION_CHECK);
+
 	Entity* target = AIAgentManager::GetInstance()->GetTargetEntity();
-	if (m_isAvoiding)
-	{
-		// Keep checking collision
-		Utils::StartTimerWithCallback(&m_agent,
-			CC_CALLBACK_0(AIAvoidTargetAction::OnCollisionCheck, this),
-			m_collisionCheckInterval, ACTION_COLLISION_CHECK);
-		
-		const Vector2& curPosition = m_agent.getPosition();		
-		PhysicsManager::Raycast(CC_CALLBACK_3(AIAvoidTargetAction::OnRayCastCallback, this),
-			curPosition,
-			curPosition + m_agent.GetHeading() * m_startAvoidingDistance);
-	}	
+	const Vector2& curPosition = m_agent.getPosition();
+	PhysicsManager::Raycast(CC_CALLBACK_3(AIAvoidTargetAction::OnRayCastCallback, this),
+		curPosition,
+		curPosition + m_agent.GetHeading() * m_startAvoidingDistance);
 }
 
 bool AIAvoidTargetAction::OnRayCastCallback(cocos2d::PhysicsWorld& world, const cocos2d::PhysicsRayCastInfo& info, void* data)
@@ -63,6 +67,26 @@ bool AIAvoidTargetAction::OnRayCastCallback(cocos2d::PhysicsWorld& world, const 
 	m_agent.SetMoveDirection(awayFromTargetAndCollision);
 
 	return true;
+}
+
+void AIAvoidTargetAction::OnAvoidCooldownExpired()
+{	
+	m_isAvoidCooldownActive = false;
+	m_isAvoidTime = true;
+
+	Utils::StartTimerWithCallback(&m_agent,
+		CC_CALLBACK_0(AIAvoidTargetAction::OnAvoidTimerFinished, this),
+		m_activeTime, ACTION_AI_AVOID_TIMER);	
+}
+
+void LightSouls::AIAvoidTargetAction::OnAvoidTimerFinished()
+{
+	m_isAvoidTime = false;
+	m_isAvoidCooldownActive = true;
+
+	Utils::StartTimerWithCallback(&m_agent,
+		CC_CALLBACK_0(AIAvoidTargetAction::OnAvoidCooldownExpired, this),
+		m_cooldownTime, ACTION_AI_AVOID_TIMER);
 }
 
 void AIAvoidTargetAction::StopAvoiding()
@@ -78,7 +102,12 @@ void AIAvoidTargetAction::StartAvoiding(const Entity* targetEntity)
 		CC_CALLBACK_0(AIAvoidTargetAction::OnCollisionCheck, this),
 		m_collisionCheckInterval, ACTION_COLLISION_CHECK);
 
-	Vector2 awayFromTarget = targetEntity->getPosition() - m_agent.getPosition();
+	const Vector2& curPosition = m_agent.getPosition();
+	PhysicsManager::Raycast(CC_CALLBACK_3(AIAvoidTargetAction::OnRayCastCallback, this),
+		curPosition,
+		curPosition + m_agent.GetHeading() * m_startAvoidingDistance);
+
+	Vector2 awayFromTarget = m_agent.getPosition() - targetEntity->getPosition();
 	awayFromTarget.normalize();
 	m_agent.SetMoveDirection(awayFromTarget);
 }
@@ -99,7 +128,7 @@ AIAvoidTargetAction* AIAvoidTargetAction::Create(AIAgent& agent)
 }
 
 void AIAvoidTargetAction::LoadXMLData(const XMLElement* xmlElement)
-{	
+{
 	m_startAvoidingDistance = xmlElement->FloatAttribute(XML_START_AVOID_DISTANCE_ATTR);
 	m_stopAvoidingDistance = xmlElement->FloatAttribute(XML_STOP_AVOID_DISTANCE_ATTR);
 	m_collisionCheckInterval = xmlElement->FloatAttribute(XML_COLLISION_CHECK_TIME_INTERVAL_ATTR);
@@ -111,10 +140,12 @@ void AIAvoidTargetAction::LoadXMLData(const XMLElement* xmlElement)
 
 void AIAvoidTargetAction::step(float deltaTime)
 {
-	Entity* targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();	
-	if (targetEntity != nullptr && 
+	Entity* targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
+	if (targetEntity != nullptr &&
 		m_agent.GetCurrentAIState() != m_skipAvoidState &&
-		m_agent.isVisible())
+		m_agent.isVisible() &&
+		!m_isAvoidCooldownActive &&
+		m_isAvoidTime)
 	{
 		if (IsTargetTooClose(targetEntity) && !m_isAvoiding)
 		{

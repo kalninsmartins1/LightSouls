@@ -19,10 +19,7 @@ public:
 	float			GetAttackRangeSqr() const;
 
 	// Returns amount of time before combo expires
-	float			GetComboExpireTime() const;
-
-	// Returns amount of stamina that is consumed
-	float			GetStaminaConsumption() const;
+	float			GetComboExpireTime() const;	
 
 	// Returns true if combo has expired
 	bool			IsComboExpired() const;
@@ -33,8 +30,7 @@ public:
 	// Returns the entity that owns this component
 	const Entity*	GetOwnerEntity() const;
 
-	void			SetComboExpireTime(float expireTime);
-	void			SetStaminaConsumption(float staminaConsumption);
+	void			SetComboExpireTime(float expireTime);	
 	virtual void	setOwner(cocos2d::Node* owner);
 
 	static GenericAttackComponent*	Create(float secondsBetweenAttacks, float attackRange);
@@ -53,8 +49,7 @@ private:
 	long long	m_lastTimeAttacked;
 	float		m_secondsBetweenAttacks;
 	float		m_comboExpireTime;
-	float		m_attackRange;
-	float		m_staminaConsumption;
+	float		m_attackRange;	
 };
 
 NS_LIGHTSOULS_END
