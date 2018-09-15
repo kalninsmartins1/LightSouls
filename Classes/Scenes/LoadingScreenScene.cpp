@@ -48,7 +48,7 @@ bool LoadingScreenScene::init()
 		return false;
 	}
 
-	float duration = 2.0f;
+	float duration = 1.0f;
 	LightSouls::Utils::StartTimerWithCallback(this, 
 		CC_CALLBACK_0(LoadingScreenScene::SwitchToNextScene, this), duration);
 	auto sprite = Sprite::create("res/Graphics/UI/loading.png");

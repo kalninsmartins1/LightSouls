@@ -57,6 +57,12 @@
 					frameCount="2"
 					timeBetweenFrames="0.1"
 			/>
+			
+			<Anim	type="Hurt"
+					frameNamePattern="bomb_hurt%d.png"
+					frameCount="1"
+					timeBetweenFrames="0.1"
+			/>
 		</SpriteSheet>
 	</Component>
 	
