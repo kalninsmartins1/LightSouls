@@ -144,6 +144,7 @@ void AIAvoidTargetAction::step(float deltaTime)
 	if (targetEntity != nullptr &&
 		m_agent.GetCurrentAIState() != m_skipAvoidState &&
 		m_agent.isVisible() &&
+		!m_agent.IsProcessing() &&
 		!m_isAvoidCooldownActive &&
 		m_isAvoidTime)
 	{
@@ -156,7 +157,7 @@ void AIAvoidTargetAction::step(float deltaTime)
 			StopAvoiding();
 		}
 	}
-	else
+	else if(!m_agent.IsProcessing())
 	{
 		StopAvoiding();
 	}
