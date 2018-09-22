@@ -13,7 +13,7 @@
 					spawnDelay="1.0" 
 					spawnCount="1">
 		</SpawnPoint>
-		<!--<SpawnPoint type="Bomb" x="-450" y="-100" 
+		<SpawnPoint type="Bomb" x="-450" y="-100" 
 					numAgentsInRow="5"
 					rowPadding="100" columnPadding="80"
 					spawnDelay="1.0" 
@@ -42,6 +42,6 @@
 					rowPadding="100" columnPadding="80"
 					spawnDelay="1.0" 
 					spawnCount="1">
-		</SpawnPoint>-->
+		</SpawnPoint>
 	</SpawnPoints>
 </AIManager>
