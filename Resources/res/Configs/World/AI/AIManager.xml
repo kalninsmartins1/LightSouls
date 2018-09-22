@@ -7,7 +7,7 @@
 		<AgentConfig type="RangeBomb" 	 path="res/Configs/World/AI/Agents/RangeBomb.xml"/>
 	</AgentConfigList>
 	<SpawnPoints>
-		<SpawnPoint type="Bomb" x="0" y="-350" 
+		<!--<SpawnPoint type="Bomb" x="0" y="-350" 
 					numAgentsInRow="5"
 					rowPadding="100" columnPadding="80"
 					spawnDelay="1.0" 
@@ -36,7 +36,7 @@
 					rowPadding="100" columnPadding="80"
 					spawnDelay="1.0" 
 					spawnCount="1">
-		</SpawnPoint>
+		</SpawnPoint>-->
 		<SpawnPoint type="RangeBomb" x="450" y="100" 
 					numAgentsInRow="1"
 					rowPadding="100" columnPadding="80"

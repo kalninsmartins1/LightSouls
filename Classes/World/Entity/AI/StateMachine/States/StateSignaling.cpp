@@ -6,6 +6,7 @@
 #include "Utils/Utils.h"
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
+#include "World/Entity/AI/AIAgentManager.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -20,7 +21,8 @@ StateSignaling::StateSignaling(AIAgent& aiAgent)
 void StateSignaling::OnEnter(AnimComponent* animComponent)
 {
 	AIAgent& agent = GetAgent();
-	if (agent.GetAttackComponent()->IsReadyToAttack())
+	const Vector2& targetEntityPoisition = AIAgentManager::GetInstance()->GetTargetEntity()->getPosition();
+	if (agent.GetAttackComponent()->IsReadyToAttack(targetEntityPoisition))
 	{
 		m_animComponent = animComponent;
 		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_SIGNAL);

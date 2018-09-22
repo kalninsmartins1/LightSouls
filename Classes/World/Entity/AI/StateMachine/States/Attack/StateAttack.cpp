@@ -49,10 +49,11 @@ EStateProgress StateAttack::OnStep()
 	if(m_curProgress == EStateProgress::IN_PROGRESS && m_isAnimFinished)
 	{
 		AIAgent& agent = GetAgent();
-		if(agent.IsReadyToAttack() && m_attackComponent->IsReadyToAttack())
+		Vector2 targetEntityPosition = m_targetEntity->getPosition();
+		if(m_attackComponent->IsReadyToAttack(targetEntityPosition))
 		{
 			// Direction to target
-			Vector2 toTarget = m_targetEntity->getPosition() - GetAgent().getPosition();
+			Vector2 toTarget = targetEntityPosition - GetAgent().getPosition();
 			m_attackComponent->Attack(toTarget.getNormalized());
 			agent.StartAttacking();
 			

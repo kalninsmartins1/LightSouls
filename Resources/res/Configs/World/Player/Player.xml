@@ -3,7 +3,7 @@
 			moveSpeed="360"
 			baseHealth="100"
 			baseStamina="80"
-			baseDamage="10"
+			baseDamage="20"
 			staminaRegenerateSpeed="30"
 			staminaRegenerateDelay="1"
 			knockBackStrenght="50"

@@ -65,7 +65,7 @@
 	<Component 	type="GenericAttackComponent"
 				secondsBetweenAttacks="0.2" 
 				comboExpireTime="0.6"
-				attackRange="60">
+				attackRange="400">
 	</Component>
 	
 	<Component type="RigidBodyComponent">

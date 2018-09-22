@@ -25,13 +25,14 @@ EAIState StateLineAttack::GetStateType() const
 }
 
 void StateLineAttack::OnEnter(AnimComponent * animComponent)
-{
-	if (GetAgent().IsReadyToAttack())
-	{
-		m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-		m_targetPosition = m_targetEntity->getPosition();
-		m_attackComponent = GetAgent().GetAttackComponent();
-		m_curProgress = EStateProgress::IN_PROGRESS;
+{	
+	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
+	m_targetPosition = m_targetEntity->getPosition();
+	m_attackComponent = GetAgent().GetAttackComponent();
+
+	if (m_attackComponent->IsReadyToAttack(m_targetPosition))
+	{				
+		m_curProgress = EStateProgress::IN_PROGRESS;				
 	}
 	else
 	{
