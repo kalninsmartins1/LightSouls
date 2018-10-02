@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Entity type="Bomb"
-			moveSpeed="700"
+			moveSpeed="300"
 			baseHealth="60"
 			baseStamina="100"
 			baseDamage="10"
@@ -22,8 +22,14 @@
 				onSuccess="Signaling"/>
 
 		<State  type="LineAttack"
-				onSuccess="Pause"
-				onFailure="Pause"/>
+				moveSpeed="400"
+				onSuccess="Avoid"
+				onFailure="Avoid"/>
+				
+		<State  type="Avoid"
+				onSuccess="Signaling"
+				onFailure="Pause"
+				/>
 				
 		<State 	type="Signaling"
 				onSuccess="LineAttack"
@@ -63,7 +69,7 @@
 	</Component>
 	
 	<Component 	type="GenericAttackComponent"
-				secondsBetweenAttacks="0.2" 
+				secondsBetweenAttacks="2" 
 				comboExpireTime="0.6"
 				attackRange="400">
 	</Component>

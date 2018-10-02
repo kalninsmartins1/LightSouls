@@ -25,7 +25,8 @@ enum class EAIState
 	PATROL,
 	IDLE,
 	SIGNALING,
-	PAUSE	
+	PAUSE,
+	AVOID
 };
 
 
@@ -38,7 +39,8 @@ public:
 	virtual EAIState	GetStateType() const = 0;
 	EAIState			GetNextStateOnSuccess() const;
 	EAIState			GetNextStateOnFailure() const;
-	static EAIState		GetStateFromString(String stateType);	
+	static EAIState		GetStateFromString(String stateType);
+	static String		GetStringFromState(EAIState state);
 
 	void			SetNextStateOnSuccess(const EAIState& state);
 	void			SetNextStateOnFailure(const EAIState& state);

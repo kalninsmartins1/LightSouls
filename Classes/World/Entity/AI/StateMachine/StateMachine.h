@@ -24,6 +24,7 @@ public:
 	void Start(AnimComponent* animComponent);
 	void AddAvailableState(EAIState availableState, const XMLElement* xmlElement);
 	void Reset();
+
 	// Should be called periodically to update current state of state machine 
 	void OnStep();
 	void DispatchEvent(const String& eventType, const AEventData& eventData);

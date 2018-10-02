@@ -7,7 +7,7 @@ NS_LIGHTSOULS_BEGIN
 struct PhysicsContactInformation;
 class PhysicsBodyConfig;
 
-using ContactCallback = std::function<bool(const cocos2d::PhysicsBody* otherBody)>;
+using ContactCallback = std::function<bool(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)>;
 using QueryRectCallback = cocos2d::PhysicsQueryRectCallbackFunc;
 using RaycastCallback = cocos2d::PhysicsRayCastCallbackFunc;
 
@@ -54,7 +54,7 @@ public:
 
 private:
 	// Return true if all the listeners agree to collide
-	bool DispatchContactEventsToListeners(const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners);
+	bool DispatchContactEventsToListeners(const Vector2& contactPoint, const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners);
 
 	// Physics world callback for when two objects begin colliding
 	bool OnContactBegin(cocos2d::PhysicsContact& contact);

@@ -19,12 +19,14 @@ public:
 	virtual EStateProgress	OnStep() override;
 	virtual void			OnExit() override;
 	virtual void			OnEventReceived(const String & receivedEvent, const AEventData & eventData) override;	
+	virtual void			LoadXMLData(const XMLElement* xmlElement) override;
 
 private:
 	EStateProgress			m_curProgress;	
 	Entity*					m_targetEntity;
 	Vector2					m_targetPosition;
 	GenericAttackComponent*	m_attackComponent;
+	float					m_moveSpeed;
 };
 
 NS_LIGHTSOULS_END

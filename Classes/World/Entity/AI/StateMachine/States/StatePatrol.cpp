@@ -35,10 +35,6 @@ void StatePatrol::OnEnter(AnimComponent* animComponent)
 	{
 		StartMovingToNewPosition();
 	}
-
-#if LIGHTSOULS_DEBUG_AI
-	CCLOG("StatePatrol: OnEnter !");
-#endif
 }
 
 EStateProgress StatePatrol::OnStep()
@@ -84,10 +80,6 @@ void StatePatrol::OnExit()
 
 	// Clear any looking around timers
 	GetAgent().stopAllActionsByTag(ACTION_TIMER_TAG);
-
-#if LIGHTSOULS_DEBUG_AI
-	CCLOG("StatePatrol: OnExit!");
-#endif
 }
 
 void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData& eventData)

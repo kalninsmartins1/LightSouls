@@ -116,7 +116,7 @@ void PhysicsManager::Raycast(RaycastCallback callback, const Vector2& startPoint
 	world->rayCast(callback, startPoint, endPoint, data);	
 }
 
-bool PhysicsManager::DispatchContactEventsToListeners(const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners)
+bool PhysicsManager::DispatchContactEventsToListeners(const Vector2& contactPoint, const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners)
 {
 	cocos2d::Node* bodyANode = bodyA->getNode();
 	cocos2d::Node* bodyBNode = bodyB->getNode();
@@ -132,11 +132,11 @@ bool PhysicsManager::DispatchContactEventsToListeners(const cocos2d::PhysicsBody
 		{
 			if (bodyAName == listener.name)
 			{
-				shouldCollide = shouldCollide && listener.onContactCallback(bodyB);
+				shouldCollide = shouldCollide && listener.onContactCallback(contactPoint, bodyB);
 			}
 			else if (bodyBName == listener.name)
 			{
-				shouldCollide = shouldCollide && listener.onContactCallback(bodyA);
+				shouldCollide = shouldCollide && listener.onContactCallback(contactPoint, bodyA);
 			}
 		}
 	}
@@ -149,14 +149,14 @@ bool PhysicsManager::DispatchContactEventsToListeners(const cocos2d::PhysicsBody
 }
 
 bool PhysicsManager::OnContactBegin(cocos2d::PhysicsContact& contact)
-{
+{	
 	const cocos2d::PhysicsBody* bodyA = contact.getShapeA()->getBody();
 	const cocos2d::PhysicsBody* bodyB = contact.getShapeB()->getBody();		
 
 	bool shouldCollide = true;
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
-		shouldCollide = DispatchContactEventsToListeners(bodyA, bodyB, m_beginContactListeners);
+		shouldCollide = DispatchContactEventsToListeners(contact.getContactData()->points[0], bodyA, bodyB, m_beginContactListeners);
 	}
 
 	return shouldCollide;
@@ -169,7 +169,7 @@ bool PhysicsManager::OnContactEnd(cocos2d::PhysicsContact& contact)
 
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
-		DispatchContactEventsToListeners(bodyA, bodyB, m_endContactListeners);
+		DispatchContactEventsToListeners(contact.getContactData()->points[0], bodyA, bodyB, m_endContactListeners);
 	}
 
 	return true;

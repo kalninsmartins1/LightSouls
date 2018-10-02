@@ -41,7 +41,7 @@ private:
 
 private:
 	bool Init(const String& pathToXML);
-	bool OnContactBegin(const cocos2d::PhysicsBody* otherBody);	
+	bool OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
 
 private:	
 	static String			s_eventAgentHealthChanged;

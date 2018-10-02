@@ -261,6 +261,9 @@
     <ClCompile Include="..\Classes\Scenes\LoadingScreenScene.cpp">
       <Filter>src\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateAvoid.cpp">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -433,6 +436,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Scenes\ENextScene.h">
       <Filter>src\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateAvoid.h">
+      <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

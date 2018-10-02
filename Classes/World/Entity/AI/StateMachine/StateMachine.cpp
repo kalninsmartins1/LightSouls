@@ -10,6 +10,7 @@
 #include "States/StateIdle.h"
 #include "States/StateSignaling.h"
 #include "States/StatePause.h"
+#include "States/StateAvoid.h"
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
 
 NS_LIGHTSOULS_BEGIN
@@ -82,6 +83,10 @@ void StateMachine::AddAvailableState(EAIState availableState, const XMLElement* 
 			{
 				state = AState::Create<StatePause>(m_agent);
 			}
+		case EAIState::AVOID:
+			{
+				state = AState::Create<StateAvoid>(m_agent);
+			}
 			break;
 	}
 
@@ -102,7 +107,15 @@ void StateMachine::SwitchState(AState* newState)
 	if (m_curState != nullptr)
 	{
 		m_curState->OnExit();
+#if LIGHTSOULS_DEBUG_AI
+		CCLOG("%s: OnExit!", AState::GetStringFromState(m_curState->GetStateType()).c_str());
+#endif
 	}
+
+#if LIGHTSOULS_DEBUG_AI	
+	CCLOG("%s: OnEnter!", AState::GetStringFromState(newState->GetStateType()).c_str());
+#endif
+
 	m_curState = newState;
 	m_curState->OnEnter(m_animComponent);
 }

@@ -62,20 +62,22 @@ const String& Player::GetEventOnStaminaChanged()
 
 bool Player::Init(const String& pathToXML)
 {
-	XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
+	bool isSuccessfullyInitialized = true;
+	isSuccessfullyInitialized &= XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
 	
 	OnEntityInitialized();
 	m_attackComponent = static_cast<GenericAttackComponent*>(getComponent(ATTACK_COMPONENT));
-	
+	isSuccessfullyInitialized &= m_attackComponent != nullptr;
+
 	PhysicsManager* physicsManager = GameScene::GetPhysicsManager();
 	physicsManager->AddContactBeginListener(getName(), 
-		CC_CALLBACK_1(Player::OnContactBegin, this));
+		CC_CALLBACK_2(Player::OnContactBegin, this));
 	physicsManager->AddContactEndListener(getName(),
-		CC_CALLBACK_1(Player::OnContactEnd, this));
+		CC_CALLBACK_2(Player::OnContactEnd, this));
 	physicsManager->AddContactBeginListener(getName() + NODE_COMPONENT,
-		CC_CALLBACK_1(Player::OnProjectileHit, this));
+		CC_CALLBACK_2(Player::OnProjectileHit, this));
 
-	return true;
+	return isSuccessfullyInitialized;
 }
 
 void Player::update(float deltaTime)
@@ -277,7 +279,7 @@ void Player::DispatchOnGiveDamageEvent() const
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerGiveDamage);
 }
 
-bool Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
+bool Player::OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)
 {
 	cocos2d::Node* otherNode = otherBody->getNode();
 	if (otherNode != nullptr)
@@ -288,13 +290,13 @@ bool Player::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
 	return true;
 }
 
-bool Player::OnContactEnd(const cocos2d::PhysicsBody* otherBody)
+bool Player::OnContactEnd(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)
 {
 	ResetCollisionData();
 	return true;
 }
 
-bool Player::OnProjectileHit(const cocos2d::PhysicsBody* otherBody)
+bool Player::OnProjectileHit(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)
 {
 	auto projectile = static_cast<Projectile*>(otherBody->getNode());
 	if (projectile != nullptr)

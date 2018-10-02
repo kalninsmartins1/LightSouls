@@ -13,7 +13,8 @@ std::map<LightSouls::EAIState, LightSouls::String> LightSouls::AState::s_stateTo
 	{EAIState::LINE_ATTACK, AI_STATE_LINE_ATTACK},
 	{EAIState::PATROL,		AI_STATE_PATROL		},
 	{EAIState::PAUSE,		AI_STATE_PAUSE		},
-	{EAIState::SIGNALING,	AI_STATE_SIGNALING	},	
+	{EAIState::SIGNALING,	AI_STATE_SIGNALING	},
+	{EAIState::AVOID,		AI_STATE_AVOID		}
 };
 
 AState::AState(AIAgent& aiAgent)
@@ -38,6 +39,17 @@ EAIState AState::GetStateFromString(String stateTypeStr)
 	Utils::FindKeyByValue(s_stateToString, stateTypeStr, state);
 
 	return state;
+}
+
+String AState::GetStringFromState(EAIState state)
+{
+	String stateStr = "";
+	if (Utils::ContainsKey(s_stateToString, state))
+	{
+		stateStr = s_stateToString[state];
+	}
+
+	return stateStr;
 }
 
 void AState::SetNextStateOnFailure(const EAIState& state)

@@ -47,9 +47,9 @@ private:
 	void LightAttack();
 	void PerformDodge();
 	void PlayRunOrIdleAnimation() const;
-	bool OnContactBegin(const cocos2d::PhysicsBody* otherBody);
-	bool OnContactEnd(const cocos2d::PhysicsBody* otherBody);
-	bool OnProjectileHit(const cocos2d::PhysicsBody* otherBody);
+	bool OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
+	bool OnContactEnd(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
+	bool OnProjectileHit(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
 	void ResetCollisionData();
 
 private:

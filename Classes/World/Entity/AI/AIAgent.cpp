@@ -70,7 +70,7 @@ bool AIAgent::Init(const String& pathToXML)
 
 		// Register for physics events
 		GameScene::GetPhysicsManager()->AddContactBeginListener(getName(),
-			CC_CALLBACK_1(AIAgent::OnContactBegin, this));
+			CC_CALLBACK_2(AIAgent::OnContactBegin, this));
 		
 		m_stateMachine.Start(GetAnimComponent());
 
@@ -103,13 +103,13 @@ void AIAgent::Init(const XMLElement* element)
 	}
 }
 
-bool AIAgent::OnContactBegin(const cocos2d::PhysicsBody* otherBody)
+bool AIAgent::OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)
 {
 	cocos2d::Node* node = otherBody->getNode();
 	if (node != nullptr)
 	{
 		m_stateMachine.DispatchEvent(PhysicsManager::GetEventOnCollisionBegin(),
-			OnCollisionBeginEventData(GetId(), node->getName()));
+			OnCollisionBeginEventData(GetId(), node->getName(), contactPoint));
 	}
 
 	return true;
