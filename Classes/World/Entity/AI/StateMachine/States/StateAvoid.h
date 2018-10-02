@@ -22,11 +22,16 @@ public:
 	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;
 
 private:
+	void					OnRandomTimeExpired();
+
+private:
 	EStateProgress			m_curProgress;	
 	GenericAttackComponent* m_attackComponent;
 	float					m_startAvoidDistance;
 	float					m_stopAvoidDistance;
 	bool					m_isAvoiding;
+	float					m_randomTime;
+	bool					m_isRandomTimeExpired;
 };
 
 NS_LIGHTSOULS_END

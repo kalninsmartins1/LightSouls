@@ -5,6 +5,7 @@
 #include "World/Physics/PhysicsManager.h"
 #include "World/World.h"
 #include "Events/OnCollisionBeginEventData.h"
+#include "Utils/Utils.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -15,6 +16,8 @@ StateAvoid::StateAvoid(AIAgent& agent)
 	, m_startAvoidDistance(100.0f)
 	, m_stopAvoidDistance(250.0f)
 	, m_isAvoiding(false)
+	, m_randomTime(0.0f)
+	, m_isRandomTimeExpired(false)
 {
 
 }
@@ -27,7 +30,12 @@ EAIState StateAvoid::GetStateType() const
 void StateAvoid::OnEnter(AnimComponent* animComponent)
 {	
 	m_curProgress = EStateProgress::IN_PROGRESS;	
-	m_attackComponent = GetAgent().GetAttackComponent();
+	AIAgent& agent = GetAgent();
+	m_attackComponent = agent.GetAttackComponent();
+	m_isRandomTimeExpired = false;
+	m_randomTime = Utils::GetRandValueWithinRange(0, 3.0f);
+	Utils::StartTimerWithCallback(&agent, CC_CALLBACK_0(StateAvoid::OnRandomTimeExpired, this),
+		m_randomTime);
 }
 
 EStateProgress StateAvoid::OnStep()
@@ -42,7 +50,7 @@ EStateProgress StateAvoid::OnStep()
 
 	if (!m_isAvoiding)
 	{
-		if (m_attackComponent->IsReadyToAttack(targetPosition))
+		if (m_attackComponent->IsReadyToAttack(targetPosition) && m_isRandomTimeExpired)
 		{
 			m_curProgress = EStateProgress::DONE;			
 		}
@@ -74,7 +82,12 @@ void StateAvoid::OnExit()
 	GetAgent().SetMoveDirection(Vector2::ZERO);
 }
 
-void LightSouls::StateAvoid::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
+void StateAvoid::OnRandomTimeExpired()
+{
+	m_isRandomTimeExpired = true;
+}
+
+void StateAvoid::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
 {
 	if (PhysicsManager::GetEventOnCollisionBegin() == receivedEvent)
 	{

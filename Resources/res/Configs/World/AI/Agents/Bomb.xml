@@ -38,7 +38,7 @@
 
 		<State 	type="Pause"
 				onSuccess="Signaling"				
-				time="1.0"/>
+				time="0.2"/>
 
 	</Component>
 
