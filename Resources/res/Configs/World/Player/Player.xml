@@ -16,7 +16,7 @@
 	</Component>
 	
 	<Component type="PlayerControllerComponent"
-				dodgeSpeed="800"
+				dodgeSpeed="1000"
 				dodgeTime="0.2"
 				dodgeStaminaConsumption="20">
 	</Component>
