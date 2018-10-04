@@ -154,7 +154,7 @@ void GameScene::InitWolrdLayer()
 		CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
 	eventDispatcher->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
 		CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
-	eventDispatcher->addCustomEventListener(LightSouls::AIAgent::GetEventAgentDestroyed(),
+	eventDispatcher->addCustomEventListener(LightSouls::AIAgent::GetEventOnDestroyed(),
 		CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
 
 	// Init AI

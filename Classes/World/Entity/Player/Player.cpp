@@ -255,7 +255,7 @@ void Player::PlayRunOrIdleAnimation() const
 	}
 }
 
-void Player::DispatchOnHealthChangedEvent()
+void Player::DispatchOnHealthReduceEvent()
 {
 	// Dispatch health changed event
 	float currentHealth = GetCurrentHealth();

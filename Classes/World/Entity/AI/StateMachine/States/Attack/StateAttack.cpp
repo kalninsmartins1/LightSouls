@@ -26,10 +26,6 @@ void StateAttack::OnEnter(AnimComponent* animComponent)
 	m_animComponent = animComponent;
 	m_attackComponent = GetAgent().GetAttackComponent();
 	m_curProgress = EStateProgress::IN_PROGRESS;
-
-#if LIGHTSOULS_DEBUG_AI
-	CCLOG("StateAttack: OnEnter !");
-#endif
 }
 
 EStateProgress StateAttack::OnStep()
@@ -79,15 +75,11 @@ void StateAttack::OnExit()
 {
 	m_curProgress = EStateProgress::NONE;
 	m_isAnimFinished = true;
-
-#if LIGHTSOULS_DEBUG_AI
-	CCLOG("StateAttack: OnExit !");
-#endif
 }
 
 void StateAttack::OnEventReceived(const String & receivedEvent, const AEventData & eventData)
 {
-	if (receivedEvent == AIAgent::GetEventAgentHealthChanged())
+	if (receivedEvent == AIAgent::GetEventOnHealthChanged())
 	{
 		m_curProgress = EStateProgress::FAILED;
 	}

@@ -79,7 +79,7 @@ void StatePatrol::OnExit()
 	m_isLookingAround = false;
 
 	// Clear any looking around timers
-	GetAgent().stopAllActionsByTag(ACTION_TIMER_TAG);
+	GetAgent().stopAllActionsByTag(ACTION_TIMER);
 }
 
 void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
@@ -131,7 +131,7 @@ void StatePatrol::StartLookingAround()
 	Utils::StartTimerWithCallback(&GetAgent(), 
 		CC_CALLBACK_0(StatePatrol::OnFinishedLookingAround, this),
 		m_patrolPause,
-		ACTION_TIMER_TAG);
+		ACTION_TIMER);
 }
 
 void StatePatrol::StartMovingToNewPosition()

@@ -13,14 +13,16 @@ namespace LightSouls
 	static constexpr const char* DEFAULT_FONT = "Arial";
 
 	// Action tag ids
-	static constexpr int ACTION_MOVE_TAG = 0;
-	static constexpr int ACTION_ANIM_TAG = 1;
-	static constexpr int ACTION_TIMER_TAG = 2;
-	static constexpr int ACTION_STAMINA_DELAY_TIMER = 3;
+	static constexpr int ACTION_MOVE = 0;
+	static constexpr int ACTION_ANIM = 1;
+	static constexpr int ACTION_TIMER = 2;
+	static constexpr int ACTION_STAMINA_DELAY = 3;
 	static constexpr int ACTION_CAMERA_SHAKE = 4;
 	static constexpr int ACTION_COLLISION_CHECK = 5;
 	static constexpr int ACTION_PAUSE = 6;
-	static constexpr int ACTION_AI_AVOID_TIMER = 7;
+	static constexpr int ACTION_AI_AVOID = 7;
+	static constexpr int ACTION_AI_SIGNAL = 8;
+	static constexpr int ACTION_TAKE_DAMAGE = 9;
 
 	// AI states
 	static constexpr const char* AI_STATE_ATTACK = "Attack";

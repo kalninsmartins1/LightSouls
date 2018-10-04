@@ -24,10 +24,6 @@ void StateChase::OnEnter(AnimComponent* animComponent)
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_curProgress = EStateProgress::IN_PROGRESS;
 	m_animComponent = animComponent;
-
-#if LIGHTSOULS_DEBUG_AI
-	CCLOG("StateChase: OnEnter!");
-#endif
 }
 
 EStateProgress StateChase::OnStep()
@@ -70,10 +66,6 @@ void StateChase::OnExit()
 	{
 		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
 	}
-
-#if LIGHTSOULS_DEBUG_AI
-	CCLOG("StateChase: OnExit!");
-#endif
 }
 
 void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& eventData)

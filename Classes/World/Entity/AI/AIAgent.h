@@ -13,8 +13,9 @@ public:
 	~AIAgent();
 
 public:	
-	static const String&	 GetEventAgentDestroyed();
-	static const String&	 GetEventAgentHealthChanged();
+	static const String&	 GetEventOnDestroyed();
+	static const String&	 GetEventOnHealthChanged();
+	static const String&	 GetEventOnDamageTaken();
 	float					 GetAttackRange() const;
 	float					 GetStoppingDistance() const;
 	const String&			 GetType() const;
@@ -32,7 +33,7 @@ public:
 	void			Reset();
 
 protected:
-	virtual void DispatchOnHealthChangedEvent() override;
+	virtual void DispatchOnHealthReduceEvent() override;
 	virtual void DispatchOnStaminaChangedEvent() const override;
 	virtual void DispatchOnGiveDamageEvent() const override;
 
@@ -46,6 +47,7 @@ private:
 private:	
 	static String			s_eventAgentHealthChanged;
 	static String			s_eventAgentDestroyed;
+	static String			s_eventAgentDamageTaken;
 	StateMachine			m_stateMachine;
 	GenericAttackComponent*	m_attackComponent;
 	Vector2					m_basePosition;

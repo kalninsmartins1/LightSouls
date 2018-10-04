@@ -50,12 +50,12 @@ int AnimationUtils::GetAnimId(String animName)
 	return animId;
 }
 
-cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
+cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* sprite,
 	const AnimationData& animationData,
 	const std::function<void()>& onFinished)
 {
-	// Stop any previously started animation
-	pSprite->stopActionByTag(ACTION_ANIM_TAG);
+	// Stop any previously started animation	
+	sprite->stopActionByTag(ACTION_ANIM);
 
 	// Start character animation
 	const auto animation = cocos2d::Animation::createWithSpriteFrames(animationData.frames,
@@ -67,10 +67,10 @@ cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::
 	 * http://www.cocos2d-x.org/docs/cocos2d-x/en/actions/sequences.html
 	*/
 	auto sequence = cocos2d::Sequence::create(animate, callbackAction, nullptr);
-	sequence->setTag(ACTION_ANIM_TAG);
+	sequence->setTag(ACTION_ANIM);
 
 	// Start new anim
-	return pSprite->runAction(sequence);
+	return sprite->runAction(sequence);
 }
 
 void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const AnimationData& animation)
@@ -78,14 +78,14 @@ void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const An
 	using namespace cocos2d;
 
 	// Stop any previously started animation
-	sprite->stopActionByTag(ACTION_ANIM_TAG);
+	sprite->stopActionByTag(ACTION_ANIM);
 
 	// Start character animation
 	const auto ccAnimation = cocos2d::Animation::createWithSpriteFrames(animation.frames,
 		animation.timeBetweenFrames);
 	const auto animateAction = Animate::create(ccAnimation);
 	const auto repeatAction = RepeatForever::create(animateAction);
-	repeatAction->setTag(ACTION_ANIM_TAG);
+	repeatAction->setTag(ACTION_ANIM);
 
 	// Start new anim
 	sprite->runAction(repeatAction);

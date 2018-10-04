@@ -15,7 +15,8 @@
 NS_LIGHTSOULS_BEGIN
 
 String AIAgent::s_eventAgentHealthChanged = "EVENT_AGENT_HEALTH_CHANGED";
-String LightSouls::AIAgent::s_eventAgentDestroyed = "EVENT_AGENT_DESTROYED";
+String AIAgent::s_eventAgentDamageTaken = "EVENT_AGENT_DAMAGE_TAKEN";
+String AIAgent::s_eventAgentDestroyed = "EVENT_AGENT_DESTROYED";
 
 AIAgent* AIAgent::Create(const String& pathToXML)
 {
@@ -144,9 +145,11 @@ void AIAgent::DispatchOnStaminaChangedEvent() const
 
 }
 
-void AIAgent::DispatchOnHealthChangedEvent()
+void AIAgent::DispatchOnHealthReduceEvent()
 {
 	m_stateMachine.DispatchEvent(s_eventAgentHealthChanged, AEventData(GetId()));
+	m_stateMachine.DispatchEvent(s_eventAgentDamageTaken, AEventData(GetId()));
+
 	if (GetHealth() <= 0)
 	{
 		getEventDispatcher()->dispatchCustomEvent(s_eventAgentDestroyed);
@@ -158,14 +161,19 @@ AIAgent::~AIAgent()
 
 }
 
-const String& AIAgent::GetEventAgentDestroyed()
+const String& AIAgent::GetEventOnDestroyed()
 {
 	return s_eventAgentDestroyed;
 }
 
-const String& AIAgent::GetEventAgentHealthChanged()
+const String& AIAgent::GetEventOnHealthChanged()
 {
 	return s_eventAgentHealthChanged;
+}
+
+const String& AIAgent::GetEventOnDamageTaken()
+{
+	return s_eventAgentDamageTaken;
 }
 
 float AIAgent::GetAttackRange() const

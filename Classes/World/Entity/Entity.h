@@ -66,7 +66,7 @@ public:
 	virtual void	update(float deltaTime) override;
 
 protected:
-	virtual void DispatchOnHealthChangedEvent() = 0;
+	virtual void DispatchOnHealthReduceEvent() = 0;
 	virtual void DispatchOnStaminaChangedEvent() const = 0;
 	virtual void DispatchOnGiveDamageEvent() const = 0;
 

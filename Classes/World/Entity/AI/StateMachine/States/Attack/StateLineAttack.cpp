@@ -88,7 +88,7 @@ void StateLineAttack::OnEventReceived(const String& receivedEvent, const AEventD
 			m_targetEntity->TakeDamage(GetAgent());
 		}
 	}
-	else if (receivedEvent == AIAgent::GetEventAgentHealthChanged())
+	else if (receivedEvent == AIAgent::GetEventOnHealthChanged())
 	{
 		m_curProgress = EStateProgress::FAILED;
 	}

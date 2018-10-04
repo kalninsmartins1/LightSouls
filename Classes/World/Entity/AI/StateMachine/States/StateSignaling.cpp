@@ -24,12 +24,14 @@ void StateSignaling::OnEnter(AnimComponent* animComponent)
 	const Vector2& targetEntityPoisition = AIAgentManager::GetInstance()->GetTargetEntity()->getPosition();
 	if (agent.GetAttackComponent()->IsReadyToAttack(targetEntityPoisition))
 	{
-		m_animComponent = animComponent;
+		m_animComponent = animComponent;		
 		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_SIGNAL);
 		m_curProgress = EStateProgress::IN_PROGRESS;
 
 		Utils::StartTimerWithCallback(&agent,
-			CC_CALLBACK_0(StateSignaling::OnFinishedSignaling, this), m_signalTime);
+			CC_CALLBACK_0(StateSignaling::OnFinishedSignaling, this),
+			m_signalTime,
+			ACTION_AI_SIGNAL);
 	}
 	else
 	{
@@ -44,7 +46,7 @@ EStateProgress StateSignaling::OnStep()
 
 void StateSignaling::OnExit()
 {
-	if (m_animComponent != nullptr)
+	if (!GetAgent().IsProcessing() && m_animComponent != nullptr)
 	{
 		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
 	}
@@ -56,9 +58,20 @@ void StateSignaling::LoadXMLData(const XMLElement* xmlElement)
 	m_signalTime = xmlElement->FloatAttribute(XML_TIME_ATTR);
 }
 
+void StateSignaling::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
+{
+	if (AIAgent::GetEventOnDamageTaken() == receivedEvent)
+	{
+		m_curProgress = EStateProgress::FAILED;
+	}
+}
+
 void StateSignaling::OnFinishedSignaling()
 {
-	m_curProgress = EStateProgress::DONE;
+	if (m_curProgress == EStateProgress::IN_PROGRESS)
+	{
+		m_curProgress = EStateProgress::DONE;
+	}
 }
 
 EAIState StateSignaling::GetStateType() const

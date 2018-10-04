@@ -35,7 +35,7 @@ void StateIdle::OnExit()
 
 void StateIdle::OnEventReceived(const String& receivedEvent, const AEventData & eventData)
 {
-	if (receivedEvent == AIAgent::GetEventAgentHealthChanged())
+	if (receivedEvent == AIAgent::GetEventOnHealthChanged())
 	{
 		m_curProgress = EStateProgress::DONE;
 	}

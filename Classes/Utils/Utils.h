@@ -34,7 +34,7 @@ public:
 	static float		SafeDevide(const float& up, const float& down);
 	static float		ConvertMillisecondsToSeconds(long long milliseconds);
 	static void			StartTimerWithCallback(cocos2d::Node* node,
-							std::function<void()> callback, float time, int tag = ACTION_TIMER_TAG);
+							std::function<void()> callback, float time, int tag = ACTION_TIMER);
 	static void			ClearCallbackTimers(cocos2d::Node* node, int timerTag);
 
 	static void LogVector2(const Vector2& v);

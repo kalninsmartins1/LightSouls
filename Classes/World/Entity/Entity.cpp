@@ -175,7 +175,8 @@ void Entity::TakeDamage(float damage)
 	{
 		m_health = 0;
 	}
-	DispatchOnHealthChangedEvent();
+
+	DispatchOnHealthReduceEvent();
 
 	if (!m_isAttacking &&
 		!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_HURT))
@@ -184,14 +185,14 @@ void Entity::TakeDamage(float damage)
 		if (m_animComponent->HasAnim(ANIM_TYPE_HURT))
 		{
 			m_animComponent->PlayOneShotAnimation(ANIM_TYPE_HURT,
-				CC_CALLBACK_0(Entity::OnDamageTaken, this));
+				CC_CALLBACK_0(Entity::OnDamageTaken, this));			
 		}
 		else
 		{
 			// If no animation then fall-back to one second pause
 			Utils::StartTimerWithCallback(this,
 				CC_CALLBACK_0(Entity::OnDamageTaken, this),
-				1.0f);
+				1.0f, ACTION_TAKE_DAMAGE);
 		}
 	}
 }
@@ -235,12 +236,12 @@ void Entity::StartStaminaRegenerateDelayTimer()
 	m_isStaminaRegenerateDelayExpired = false;
 
 	// Make sure any previous stamina regenerate actions are stopped
-	stopActionByTag(ACTION_STAMINA_DELAY_TIMER);
+	stopActionByTag(ACTION_STAMINA_DELAY);
 
 	// Start a new timer action
 	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(Entity::OnStaminaRegenerateDelayExpired, this),
-			m_staminaRegenerateDelay, ACTION_STAMINA_DELAY_TIMER);
+			m_staminaRegenerateDelay, ACTION_STAMINA_DELAY);
 }
 
 void Entity::OnStaminaRegenerateDelayExpired()
@@ -274,7 +275,7 @@ void Entity::RegenerateStamina(float regenerateSpeedASecond)
 void Entity::OnDamageTaken()
 {
 	m_isTakingDamage = false;
-	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);	
 }
 
 void Entity::OnEntityInitialized()

@@ -22,7 +22,7 @@ AIAvoidTargetAction::AIAvoidTargetAction(AIAgent& agent)
 	// Start avoid timer
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(AIAvoidTargetAction::OnAvoidTimerFinished, this),
-		m_activeTime, ACTION_AI_AVOID_TIMER);
+		m_activeTime, ACTION_AI_AVOID);
 }
 
 AIAvoidTargetAction::~AIAvoidTargetAction()
@@ -76,7 +76,7 @@ void AIAvoidTargetAction::OnAvoidCooldownExpired()
 
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(AIAvoidTargetAction::OnAvoidTimerFinished, this),
-		m_activeTime, ACTION_AI_AVOID_TIMER);	
+		m_activeTime, ACTION_AI_AVOID);	
 }
 
 void LightSouls::AIAvoidTargetAction::OnAvoidTimerFinished()
@@ -86,7 +86,7 @@ void LightSouls::AIAvoidTargetAction::OnAvoidTimerFinished()
 
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(AIAvoidTargetAction::OnAvoidCooldownExpired, this),
-		m_cooldownTime, ACTION_AI_AVOID_TIMER);
+		m_cooldownTime, ACTION_AI_AVOID);
 }
 
 void AIAvoidTargetAction::StopAvoiding()
