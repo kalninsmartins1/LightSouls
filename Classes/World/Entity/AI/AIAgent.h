@@ -24,7 +24,7 @@ public:
 	virtual EntityType		 GetEntityType() const override;
 	EAIState				 GetCurrentAIState() const;
 
-	void SetBasePosition(const Vector2& position);
+	void SetBasePosition(const Vector2& position);	
 	void SetAgentType(const String& type);
 
 	static AIAgent* Create(const String& pathToXML);
@@ -50,8 +50,7 @@ private:
 	static String			s_eventAgentDamageTaken;
 	StateMachine			m_stateMachine;
 	GenericAttackComponent*	m_attackComponent;
-	Vector2					m_basePosition;
-	Vector2					m_previousPosition;
+	Vector2					m_basePosition;	
 	String					m_agentType;
 };
 

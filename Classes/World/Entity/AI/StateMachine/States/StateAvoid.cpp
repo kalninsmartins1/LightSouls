@@ -33,7 +33,7 @@ void StateAvoid::OnEnter(AnimComponent* animComponent)
 	AIAgent& agent = GetAgent();
 	m_attackComponent = agent.GetAttackComponent();
 	m_isRandomTimeExpired = false;
-	m_randomTime = Utils::GetRandValueWithinRange(0, 3.0f);
+	m_randomTime = Utils::GetRandValueWithinRange(0, 7.0f);
 	Utils::StartTimerWithCallback(&agent, CC_CALLBACK_0(StateAvoid::OnRandomTimeExpired, this),
 		m_randomTime);
 }

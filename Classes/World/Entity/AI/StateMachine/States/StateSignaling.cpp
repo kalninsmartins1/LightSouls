@@ -26,7 +26,7 @@ void StateSignaling::OnEnter(AnimComponent* animComponent)
 	{
 		m_animComponent = animComponent;		
 		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_SIGNAL);
-		m_curProgress = EStateProgress::IN_PROGRESS;
+		m_curProgress = EStateProgress::IN_PROGRESS;		
 
 		Utils::StartTimerWithCallback(&agent,
 			CC_CALLBACK_0(StateSignaling::OnFinishedSignaling, this),

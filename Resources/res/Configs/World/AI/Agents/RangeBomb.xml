@@ -38,7 +38,7 @@
 		<State 	type="Pause"
 				onSuccess="Signaling"
 				onFailure="Chase"
-				maxDistanceToTarget="400"
+				maxDistanceToTarget="560"
 				isCheckingDistanceToTarget="true"
 				time="0"/>
 
@@ -80,7 +80,7 @@
 	
 	<Component 	type="RangedAttackComponent"
 				secondsBetweenAttacks="2"
-				attackRange="400">
+				attackRange="560">
 			
 		<Projectile path="res/Configs/World/Projectiles/Fireball.xml">
 		</Projectile>

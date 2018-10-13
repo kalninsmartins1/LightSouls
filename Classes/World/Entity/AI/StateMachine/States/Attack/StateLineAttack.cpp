@@ -28,11 +28,13 @@ EAIState StateLineAttack::GetStateType() const
 
 void StateLineAttack::OnEnter(AnimComponent * animComponent)
 {		
-	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	m_targetPosition = m_targetEntity->getPosition();
-
 	AIAgent& agent = GetAgent();	
 	m_attackComponent = agent.GetAttackComponent();	
+	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
+	const Vector2& agentPosition = agent.getPosition();
+	const Vector2& toTarget = (m_targetEntity->getPosition() - agentPosition).getNormalized();
+	float goodAttackRange = m_attackComponent->GetAttackRange() - 5.0f; // Don't max out the range
+	m_targetPosition = agentPosition + toTarget * goodAttackRange;
 
 	if (m_attackComponent->IsReadyToAttack(m_targetPosition))
 	{				
@@ -58,7 +60,7 @@ EStateProgress StateLineAttack::OnStep()
 		// Check if we are already there
 		if (toTarget.length() <= (agent.GetCurrentMoveSpeed() / 10.0f))
 		{
-			m_curProgress = EStateProgress::DONE;
+			m_curProgress = EStateProgress::FAILED;
 		}
 	}
 		
