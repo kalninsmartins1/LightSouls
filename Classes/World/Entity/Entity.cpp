@@ -218,6 +218,12 @@ void Entity::ApplyKnockbackEffect(const Entity& attackingEntity)
 		m_physicsBodyForceScale);
 }
 
+void Entity::ApplyInstantSpeed(float speed)
+{
+	_physicsBody->setVelocityLimit(speed);
+	_physicsBody->setVelocity(GetHeading() * speed);
+}
+
 void Entity::update(float deltaTime)
 {
 	Sprite::update(deltaTime);

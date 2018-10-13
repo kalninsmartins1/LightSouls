@@ -192,7 +192,8 @@ void Player::FilterMovementDirectionBasedOnCollisionData(Vector2& moveDirection)
 void Player::StartDodging()
 {
 	m_isDodging = true;
-	SetCurrentMoveSpeed(m_dodgeSpeed);
+	SetCurrentMoveSpeed(0.0f);
+	ApplyInstantSpeed(m_dodgeSpeed);
 
 	// Consume stamina
 	ConsumeStamina(m_dodgeStaminaConsumption);

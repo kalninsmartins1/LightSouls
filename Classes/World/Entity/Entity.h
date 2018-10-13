@@ -63,6 +63,7 @@ public:
 	void			StartAttacking();
 	void			StopAttacking();
 	void			ApplyKnockbackEffect(const Entity& attackingEntity);
+	void			ApplyInstantSpeed(float speed);
 	virtual void	update(float deltaTime) override;
 
 protected:
