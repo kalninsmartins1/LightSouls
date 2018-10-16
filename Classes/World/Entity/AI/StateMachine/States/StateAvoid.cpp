@@ -36,6 +36,7 @@ void StateAvoid::OnEnter(AnimComponent* animComponent)
 	m_randomTime = Utils::GetRandValueWithinRange(0, 7.0f);
 	Utils::StartTimerWithCallback(&agent, CC_CALLBACK_0(StateAvoid::OnRandomTimeExpired, this),
 		m_randomTime);
+	m_randomTargetOffset = Utils::GetRandomPositionWithinCircle(Vector2(0.0f, 0.0f), 150.0f);
 }
 
 EStateProgress StateAvoid::OnStep()
@@ -43,7 +44,7 @@ EStateProgress StateAvoid::OnStep()
 	AIAgent& agent = GetAgent();
 	Entity* targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 
-	const Vector2& targetPosition = targetEntity->getPosition();
+	const Vector2& targetPosition = targetEntity->getPosition() + m_randomTargetOffset;
 	Vector2 toTarget = targetPosition - agent.getPosition();
 	Vector2 toTargetNormalized = toTarget.getNormalized();
 	float distanceSqrToTarget = toTarget.lengthSquared();

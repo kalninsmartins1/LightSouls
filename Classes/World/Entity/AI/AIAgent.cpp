@@ -110,7 +110,7 @@ bool AIAgent::OnContactBegin(const Vector2& contactPoint, const cocos2d::Physics
 	if (node != nullptr)
 	{
 		m_stateMachine.DispatchEvent(PhysicsManager::GetEventOnCollisionBegin(),
-			OnCollisionBeginEventData(GetId(), node->getName(), contactPoint));
+			OnCollisionBeginEventData(GetId(), node->getName(), contactPoint));		
 	}
 
 	return true;

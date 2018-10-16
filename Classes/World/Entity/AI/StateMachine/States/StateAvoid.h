@@ -32,6 +32,7 @@ private:
 	bool					m_isAvoiding;
 	float					m_randomTime;
 	bool					m_isRandomTimeExpired;
+	Vector2					m_randomTargetOffset; // Makes agents more disperse
 };
 
 NS_LIGHTSOULS_END

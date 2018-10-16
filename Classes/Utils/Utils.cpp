@@ -19,7 +19,7 @@ long long Utils::GetTimeStampInMilliseconds()
 	return ticks / 10000;
 }
 
-float LightSouls::Utils::GetScaleFactor()
+float Utils::GetScaleFactor()
 {
 	return cocos2d::Director::getInstance()->getContentScaleFactor();
 }

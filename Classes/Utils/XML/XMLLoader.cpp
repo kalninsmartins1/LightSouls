@@ -309,7 +309,9 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 		const float staminaRegenerateDelay = root->FloatAttribute(XML_ENTITY_STAMINA_REGENARATE_DELAY_ATTR);
 		const float	knockBackStrenght = root->FloatAttribute(XML_ENTITY_KNOCK_BACK_STRENGHT);
 
-		entity.setName(actorType);
+		std::ostringstream strStream;
+		strStream << actorType << entity.GetId();
+		entity.setName(strStream.str());
 		entity.SetBaseMoveSpeed(moveSpeed);
 		entity.SetBaseDamage(baseDamage);
 		entity.SetBaseHealth(baseHealth);

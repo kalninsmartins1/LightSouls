@@ -52,6 +52,7 @@ public:
 	void			SetStaminaRegenerateDelay(float regenerateDelay);
 	void			SetKnockBackStrenght(float strenght);
 	virtual void	setScale(float scaleX, float scaleY) override;
+	
 
 	void			ResetHealth();
 	void			ResetStamina();
