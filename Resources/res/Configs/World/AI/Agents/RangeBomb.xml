@@ -79,7 +79,7 @@
 	</Component>
 	
 	<Component 	type="RangedAttackComponent"
-				secondsBetweenAttacks="2"
+				secondsBetweenAttacks="1"
 				attackRange="560">
 			
 		<Projectile path="res/Configs/World/Projectiles/Fireball.xml">
