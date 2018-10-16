@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Entity type="RangeBomb"
-			moveSpeed="400"
+			moveSpeed="440"
 			baseHealth="40"
 			baseStamina="100"
 			baseDamage="10"

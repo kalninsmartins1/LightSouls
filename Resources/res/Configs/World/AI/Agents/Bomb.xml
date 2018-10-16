@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Entity type="Bomb"
-			moveSpeed="300"
+			moveSpeed="330"
 			baseHealth="60"
 			baseStamina="100"
 			baseDamage="10"
