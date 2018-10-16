@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Projectile type="Fireball"
-			moveSpeed="300"			
+			moveSpeed="600"
 	>
 	
 	<Component 	type="SpriteComponent" 
