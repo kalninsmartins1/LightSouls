@@ -4,7 +4,7 @@
 
 NS_LIGHTSOULS_BEGIN
 
-class GenericAttackComponent;
+class HitAttackComponent;
 class Entity;
 
 class StateLineAttack : public AState
@@ -25,7 +25,7 @@ private:
 	EStateProgress			m_curProgress;	
 	Entity*					m_targetEntity;
 	Vector2					m_targetPosition;
-	GenericAttackComponent*	m_attackComponent;
+	HitAttackComponent*		m_attackComponent;
 	float					m_moveSpeed;
 };
 

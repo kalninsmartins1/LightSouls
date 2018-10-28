@@ -26,7 +26,8 @@ enum class EAIState
 	IDLE,
 	SIGNALING,
 	PAUSE,
-	AVOID
+	AVOID,
+	IS_PLAYER_CLOSE
 };
 
 

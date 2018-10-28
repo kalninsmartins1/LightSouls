@@ -20,9 +20,8 @@ StateSignaling::StateSignaling(AIAgent& aiAgent)
 
 void StateSignaling::OnEnter(AnimComponent* animComponent)
 {
-	AIAgent& agent = GetAgent();
-	const Vector2& targetEntityPoisition = AIAgentManager::GetInstance()->GetTargetEntity()->getPosition();
-	if (agent.GetAttackComponent()->IsReadyToAttack(targetEntityPoisition))
+	AIAgent& agent = GetAgent();	
+	if (agent.GetAttackComponent()->IsReadyToAttack())
 	{
 		m_animComponent = animComponent;		
 		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_SIGNAL);

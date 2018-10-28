@@ -30,13 +30,7 @@ void StateAttack::OnEnter(AnimComponent* animComponent)
 
 EStateProgress StateAttack::OnStep()
 {
-	const Vector2 toTarget = m_targetEntity->getPosition() - GetAgent().getPosition();
-	if (toTarget.lengthSquared() > m_attackComponent->GetAttackRangeSqr() && m_isAnimFinished)
-	{
-		// Target run away cant attack
-		m_curProgress = EStateProgress::FAILED;
-	}
-	else if (m_targetEntity->GetHealth() <= 0)
+	if (m_targetEntity->GetHealth() <= 0)
 	{
 		// Target extinguished
 		m_curProgress = EStateProgress::DONE;
@@ -44,12 +38,12 @@ EStateProgress StateAttack::OnStep()
 
 	if(m_curProgress == EStateProgress::IN_PROGRESS && m_isAnimFinished)
 	{
-		AIAgent& agent = GetAgent();
-		Vector2 targetEntityPosition = m_targetEntity->getPosition();
-		if(m_attackComponent->IsReadyToAttack(targetEntityPosition))
+		if(m_attackComponent->IsReadyToAttack())
 		{
 			// Direction to target
-			Vector2 toTarget = targetEntityPosition - GetAgent().getPosition();
+			AIAgent& agent = GetAgent();
+			const Vector2& targetEntityPosition = AIAgentManager::GetInstance()->GetTargetEntity()->getPosition();
+			Vector2 toTarget = targetEntityPosition - agent.getPosition();
 			m_attackComponent->Attack(toTarget.getNormalized());
 			agent.StartAttacking();
 			

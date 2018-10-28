@@ -63,6 +63,7 @@ namespace LightSouls
 	static constexpr char* XML_AI_ROW_PADDING = "rowPadding";
 	static constexpr char* XML_AI_COLUMN_PADDING = "columnPadding";
 	static constexpr char* XML_AI_SKIP_AVOID_STATES = "skipAvoidStates";
+	static constexpr char* XML_AI_DISTANCE = "distance";
 
 	// XML action attributes
 	static constexpr char* XML_START_AVOID_DISTANCE_ATTR = "startAvoidDistance";

@@ -39,7 +39,7 @@ bool LongSwordAttackComponent::OnAttackHit(cocos2d::PhysicsWorld& world,
 
 void LongSwordAttackComponent::Attack(const Vector2& direction)
 {
-	if (IsReadyToAttack(GetOwnerEntity()->getPosition()))
+	if (IsReadyToAttack())
 	{
 		GenericAttackComponent::Attack(direction);
 		GenericAttackComponent::CheckAffectedObjects(*GetOwnerEntity(), *this, direction, m_paddingFromBody,

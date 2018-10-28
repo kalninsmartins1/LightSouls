@@ -12,6 +12,7 @@ class HitAttackComponent : public GenericAttackComponent
 public:
 	static HitAttackComponent*		Create(float secondsBetweenAttacks, float attackRange);
 	virtual void					Attack(const Vector2& direction) override;
+	void							RegisterSuccessfulAttack();
 
 private:
 	HitAttackComponent(float secondsBetweenAttacks, float attackRange);

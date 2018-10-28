@@ -2,7 +2,7 @@
 #include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/AI/AIAgentManager.h"
 #include "World/Physics/PhysicsManager.h"
-#include "World/Entity/Components/Attack/GenericAttackComponent.h"
+#include "World/Entity/Components/Attack/HitAttackComponent.h"
 #include "World/Entity/Entity.h"
 #include "Events/OnCollisionBeginEventData.h"
 #include "Utils/XML/XMLConsts.h"
@@ -29,14 +29,11 @@ EAIState StateLineAttack::GetStateType() const
 void StateLineAttack::OnEnter(AnimComponent * animComponent)
 {		
 	AIAgent& agent = GetAgent();	
-	m_attackComponent = agent.GetAttackComponent();	
+	m_attackComponent = static_cast<HitAttackComponent*>(agent.GetAttackComponent());	
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	const Vector2& agentPosition = agent.getPosition();
-	const Vector2& toTarget = (m_targetEntity->getPosition() - agentPosition).getNormalized();
-	float goodAttackRange = m_attackComponent->GetAttackRange() - 5.0f; // Don't max out the range
-	m_targetPosition = agentPosition + toTarget * goodAttackRange;
+	m_targetPosition = m_targetEntity->getPosition();
 
-	if (m_attackComponent->IsReadyToAttack(m_targetPosition))
+	if (m_attackComponent->IsReadyToAttack())
 	{				
 		m_curProgress = EStateProgress::IN_PROGRESS;				
 		agent.SetCurrentMoveSpeed(m_moveSpeed); // Move with different speed in this state
@@ -71,8 +68,7 @@ void StateLineAttack::OnExit()
 {
 	if(m_curProgress == EStateProgress::DONE)
 	{
-		m_attackComponent->Attack(GetAgent().getPosition() -
-			m_targetEntity->getPosition());
+		m_attackComponent->RegisterSuccessfulAttack();
 	}
 	AIAgent& agent = GetAgent();
 	agent.SetMoveDirection(Vector2::ZERO);

@@ -100,20 +100,17 @@ float LightSouls::GenericAttackComponent::GetSecondsSinceLastAttack() const
 	return Utils::ConvertMillisecondsToSeconds(millisecondsSinceLastAttack);
 }
 
-bool GenericAttackComponent::IsReadyToAttack(const Vector2& targetPosition) const
+bool GenericAttackComponent::IsReadyToAttack() const
 {
 	// Check if attack cooldown has passed
 	bool isAttackCooledDown = GetSecondsSinceLastAttack() > (m_secondsBetweenAttacks - Utils::GetRandValueWithinRange(0.0f, 2.0f));	
 	bool isEntityReady = m_ownerEntity->IsReadyToAttack();
 
-	float curDistanceToTargetSqr = (m_ownerEntity->getPosition() - targetPosition).lengthSquared();
-	bool isTargetInRange =  curDistanceToTargetSqr <= GetAttackRangeSqr();
-
 #if LIGHTSOULS_ATTACK_DEBUG
 	CCLOG("AttackComponent entity %s | isAttackCooleddown %d | hasEnoughStamina %d | isEntityReady %d |", m_ownerEntity->getName().c_str(), isAttackCooledDown, hasEnoughStamina, isEntityReady);
 #endif
 
-	return isAttackCooledDown && isEntityReady && isTargetInRange;
+	return isAttackCooledDown && isEntityReady;
 }
 
 const Entity* LightSouls::GenericAttackComponent::GetOwnerEntity() const

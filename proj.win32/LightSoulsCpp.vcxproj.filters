@@ -264,6 +264,7 @@
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateAvoid.cpp">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateIsPlayerClose.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">

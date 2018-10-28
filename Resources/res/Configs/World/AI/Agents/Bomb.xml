@@ -34,7 +34,7 @@
 		<State 	type="Signaling"
 				onSuccess="LineAttack"
 				onFailure="Pause" 
-				time="1.0"/>
+				time="1.0"/>	
 
 		<State 	type="Pause"
 				onSuccess="Signaling"				
@@ -68,7 +68,7 @@
 		</SpriteSheet>
 	</Component>
 	
-	<Component 	type="GenericAttackComponent"
+	<Component 	type="HitAttackComponent"
 				secondsBetweenAttacks="3" 
 				comboExpireTime="0.6"
 				attackRange="267">

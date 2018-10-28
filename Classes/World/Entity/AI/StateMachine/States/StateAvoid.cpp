@@ -13,8 +13,8 @@ StateAvoid::StateAvoid(AIAgent& agent)
 	: AState(agent)
 	, m_curProgress(EStateProgress::NONE)
 	, m_attackComponent(nullptr)
-	, m_startAvoidDistance(100.0f)
-	, m_stopAvoidDistance(250.0f)
+	, m_startAvoidDistance(200.0f)
+	, m_stopAvoidDistance(450.0f)
 	, m_isAvoiding(false)
 	, m_randomTime(0.0f)
 	, m_isRandomTimeExpired(false)
@@ -51,7 +51,7 @@ EStateProgress StateAvoid::OnStep()
 
 	if (!m_isAvoiding)
 	{
-		if (m_attackComponent->IsReadyToAttack(targetPosition) && m_isRandomTimeExpired)
+		if (m_attackComponent->IsReadyToAttack() && distanceSqrToTarget <= m_attackComponent->GetAttackRangeSqr() && m_isRandomTimeExpired)
 		{
 			m_curProgress = EStateProgress::DONE;			
 		}

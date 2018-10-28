@@ -33,12 +33,17 @@ HitAttackComponent* HitAttackComponent::Create(float secondsBetweenAttacks, floa
 
 void HitAttackComponent::Attack(const Vector2& direction)
 {
-	if (IsReadyToAttack(GetOwnerEntity()->getPosition()))
+	if (IsReadyToAttack())
 	{
 		GenericAttackComponent::Attack(direction);
 		GenericAttackComponent::CheckAffectedObjects(*GetOwnerEntity(), *this, direction, 10.0f,
 			CC_CALLBACK_3(HitAttackComponent::OnAttackHit, this));
 	}
+}
+
+void HitAttackComponent::RegisterSuccessfulAttack()
+{
+	GenericAttackComponent::Attack(Vector2::ZERO);
 }
 
 NS_LIGHTSOULS_END

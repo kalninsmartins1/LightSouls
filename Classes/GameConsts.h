@@ -33,6 +33,7 @@ namespace LightSouls
 	static constexpr const char* AI_STATE_PAUSE = "Pause";
 	static constexpr const char* AI_STATE_SIGNALING = "Signaling";
 	static constexpr const char* AI_STATE_AVOID = "Avoid";
+	static constexpr const char* AI_STATE_IS_PLAYER_CLOSE = "IsPlayerClose";
 
 	// Entity components
 	static constexpr char* ANIM_COMPONENT = "AnimComponent";

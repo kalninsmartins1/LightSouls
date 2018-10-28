@@ -25,7 +25,7 @@ public:
 	bool			IsComboExpired() const;
 
 	// Returns ready if owner is ready to attack
-	virtual bool	IsReadyToAttack(const Vector2& targetPosition) const;
+	virtual bool	IsReadyToAttack() const;
 
 	// Returns the entity that owns this component
 	const Entity*	GetOwnerEntity() const;

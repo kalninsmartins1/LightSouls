@@ -11,7 +11,11 @@
 #include "States/StateSignaling.h"
 #include "States/StatePause.h"
 #include "States/StateAvoid.h"
+#include "States/StateIsPlayerClose.h"
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
+#include "World/Physics/PhysicsManager.h"
+#include "Events/OnCollisionBeginEventData.h"
+#include "World/Entity/AI/AIAgentManager.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -73,20 +77,20 @@ void StateMachine::AddAvailableState(EAIState availableState, const XMLElement* 
 			state = AState::Create<StateIdle>(m_agent);
 			break;
 
-		case EAIState::SIGNALING:
-			{
-				state = AState::Create<StateSignaling>(m_agent);
-			}
+		case EAIState::SIGNALING:			
+			state = AState::Create<StateSignaling>(m_agent);			
 			break;
 
-		case EAIState::PAUSE:
-			{
-				state = AState::Create<StatePause>(m_agent);
-			}
-		case EAIState::AVOID:
-			{
-				state = AState::Create<StateAvoid>(m_agent);
-			}
+		case EAIState::PAUSE:			
+			state = AState::Create<StatePause>(m_agent);			
+			break;
+
+		case EAIState::AVOID:			
+			state = AState::Create<StateAvoid>(m_agent);			
+			break;
+
+		case EAIState::IS_PLAYER_CLOSE:			
+			state = AState::Create<StateIsPlayerClose>(m_agent);			
 			break;
 	}
 
@@ -157,6 +161,16 @@ void StateMachine::OnStep()
 
 void StateMachine::DispatchEvent(const String& eventType, const AEventData& eventData)
 {
+	if (eventType == PhysicsManager::GetEventOnCollisionBegin()) 
+	{
+		Entity* targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
+		const OnCollisionBeginEventData& collisionData = static_cast<const OnCollisionBeginEventData&>(eventData);
+		if (collisionData.GetCollidedWithName() == targetEntity->getName())
+		{
+			CCLOG("BingO!!");
+		}
+	}
+
 	m_curState->OnEventReceived(eventType, eventData);
 }
 

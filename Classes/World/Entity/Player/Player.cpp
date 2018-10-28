@@ -207,7 +207,7 @@ void Player::StopDodging()
 
 void Player::LightAttack()
 {	
-	if (!m_isDodging && m_attackComponent->IsReadyToAttack(getPosition()))
+	if (!m_isDodging && m_attackComponent->IsReadyToAttack())
 	{
 		AnimComponent* animComponent = GetAnimComponent();
 		if(!m_attackComponent->IsComboExpired())
