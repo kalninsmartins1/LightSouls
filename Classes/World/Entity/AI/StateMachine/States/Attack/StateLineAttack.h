@@ -22,11 +22,16 @@ public:
 	virtual void			LoadXMLData(const XMLElement* xmlElement) override;
 
 private:
+	void OnSuccessfulAttack();
+
+private:
 	EStateProgress			m_curProgress;	
 	Entity*					m_targetEntity;
-	Vector2					m_targetPosition;
+	Vector2					m_beginTargetPos;
 	HitAttackComponent*		m_attackComponent;
 	float					m_moveSpeed;
+	float					m_deliverDamageDistance;
+	float					m_arriveDistance;
 };
 
 NS_LIGHTSOULS_END

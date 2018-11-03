@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
-<Projectile type="Fireball"
+<Projectile type="Knife"
 			moveSpeed="600"
 	>
 	
 	<Component 	type="SpriteComponent" 
-				path="res/Graphics/World/Projectiles/flame.png">
+				path="res/Graphics/World/Projectiles/knife.png">
 	</Component>
 	
 	<Component type="RigidBodyComponent">

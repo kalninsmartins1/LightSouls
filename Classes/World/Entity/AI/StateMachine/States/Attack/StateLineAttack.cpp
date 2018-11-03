@@ -6,6 +6,7 @@
 #include "World/Entity/Entity.h"
 #include "Events/OnCollisionBeginEventData.h"
 #include "Utils/XML/XMLConsts.h"
+#include "World/Entity/Components/AnimComponent.h"
 #include "GameConsts.h"
 
 NS_LIGHTSOULS_BEGIN
@@ -14,9 +15,11 @@ StateLineAttack::StateLineAttack(AIAgent& aiAgent)
 	: AState(aiAgent)	
 	, m_curProgress(EStateProgress::NONE)
 	, m_targetEntity(nullptr)
-	, m_targetPosition(Vector2::ZERO)
+	, m_beginTargetPos(Vector2::ZERO)
 	, m_attackComponent(nullptr)
 	, m_moveSpeed(100.0f)
+	, m_deliverDamageDistance(40.0f)
+	, m_arriveDistance(40.0f)
 {
 
 }
@@ -31,7 +34,8 @@ void StateLineAttack::OnEnter(AnimComponent * animComponent)
 	AIAgent& agent = GetAgent();	
 	m_attackComponent = static_cast<HitAttackComponent*>(agent.GetAttackComponent());	
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	m_targetPosition = m_targetEntity->getPosition();
+	m_beginTargetPos = m_targetEntity->getPosition();
+	animComponent->PlayLoopingAnimation(ANIM_TYPE_ATTACK);
 
 	if (m_attackComponent->IsReadyToAttack())
 	{				
@@ -51,13 +55,23 @@ EStateProgress StateLineAttack::OnStep()
 		AIAgent& agent = GetAgent();
 
 		// Move to target
-		Vector2 toTarget = m_targetPosition - agent.getPosition();
+		const Vector2 agentPos = agent.getPosition();
+		Vector2 toTarget = m_beginTargetPos - agentPos;
 		agent.SetMoveDirection(toTarget.getNormalized());
 		
 		// Check if we are already there
-		if (toTarget.length() <= (agent.GetCurrentMoveSpeed() / 10.0f))
+		if (toTarget.lengthSquared() <= m_arriveDistance * m_arriveDistance)
 		{
-			m_curProgress = EStateProgress::FAILED;
+			const Vector2& actualTargetPos = m_targetEntity->getPosition();
+			Vector2 toActualPos = agentPos - actualTargetPos;
+			if (toActualPos.lengthSquared() < m_deliverDamageDistance * m_deliverDamageDistance)
+			{
+				OnSuccessfulAttack();
+			}
+			else
+			{
+				m_curProgress = EStateProgress::FAILED;
+			}
 		}
 	}
 		
@@ -82,8 +96,7 @@ void StateLineAttack::OnEventReceived(const String& receivedEvent, const AEventD
 		auto colData = static_cast<const OnCollisionBeginEventData&>(eventData);
 		if (colData.GetCollidedWithName() == m_targetEntity->getName())
 		{
-			m_curProgress = EStateProgress::DONE;			
-			m_targetEntity->TakeDamage(GetAgent());
+			OnSuccessfulAttack();
 		}
 	}
 	else if (receivedEvent == AIAgent::GetEventOnHealthChanged())
@@ -96,6 +109,14 @@ void StateLineAttack::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
 	m_moveSpeed = xmlElement->FloatAttribute(XML_MOVE_SPEED_ATTR);
+	m_arriveDistance = xmlElement->FloatAttribute(XML_AI_ARRIVE_DISTANCE);
+	m_deliverDamageDistance = xmlElement->FloatAttribute(XML_AI_DAMAGE_DISTANCE);
+}
+
+void StateLineAttack::OnSuccessfulAttack()
+{
+	m_curProgress = EStateProgress::DONE;
+	m_targetEntity->TakeDamage(GetAgent());
 }
 
 NS_LIGHTSOULS_END

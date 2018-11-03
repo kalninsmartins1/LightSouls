@@ -63,7 +63,8 @@ namespace LightSouls
 	static constexpr char* XML_AI_ROW_PADDING = "rowPadding";
 	static constexpr char* XML_AI_COLUMN_PADDING = "columnPadding";
 	static constexpr char* XML_AI_SKIP_AVOID_STATES = "skipAvoidStates";
-	static constexpr char* XML_AI_DISTANCE = "distance";
+	static constexpr char* XML_AI_ARRIVE_DISTANCE = "arriveDistance";
+	static constexpr char* XML_AI_DAMAGE_DISTANCE = "damageDistance";
 
 	// XML action attributes
 	static constexpr char* XML_START_AVOID_DISTANCE_ATTR = "startAvoidDistance";
@@ -77,6 +78,7 @@ namespace LightSouls
 	static constexpr char* XML_ANIM_TIME_BETWEEN_FRAMES_ATTR = "timeBetweenFrames";
 
 	// XML generic attributes
+	static constexpr char* XML_DISTANCE = "distance";
 	static constexpr char* XML_NAME_ATTR = "name";
 	static constexpr char* XML_TIME_ATTR = "time";
 	static constexpr char* XML_MOVE_SPEED_ATTR = "moveSpeed";

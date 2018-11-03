@@ -41,7 +41,7 @@ void StateIsPlayerClose::OnExit()
 void StateIsPlayerClose::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_closeDistance = xmlElement->FloatAttribute(XML_AI_DISTANCE);
+	m_closeDistance = xmlElement->FloatAttribute(XML_DISTANCE);
 }
 
 EAIState StateIsPlayerClose::GetStateType() const

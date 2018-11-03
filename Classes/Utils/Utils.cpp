@@ -138,6 +138,21 @@ float Utils::GetRandAngleInRadians()
 	return (rand() % FULL_CIRCLE_DEGREES) * (PI / HALF_CIRCLE_DEGREES);
 }
 
+float Utils::GetSignedAngleBetweenVectors(const Vector2& v1, const Vector2& v2)
+{	
+	return CC_RADIANS_TO_DEGREES(GetSignedRadiansBetweenVectors(v1, v2));
+}
+
+float Utils::GetSignedRadiansBetweenVectors(const Vector2& v1, const Vector2& v2)
+{
+	float result = atan2(v2.y, v2.x) - atan2(v1.y, v1.x);
+	if (result < 0)
+	{
+		result += 2 * PI;
+	}
+	return result;
+}
+
 MouseButtonCode Utils::ConvertStringToMouseButtonCode(const String& mouseButtonStr)
 {	
 	MouseButtonCode result = MouseButtonCode::BUTTON_UNSET;

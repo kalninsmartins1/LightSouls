@@ -167,7 +167,7 @@ void StateMachine::DispatchEvent(const String& eventType, const AEventData& even
 		const OnCollisionBeginEventData& collisionData = static_cast<const OnCollisionBeginEventData&>(eventData);
 		if (collisionData.GetCollidedWithName() == targetEntity->getName())
 		{
-			CCLOG("BingO!!");
+			//CCLOG("Collided with player !");
 		}
 	}
 

@@ -12,7 +12,7 @@
 	<Component type="TransformComponent">
 		<Position x="200" y="1" z="0" />
 		<Rotation x="0" y="0" z="0" />
-		<Scale x="0.2" y="0.2" z="0.2"/>
+		<Scale x="0.5" y="0.5" z="0.5"/>
 	</Component>
 	
 	<Component  type="AIControllerComponent"
@@ -55,23 +55,35 @@
 	
 	<Component type="AnimComponent">
 		<SpriteSheet
-			path="res/Graphics/World/AI/RangeBomb/rangeBombAnims.png" 
-			plistPath="res/Graphics/World/AI/RangeBomb/rangeBombAnims.plist">
+			path="res/Graphics/World/AI/Thrower/throwerAnimations.png" 
+			plistPath="res/Graphics/World/AI/Thrower/throwerAnimations.plist">
 			
 			<Anim 	type="Idle"
-					frameNamePattern="rangeBomb_idle%d.png"
-					frameCount="1"
+					frameNamePattern="thrower_idle%d.png"
+					frameCount="7"
 					timeBetweenFrames="0.1"
 			/>
 			
+			<Anim 	type="Run"
+					frameNamePattern="thrower_run%d.png"
+					frameCount="4"
+					timeBetweenFrames="0.1"
+			/>
+			
+			<Anim 	type="Attack"
+					frameNamePattern="thrower_attack%d.png"
+					frameCount="1"
+					timeBetweenFrames="1"
+			/>
+			
 			<Anim	type="Signal"
-					frameNamePattern="rangeBomb_signal%d.png"
-					frameCount="2"
+					frameNamePattern="thrower_signal%d.png"
+					frameCount="6"
 					timeBetweenFrames="0.1"
 			/>
 			
 			<Anim	type="Hurt"
-					frameNamePattern="rangeBomb_hurt%d.png"
+					frameNamePattern="thrower_hurt%d.png"
 					frameCount="1"
 					timeBetweenFrames="1"
 			/>
@@ -82,18 +94,18 @@
 				secondsBetweenAttacks="1"
 				attackRange="560">
 			
-		<Projectile path="res/Configs/World/Projectiles/Fireball.xml">
+		<Projectile path="res/Configs/World/Projectiles/Knife.xml">
 		</Projectile>
 			
 	</Component>
 	
 	<Component type="RigidBodyComponent">
 		<PhysicsMaterial density="0.1" restitution="0" friction="0.3" />
-		<AnchorPosition x="0" y="0" />
+		<AnchorPosition x="0" y="0.1" />
 		<PhysicsBody
 			shape="box"
-			width="250"
-			height="100"
+			width="100"
+			height="50"
 			isDynamic="true" 
 			isGravityEnabled="false"
 			isRotationEnabled="false"

@@ -2,6 +2,7 @@
 #include "ProjectileConfig.h"
 #include "World/Physics/PhysicsManager.h"
 #include "World/Entity/Entity.h"
+#include "Utils/Utils.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -46,6 +47,7 @@ bool Projectile::Init()
 	bool isSuccessfull = initWithFile(m_config.GetPathToSprite());
 	PhysicsManager::AddPhysicsBody(*this, m_config.GetPhysicsBodyConfig());
 	setPosition(m_startPosition);
+	_physicsBody->setRotationOffset(90.0f); // For some reason physics body rotation is always offset
 
 	return isSuccessfull;
 }
@@ -60,8 +62,7 @@ void Projectile::update(float deltaTime)
 	}
 	else
 	{
-		setPosition(curPosition + m_shootDirection * 
-			m_config.GetMoveSpeed() * deltaTime);
+		setPosition(curPosition + m_shootDirection * m_config.GetMoveSpeed() * deltaTime);
 		RotateProjectileInDirectionOfMovement();
 	}
 }
@@ -72,11 +73,10 @@ void Projectile::Destroy()
 }
 
 void Projectile::RotateProjectileInDirectionOfMovement()
-{	
-	const float angleBetweenVectors = CC_RADIANS_TO_DEGREES(acos(
-		Vector2(0, 1).dot(m_shootDirection) / m_shootDirection.length()));
-	_physicsBody->setRotationOffset(angleBetweenVectors);
-	setRotation(angleBetweenVectors);
+{
+	const Vector2 up = Vector2(0, 1.0f);
+	const float angleBetweenVectors = -Utils::GetSignedAngleBetweenVectors(up, m_shootDirection);
+	setRotation(angleBetweenVectors);	
 }
 
 NS_LIGHTSOULS_END

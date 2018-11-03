@@ -26,6 +26,8 @@ public:
 	static Vector2				GetRandomPositionWithinCircle(const Vector2& centerPos, float radius);
 	static Vector2				GetRandomPositionWithinCircle(const Vector3& centerPos, float radius);
 	static float				GetRandAngleInRadians();
+	static float				GetSignedAngleBetweenVectors(const Vector2& v1, const Vector2& v2);
+	static float				GetSignedRadiansBetweenVectors(const Vector2& v1, const Vector2& v2);
 	static Vector2				GetScreenFillScale(const cocos2d::Size& curSize);
 	static const cocos2d::Size& GetScreenSize();
 	static long long			GetTimeStampInMilliseconds();

@@ -98,6 +98,7 @@ cocos2d/cocos/editor-support/spine/proj.win32/Release.*
 cocos2d/external/Box2D/proj.win32/Release.*
 cocos2d/external/bullet/proj.win32/Release.*
 cocos2d/external/recast/proj.win32/Release.*
+cocos2d/build/Release.win32
 proj.win32/*.sdf
 proj.win32/*.opensdf
 proj.win32/Debug.*

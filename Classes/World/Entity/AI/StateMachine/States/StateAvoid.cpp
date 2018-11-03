@@ -5,7 +5,9 @@
 #include "World/Physics/PhysicsManager.h"
 #include "World/World.h"
 #include "Events/OnCollisionBeginEventData.h"
+#include "World/Entity/Components/AnimComponent.h"
 #include "Utils/Utils.h"
+#include "Utils/XML/XMLConsts.h"
 
 NS_LIGHTSOULS_BEGIN
 
@@ -29,6 +31,7 @@ EAIState StateAvoid::GetStateType() const
 
 void StateAvoid::OnEnter(AnimComponent* animComponent)
 {	
+	m_animComponent = animComponent;	
 	m_curProgress = EStateProgress::IN_PROGRESS;	
 	AIAgent& agent = GetAgent();
 	m_attackComponent = agent.GetAttackComponent();
@@ -55,25 +58,19 @@ EStateProgress StateAvoid::OnStep()
 		{
 			m_curProgress = EStateProgress::DONE;			
 		}
-		else if (distanceSqrToTarget > m_attackComponent->GetAttackRangeSqr())
-		{
-			agent.SetMoveDirection(toTargetNormalized);
-		}
 		else if (distanceSqrToTarget < m_startAvoidDistance * m_startAvoidDistance)
 		{
-			agent.SetMoveDirection(toTargetNormalized * -1);
+			agent.SetMoveDirection(toTargetNormalized * -1);			
 			m_isAvoiding = true;
 		}
 	}
 	else if(distanceSqrToTarget >= m_stopAvoidDistance * m_stopAvoidDistance)
 	{
 		m_isAvoiding = false;
-		agent.SetMoveDirection(Vector2::ZERO);
+		agent.SetMoveDirection(Vector2::ZERO);		
 	}
-	else if (m_isAvoiding && agent.GetHeading().lengthSquared() < 0.1f)
-	{
-		agent.SetMoveDirection(toTargetNormalized * -1);
-	}
+
+	ProcessAnimations();
 
 	return m_curProgress;
 }
@@ -86,6 +83,28 @@ void StateAvoid::OnExit()
 void StateAvoid::OnRandomTimeExpired()
 {
 	m_isRandomTimeExpired = true;
+}
+
+void StateAvoid::ProcessAnimations()
+{
+	AIAgent& agent = GetAgent();
+	if (!agent.IsProcessing())
+	{
+		if (agent.GetHeading().lengthSquared() > 0)
+		{
+			if (!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_RUN))
+			{
+				m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+			}
+		}
+		else
+		{
+			if (!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_IDLE))
+			{
+				m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+			}
+		}
+	}
 }
 
 void StateAvoid::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
@@ -101,6 +120,13 @@ void StateAvoid::OnEventReceived(const String& receivedEvent, const AEventData& 
 			agent.SetMoveDirection(awayFromCollision.getNormalized());
 		}
 	}
+}
+
+void StateAvoid::LoadXMLData(const XMLElement* xmlElement)
+{
+	AState::LoadXMLData(xmlElement);
+	m_stopAvoidDistance = xmlElement->FloatAttribute(XML_STOP_AVOID_DISTANCE_ATTR);
+	m_startAvoidDistance = xmlElement->FloatAttribute(XML_START_AVOID_DISTANCE_ATTR);
 }
 
 NS_LIGHTSOULS_END

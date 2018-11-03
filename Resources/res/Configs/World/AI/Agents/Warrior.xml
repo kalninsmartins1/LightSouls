@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Entity type="Bomb"
+<Entity type="Warrior"
 			moveSpeed="330"
 			baseHealth="60"
 			baseStamina="100"
@@ -12,7 +12,7 @@
 	<Component type="TransformComponent">
 		<Position x="200" y="1" z="0" />
 		<Rotation x="0" y="0" z="0" />
-		<Scale x="0.2" y="0.2" z="0.2"/>
+		<Scale x="0.5" y="0.5" z="0.5"/>
 	</Component>
 	
 	<Component  type="AIControllerComponent"				
@@ -22,13 +22,17 @@
 				onSuccess="Signaling"/>
 
 		<State  type="LineAttack"
-				moveSpeed="400"
 				onSuccess="Avoid"
-				onFailure="Avoid"/>
+				onFailure="Avoid"
+				moveSpeed="400"
+				arriveDistance="40"
+				damageDistance="40"/>
 				
 		<State  type="Avoid"
 				onSuccess="Signaling"
 				onFailure="Pause"
+				startAvoidDistance="200"
+				stopAvoidDistance="260"
 				/>
 				
 		<State 	type="Signaling"
@@ -45,23 +49,35 @@
 	
 	<Component type="AnimComponent">
 		<SpriteSheet
-			path="res/Graphics/World/AI/Bomb/bombAnims.png" 
-			plistPath="res/Graphics/World/AI/Bomb/bombAnims.plist">
+			path="res/Graphics/World/AI/Warrior/warriorAnimations.png" 
+			plistPath="res/Graphics/World/AI/Warrior/warriorAnimations.plist">
 			
 			<Anim 	type="Idle"
-					frameNamePattern="bomb_idle%d.png"
+					frameNamePattern="warrior_idle%d.png"
+					frameCount="4"
+					timeBetweenFrames="0.2"
+			/>
+			
+			<Anim 	type="Attack"
+					frameNamePattern="warrior_attack%d.png"
 					frameCount="1"
+					timeBetweenFrames="1"
+			/>
+			
+			<Anim 	type="Run"
+					frameNamePattern="warrior_run%d.png"
+					frameCount="6"
 					timeBetweenFrames="0.1"
 			/>
 			
 			<Anim	type="Signal"
-					frameNamePattern="bomb_signal%d.png"
-					frameCount="2"
+					frameNamePattern="warrior_signal%d.png"
+					frameCount="6"
 					timeBetweenFrames="0.1"
 			/>
 			
 			<Anim	type="Hurt"
-					frameNamePattern="bomb_hurt%d.png"
+					frameNamePattern="warrior_hurt%d.png"
 					frameCount="1"
 					timeBetweenFrames="1"
 			/>
@@ -71,7 +87,7 @@
 	<Component 	type="HitAttackComponent"
 				secondsBetweenAttacks="3" 
 				comboExpireTime="0.6"
-				attackRange="267">
+				attackRange="280">
 	</Component>
 	
 	<Component type="RigidBodyComponent">
@@ -79,8 +95,8 @@
 		<AnchorPosition x="0" y="0" />
 		<PhysicsBody
 			shape="box"
-			width="250"
-			height="100"
+			width="110"
+			height="60"
 			isDynamic="true" 
 			isGravityEnabled="false"
 			isRotationEnabled="false"
