@@ -265,6 +265,8 @@
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateIsPlayerClose.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Animation\LSAnimation.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\CustomActions\LSAnimate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -441,6 +443,8 @@
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateAvoid.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\World\Entity\Animation\LSAnimation.h" />
+    <ClInclude Include="..\Classes\World\Entity\CustomActions\LSAnimate.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

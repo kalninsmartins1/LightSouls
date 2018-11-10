@@ -46,20 +46,10 @@ EStateProgress StateAttack::OnStep()
 			Vector2 toTarget = targetEntityPosition - agent.getPosition();
 			m_attackComponent->Attack(toTarget.getNormalized());
 			agent.StartAttacking();
-			
-			// Check for combo
-			if (!m_attackComponent->IsComboExpired())
-			{
-				m_animComponent->GoToNextAttackAnimation();
-			}
-			else
-			{
-				m_animComponent->ResetAttackAnimation();
-			}
 
 			// Start attack animation
 			m_isAnimFinished = false;
-			m_animComponent->PlayAttackAnimation(CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
+			m_animComponent->PlayOneShotAnimation(GameConsts::ANIM_TYPE_ATTACK, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
 		}
 	}
 	return m_curProgress;

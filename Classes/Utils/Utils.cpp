@@ -98,7 +98,7 @@ void Utils::ClearCallbackTimers(cocos2d::Node* node, int timerTag)
 	node->stopActionByTag(timerTag);
 }
 
-void Utils::ParseFloatArray(const String& data, cocos2d::Vector<float> outArray)
+void Utils::ParseFloatArray(const String& data, std::vector<float>& outArray)
 {
 	int index = 0;
 	String midResult = "";
@@ -106,7 +106,7 @@ void Utils::ParseFloatArray(const String& data, cocos2d::Vector<float> outArray)
 	{
 		if (data[index] == ';')
 		{
-			outArray.pushBack(atof(midResult.c_str()));
+			outArray.push_back(atof(midResult.c_str()));
 			midResult = "";
 		}
 		else

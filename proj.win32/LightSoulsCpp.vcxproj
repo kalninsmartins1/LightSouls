@@ -186,6 +186,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Animation\LSAnimation.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\LongSwordAttackComponent.cpp" />
@@ -195,6 +196,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\CustomActions\ActionSequence.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\AI\AIAvoidTargetAction.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\CameraFallow.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\CustomActions\LSAnimate.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Entity.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Player\Player.cpp" />
     <ClCompile Include="..\Classes\World\Physics\PhysicsBodyConfig.cpp" />
@@ -246,6 +248,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.h" />
+    <ClInclude Include="..\Classes\World\Entity\Animation\LSAnimation.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\LongSwordAttackComponent.h" />
@@ -255,6 +258,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\CustomActions\ActionSequence.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\AI\AIAvoidTargetAction.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\CameraFallow.h" />
+    <ClInclude Include="..\Classes\World\Entity\CustomActions\LSAnimate.h" />
     <ClInclude Include="..\Classes\World\Entity\Entity.h" />
     <ClInclude Include="..\Classes\World\Entity\Player\Player.h" />
     <ClInclude Include="..\Classes\World\Physics\PhysicsBodyConfig.h" />

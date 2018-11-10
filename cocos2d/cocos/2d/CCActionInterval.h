@@ -1557,7 +1557,7 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~Animate();
 
     /** initializes the action with an Animation and will restore the original frame when the animation is over */
-    bool initWithAnimation(Animation *animation);
+    virtual bool initWithAnimation(Animation *animation);
 
 protected:
     std::vector<float>* _splitTimes;

@@ -3,6 +3,8 @@
 #include "tinyxml2/tinyxml2.h"
 #include "Utils.h"
 #include "XML/XMLConsts.h"
+#include "World/Entity/Animation/LSAnimation.h"
+#include "World/Entity/CustomActions/LSAnimate.h"
 
 
 const std::map<String, int> AnimationUtils::s_animTypeToId =
@@ -67,9 +69,8 @@ cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::
 	sprite->stopActionByTag(GameConsts::ACTION_ANIM);
 
 	// Start character animation
-	const auto animation = cocos2d::Animation::createWithSpriteFrames(animationData.frames,
-		animationData.timeBetweenFrames);
-	const auto animate = cocos2d::Animate::create(animation);
+	const auto animation = LSAnimation::Create(animationData.frames, animationData.timeBetweenFrames);
+	const auto animate = LSAnimate::Create(animation);
 	const auto callbackAction = cocos2d::CallFunc::create(onFinished);
 
 	/* According to cocos2d documentation last parameter to Sequnce::create must be nullptr
@@ -82,18 +83,16 @@ cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::
 	return sprite->runAction(sequence);
 }
 
-void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const AnimationData& animation)
+void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const AnimationData& animationData)
 {
-	using namespace cocos2d;
-
 	// Stop any previously started animation
 	sprite->stopActionByTag(GameConsts::ACTION_ANIM);
 
 	// Start character animation
-	const auto ccAnimation = cocos2d::Animation::createWithSpriteFrames(animation.frames,
-		animation.timeBetweenFrames);
-	const auto animateAction = Animate::create(ccAnimation);
-	const auto repeatAction = RepeatForever::create(animateAction);
+	const auto animation = LSAnimation::Create(animationData.frames,
+		animationData.timeBetweenFrames);
+	const auto animateAction = LSAnimate::Create(animation);
+	const auto repeatAction = cocos2d::RepeatForever::create(animateAction);
 	repeatAction->setTag(GameConsts::ACTION_ANIM);
 
 	// Start new anim

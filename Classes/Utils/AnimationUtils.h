@@ -7,12 +7,10 @@ namespace tinyxml2
 	class XMLElement;
 };
 
-
-
 struct AnimationData
 {
 	cocos2d::Vector<cocos2d::SpriteFrame*>	frames;	
-	cocos2d::Vector<float>					timeBetweenFrames;
+	std::vector<float>						timeBetweenFrames;
 };
 
 class AnimationUtils

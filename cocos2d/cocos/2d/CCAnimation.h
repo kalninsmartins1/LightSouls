@@ -237,7 +237,7 @@ public:
      *
      * @return Result of totalDelayUnits * delayPerUnit.
      */
-    float getDuration() const;
+    virtual float getDuration() const;
     
     /** Gets the array of AnimationFrames.
      * 
