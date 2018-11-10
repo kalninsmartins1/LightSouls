@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class AnimComponent;
 
@@ -110,4 +110,3 @@ private:
 	float m_knockBackStrenght;
 };
 
-NS_LIGHTSOULS_END

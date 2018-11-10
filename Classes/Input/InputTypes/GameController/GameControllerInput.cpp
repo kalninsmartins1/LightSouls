@@ -1,7 +1,7 @@
 #include "GameControllerInput.h"
 #include "Utils/Utils.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 bool GameControllerInput::s_isConnected = false;
 
@@ -143,4 +143,3 @@ void GameControllerInput::SetAxisInputState(float value, int buttonCode)
 	}
 }
 
-NS_LIGHTSOULS_END

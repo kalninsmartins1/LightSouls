@@ -7,7 +7,7 @@ namespace tinyxml2
 	class XMLElement;
 };
 
-NS_LIGHTSOULS_BEGIN
+
 
 class CameraShakeTrigger;
 
@@ -37,4 +37,3 @@ private:
 	cocos2d::EventListener*					m_onStartCameraShakeEventListener;
 };
 
-NS_LIGHTSOULS_END

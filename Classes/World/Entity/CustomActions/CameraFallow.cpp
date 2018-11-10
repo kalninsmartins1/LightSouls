@@ -1,8 +1,6 @@
 #include "CameraFallow.h"
 #include "Utils/Utils.h"
 
-NS_LIGHTSOULS_BEGIN
-
 CameraFollow* CameraFollow::Create(cocos2d::Node* followedNode)
 {
 	CameraFollow *follow = new (std::nothrow) CameraFollow(followedNode);
@@ -46,29 +44,7 @@ void CameraFollow::step(float dt)
 	Vector2 cameraPos = _target->getPosition();
 	Vector2 followedNodePos = m_followNode->getPosition();
 	Vector2 toFollowedNode = (followedNodePos - cameraPos);
-//	float distance = toFollowedNode.length();
 	_target->setPosition(cameraPos + toFollowedNode * 0.1f * 50 * dt);
-
-// 	toFollowedNode.normalize();
-// 
-// 	switch (m_cameraState)
-// 	{
-// 	case CameraMoveSate::EASING_IN:
-// 		ProcessStateEasingIn(dt, cameraPos, toFollowedNode, distance);
-// 		break;
-// 
-// 	case CameraMoveSate::FULL_SPEED:
-// 		ProcessStateFullSpeed(dt, cameraPos, toFollowedNode, distance);
-// 		break;
-// 
-// 	case CameraMoveSate::EASING_OUT:
-// 		ProcessStateEasingOut(dt, cameraPos, toFollowedNode, distance);
-// 		break;	
-// 
-// 	case CameraMoveSate::TARGET_REACHED:
-// 		ProcessStateTargetReached(dt, distance);
-// 		break;		
-// 	}
 }
 
 void CameraFollow::ProcessStateEasingIn(float dt, const Vector2& cameraPos, const Vector2& toFollowNodeNormalized, float distance)
@@ -89,7 +65,7 @@ void CameraFollow::ProcessStateEasingIn(float dt, const Vector2& cameraPos, cons
 	}	
 }
 
-void LightSouls::CameraFollow::ProcessStateFullSpeed(float dt, const Vector2& cameraPos, const Vector2& toFollowNodeNormalized, float distance)
+void CameraFollow::ProcessStateFullSpeed(float dt, const Vector2& cameraPos, const Vector2& toFollowNodeNormalized, float distance)
 {	
 	if (distance < m_curSpeed)
 	{
@@ -136,4 +112,3 @@ void CameraFollow::Reset()
 	CCLOG("Reset!");
 }
 
-NS_LIGHTSOULS_END

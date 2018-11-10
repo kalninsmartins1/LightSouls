@@ -3,7 +3,7 @@
 #include "LightSoulsTypes.h"
 #include "World/Physics/PhysicsBodyConfig.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class ProjectileConfig
 {
@@ -28,4 +28,3 @@ private:
 	PhysicsBodyConfig	m_physicsBodyConfig;
 };
 
-NS_LIGHTSOULS_END

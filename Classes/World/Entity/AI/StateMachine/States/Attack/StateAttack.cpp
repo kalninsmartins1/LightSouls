@@ -7,7 +7,7 @@
 #include "Utils/AnimationUtils.h"
 #include "Utils/Utils.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 StateAttack::StateAttack(AIAgent& agent)
 	: AState(agent)	
@@ -96,8 +96,7 @@ void StateAttack::PlayIdleAnimation()
 {
 	if (!GetAgent().IsProcessing())
 	{
-		m_animComponent->PlayLoopingAnimation(AnimationUtils::GetAnimId(ANIM_TYPE_IDLE));
+		m_animComponent->PlayLoopingAnimation(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_IDLE));
 	}
 }
 
-NS_LIGHTSOULS_END

@@ -4,7 +4,7 @@
 #include "World/Entity/Entity.h"
 #include "World/Entity/Components/Attack/LongSwordAttackComponent.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class AnimComponent;
 class GameInput;
@@ -71,4 +71,4 @@ private:
 	bool					m_isCollidedFromBottom;	
 };
 
-NS_LIGHTSOULS_END
+

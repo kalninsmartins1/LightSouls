@@ -1,8 +1,9 @@
 #include "AState.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class Entity;
+class AIAvoidTargetAction;
 
 class StatePause : public AState
 {
@@ -23,11 +24,12 @@ private:
 	void OnPauseExpired();
 
 private:
-	const Entity*	m_targetEntity;	
-	EStateProgress	m_curProgress;
+	const Entity*		 m_targetEntity;
+	AIAvoidTargetAction* m_avoidAction;
+	EStateProgress		 m_curProgress;
+
 	float			m_pauseTime;
 	float			m_maxDistaneceToTarget;
 	bool			m_shouldCheckDistanceToTarget;
 };
 
-NS_LIGHTSOULS_END

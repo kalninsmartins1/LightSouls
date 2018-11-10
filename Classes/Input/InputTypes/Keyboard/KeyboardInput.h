@@ -3,7 +3,7 @@
 #include <map>
 #include "Input/InputTypes/AInputDevice.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 using KeyCode = cocos2d::EventKeyboard::KeyCode;
 
@@ -74,4 +74,4 @@ private:
 	std::map<KeyCode, String> m_keyCodeToAxisAction;	
 };
 
-NS_LIGHTSOULS_END
+

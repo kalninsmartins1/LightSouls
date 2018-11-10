@@ -2,13 +2,10 @@
 
 #include "cocos2d.h"
 
-namespace LightSouls
-{
-	class Player;
-	class ProgressBar;
-	class PhysicsManager;
-	class GameInput;
-};
+class Player;
+class ProgressBar;
+class PhysicsManager;
+class GameInput;
 
 namespace cocos2d
 {
@@ -25,8 +22,8 @@ public:
 	~GameScene();
 
 public:
-	static LightSouls::PhysicsManager* GetPhysicsManager();
-	static LightSouls::GameInput*	   GetGameInput();
+	static PhysicsManager* GetPhysicsManager();
+	static GameInput*	   GetGameInput();
 
 	static cocos2d::Scene* CreateScene();
 	
@@ -47,11 +44,11 @@ private:
 	void OnAgentDestroyed(cocos2d::EventCustom* eventData);
 
 private:
-	static LightSouls::PhysicsManager*			s_physicsManager;
-	static LightSouls::GameInput*				s_gameInput;
-	LightSouls::Player*							m_player;
-	LightSouls::ProgressBar*					m_healthBar;
-	LightSouls::ProgressBar*					m_staminaBar;
+	static PhysicsManager*			s_physicsManager;
+	static GameInput*				s_gameInput;
+	Player*							m_player;
+	ProgressBar*					m_healthBar;
+	ProgressBar*					m_staminaBar;
 	cocos2d::ui::Text*							m_scoreText;
 	bool										m_physicsDebugEnabled;
 };

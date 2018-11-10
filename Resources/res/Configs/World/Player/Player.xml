@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <Entity type="Player"
 			moveSpeed="360"
-			baseHealth="100"
+			baseHealth="10000"
 			baseStamina="80"
 			baseDamage="20"
 			staminaRegenerateSpeed="30"
@@ -36,18 +36,16 @@
 			plistPath="res/Graphics/World/Player/Run/runAnim.plist">
 			
 			<Anim 	type="Run" 
-					frameNamePattern="run%d.png"
-					frameCount="10"
-					timeBetweenFrames="0.1"/>
+					frameNamePattern="run%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.1;0.1;0.1;0.1;0.1;"/>
 		</SpriteSheet>
 		<SpriteSheet
 			path="res/Graphics/World/Player/Idle/idleAnim.png" 
 			plistPath="res/Graphics/World/Player/Idle/idleAnim.plist">
 			
 			<Anim 	type="Idle"			
-					frameNamePattern="idle%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.1"
+					frameNamePattern="idle%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;"
 			/>
 		</SpriteSheet>
 		<SpriteSheet
@@ -55,9 +53,8 @@
 			plistPath="res/Graphics/World/Player/Hurt/hurtAnim.plist"
 			>
 			<Anim 	type="Hurt"			
-					frameNamePattern="hurt%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.1"
+					frameNamePattern="hurt%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;"
 			/>
 		</SpriteSheet>
 		<SpriteSheet
@@ -67,7 +64,7 @@
 			<Anim 	type="Dodge"			
 					frameNamePattern="run%d.png"
 					frameCount="3"
-					timeBetweenFrames="0.1"
+					timeBetweenFrames="0.1;0.1;0.1;"
 			/>
 		</SpriteSheet>
 		<SpriteSheet
@@ -75,79 +72,64 @@
 			plistPath="res/Graphics/World/Player/Attack/attack.plist"
 			>
 			<Anim 	type="AttackForward1"					
-					frameNamePattern="AttackForward1%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackForward1%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>		
 			<Anim 	type="AttackForward2"			
-					frameNamePattern="AttackForward2%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackForward2%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackForward3"			
-					frameNamePattern="AttackForward3%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackForward3%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackForward4"			
-					frameNamePattern="AttackForward4%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackForward4%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackForward5"			
-					frameNamePattern="AttackForward5%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackForward5%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackUpward1"					
-					frameNamePattern="AttackUpward1%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackUpward1%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackUpward2"			
-					frameNamePattern="AttackUpward2%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackUpward2%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackUpward3"			
-					frameNamePattern="AttackUpward3%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackUpward3%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackUpward4"			
-					frameNamePattern="AttackUpward4%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackUpward4%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackUpward5"			
-					frameNamePattern="AttackUpward5%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackUpward5%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackDownward1"					
-					frameNamePattern="AttackDownward1%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackDownward1%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackDownward2"			
-					frameNamePattern="AttackDownward2%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackDownward2%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackDownward3"			
-					frameNamePattern="AttackDownward3%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackDownward3%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackDownward4"			
-					frameNamePattern="AttackDownward4%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackDownward4%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 			<Anim 	type="AttackDownward5"			
-					frameNamePattern="AttackDownward5%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.07"
+					frameNamePattern="AttackDownward5%d.png"					
+					timeBetweenFrames="0.07;0.07;0.07;"
 			/>
 		</SpriteSheet>					
 	</Component>

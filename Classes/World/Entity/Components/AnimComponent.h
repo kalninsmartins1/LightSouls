@@ -8,7 +8,7 @@ namespace tinyxml2
 	class XMLNode;
 };
 
-NS_LIGHTSOULS_BEGIN
+
 
 class Entity;
 enum class AnimationKind;
@@ -69,4 +69,4 @@ private:
 	std::map<int, AnimationData>	m_animations;
 };
 
-NS_LIGHTSOULS_END
+

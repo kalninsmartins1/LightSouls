@@ -2,7 +2,7 @@
 #include "Utils/Utils.h"
 
 
-NS_LIGHTSOULS_BEGIN
+
 
 KeyboardInput::KeyboardInput()
 {
@@ -157,4 +157,4 @@ void KeyboardInput::IncreaseAxisCurValue(KeyboardAxis & keyboardAxis, float valu
 	}
 }
 
-NS_LIGHTSOULS_END
+

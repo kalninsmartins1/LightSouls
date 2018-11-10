@@ -4,7 +4,7 @@
 #include "Utils/Utils.h"
 
 
-NS_LIGHTSOULS_BEGIN
+
 
 SpawnPoint::SpawnPoint(const SpawnPointConfig& config)
 	: m_respawnIndexQueue()
@@ -135,4 +135,3 @@ void SpawnPoint::SetAgentEnabled(int agentIndex, bool isEnabled)
 	m_spawnedAgents[agentIndex]->getPhysicsBody()->setEnabled(isEnabled);
 }
 
-NS_LIGHTSOULS_END

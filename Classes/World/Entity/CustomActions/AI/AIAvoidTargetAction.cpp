@@ -6,8 +6,8 @@
 #include "World/Physics/PhysicsManager.h"
 #include "Utils/Utils.h"
 #include "World/Entity/AI/StateMachine/States/AState.h"
+#include "World/Entity/Components/AnimComponent.h"
 
-NS_LIGHTSOULS_BEGIN
 
 AIAvoidTargetAction::AIAvoidTargetAction(AIAgent& agent)
 	: m_agent(agent)
@@ -22,7 +22,7 @@ AIAvoidTargetAction::AIAvoidTargetAction(AIAgent& agent)
 	// Start avoid timer
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(AIAvoidTargetAction::OnAvoidTimerFinished, this),
-		m_activeTime, ACTION_AI_AVOID);
+		m_activeTime, GameConsts::ACTION_AI_AVOID);
 }
 
 AIAvoidTargetAction::~AIAvoidTargetAction()
@@ -51,7 +51,7 @@ void AIAvoidTargetAction::OnCollisionCheck()
 	// Keep checking for collision
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(AIAvoidTargetAction::OnCollisionCheck, this),
-		m_collisionCheckInterval, ACTION_COLLISION_CHECK);
+		m_collisionCheckInterval, GameConsts::ACTION_COLLISION_CHECK);
 
 	Entity* target = AIAgentManager::GetInstance()->GetTargetEntity();
 	const Vector2& curPosition = m_agent.getPosition();
@@ -76,23 +76,28 @@ void AIAvoidTargetAction::OnAvoidCooldownExpired()
 
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(AIAvoidTargetAction::OnAvoidTimerFinished, this),
-		m_activeTime, ACTION_AI_AVOID);	
+		m_activeTime, GameConsts::ACTION_AI_AVOID);
 }
 
-void LightSouls::AIAvoidTargetAction::OnAvoidTimerFinished()
+void AIAvoidTargetAction::OnAvoidTimerFinished()
 {
 	m_isAvoidTime = false;
 	m_isAvoidCooldownActive = true;
 
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(AIAvoidTargetAction::OnAvoidCooldownExpired, this),
-		m_cooldownTime, ACTION_AI_AVOID);
+		m_cooldownTime, GameConsts::ACTION_AI_AVOID);
 }
 
 void AIAvoidTargetAction::StopAvoiding()
 {
 	m_isAvoiding = false;
 	m_agent.SetMoveDirection(Vector2::ZERO);
+	AnimComponent* animComponent = m_agent.GetAnimComponent();
+	if (!m_agent.IsProcessing() && !animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_SIGNAL))
+	{
+		animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
+	}
 }
 
 void AIAvoidTargetAction::StartAvoiding(const Entity* targetEntity)
@@ -100,7 +105,7 @@ void AIAvoidTargetAction::StartAvoiding(const Entity* targetEntity)
 	m_isAvoiding = true;
 	Utils::StartTimerWithCallback(&m_agent,
 		CC_CALLBACK_0(AIAvoidTargetAction::OnCollisionCheck, this),
-		m_collisionCheckInterval, ACTION_COLLISION_CHECK);
+		m_collisionCheckInterval, GameConsts::ACTION_COLLISION_CHECK);
 
 	const Vector2& curPosition = m_agent.getPosition();
 	PhysicsManager::Raycast(CC_CALLBACK_3(AIAvoidTargetAction::OnRayCastCallback, this),
@@ -110,6 +115,12 @@ void AIAvoidTargetAction::StartAvoiding(const Entity* targetEntity)
 	Vector2 awayFromTarget = m_agent.getPosition() - targetEntity->getPosition();
 	awayFromTarget.normalize();
 	m_agent.SetMoveDirection(awayFromTarget);
+
+	AnimComponent* animComponent = m_agent.GetAnimComponent();
+	if (!m_agent.IsProcessing() && !animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_SIGNAL))
+	{
+		m_agent.GetAnimComponent()->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
+	}
 }
 
 AIAvoidTargetAction* AIAvoidTargetAction::Create(AIAgent& agent)
@@ -127,14 +138,19 @@ AIAvoidTargetAction* AIAvoidTargetAction::Create(AIAgent& agent)
 	return avoidAction;
 }
 
+bool AIAvoidTargetAction::IsAvoiding() const
+{
+	return m_isAvoiding;
+}
+
 void AIAvoidTargetAction::LoadXMLData(const XMLElement* xmlElement)
 {
-	m_startAvoidingDistance = xmlElement->FloatAttribute(XML_START_AVOID_DISTANCE_ATTR);
-	m_stopAvoidingDistance = xmlElement->FloatAttribute(XML_STOP_AVOID_DISTANCE_ATTR);
-	m_collisionCheckInterval = xmlElement->FloatAttribute(XML_COLLISION_CHECK_TIME_INTERVAL_ATTR);
+	m_startAvoidingDistance = xmlElement->FloatAttribute(XMLConsts::START_AVOID_DISTANCE_ATTR);
+	m_stopAvoidingDistance = xmlElement->FloatAttribute(XMLConsts::STOP_AVOID_DISTANCE_ATTR);
+	m_collisionCheckInterval = xmlElement->FloatAttribute(XMLConsts::COLLISION_CHECK_TIME_INTERVAL_ATTR);
 
 	String skipAvoidStates;
-	XMLLoader::ReadXMLAttribute(xmlElement, XML_AI_SKIP_AVOID_STATES, skipAvoidStates);
+	XMLLoader::ReadXMLAttribute(xmlElement, XMLConsts::AI_SKIP_AVOID_STATES, skipAvoidStates);
 	m_skipAvoidState = AState::GetStateFromString(skipAvoidStates);
 }
 
@@ -168,4 +184,3 @@ bool AIAvoidTargetAction::isDone() const
 	return false;
 }
 
-NS_LIGHTSOULS_END

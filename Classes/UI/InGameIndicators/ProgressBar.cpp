@@ -2,7 +2,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "UI/UIElementConfig.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 void ProgressBar::SetCurrentValue(float value)
 {
@@ -125,4 +125,3 @@ void ProgressBar::Update(float deltaTime)
 	}
 }
 
-NS_LIGHTSOULS_END

@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 struct PhysicsContactInformation;
 class PhysicsBodyConfig;
@@ -71,4 +71,3 @@ private:
 	cocos2d::DrawNode* m_debugDrawNode;
 };
 
-NS_LIGHTSOULS_END

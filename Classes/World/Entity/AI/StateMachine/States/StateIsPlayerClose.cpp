@@ -8,7 +8,7 @@
 #include "Utils/XML/XMLConsts.h"
 #include "World/Entity/AI/AIAgentManager.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 StateIsPlayerClose::StateIsPlayerClose(AIAgent& aiAgent)
 	: AState(aiAgent)
@@ -34,14 +34,14 @@ void StateIsPlayerClose::OnExit()
 {
 	if (!GetAgent().IsProcessing() && m_animComponent != nullptr)
 	{
-		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+		m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 	}
 }
 
 void StateIsPlayerClose::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_closeDistance = xmlElement->FloatAttribute(XML_DISTANCE);
+	m_closeDistance = xmlElement->FloatAttribute(XMLConsts::DISTANCE);
 }
 
 EAIState StateIsPlayerClose::GetStateType() const
@@ -49,4 +49,3 @@ EAIState StateIsPlayerClose::GetStateType() const
 	return EAIState::IS_PLAYER_CLOSE;
 }
 
-NS_LIGHTSOULS_END

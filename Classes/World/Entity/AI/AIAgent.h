@@ -3,9 +3,8 @@
 #include "World/Entity/Entity.h"
 #include "World/Entity/AI/StateMachine/StateMachine.h"
 
-NS_LIGHTSOULS_BEGIN
-
 class GenericAttackComponent;
+class AIAvoidTargetAction;
 
 class AIAgent : public Entity
 {
@@ -23,6 +22,7 @@ public:
 	GenericAttackComponent*	 GetAttackComponent() const;
 	virtual EntityType		 GetEntityType() const override;
 	EAIState				 GetCurrentAIState() const;
+	bool					 IsBackgroundTaskReady() const;
 
 	void SetBasePosition(const Vector2& position);	
 	void SetAgentType(const String& type);
@@ -52,6 +52,7 @@ private:
 	GenericAttackComponent*	m_attackComponent;
 	Vector2					m_basePosition;	
 	String					m_agentType;
+	AIAvoidTargetAction*	m_avoidAction;
 };
 
-NS_LIGHTSOULS_END
+

@@ -3,7 +3,7 @@
 #include "GenericAttackComponent.h"
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class Entity;
 
@@ -25,4 +25,3 @@ private:
 	const float		m_paddingFromBody;
 };
 
-NS_LIGHTSOULS_END

@@ -1,6 +1,6 @@
 #include "CameraShakeTrigger.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 CameraShakeTrigger::CameraShakeTrigger(const String& triggerEvent, float moveSpeed, float time, float shakeRadius)
 	: m_triggerEvent(triggerEvent)
@@ -40,5 +40,5 @@ float CameraShakeTrigger::GetTime() const
 	return m_time;
 }
 
-NS_LIGHTSOULS_END
+
 

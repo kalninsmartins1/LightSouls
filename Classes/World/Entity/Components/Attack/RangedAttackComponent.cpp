@@ -4,7 +4,7 @@
 #include "World/Entity/Entity.h"
 #include "World/Projectiles/Projectile.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 RangedAttackComponent* RangedAttackComponent::Create(const ProjectileConfig& config, float range, float secondsBetweenAttacks)
 {
@@ -45,4 +45,3 @@ void RangedAttackComponent::Attack(const Vector2& direction)
 	parent->addChild(projectile);	
 }
 
-NS_LIGHTSOULS_END

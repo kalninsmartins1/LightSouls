@@ -1,7 +1,7 @@
 #include "HitAttackComponent.h"
 #include "World/Entity/Entity.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 
 HitAttackComponent::HitAttackComponent(float secondsBetweenAttacks, float attackRange)
@@ -46,4 +46,3 @@ void HitAttackComponent::RegisterSuccessfulAttack()
 	GenericAttackComponent::Attack(Vector2::ZERO);
 }
 
-NS_LIGHTSOULS_END

@@ -4,7 +4,7 @@
 #include "World/Entity/Entity.h"
 #include "Utils/Utils.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 Projectile::Projectile(const Entity& shooter, const ProjectileConfig& config, const Vector2& shootDirection, float attackRange)
 	: m_shooterEntity(shooter)
@@ -79,4 +79,4 @@ void Projectile::RotateProjectileInDirectionOfMovement()
 	setRotation(angleBetweenVectors);	
 }
 
-NS_LIGHTSOULS_END
+

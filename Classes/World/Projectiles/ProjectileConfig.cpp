@@ -1,7 +1,7 @@
 #include "ProjectileConfig.h"
 #include "Utils/XML/XMLLoader.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 ProjectileConfig::ProjectileConfig()
 	: m_moveSpeed(0.0f)
@@ -46,4 +46,4 @@ bool ProjectileConfig::Init(const String& pathToXML)
 	return XMLLoader::InitializeProjectileConfig(*this, pathToXML);
 }
 
-NS_LIGHTSOULS_END
+

@@ -9,14 +9,13 @@
 #include "Utils/Utils.h"
 #include "Utils/XML/XMLConsts.h"
 
-NS_LIGHTSOULS_BEGIN
-
 StateAvoid::StateAvoid(AIAgent& agent)
 	: AState(agent)
 	, m_curProgress(EStateProgress::NONE)
 	, m_attackComponent(nullptr)
 	, m_startAvoidDistance(200.0f)
 	, m_stopAvoidDistance(450.0f)
+	, m_failDistance(560.0f)
 	, m_isAvoiding(false)
 	, m_randomTime(0.0f)
 	, m_isRandomTimeExpired(false)
@@ -70,6 +69,11 @@ EStateProgress StateAvoid::OnStep()
 		agent.SetMoveDirection(Vector2::ZERO);		
 	}
 
+	if (distanceSqrToTarget > m_failDistance * m_failDistance)
+	{
+		m_curProgress = EStateProgress::FAILED;
+	}
+
 	ProcessAnimations();
 
 	return m_curProgress;
@@ -92,16 +96,16 @@ void StateAvoid::ProcessAnimations()
 	{
 		if (agent.GetHeading().lengthSquared() > 0)
 		{
-			if (!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_RUN))
+			if (!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
 			{
-				m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+				m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
 			}
 		}
 		else
 		{
-			if (!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_IDLE))
+			if (!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_IDLE))
 			{
-				m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+				m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 			}
 		}
 	}
@@ -125,8 +129,8 @@ void StateAvoid::OnEventReceived(const String& receivedEvent, const AEventData& 
 void StateAvoid::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_stopAvoidDistance = xmlElement->FloatAttribute(XML_STOP_AVOID_DISTANCE_ATTR);
-	m_startAvoidDistance = xmlElement->FloatAttribute(XML_START_AVOID_DISTANCE_ATTR);
+	m_stopAvoidDistance = xmlElement->FloatAttribute(XMLConsts::STOP_AVOID_DISTANCE_ATTR);
+	m_startAvoidDistance = xmlElement->FloatAttribute(XMLConsts::START_AVOID_DISTANCE_ATTR);
+	m_failDistance = xmlElement->FloatAttribute(XMLConsts::AI_FAIL_DISTANCE);
 }
 
-NS_LIGHTSOULS_END

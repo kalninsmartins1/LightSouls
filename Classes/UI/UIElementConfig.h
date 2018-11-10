@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class UIElementConfig
 {
@@ -27,4 +27,4 @@ private:
 	Vector2 m_scale;
 };
 
-NS_LIGHTSOULS_END
+

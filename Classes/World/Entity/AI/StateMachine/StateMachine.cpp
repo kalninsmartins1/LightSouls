@@ -17,7 +17,7 @@
 #include "Events/OnCollisionBeginEventData.h"
 #include "World/Entity/AI/AIAgentManager.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 StateMachine::StateMachine(AIAgent& agent)
 	: m_agent(agent)
@@ -200,4 +200,3 @@ void StateMachine::OnStateFailed()
 	}
 }
 
-NS_LIGHTSOULS_END

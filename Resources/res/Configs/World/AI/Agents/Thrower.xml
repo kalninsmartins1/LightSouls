@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
-<Entity type="RangeBomb"
-			moveSpeed="440"
+<Entity type="Thrower"
+			moveSpeed="380"
 			baseHealth="40"
 			baseStamina="100"
 			baseDamage="10"
@@ -20,15 +20,10 @@
 		
 		<State  type="Idle"
 				onSuccess="Signaling"/>
-				
-		<State type="Chase"
-				onSuccess="Signaling"
-				chaseRadius="1000"
-				stopDistance="250"/>
 
 		<State  type="Attack"
-				onSuccess="Pause"
-				onFailure="Chase"/>
+				onSuccess="Avoid"
+				onFailure="Avoid"/>
 				
 		<State 	type="Signaling"
 				onSuccess="Attack"
@@ -41,16 +36,20 @@
 				maxDistanceToTarget="560"
 				isCheckingDistanceToTarget="true"
 				time="0"/>
-
-	</Component>
-	
-	<Component type="BackgroundAction">
-		<Action type="AIAvoidTarget"
-				startAvoidDistance="100"
-				stopAvoidDistance="350"
-				collisionCheckTimeInterval="1"
-				skipAvoidStates="Idle"
+				
+		<State type="Chase"
+				onSuccess="Signaling"
+				chaseRadius="1000"
+				stopDistance="250"/>
+				
+		<State  type="Avoid"
+				onSuccess="Signaling"
+				onFailure="Chase"
+				startAvoidDistance="200"
+				stopAvoidDistance="540"
+				failDistance="560"
 				/>
+
 	</Component>
 	
 	<Component type="AnimComponent">
@@ -59,33 +58,28 @@
 			plistPath="res/Graphics/World/AI/Thrower/throwerAnimations.plist">
 			
 			<Anim 	type="Idle"
-					frameNamePattern="thrower_idle%d.png"
-					frameCount="7"
-					timeBetweenFrames="0.1"
+					frameNamePattern="thrower_idle%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.1;0.1;"
 			/>
 			
 			<Anim 	type="Run"
-					frameNamePattern="thrower_run%d.png"
-					frameCount="4"
-					timeBetweenFrames="0.1"
+					frameNamePattern="thrower_run%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;"					
 			/>
 			
 			<Anim 	type="Attack"
 					frameNamePattern="thrower_attack%d.png"
-					frameCount="1"
-					timeBetweenFrames="1"
+					timeBetweenFrames="1.0;"
 			/>
 			
 			<Anim	type="Signal"
-					frameNamePattern="thrower_signal%d.png"
-					frameCount="6"
-					timeBetweenFrames="0.1"
+					frameNamePattern="thrower_signal%d.png"									
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.5;"
 			/>
 			
 			<Anim	type="Hurt"
-					frameNamePattern="thrower_hurt%d.png"
-					frameCount="1"
-					timeBetweenFrames="1"
+					frameNamePattern="thrower_hurt%d.png"					
+					timeBetweenFrames="1.0;"
 			/>
 		</SpriteSheet>
 	</Component>

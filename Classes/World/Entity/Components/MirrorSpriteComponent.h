@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class Entity;
 
@@ -18,4 +18,4 @@ private:
 	Entity* m_ownerEntity;
 };
 
-NS_LIGHTSOULS_END
+

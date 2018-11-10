@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 enum class BodyType
 {
@@ -45,4 +45,3 @@ private:
 	bool						m_isRotationEnabled;
 };
 
-NS_LIGHTSOULS_END

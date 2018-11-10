@@ -8,7 +8,7 @@
 #include "Utils/XML/XMLConsts.h"
 #include "World/Entity/AI/AIAgentManager.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 StateSignaling::StateSignaling(AIAgent& aiAgent)
 	: AState(aiAgent)
@@ -24,13 +24,13 @@ void StateSignaling::OnEnter(AnimComponent* animComponent)
 	if (agent.GetAttackComponent()->IsReadyToAttack())
 	{
 		m_animComponent = animComponent;		
-		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_SIGNAL);
+		m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_SIGNAL);
 		m_curProgress = EStateProgress::IN_PROGRESS;		
 
 		Utils::StartTimerWithCallback(&agent,
 			CC_CALLBACK_0(StateSignaling::OnFinishedSignaling, this),
 			m_signalTime,
-			ACTION_AI_SIGNAL);
+			GameConsts::ACTION_AI_SIGNAL);
 	}
 	else
 	{
@@ -47,14 +47,14 @@ void StateSignaling::OnExit()
 {
 	if (!GetAgent().IsProcessing() && m_animComponent != nullptr)
 	{
-		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+		m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 	}
 }
 
 void StateSignaling::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_signalTime = xmlElement->FloatAttribute(XML_TIME_ATTR);
+	m_signalTime = xmlElement->FloatAttribute(XMLConsts::TIME_ATTR);
 }
 
 void StateSignaling::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
@@ -78,4 +78,3 @@ EAIState StateSignaling::GetStateType() const
 	return EAIState::SIGNALING;
 }
 
-NS_LIGHTSOULS_END

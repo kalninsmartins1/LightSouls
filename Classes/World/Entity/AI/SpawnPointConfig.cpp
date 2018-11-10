@@ -1,6 +1,6 @@
 #include "SpawnPointConfig.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 const String& SpawnPointConfig::GetAgentType() const
 {
@@ -73,4 +73,4 @@ void SpawnPointConfig::SetSpawnCount(int spawnCount)
 	m_spawnCount = spawnCount;
 }
 
-NS_LIGHTSOULS_END
+

@@ -3,7 +3,7 @@
 #include "GameConsts.h"
 #include "World/Entity/Entity.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 const String PhysicsManager::s_onCollisionBeginEvent = "EVENT_ON_COLLISION_BEGIN";
 
@@ -82,7 +82,7 @@ void PhysicsManager::AddPhysicsBody(cocos2d::Node& attachmentNode,
 	physicsBody->setContactTestBitmask(bodyConfig.GetCollisionBitMask());
 	physicsBody->setCategoryBitmask(bodyConfig.GetCollisionCategory());
 
-	physicsBody->setName(RIGID_BODY_COMPONENT);
+	physicsBody->setName(GameConsts::RIGID_BODY_COMPONENT);
 	physicsBody->setRotationEnable(bodyConfig.IsRotationEnabled());
 	attachmentNode.addComponent(physicsBody);
 }
@@ -175,5 +175,5 @@ bool PhysicsManager::OnContactEnd(cocos2d::PhysicsContact& contact)
 	return true;
 }
 
-NS_LIGHTSOULS_END
+
 

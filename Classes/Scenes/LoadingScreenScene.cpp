@@ -10,13 +10,13 @@
 
 USING_NS_CC;
 
-LoadingScreenScene::LoadingScreenScene(LightSouls::ENextScene nextScene)
+LoadingScreenScene::LoadingScreenScene(const ENextScene& nextScene)
 	: m_nextScene(nextScene)
 {
 
 }
 
-Scene* LoadingScreenScene::CreateScene(LightSouls::ENextScene nextScene)
+Scene* LoadingScreenScene::CreateScene(const ENextScene& nextScene)
 {
 	LoadingScreenScene* scene = new (std::nothrow) LoadingScreenScene(nextScene);
 	if (scene != nullptr && scene->init())
@@ -49,7 +49,7 @@ bool LoadingScreenScene::init()
 	}
 
 	float duration = 1.0f;
-	LightSouls::Utils::StartTimerWithCallback(this, 
+	Utils::StartTimerWithCallback(this, 
 		CC_CALLBACK_0(LoadingScreenScene::SwitchToNextScene, this), duration);
 	auto sprite = Sprite::create("res/Graphics/UI/loading.png");
 	sprite->setScale(5.0f);
@@ -64,15 +64,15 @@ void LoadingScreenScene::SwitchToNextScene()
 {	
 	switch (m_nextScene)
 	{		
-		case LightSouls::ENextScene::MAIN_MENU:
+		case ENextScene::MAIN_MENU:
 			Director::getInstance()->replaceScene(MainMenuScene::CreateScene());
 			break;
 
-		case LightSouls::ENextScene::GAME:
+		case ENextScene::GAME:
 			Director::getInstance()->replaceScene(GameScene::CreateScene());
 			break;
 
-		case LightSouls::ENextScene::GAME_OVER:
+		case ENextScene::GAME_OVER:
 			Director::getInstance()->replaceScene(GameOverScene::CreateScene());
 			break;	
 	}		

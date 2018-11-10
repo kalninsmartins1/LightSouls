@@ -69,9 +69,9 @@ bool MainMenuScene::init()
 
 void MainMenuScene::OnStartPressed()
 {	
-	LightSouls::Utils::StartTimerWithCallback(this,
+	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(MainMenuScene::SwitchToGameScene, this),
-		LightSouls::LOADING_TIME);
+		GameConsts::LOADING_TIME);
 }
 
 void MainMenuScene::OnQuitPressed()
@@ -81,5 +81,5 @@ void MainMenuScene::OnQuitPressed()
 
 void MainMenuScene::SwitchToGameScene()
 {	
-	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(LightSouls::ENextScene::GAME));	
+	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(ENextScene::GAME));	
 }

@@ -13,7 +13,7 @@
 #include "Scenes/GameScene.h"
 #include "World/Projectiles/Projectile.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
 const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
@@ -66,7 +66,7 @@ bool Player::Init(const String& pathToXML)
 	isSuccessfullyInitialized &= XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
 	
 	OnEntityInitialized();
-	m_attackComponent = static_cast<GenericAttackComponent*>(getComponent(ATTACK_COMPONENT));
+	m_attackComponent = static_cast<GenericAttackComponent*>(getComponent(GameConsts::ATTACK_COMPONENT));
 	isSuccessfullyInitialized &= m_attackComponent != nullptr;
 
 	PhysicsManager* physicsManager = GameScene::GetPhysicsManager();
@@ -74,7 +74,7 @@ bool Player::Init(const String& pathToXML)
 		CC_CALLBACK_2(Player::OnContactBegin, this));
 	physicsManager->AddContactEndListener(getName(),
 		CC_CALLBACK_2(Player::OnContactEnd, this));
-	physicsManager->AddContactBeginListener(getName() + NODE_COMPONENT,
+	physicsManager->AddContactBeginListener(getName() + GameConsts::NODE_COMPONENT,
 		CC_CALLBACK_2(Player::OnProjectileHit, this));
 
 	return isSuccessfullyInitialized;
@@ -229,7 +229,7 @@ void Player::LightAttack()
 void Player::PerformDodge()
 {	
 	StartDodging();
-	GetAnimComponent()->PlayLoopingAnimation(ANIM_TYPE_DODGE);
+	GetAnimComponent()->PlayLoopingAnimation(GameConsts::ANIM_TYPE_DODGE);
 	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(Player::OnDodgeFinished, this), m_dodgeTime);
 }
@@ -241,16 +241,16 @@ void Player::PlayRunOrIdleAnimation() const
 	{
 		if (IsRunning() && !m_isDodging)
 		{
-			if (!animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_RUN))
+			if (!animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
 			{
-				animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+				animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
 			}
 		}
 		else if (!IsRunning())
 		{
-			if (!animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_IDLE))
+			if (!animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_IDLE))
 			{
-				animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+				animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 			}
 		}
 	}
@@ -343,4 +343,4 @@ void Player::SetCollisionData(cocos2d::Node* otherNode)
 	}	
 }
 
-NS_LIGHTSOULS_END
+

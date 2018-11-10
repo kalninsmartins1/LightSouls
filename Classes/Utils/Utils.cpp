@@ -5,7 +5,6 @@
 #include "Input/InputTypes/GameController/GameControllerInput.h"
 
 
-NS_LIGHTSOULS_BEGIN
 
 Utils::Utils()
 {
@@ -99,6 +98,26 @@ void Utils::ClearCallbackTimers(cocos2d::Node* node, int timerTag)
 	node->stopActionByTag(timerTag);
 }
 
+void Utils::ParseFloatArray(const String& data, cocos2d::Vector<float> outArray)
+{
+	int index = 0;
+	String midResult = "";
+	while (index < data.length())
+	{
+		if (data[index] == ';')
+		{
+			outArray.pushBack(atof(midResult.c_str()));
+			midResult = "";
+		}
+		else
+		{
+			midResult += data[index];
+		}
+
+		index++;
+	}
+}
+
 Vector2 Utils::GetRandomPositionWithinCircle(const Vector2& centerPos, float radius)
 {
 	// Get random position within range
@@ -135,7 +154,7 @@ float Utils::GetRandValueWithinRange(float minValue, int maxValue)
 
 float Utils::GetRandAngleInRadians()
 {
-	return (rand() % FULL_CIRCLE_DEGREES) * (PI / HALF_CIRCLE_DEGREES);
+	return (rand() % GameConsts::FULL_CIRCLE_DEGREES) * (GameConsts::PI / GameConsts::HALF_CIRCLE_DEGREES);
 }
 
 float Utils::GetSignedAngleBetweenVectors(const Vector2& v1, const Vector2& v2)
@@ -148,7 +167,7 @@ float Utils::GetSignedRadiansBetweenVectors(const Vector2& v1, const Vector2& v2
 	float result = atan2(v2.y, v2.x) - atan2(v1.y, v1.x);
 	if (result < 0)
 	{
-		result += 2 * PI;
+		result += 2 * GameConsts::PI;
 	}
 	return result;
 }
@@ -321,4 +340,4 @@ int Utils::GetSign(const float & value)
 	return sign;
 }
 
-NS_LIGHTSOULS_END
+

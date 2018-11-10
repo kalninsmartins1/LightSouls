@@ -3,7 +3,7 @@
 #include "LightSoulsTypes.h"
 #include <memory>
 
-NS_LIGHTSOULS_BEGIN
+
 
 class KeyboardInput;
 class MouseInput;
@@ -67,4 +67,3 @@ private:
 	std::unique_ptr<GameControllerInput>	m_gameControllerInput;
 };
 
-NS_LIGHTSOULS_END

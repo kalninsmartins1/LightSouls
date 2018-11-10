@@ -1,6 +1,6 @@
 #pragma once
 
-namespace LightSouls
+namespace GameConsts
 {
 	// Default values
 	static constexpr float		 PI = 3.14159265359f;
@@ -23,6 +23,7 @@ namespace LightSouls
 	static constexpr int ACTION_AI_AVOID = 7;
 	static constexpr int ACTION_AI_SIGNAL = 8;
 	static constexpr int ACTION_TAKE_DAMAGE = 9;
+	static constexpr int ACTION_AI_TASK_AVOID = 10;
 
 	// AI states
 	static constexpr const char* AI_STATE_ATTACK = "Attack";

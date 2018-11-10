@@ -1,6 +1,6 @@
 #include "OnCollisionBeginEventData.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 OnCollisionBeginEventData::OnCollisionBeginEventData(unsigned int receiverId, const String& collidedWithName, const Vector2& collisionPoint)
 	: AEventData(receiverId)
@@ -20,4 +20,3 @@ const Vector2& OnCollisionBeginEventData::GetCollisionPoint() const
 	return m_collisionPoint;
 }
 
-NS_LIGHTSOULS_END

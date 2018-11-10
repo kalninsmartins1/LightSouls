@@ -1,6 +1,6 @@
 #include "ScoringSystem.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 ScoringSystem* ScoringSystem::GetInstance()
 {
@@ -29,4 +29,4 @@ ScoringSystem::ScoringSystem()
 
 }
 
-NS_LIGHTSOULS_END
+

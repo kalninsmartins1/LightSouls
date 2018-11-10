@@ -3,7 +3,7 @@
 #include "World/Entity/AI/AIAgent.h"
 #include "GameConsts.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 StateIdle::StateIdle(AIAgent& aiAgent)
 	: AState(aiAgent)
@@ -20,7 +20,7 @@ EAIState StateIdle::GetStateType() const
 void StateIdle::OnEnter(AnimComponent * animComponent)
 {
 	m_curProgress = EStateProgress::IN_PROGRESS;
-	animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+	animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 }
 
 EStateProgress StateIdle::OnStep()
@@ -41,4 +41,3 @@ void StateIdle::OnEventReceived(const String& receivedEvent, const AEventData & 
 	}
 }
 
-NS_LIGHTSOULS_END

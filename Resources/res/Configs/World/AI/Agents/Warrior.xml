@@ -53,33 +53,28 @@
 			plistPath="res/Graphics/World/AI/Warrior/warriorAnimations.plist">
 			
 			<Anim 	type="Idle"
-					frameNamePattern="warrior_idle%d.png"
-					frameCount="4"
-					timeBetweenFrames="0.2"
+					frameNamePattern="warrior_idle%d.png"					
+					timeBetweenFrames="0.2;0.2;0.2;0.2"
 			/>
 			
 			<Anim 	type="Attack"
-					frameNamePattern="warrior_attack%d.png"
-					frameCount="1"
-					timeBetweenFrames="1"
+					frameNamePattern="warrior_attack%d.png"					
+					timeBetweenFrames="1.0;"
 			/>
 			
 			<Anim 	type="Run"
-					frameNamePattern="warrior_run%d.png"
-					frameCount="6"
-					timeBetweenFrames="0.1"
+					frameNamePattern="warrior_run%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.1;"
 			/>
 			
 			<Anim	type="Signal"
-					frameNamePattern="warrior_signal%d.png"
-					frameCount="6"
-					timeBetweenFrames="0.1"
+					frameNamePattern="warrior_signal%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.1;"
 			/>
 			
 			<Anim	type="Hurt"
-					frameNamePattern="warrior_hurt%d.png"
-					frameCount="1"
-					timeBetweenFrames="1"
+					frameNamePattern="warrior_hurt%d.png"					
+					timeBetweenFrames="1.0;"
 			/>
 		</SpriteSheet>
 	</Component>

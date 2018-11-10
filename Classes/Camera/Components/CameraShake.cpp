@@ -4,7 +4,7 @@
 #include "Utils/XML/XMLConsts.h"
 #include "Camera\CameraShake\CameraShakeTrigger.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 CameraShake::CameraShake()
 	: m_cameraShakeTriggers()
@@ -28,10 +28,10 @@ bool CameraShake::Init(tinyxml2::XMLElement* element)
 		triggerData = triggerData->NextSiblingElement())
 	{
 		// Extract data
-		const String& triggerEvent = triggerData->Attribute(XML_TYPE_ATTR);
-		const float moveSpeed = triggerData->FloatAttribute(XML_MOVE_SPEED_ATTR);
-		const float shakeTime = triggerData->FloatAttribute(XML_TIME_ATTR);
-		const float shakeRadius = triggerData->FloatAttribute(XML_CAMERA_SHAKE_RADIUS);
+		const String& triggerEvent = triggerData->Attribute(XMLConsts::TYPE_ATTR);
+		const float moveSpeed = triggerData->FloatAttribute(XMLConsts::MOVE_SPEED_ATTR);
+		const float shakeTime = triggerData->FloatAttribute(XMLConsts::TIME_ATTR);
+		const float shakeRadius = triggerData->FloatAttribute(XMLConsts::CAMERA_SHAKE_RADIUS);
 
 		// Add to collection
 		const CameraShakeTrigger trigger(triggerEvent, moveSpeed, shakeTime, shakeRadius);
@@ -56,11 +56,11 @@ void CameraShake::OnStartCameraShake(cocos2d::EventCustom* eventData)
 		m_isCameraShakeActive = true;
 
 		// Stop any previous actions
-		getOwner()->stopActionByTag(ACTION_CAMERA_SHAKE);
+		getOwner()->stopActionByTag(GameConsts::ACTION_CAMERA_SHAKE);
 
 		Utils::StartTimerWithCallback(getOwner(),
 			CC_CALLBACK_0(CameraShake::OnEndCameraShake, this),
-			m_curCameraShakeTrigger->GetTime(), ACTION_CAMERA_SHAKE);
+			m_curCameraShakeTrigger->GetTime(), GameConsts::ACTION_CAMERA_SHAKE);
 	}	
 }
 
@@ -111,4 +111,3 @@ void CameraShake::update(float deltaTime)
 	}
 }
 
-NS_LIGHTSOULS_END

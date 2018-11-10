@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class ScoringSystem
 {
@@ -20,4 +20,4 @@ private:
 	int		m_score;
 };
 
-NS_LIGHTSOULS_END
+

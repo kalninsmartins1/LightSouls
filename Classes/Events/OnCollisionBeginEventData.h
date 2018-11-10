@@ -3,7 +3,7 @@
 #include "LightSoulsTypes.h"
 #include "AEventData.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class OnCollisionBeginEventData : public AEventData
 {
@@ -19,4 +19,3 @@ private:
 	Vector2 m_collisionPoint;
 };
 
-NS_LIGHTSOULS_END

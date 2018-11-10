@@ -3,7 +3,7 @@
 #include "LightSoulsTypes.h"
 #include "AEventData.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class ProgressBarChangedEventData : public AEventData
 {
@@ -18,4 +18,4 @@ private:
 	float m_percentage;
 };
 
-NS_LIGHTSOULS_END
+

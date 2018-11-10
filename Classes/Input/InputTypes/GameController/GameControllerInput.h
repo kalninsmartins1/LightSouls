@@ -3,7 +3,7 @@
 #include "LightSoulsTypes.h"
 #include "Input/InputTypes/AInputDevice.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 using ButtonCode = cocos2d::Controller::Key;
 
@@ -94,6 +94,6 @@ private:
 	std::map<int, String>				m_buttonCodeToAxisAction;
 };
 
-NS_LIGHTSOULS_END
+
 
 

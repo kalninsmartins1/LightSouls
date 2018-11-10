@@ -1,7 +1,7 @@
 
 #include "AState.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class StateIdle : public AState
 {
@@ -20,4 +20,3 @@ private:
 	EStateProgress	m_curProgress;
 };
 
-NS_LIGHTSOULS_END

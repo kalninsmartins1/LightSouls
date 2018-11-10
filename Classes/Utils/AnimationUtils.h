@@ -7,18 +7,19 @@ namespace tinyxml2
 	class XMLElement;
 };
 
-NS_LIGHTSOULS_BEGIN
+
 
 struct AnimationData
 {
-	cocos2d::Vector<cocos2d::SpriteFrame*>	frames;
-	float									timeBetweenFrames;
+	cocos2d::Vector<cocos2d::SpriteFrame*>	frames;	
+	cocos2d::Vector<float>					timeBetweenFrames;
 };
 
 class AnimationUtils
 {
 public:
-	static int GetAnimId(String animName);
+	static int		GetAnimId(String animName);
+	static void		GetAnimName(int animId, String& outAnimName);
 
 	static cocos2d::Action* StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
 		const AnimationData& animationData, const std::function<void()>& onFinished);
@@ -33,4 +34,3 @@ private:
 	static const std::map<String, int> s_animTypeToId;
 };
 
-NS_LIGHTSOULS_END

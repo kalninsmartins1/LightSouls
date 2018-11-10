@@ -3,7 +3,7 @@
 #include "LightSoulsTypes.h"
 #include "Events/AEventData.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class AnimComponent;
 class AIAgent;
@@ -89,4 +89,3 @@ T* AState::Create(AIAgent& agent)
 }
 
 
-NS_LIGHTSOULS_END

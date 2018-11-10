@@ -4,7 +4,7 @@
 #include "Input/InputTypes/AInputDevice.h"
 #include "Utils/Utils.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 using MouseButtonCode = cocos2d::EventMouse::MouseButton;
 
@@ -27,4 +27,4 @@ private:
 	void OnMouseButtonUp(cocos2d::EventMouse* pEvent);	
 };
 
-NS_LIGHTSOULS_END
+

@@ -1,7 +1,7 @@
 #include "MouseInput.h"
 #include "Utils/Utils.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 MouseInput::MouseInput()
 {
@@ -63,4 +63,4 @@ void MouseInput::SetStateButtonState(bool isPressed, const MouseButtonCode& butt
 	AInputDevice::SetStateButtonState(isPressed, inputCode);
 }
 
-NS_LIGHTSOULS_END
+

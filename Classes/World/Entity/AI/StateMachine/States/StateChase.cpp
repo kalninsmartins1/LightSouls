@@ -7,7 +7,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 StateChase::StateChase(AIAgent& agent) 
 	: AState(agent)	
@@ -41,9 +41,9 @@ EStateProgress StateChase::OnStep()
 		float distanceToTarget = toTarget.length();
 
 		// Play run animation if not playing, might be that on enter entity was processing
-		if (!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_RUN))
+		if (!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
 		{
-			m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+			m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
 		}
 
 		if (distanceToTarget <= m_chaseStopDistance ||	// Target has been caught
@@ -64,7 +64,7 @@ void StateChase::OnExit()
 
 	if (!agent.IsProcessing())
 	{
-		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+		m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 	}
 }
 
@@ -76,8 +76,8 @@ void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& 
 void StateChase::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_chaseRadius = xmlElement->FloatAttribute(XML_AI_CHASE_RADIUS_ATTR);
-	m_chaseStopDistance = xmlElement->FloatAttribute(XML_AI_STOP_DISTANCE);
+	m_chaseRadius = xmlElement->FloatAttribute(XMLConsts::AI_CHASE_RADIUS_ATTR);
+	m_chaseStopDistance = xmlElement->FloatAttribute(XMLConsts::AI_STOP_DISTANCE);
 }
 
 EAIState StateChase::GetStateType() const
@@ -85,4 +85,3 @@ EAIState StateChase::GetStateType() const
 	return EAIState::CHASE;
 }
 
-NS_LIGHTSOULS_END

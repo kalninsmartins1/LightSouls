@@ -2,18 +2,15 @@
 
 #include "cocos2d.h"
 
-namespace LightSouls
-{
-	enum class ENextScene;
-};
+enum class ENextScene;
 
 class LoadingScreenScene : public cocos2d::Scene
 {
 public:
-	LoadingScreenScene(LightSouls::ENextScene nextScene);
+	LoadingScreenScene(const ENextScene& nextScene);
 
 public:
-    static cocos2d::Scene* CreateScene(LightSouls::ENextScene nextScene);	
+    static cocos2d::Scene* CreateScene(const ENextScene& nextScene);	
 
     virtual bool	init() override;	
 
@@ -21,5 +18,5 @@ private:
 	void SwitchToNextScene();
 
 private:
-	LightSouls::ENextScene	m_nextScene;	
+	ENextScene	m_nextScene;	
 };

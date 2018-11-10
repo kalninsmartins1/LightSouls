@@ -2,7 +2,7 @@
 
 #include "../AState.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class HitAttackComponent;
 class Entity;
@@ -34,4 +34,3 @@ private:
 	float					m_arriveDistance;
 };
 
-NS_LIGHTSOULS_END

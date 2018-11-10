@@ -3,8 +3,6 @@
 #include "LightSoulsTypes.h"
 #include "AState.h"
 
-NS_LIGHTSOULS_BEGIN
-
 class Entity;
 class GenericAttackComponent;
 
@@ -32,10 +30,10 @@ private:
 	AnimComponent*			m_animComponent;
 	float					m_startAvoidDistance;
 	float					m_stopAvoidDistance;
+	float					m_failDistance;
 	bool					m_isAvoiding;
 	float					m_randomTime;
 	bool					m_isRandomTimeExpired;
 	Vector2					m_randomTargetOffset; // Makes agents more disperse
 };
 
-NS_LIGHTSOULS_END

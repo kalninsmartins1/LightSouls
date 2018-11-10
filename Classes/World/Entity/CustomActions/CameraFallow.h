@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class CameraFollow: public cocos2d::Action
 {
@@ -43,4 +43,3 @@ private:
 	float					m_easeOutTime;
 };
 
-NS_LIGHTSOULS_END

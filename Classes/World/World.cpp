@@ -5,8 +5,6 @@
 #include "Physics/PhysicsManager.h"
 #include "3rdParty/Physics/PhysicsShapeCache.h"
 
-NS_LIGHTSOULS_BEGIN
-
 const String World::s_nodeName = "World";
 bool World::s_isShapeCacheInitialized = false;
 
@@ -47,10 +45,10 @@ bool World::Init(const String& pathToSprite, const String& bodyName, const Strin
 
 	isSuccessful = isSuccessful && physicsShapeCache->setBodyOnSprite(bodyName, this);
 	setName(s_nodeName);
-	setLocalZOrder(WORLD_LAYER);
+	setLocalZOrder(GameConsts::WORLD_LAYER);
 
 	// If all operations were successful then init was successful
 	return isSuccessful;
 }
 
-NS_LIGHTSOULS_END
+

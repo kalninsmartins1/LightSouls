@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class World : public cocos2d::Sprite
 {
@@ -20,4 +20,3 @@ private:
 	static bool			s_isShapeCacheInitialized;
 };
 
-NS_LIGHTSOULS_END

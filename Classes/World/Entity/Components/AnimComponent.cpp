@@ -6,13 +6,13 @@
 #include "GameConsts.h"
 #include "World/Entity/Entity.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 AnimComponent::AnimComponent(Entity& ownerSprite) 
 	: m_curAnimId(-1)
 	, m_entity(ownerSprite)
-	, m_firstAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD))
-	, m_lastAttackAnimId(AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD))
+	, m_firstAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD))
+	, m_lastAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD))
 	, m_curAttackAnimId(m_firstAttackAnimId)
 	, m_currentAttackStyle(AttackAnimStyle::FORWARD)
 	, m_animations()
@@ -42,13 +42,13 @@ void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 		spriteSheetNode != nullptr; spriteSheetNode = spriteSheetNode->NextSiblingElement())
 	{
 		auto spriteCache = cocos2d::SpriteFrameCache::getInstance();
-		const char* plistPath = spriteSheetNode->Attribute(XML_ANIM_PLIST_PATH_ATTR);
+		const char* plistPath = spriteSheetNode->Attribute(XMLConsts::ANIM_PLIST_PATH_ATTR);
 		spriteCache->addSpriteFramesWithFile(plistPath);
 
 		for (tinyxml2::XMLElement* animNode = spriteSheetNode->FirstChildElement();
 			animNode != nullptr; animNode = animNode->NextSiblingElement())
 		{
-			const String& animType = animNode->Attribute(XML_TYPE_ATTR);
+			const String& animType = animNode->Attribute(XMLConsts::TYPE_ATTR);
 
 			// Load specific animation based on its type
 			AnimationData animationData;
@@ -58,13 +58,15 @@ void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 	}
 
 	// Init parent sprite
-	m_entity.initWithSpriteFrame(m_animations[AnimationUtils::GetAnimId(ANIM_TYPE_IDLE)].frames.at(0));
+	m_entity.initWithSpriteFrame(m_animations[AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_IDLE)].frames.at(0));
 }
 
 void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback)
 {
 #if LIGHTSOULS_ANIM_DEBUG
-	CCLOG("PlayOneShotAnimation: %d %s", animationId, getOwner()->getName().c_str());
+	String animName;
+	AnimationUtils::GetAnimName(animationId, animName);
+	CCLOG("PlayOneShotAnimation: %s %s", animName.c_str(), getOwner()->getName().c_str());
 #endif
 
 	if (HasAnim(animationId))
@@ -108,7 +110,9 @@ void AnimComponent::update(float deltaTime)
 void AnimComponent::PlayLoopingAnimation(int animationId)
 {
 #if LIGHTSOULS_ANIM_DEBUG
-	CCLOG("PlayLoopingAnimation: %d %s", animationId, getOwner()->getName().c_str());
+	String animName;
+	AnimationUtils::GetAnimName(animationId, animName);
+	CCLOG("PlayLoopingAnimation: %s %s", animName.c_str(), getOwner()->getName().c_str());
 #endif
 	if (HasAnim(animationId))
 	{
@@ -161,20 +165,20 @@ void AnimComponent::UpdateAttackAnimState()
 	if (abs(heading.x) > 0.0f && absoluteXValue > absoluteYValue)
 	{
 		TransitionAttackAnimDirection(AttackAnimStyle::FORWARD,
-			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD),
-			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD));
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD),
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD));
 	}
 	else if (heading.y > 0.0f)
 	{
 		TransitionAttackAnimDirection(AttackAnimStyle::UPWARD,
-			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD),
-			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD));
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD),
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD));
 	}
 	else if (heading.y < 0.0f)
 	{
 		TransitionAttackAnimDirection(AttackAnimStyle::DOWNWARD,
-			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD),
-			AnimationUtils::GetAnimId(ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD));
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD),
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD));
 	}
 }
 
@@ -187,5 +191,3 @@ void AnimComponent::TransitionAttackAnimDirection(AttackAnimStyle style, int fir
 	m_curAttackAnimId = m_firstAttackAnimId + curAttackIdDif;
 	m_lastAttackAnimId = lastAttackAnimId;
 }
-
-NS_LIGHTSOULS_END

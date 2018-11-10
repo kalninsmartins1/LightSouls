@@ -6,12 +6,13 @@
 #include "World/Entity/AI/AIAgentManager.h"
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
+#include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
 
-NS_LIGHTSOULS_BEGIN
 
 StatePause::StatePause(AIAgent& aiAgent)
 	: AState(aiAgent)	
 	, m_targetEntity(nullptr)
+	, m_avoidAction(nullptr)
 	, m_curProgress(EStateProgress::IN_PROGRESS)
 	, m_pauseTime(0.0f)
 	, m_shouldCheckDistanceToTarget(false)
@@ -21,13 +22,18 @@ StatePause::StatePause(AIAgent& aiAgent)
 
 void StatePause::OnEnter(AnimComponent* animComponent)
 {
-	animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+	AIAgent& agent = GetAgent();	
+	if (!agent.IsProcessing() && agent.IsBackgroundTaskReady())
+	{
+		animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
+	}
+
 	m_curProgress = EStateProgress::IN_PROGRESS;
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	
 	float pauseTime = m_pauseTime + Utils::GetRandValueWithinRange(0.0f, 5.0f);
 	Utils::StartTimerWithCallback(&GetAgent(),
-			CC_CALLBACK_0(StatePause::OnPauseExpired, this), pauseTime, ACTION_PAUSE);
+			CC_CALLBACK_0(StatePause::OnPauseExpired, this), pauseTime, GameConsts::ACTION_PAUSE);
 
 }
 
@@ -38,20 +44,26 @@ EStateProgress StatePause::OnStep()
 		m_curProgress = EStateProgress::FAILED;
 	}
 
+	AIAgent& agent = GetAgent();
+	if (!agent.IsProcessing())
+	{
+		agent.SetMoveDirection(Vector2::ZERO);
+	}
+
 	return m_curProgress;
 }
 
 void StatePause::OnExit()
 {
-	Utils::ClearCallbackTimers(&GetAgent(), ACTION_PAUSE);
+	Utils::ClearCallbackTimers(&GetAgent(), GameConsts::ACTION_PAUSE);
 }
 
 void StatePause::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_pauseTime = xmlElement->FloatAttribute(XML_TIME_ATTR);
-	m_maxDistaneceToTarget = xmlElement->FloatAttribute(XML_AI_MAX_DISTANCE_TO_TARGET);
-	m_shouldCheckDistanceToTarget = xmlElement->BoolAttribute(XML_AI_IS_CHECKING_DISTANCE_TO_TARGET);
+	m_pauseTime = xmlElement->FloatAttribute(XMLConsts::TIME_ATTR);
+	m_maxDistaneceToTarget = xmlElement->FloatAttribute(XMLConsts::AI_MAX_DISTANCE_TO_TARGET);
+	m_shouldCheckDistanceToTarget = xmlElement->BoolAttribute(XMLConsts::AI_IS_CHECKING_DISTANCE_TO_TARGET);
 }
 
 bool StatePause::IsTargetTooFar() const
@@ -71,4 +83,3 @@ EAIState StatePause::GetStateType() const
 	return EAIState::PAUSE;
 }
 
-NS_LIGHTSOULS_END

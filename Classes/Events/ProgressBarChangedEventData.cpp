@@ -1,6 +1,6 @@
 #include "ProgressBarChangedEventData.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 ProgressBarChangedEventData::ProgressBarChangedEventData(unsigned int receiverId, float newHealthValue, float healthPercentage)
 	: AEventData(receiverId)
@@ -19,4 +19,4 @@ float ProgressBarChangedEventData::GetPercentage() const
 	return m_percentage;
 }
 
-NS_LIGHTSOULS_END
+

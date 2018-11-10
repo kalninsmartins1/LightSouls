@@ -1,6 +1,6 @@
 #include "AState.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class StateSignaling : public AState
 {
@@ -25,4 +25,3 @@ private:
 	float			m_signalTime;
 };
 
-NS_LIGHTSOULS_END

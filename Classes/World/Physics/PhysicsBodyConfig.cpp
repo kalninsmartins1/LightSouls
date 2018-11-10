@@ -1,6 +1,6 @@
 #include "PhysicsBodyConfig.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 PhysicsBodyConfig::PhysicsBodyConfig()
 	: m_bodySize(cocos2d::Size::ZERO)
@@ -94,4 +94,3 @@ void PhysicsBodyConfig::SetIsGravityEnabled(bool isGravityEnabled)
 	m_isGravityEnabled = isGravityEnabled;
 }
 
-NS_LIGHTSOULS_END

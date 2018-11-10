@@ -2,7 +2,7 @@
 
 #include "AIAgent.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class SpawnPoint;
 class SpawnPointConfig;
@@ -32,4 +32,4 @@ private:
 	std::map<String, String> m_agentConfigPathMap;
 };
 
-NS_LIGHTSOULS_END
+

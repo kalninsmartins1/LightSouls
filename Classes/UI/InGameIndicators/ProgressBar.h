@@ -6,7 +6,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class UIElementConfig;
 
@@ -40,4 +40,3 @@ private:
 	bool			 m_isAnimationgForward;
 };
 
-NS_LIGHTSOULS_END

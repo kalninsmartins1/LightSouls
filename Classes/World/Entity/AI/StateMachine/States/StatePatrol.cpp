@@ -9,7 +9,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 StatePatrol::StatePatrol(AIAgent& agent)
 	: AState(agent)
@@ -53,9 +53,9 @@ EStateProgress StatePatrol::OnStep()
 			Vector2 toTargetPosition = m_curTargetPosition - agent.getPosition();
 			agent.SetMoveDirection(toTargetPosition.getNormalized());
 
-			if (!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_RUN))
+			if (!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
 			{
-				m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+				m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
 			}
 			
 			float stoppingDistance = agent.GetStoppingDistance();
@@ -79,7 +79,7 @@ void StatePatrol::OnExit()
 	m_isLookingAround = false;
 
 	// Clear any looking around timers
-	GetAgent().stopAllActionsByTag(ACTION_TIMER);
+	GetAgent().stopAllActionsByTag(GameConsts::ACTION_TIMER);
 }
 
 void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
@@ -97,8 +97,8 @@ void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData&
 void StatePatrol::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_patrolRadius = xmlElement->FloatAttribute(XML_AI_PATROL_RADIUS_ATTR);
-	m_patrolPause = xmlElement->FloatAttribute(XML_AI_PATROL_PAUSE_ATTR);
+	m_patrolRadius = xmlElement->FloatAttribute(XMLConsts::AI_PATROL_RADIUS_ATTR);
+	m_patrolPause = xmlElement->FloatAttribute(XMLConsts::AI_PATROL_PAUSE_ATTR);
 }
 
 EAIState StatePatrol::GetStateType() const
@@ -125,13 +125,13 @@ void StatePatrol::GetRandomPositionInRange(Vector2& outRandomPosition) const
 
 void StatePatrol::StartLookingAround()
 {	
-	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+	m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 	GetAgent().SetMoveDirection(Vector2::ZERO); // We are not moving while looking around
 
 	Utils::StartTimerWithCallback(&GetAgent(), 
 		CC_CALLBACK_0(StatePatrol::OnFinishedLookingAround, this),
 		m_patrolPause,
-		ACTION_TIMER);
+		GameConsts::ACTION_TIMER);
 }
 
 void StatePatrol::StartMovingToNewPosition()
@@ -146,7 +146,7 @@ void StatePatrol::StartMovingToNewPosition()
 		m_isCollided = false;
 	}
 	
-	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_RUN);
+	m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
 }
 
 void StatePatrol::OnFinishedLookingAround()
@@ -154,5 +154,3 @@ void StatePatrol::OnFinishedLookingAround()
 	m_isLookingAround = false;
 	StartMovingToNewPosition();
 }
-
-NS_LIGHTSOULS_END

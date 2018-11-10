@@ -5,7 +5,7 @@
 #include "Input/InputTypes/GameController/GameControllerInput.h"
 #include "Utils/Utils.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 GameInput::GameInput()
 	: m_keyboard(nullptr)
@@ -283,4 +283,3 @@ void GameInput::AddGameControllerAxis(const String& actionName, const String& ax
 	m_gameControllerInput->AddAxisButton(actionName, axis);
 }
 
-NS_LIGHTSOULS_END

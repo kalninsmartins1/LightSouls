@@ -1,12 +1,9 @@
 #pragma once
 
-namespace LightSouls
+enum class ENextScene
 {
-	enum class ENextScene
-	{
-		NONE,
-		MAIN_MENU,
-		GAME,
-		GAME_OVER,
-	};
+	NONE,
+	MAIN_MENU,
+	GAME,
+	GAME_OVER,
 };

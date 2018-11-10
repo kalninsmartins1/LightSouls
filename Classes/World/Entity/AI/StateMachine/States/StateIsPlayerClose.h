@@ -1,6 +1,6 @@
 #include "AState.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class StateIsPlayerClose : public AState
 {
@@ -21,4 +21,3 @@ private:
 	float			m_closeDistance;
 };
 
-NS_LIGHTSOULS_END

@@ -4,7 +4,7 @@
 #include <map>
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 struct ActionButton
 {
@@ -85,4 +85,4 @@ private:
 	std::map<int, String> m_buttonCodeToStateAction;	
 };
 
-NS_LIGHTSOULS_END
+

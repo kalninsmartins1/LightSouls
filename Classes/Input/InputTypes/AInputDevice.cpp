@@ -1,7 +1,7 @@
 #include "AInputDevice.h"
 #include "Utils/Utils.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 void AInputDevice::Update(float deltaTime)
 {
@@ -94,4 +94,4 @@ void AInputDevice::AddActionButton(const String& actionName, const ActionButton&
 	m_buttonCodeToAction[actionButton.buttonCode] = actionName;
 }
 
-NS_LIGHTSOULS_END
+

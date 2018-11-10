@@ -3,19 +3,19 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
 
-NS_LIGHTSOULS_BEGIN
 
-std::map<LightSouls::EAIState, LightSouls::String> LightSouls::AState::s_stateToString =
+
+std::map<EAIState, String> AState::s_stateToString =
 {
-	{EAIState::ATTACK,			AI_STATE_ATTACK		},
-	{EAIState::CHASE,			AI_STATE_CHASE		},
-	{EAIState::IDLE,			AI_STATE_IDLE		},
-	{EAIState::LINE_ATTACK,		AI_STATE_LINE_ATTACK},
-	{EAIState::PATROL,			AI_STATE_PATROL		},
-	{EAIState::PAUSE,			AI_STATE_PAUSE		},
-	{EAIState::SIGNALING,		AI_STATE_SIGNALING	},
-	{EAIState::AVOID,			AI_STATE_AVOID		},
-	{EAIState::IS_PLAYER_CLOSE, AI_STATE_IS_PLAYER_CLOSE }
+	{EAIState::ATTACK,			GameConsts::AI_STATE_ATTACK		},
+	{EAIState::CHASE,			GameConsts::AI_STATE_CHASE		},
+	{EAIState::IDLE,			GameConsts::AI_STATE_IDLE		},
+	{EAIState::LINE_ATTACK,		GameConsts::AI_STATE_LINE_ATTACK},
+	{EAIState::PATROL,			GameConsts::AI_STATE_PATROL		},
+	{EAIState::PAUSE,			GameConsts::AI_STATE_PAUSE		},
+	{EAIState::SIGNALING,		GameConsts::AI_STATE_SIGNALING	},
+	{EAIState::AVOID,			GameConsts::AI_STATE_AVOID		},
+	{EAIState::IS_PLAYER_CLOSE, GameConsts::AI_STATE_IS_PLAYER_CLOSE }
 };
 
 AState::AState(AIAgent& aiAgent)
@@ -66,9 +66,9 @@ void AState::OnEventReceived(const String& receivedEvent, const AEventData& even
 void AState::LoadXMLData(const XMLElement* xmlElement)
 {
 	String nextSuccessType;
-	XMLLoader::ReadXMLAttribute(xmlElement, XML_AI_NEXT_STATE_ON_SUCCESS, nextSuccessType);
+	XMLLoader::ReadXMLAttribute(xmlElement, XMLConsts::AI_NEXT_STATE_ON_SUCCESS, nextSuccessType);
 	String nextFailureType;
-	XMLLoader::ReadXMLAttribute(xmlElement, XML_AI_NEXT_STATE_ON_FAILURE, nextFailureType);
+	XMLLoader::ReadXMLAttribute(xmlElement, XMLConsts::AI_NEXT_STATE_ON_FAILURE, nextFailureType);
 
 	m_nextStateOnSuccess = AState::GetStateFromString(nextSuccessType);
 	m_nextStateOnFailure = AState::GetStateFromString(nextFailureType);
@@ -84,4 +84,3 @@ void AState::SetNextStateOnSuccess(const EAIState& state)
 	m_nextStateOnSuccess = state;
 }
 
-NS_LIGHTSOULS_END

@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class Entity;
 
@@ -52,4 +52,3 @@ private:
 	float		m_attackRange;	
 };
 
-NS_LIGHTSOULS_END

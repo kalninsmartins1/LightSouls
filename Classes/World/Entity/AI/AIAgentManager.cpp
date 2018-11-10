@@ -3,7 +3,7 @@
 #include "Utils/Utils.h"
 #include "SpawnPoint.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 AIAgentManager::AIAgentManager()
 	: m_worldLayer(nullptr)
@@ -91,4 +91,4 @@ bool AIAgentManager::Init(cocos2d::Node* worldLayer, const String& pathToXML)
 	return isSuccessfullyInitialized;
 }
 
-NS_LIGHTSOULS_END
+

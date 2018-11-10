@@ -3,7 +3,7 @@
 #include "GameConsts.h"
 #include "Utils/Utils.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 unsigned int Entity::s_uniqueId = 0;
 
@@ -36,7 +36,7 @@ Entity::~Entity()
 
 }
 
-EntityType LightSouls::Entity::GetEntityType() const
+EntityType Entity::GetEntityType() const
 {
 	return EntityType::NONE;
 }
@@ -179,12 +179,12 @@ void Entity::TakeDamage(float damage)
 	DispatchOnHealthReduceEvent();
 
 	if (!m_isAttacking &&
-		!m_animComponent->IsCurrrentlyPlayingAnim(ANIM_TYPE_HURT))
+		!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_HURT))
 	{
 		m_isTakingDamage = true;
-		if (m_animComponent->HasAnim(ANIM_TYPE_HURT))
+		if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT))
 		{
-			m_animComponent->PlayOneShotAnimation(ANIM_TYPE_HURT,
+			m_animComponent->PlayOneShotAnimation(GameConsts::ANIM_TYPE_HURT,
 				CC_CALLBACK_0(Entity::OnDamageTaken, this));			
 		}
 		else
@@ -192,7 +192,7 @@ void Entity::TakeDamage(float damage)
 			// If no animation then fall-back to one second pause
 			Utils::StartTimerWithCallback(this,
 				CC_CALLBACK_0(Entity::OnDamageTaken, this),
-				1.0f, ACTION_TAKE_DAMAGE);
+				1.0f, GameConsts::ACTION_TAKE_DAMAGE);
 		}
 	}
 }
@@ -242,12 +242,12 @@ void Entity::StartStaminaRegenerateDelayTimer()
 	m_isStaminaRegenerateDelayExpired = false;
 
 	// Make sure any previous stamina regenerate actions are stopped
-	stopActionByTag(ACTION_STAMINA_DELAY);
+	stopActionByTag(GameConsts::ACTION_STAMINA_DELAY);
 
 	// Start a new timer action
 	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(Entity::OnStaminaRegenerateDelayExpired, this),
-			m_staminaRegenerateDelay, ACTION_STAMINA_DELAY);
+			m_staminaRegenerateDelay, GameConsts::ACTION_STAMINA_DELAY);
 }
 
 void Entity::OnStaminaRegenerateDelayExpired()
@@ -281,16 +281,16 @@ void Entity::RegenerateStamina(float regenerateSpeedASecond)
 void Entity::OnDamageTaken()
 {
 	m_isTakingDamage = false;
-	m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);	
+	m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 }
 
 void Entity::OnEntityInitialized()
 {
 	// Get animation component to trigger animations when that is necessary
-	m_animComponent = static_cast<AnimComponent*>(getComponent(ANIM_COMPONENT));
+	m_animComponent = static_cast<AnimComponent*>(getComponent(GameConsts::ANIM_COMPONENT));
 	if (m_animComponent != nullptr)
 	{
-		m_animComponent->PlayLoopingAnimation(ANIM_TYPE_IDLE);
+		m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 	}
 	else
 	{
@@ -385,4 +385,3 @@ void Entity::SetPhysicsBodyForceScale(float scale)
 	m_physicsBodyForceScale = scale;
 }
 
-NS_LIGHTSOULS_END

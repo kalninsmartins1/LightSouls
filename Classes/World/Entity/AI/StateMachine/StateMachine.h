@@ -3,8 +3,6 @@
 #include "LightSoulsTypes.h"
 #include "Events/AEventData.h"
 
-NS_LIGHTSOULS_BEGIN
-
 class AnimComponent;
 class AIAgent;
 class AState;
@@ -43,4 +41,4 @@ private:
 	cocos2d::Map<EAIState, AState*>				m_availableStates;
 };
 
-NS_LIGHTSOULS_END
+

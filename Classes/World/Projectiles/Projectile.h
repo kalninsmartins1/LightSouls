@@ -3,7 +3,7 @@
 #include "LightSoulsTypes.h"
 #include "World/Projectiles/ProjectileConfig.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class Entity;
 
@@ -33,4 +33,4 @@ private:
 	float			 m_damage;
 };
 
-NS_LIGHTSOULS_END
+

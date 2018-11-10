@@ -3,7 +3,7 @@
 #include "World/Entity/Entity.h"
 #include "World/Physics/PhysicsManager.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 GenericAttackComponent* GenericAttackComponent::Create(float secondsBetweenAttacks, float attackRange)
 {
@@ -40,12 +40,12 @@ float GenericAttackComponent::GetAttackRangeSqr() const
 	return m_attackRange * m_attackRange;
 }
 
-float LightSouls::GenericAttackComponent::GetComboExpireTime() const
+float GenericAttackComponent::GetComboExpireTime() const
 {
 	return m_comboExpireTime;
 }
 
-bool LightSouls::GenericAttackComponent::IsComboExpired() const
+bool GenericAttackComponent::IsComboExpired() const
 {
 	return GetSecondsSinceLastAttack() > m_comboExpireTime;
 }
@@ -94,7 +94,7 @@ void GenericAttackComponent::TryToGiveDamage(cocos2d::PhysicsShape& physicsObjec
 	}
 }
 
-float LightSouls::GenericAttackComponent::GetSecondsSinceLastAttack() const
+float GenericAttackComponent::GetSecondsSinceLastAttack() const
 {
 	const long long millisecondsSinceLastAttack = Utils::GetTimeStampInMilliseconds() - m_lastTimeAttacked;	
 	return Utils::ConvertMillisecondsToSeconds(millisecondsSinceLastAttack);
@@ -113,7 +113,7 @@ bool GenericAttackComponent::IsReadyToAttack() const
 	return isAttackCooledDown && isEntityReady;
 }
 
-const Entity* LightSouls::GenericAttackComponent::GetOwnerEntity() const
+const Entity* GenericAttackComponent::GetOwnerEntity() const
 {
 	return m_ownerEntity;
 }
@@ -139,6 +139,3 @@ void GenericAttackComponent::setOwner(cocos2d::Node* owner)
 		CCLOGERROR("GenericAttackComponent: Setting nullptr as owner !");
 	}
 }
-
-NS_LIGHTSOULS_END
-

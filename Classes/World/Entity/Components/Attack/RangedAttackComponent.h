@@ -3,7 +3,7 @@
 #include "GenericAttackComponent.h"
 #include "World/Projectiles/ProjectileConfig.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class RangedAttackComponent: public GenericAttackComponent
 {
@@ -19,4 +19,4 @@ private:
 	ProjectileConfig	m_projectileConfig;
 };
 
-NS_LIGHTSOULS_END
+

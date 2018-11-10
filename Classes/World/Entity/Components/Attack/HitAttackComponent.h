@@ -3,7 +3,7 @@
 #include "GenericAttackComponent.h"
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class Entity;
 
@@ -22,4 +22,3 @@ private:
 		cocos2d::PhysicsShape& physicsObject, void* pMetaData) const;
 };
 
-NS_LIGHTSOULS_END

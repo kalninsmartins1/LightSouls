@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class CameraShakeTrigger
 {
@@ -23,4 +23,4 @@ private:
 	float				m_shakeRadius;
 };
 
-NS_LIGHTSOULS_END
+

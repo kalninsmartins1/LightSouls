@@ -2,7 +2,10 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+namespace LS
+{
+	class Camera;
+};
 
 class GameInput;
 class World;
@@ -31,7 +34,7 @@ public:
 
 	static bool InitializeUIProgressBar(ProgressBar& healthBar, const String& pathToXML);
 	static bool LoadWorld(World& world, const String& pathToXML);
-	static bool InitializeCamera(Camera& camera, const String& pathToXML);
+	static bool InitializeCamera(LS::Camera& camera, const String& pathToXML);
 	static void	ReadXMLAttribute(const XMLElement* element, const String& attributeName, String& outValue);
 
 private:
@@ -62,4 +65,4 @@ private:
 	static GameInputType			StrToGameInputType(const String& inputType);
 };
 
-NS_LIGHTSOULS_END
+

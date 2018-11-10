@@ -3,7 +3,7 @@
 #include "AState.h"
 #include "World/Entity/Entity.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class StatePatrol: public AState
 {
@@ -38,4 +38,4 @@ private:
 	float				m_patrolPause;
 };
 
-NS_LIGHTSOULS_END
+

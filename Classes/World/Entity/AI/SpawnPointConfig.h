@@ -2,7 +2,7 @@
 
 #include "LightSoulsTypes.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class SpawnPointConfig
 {
@@ -33,4 +33,4 @@ private:
 	float	m_spawnCount;
 };
 
-NS_LIGHTSOULS_END
+

@@ -11,8 +11,7 @@
 #include "World/Entity/AI/StateMachine/States/AState.h"
 #include "Scenes/GameScene.h"
 #include "World/Entity/AI/AIAgentManager.h"
-
-NS_LIGHTSOULS_BEGIN
+#include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
 
 String AIAgent::s_eventAgentHealthChanged = "EVENT_AGENT_HEALTH_CHANGED";
 String AIAgent::s_eventAgentDamageTaken = "EVENT_AGENT_DAMAGE_TAKEN";
@@ -64,10 +63,11 @@ bool AIAgent::Init(const String& pathToXML)
 	{
 		OnEntityInitialized();
 
-		GenericAttackComponent* attackComponent = dynamic_cast<GenericAttackComponent*>(getComponent(ATTACK_COMPONENT));
+		GenericAttackComponent* attackComponent = dynamic_cast<GenericAttackComponent*>(getComponent(GameConsts::ATTACK_COMPONENT));
 		const bool isAttackComponentFound = attackComponent != nullptr;
 		CCASSERT(isAttackComponentFound, "AIAgent: AIAttackComponent not found !");
 		m_attackComponent = attackComponent;
+		m_avoidAction = dynamic_cast<AIAvoidTargetAction*>(getActionByTag(GameConsts::ACTION_AI_TASK_AVOID));
 
 		// Register for physics events
 		GameScene::GetPhysicsManager()->AddContactBeginListener(getName(),
@@ -85,7 +85,7 @@ bool AIAgent::Init(const String& pathToXML)
 void AIAgent::Init(const XMLElement* element)
 {	
 	String startStateType;
-	XMLLoader::ReadXMLAttribute(element, XML_AI_START_STATE, startStateType);
+	XMLLoader::ReadXMLAttribute(element, XMLConsts::AI_START_STATE, startStateType);
 	EAIState startState = AState::GetStateFromString(startStateType);
 	m_stateMachine.SetStartState(startState);
 
@@ -95,7 +95,7 @@ void AIAgent::Init(const XMLElement* element)
 	for (const XMLElement* stateXML = element->FirstChildElement(); stateXML != nullptr;
 		stateXML = stateXML->NextSiblingElement())
 	{
-		String type = stateXML->Attribute(XML_TYPE_ATTR);
+		String type = stateXML->Attribute(XMLConsts::TYPE_ATTR);
 		EAIState state = AState::GetStateFromString(type);
 		if (state != EAIState::NONE)
 		{			
@@ -211,4 +211,9 @@ EAIState AIAgent::GetCurrentAIState() const
 	return m_stateMachine.GetCurrentState();
 }
 
-NS_LIGHTSOULS_END
+bool AIAgent::IsBackgroundTaskReady() const
+{	
+	return m_avoidAction == nullptr || !m_avoidAction->IsAvoiding();
+}
+
+

@@ -9,7 +9,7 @@
 #include "World/Entity/Components/AnimComponent.h"
 #include "GameConsts.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 StateLineAttack::StateLineAttack(AIAgent& aiAgent)	
 	: AState(aiAgent)	
@@ -35,7 +35,7 @@ void StateLineAttack::OnEnter(AnimComponent * animComponent)
 	m_attackComponent = static_cast<HitAttackComponent*>(agent.GetAttackComponent());	
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_beginTargetPos = m_targetEntity->getPosition();
-	animComponent->PlayLoopingAnimation(ANIM_TYPE_ATTACK);
+	animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_ATTACK);
 
 	if (m_attackComponent->IsReadyToAttack())
 	{				
@@ -108,9 +108,9 @@ void StateLineAttack::OnEventReceived(const String& receivedEvent, const AEventD
 void StateLineAttack::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_moveSpeed = xmlElement->FloatAttribute(XML_MOVE_SPEED_ATTR);
-	m_arriveDistance = xmlElement->FloatAttribute(XML_AI_ARRIVE_DISTANCE);
-	m_deliverDamageDistance = xmlElement->FloatAttribute(XML_AI_DAMAGE_DISTANCE);
+	m_moveSpeed = xmlElement->FloatAttribute(XMLConsts::MOVE_SPEED_ATTR);
+	m_arriveDistance = xmlElement->FloatAttribute(XMLConsts::AI_ARRIVE_DISTANCE);
+	m_deliverDamageDistance = xmlElement->FloatAttribute(XMLConsts::AI_DAMAGE_DISTANCE);
 }
 
 void StateLineAttack::OnSuccessfulAttack()
@@ -119,4 +119,3 @@ void StateLineAttack::OnSuccessfulAttack()
 	m_targetEntity->TakeDamage(GetAgent());
 }
 
-NS_LIGHTSOULS_END

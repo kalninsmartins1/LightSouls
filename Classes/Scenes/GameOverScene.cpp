@@ -51,9 +51,9 @@ bool GameOverScene::init()
 	layout->addChild(tryAgainButton);
 	layout->addChild(goToMenuButton);
 
-	auto title = ui::Text::create("Game over !", "Arial", 80);
+	auto title = ui::Text::create("Game over !", GameConsts::DEFAULT_FONT, 80);
 	title->setNormalizedPosition(Vec2(0.52f, 0.8f));
-	auto scoreText = ui::Text::create(StringUtils::format("Score: %d", LightSouls::ScoringSystem::GetInstance()->GetScore()), "Arial", 40);
+	auto scoreText = ui::Text::create(StringUtils::format("Score: %d", ScoringSystem::GetInstance()->GetScore()), "Arial", 40);
 	scoreText->setNormalizedPosition(Vec2(0.5f, 0.7f));
 
 	addChild(title);
@@ -65,17 +65,17 @@ bool GameOverScene::init()
 
 void GameOverScene::OnTryAgainPressed()
 {
-	LightSouls::Utils::StartTimerWithCallback(this,
+	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(GameOverScene::SwitchToGameScene, this),
-		LightSouls::LOADING_TIME);	
+		GameConsts::LOADING_TIME);	
 }
 
 void GameOverScene::OnGoToMenuPressed()
 {
-	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(LightSouls::ENextScene::MAIN_MENU));	
+	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(ENextScene::MAIN_MENU));	
 }
 
 void GameOverScene::SwitchToGameScene()
 {
-	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(LightSouls::ENextScene::GAME));
+	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(ENextScene::GAME));
 }

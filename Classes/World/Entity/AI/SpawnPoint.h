@@ -3,7 +3,7 @@
 #include "LightSoulsTypes.h"
 #include "SpawnPointConfig.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class AIAgent;
 
@@ -36,4 +36,3 @@ private:
 	int						m_curRespawnIndex;
 };
 
-NS_LIGHTSOULS_END

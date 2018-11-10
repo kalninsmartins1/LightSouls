@@ -2,7 +2,7 @@
 
 #include "../AState.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 class Entity;
 class GenericAttackComponent;
@@ -32,4 +32,3 @@ private:
 	bool					m_isAnimFinished;
 };
 
-NS_LIGHTSOULS_END

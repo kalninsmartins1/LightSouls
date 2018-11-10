@@ -1,6 +1,6 @@
 #include "UIElementConfig.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 UIElementConfig::UIElementConfig()
 	: m_pathToSprite()
@@ -56,4 +56,4 @@ void UIElementConfig::SetScale(const Vector2& scale)
 	m_scale = scale;
 }
 
-NS_LIGHTSOULS_END
+

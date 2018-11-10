@@ -2,7 +2,7 @@
 #include "Utils/Utils.h"
 #include "World/Entity/Entity.h"
 
-NS_LIGHTSOULS_BEGIN
+
 
 void MirrorSpriteComponent::setOwnerEntity(Entity* ownerEntity)
 {
@@ -24,4 +24,4 @@ void MirrorSpriteComponent::update(float delta)
 	}
 }
 
-NS_LIGHTSOULS_END
+

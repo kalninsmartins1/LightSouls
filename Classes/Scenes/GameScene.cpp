@@ -16,8 +16,8 @@
 
 USING_NS_CC;
 
-LightSouls::PhysicsManager* GameScene::s_physicsManager = nullptr;
-LightSouls::GameInput* GameScene::s_gameInput = nullptr;
+PhysicsManager* GameScene::s_physicsManager = nullptr;
+GameInput* GameScene::s_gameInput = nullptr;
 
 GameScene::GameScene()
 	: m_player(nullptr)
@@ -27,24 +27,24 @@ GameScene::GameScene()
 	, m_physicsDebugEnabled(false)
 {
 	// Reset player score upon new game
-	LightSouls::ScoringSystem::GetInstance()->Reset();
+	ScoringSystem::GetInstance()->Reset();
 }
 
 GameScene::~GameScene()
 {	
-	LightSouls::AIAgentManager::GetInstance()->Cleanup();
+	AIAgentManager::GetInstance()->Cleanup();
 	s_physicsManager->release();
 	s_physicsManager = nullptr;
 	s_gameInput->release();
 	s_gameInput = nullptr;
 }
 
-LightSouls::PhysicsManager* GameScene::GetPhysicsManager()
+PhysicsManager* GameScene::GetPhysicsManager()
 {
 	return s_physicsManager;
 }
 
-LightSouls::GameInput* GameScene::GetGameInput()
+GameInput* GameScene::GetGameInput()
 {
 	return s_gameInput;
 }
@@ -78,7 +78,7 @@ bool GameScene::init()
 	}	
 
 	// Init physics manager
-	s_physicsManager = LightSouls::PhysicsManager::Create(this);
+	s_physicsManager = PhysicsManager::Create(this);
 	if (s_physicsManager == nullptr)
 	{
 		CCASSERT(false, "HelloWorldScene: Failed to initialize PhysicsManager !");
@@ -88,7 +88,7 @@ bool GameScene::init()
 	InitUILayer();	
 
 	// Init Input
-	s_gameInput = LightSouls::GameInput::Create("res/Configs/Input/Input.xml");
+	s_gameInput = GameInput::Create("res/Configs/Input/Input.xml");
 	if (s_gameInput == nullptr)
 	{
 		// Halt the game when in debug mode
@@ -112,13 +112,13 @@ void GameScene::update(float deltaTime)
 	}
 
 	// Update AI
-	LightSouls::AIAgentManager::GetInstance()->Update(deltaTime);	
+	AIAgentManager::GetInstance()->Update(deltaTime);	
 
 #if !defined(LIGHTSOULS_RELEASE)
 	if (s_gameInput->HasAction("ReloadGame"))
 	{
 		removeAllChildren();
-		LightSouls::AIAgentManager::GetInstance()->Cleanup();
+		AIAgentManager::GetInstance()->Cleanup();
 		InitWolrdLayer();
 		InitUILayer();
 	}
@@ -142,23 +142,23 @@ void GameScene::InitWolrdLayer()
 	Node* worldLayer = Node::create();
 
 	// Init world
-	LightSouls::World* pWorld = LightSouls::World::Create("res/Configs/World/WorldConfig.xml");
+	World* pWorld = World::Create("res/Configs/World/WorldConfig.xml");
 	worldLayer->addChild(pWorld);
 
 	// Init player
-	m_player = LightSouls::Player::Create("res/Configs/World/Player/Player.xml");
+	m_player = Player::Create("res/Configs/World/Player/Player.xml");
 	worldLayer->addChild(m_player);
 	
 	EventDispatcher* eventDispatcher = getEventDispatcher();
-	eventDispatcher->addCustomEventListener(LightSouls::Player::GetEventOnHealthChanged(),
+	eventDispatcher->addCustomEventListener(Player::GetEventOnHealthChanged(),
 		CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
-	eventDispatcher->addCustomEventListener(LightSouls::Player::GetEventOnStaminaChanged(),
+	eventDispatcher->addCustomEventListener(Player::GetEventOnStaminaChanged(),
 		CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
-	eventDispatcher->addCustomEventListener(LightSouls::AIAgent::GetEventOnDestroyed(),
+	eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDestroyed(),
 		CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
 
 	// Init AI
-	LightSouls::AIAgentManager* agentManager = LightSouls::AIAgentManager::GetInstance();
+	AIAgentManager* agentManager = AIAgentManager::GetInstance();
 	if (agentManager->Init(worldLayer, "res/Configs/World/AI/AIManager.xml"))
 	{
 		agentManager->SetTargetEntity(m_player);
@@ -174,9 +174,9 @@ void GameScene::InitWolrdLayer()
 	addChild(worldLayer);
 
 	// Create world camera and set it to follow player
-	LightSouls::Camera* worldCamera = LightSouls::Camera::Create("res/Configs/Camera/Camera.xml");
+	LS::Camera* worldCamera = LS::Camera::Create("res/Configs/Camera/Camera.xml");
 	worldCamera->setCameraFlag(CameraFlag::USER1);
-	worldCamera->runAction(LightSouls::CameraFollow::Create(m_player));	
+	worldCamera->runAction(CameraFollow::Create(m_player));	
 	addChild(worldCamera);	
 }
 
@@ -184,27 +184,27 @@ void GameScene::InitUILayer()
 {
 	// Init UI
 	Node* uiLayer = Node::create();
-	uiLayer->setContentSize(LightSouls::Utils::GetScreenSize());
+	uiLayer->setContentSize(Utils::GetScreenSize());
 
 	Sprite* screenOverlay = Sprite::create("res/Graphics/UI/screenOverlay.png");
-	const Vec2 scale = LightSouls::Utils::GetScreenFillScale(screenOverlay->getContentSize());
+	const Vec2 scale = Utils::GetScreenFillScale(screenOverlay->getContentSize());
 	screenOverlay->setScale(scale.x, scale.y);
 	screenOverlay->setAnchorPoint(Vec2::ZERO);
 
-	m_healthBar = LightSouls::ProgressBar::Create("res/Configs/UI/InGameIndicators/HealthBar.xml");
+	m_healthBar = ProgressBar::Create("res/Configs/UI/InGameIndicators/HealthBar.xml");
 	if (m_healthBar == nullptr)
 	{
 		CCLOG("HelloWorldScene: Failed to initialize health bar !");
 	}
 
-	m_staminaBar = LightSouls::ProgressBar::Create("res/Configs/UI/InGameIndicators/StaminaBar.xml");
+	m_staminaBar = ProgressBar::Create("res/Configs/UI/InGameIndicators/StaminaBar.xml");
 	if (m_staminaBar == nullptr)
 	{
 		CCLOG("HelloWorldScene: Failed to initialize stamina bar!");
 	}
 
-	m_scoreText = ui::Text::create(StringUtils::format("Score: %d", LightSouls::ScoringSystem::GetInstance()->GetScore()),
-		LightSouls::DEFAULT_FONT, 100);
+	m_scoreText = ui::Text::create(StringUtils::format("Score: %d", ScoringSystem::GetInstance()->GetScore()),
+		GameConsts::DEFAULT_FONT, 100);
 	m_scoreText->setNormalizedPosition(Vec2(0.5f, 0.82f)); 
 
 	uiLayer->addChild(screenOverlay);
@@ -215,7 +215,7 @@ void GameScene::InitUILayer()
 	addChild(uiLayer);
 
 	// Create UI camera
-	Camera* uiCamera = Camera::create();
+	cocos2d::Camera* uiCamera = cocos2d::Camera::create();
 	uiCamera->setCameraFlag(CameraFlag::USER2);
 	addChild(uiCamera);
 }
@@ -223,19 +223,19 @@ void GameScene::InitUILayer()
 void GameScene::StartGameOverFadeIn(float time)
 {
 	Sprite* fadeSprite = Sprite::create("res/Graphics/pixel.png");
-	const Vec2& scale = LightSouls::Utils::GetScreenFillScale(fadeSprite->getContentSize());
+	const Vec2& scale = Utils::GetScreenFillScale(fadeSprite->getContentSize());
 	fadeSprite->setScale(scale.x, scale.y);
 	fadeSprite->setColor(Color3B::BLACK);
 	fadeSprite->setAnchorPoint(Vec2::ZERO);
 	fadeSprite->setOpacity(0);
 	fadeSprite->runAction(FadeIn::create(time));
 
-	auto infoText = ui::Text::create("Died !", LightSouls::DEFAULT_FONT, 100);
+	auto infoText = ui::Text::create("Died !", GameConsts::DEFAULT_FONT, 100);
 	infoText->setTextColor(Color4B::RED);
 	infoText->setNormalizedPosition(Vec2(0.5f, 0.65f));
 
 	Node* fadeContainer = Node::create();
-	fadeContainer->setContentSize(LightSouls::Utils::GetScreenSize());
+	fadeContainer->setContentSize(Utils::GetScreenSize());
 	fadeContainer->addChild(fadeSprite);
 	fadeContainer->addChild(infoText);
 
@@ -246,7 +246,7 @@ void GameScene::StartGameOverFadeIn(float time)
 
 void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 {
-	auto healthData = static_cast<LightSouls::ProgressBarChangedEventData*>(eventData->getUserData());
+	auto healthData = static_cast<ProgressBarChangedEventData*>(eventData->getUserData());
 	
 	if (healthData != nullptr && m_healthBar != nullptr)
 	{
@@ -257,7 +257,7 @@ void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 
 			float toNextSceneTime = 2.0f;
 			StartGameOverFadeIn(toNextSceneTime);
-			LightSouls::Utils::StartTimerWithCallback(this,
+			Utils::StartTimerWithCallback(this,
 				CC_CALLBACK_0(GameScene::SwitchToGameOverScene, this),
 				toNextSceneTime);
 		}
@@ -266,7 +266,7 @@ void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 
 void GameScene::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
 {
-	auto staminaData = static_cast<LightSouls::ProgressBarChangedEventData*>(eventData->getUserData());
+	auto staminaData = static_cast<ProgressBarChangedEventData*>(eventData->getUserData());
 
 	if (staminaData != nullptr && m_staminaBar != nullptr)
 	{
@@ -275,8 +275,7 @@ void GameScene::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
 }
 
 void GameScene::OnAgentDestroyed(cocos2d::EventCustom* eventData)
-{
-	using namespace LightSouls;
+{	
 	ScoringSystem* scoringSystem = ScoringSystem::GetInstance();
 	scoringSystem->IncreaseScore();
 	m_scoreText->setString(StringUtils::format("Score: %d", scoringSystem->GetScore()));
@@ -285,7 +284,7 @@ void GameScene::OnAgentDestroyed(cocos2d::EventCustom* eventData)
 void GameScene::SwitchToGameOverScene()
 {
 	getEventDispatcher()->removeAllEventListeners();
-	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(LightSouls::ENextScene::GAME_OVER));
+	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(ENextScene::GAME_OVER));
 }
 
 void GameScene::ProcessDebugPhysicsDraw()

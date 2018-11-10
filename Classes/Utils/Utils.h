@@ -3,8 +3,6 @@
 #include "LightSoulsTypes.h"
 #include "GameConsts.h"
 
-NS_LIGHTSOULS_BEGIN
-
 enum class X360Axes;
 enum class X360Button;
 
@@ -36,8 +34,9 @@ public:
 	static float		SafeDevide(const float& up, const float& down);
 	static float		ConvertMillisecondsToSeconds(long long milliseconds);
 	static void			StartTimerWithCallback(cocos2d::Node* node,
-							std::function<void()> callback, float time, int tag = ACTION_TIMER);
+							std::function<void()> callback, float time, int tag = GameConsts::ACTION_TIMER);
 	static void			ClearCallbackTimers(cocos2d::Node* node, int timerTag);
+	static void			ParseFloatArray(const String& data, cocos2d::Vector<float> outArray);
 
 	static void LogVector2(const Vector2& v);
 	static void LogVector3(const Vector3& v);
@@ -144,4 +143,3 @@ void Utils::WrapValue(T& value, const T& startValue, const T& endValue)
 	}
 }
 
-NS_LIGHTSOULS_END
