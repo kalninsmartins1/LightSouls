@@ -51,6 +51,7 @@ namespace GameConsts
 	static constexpr char* GENERIC_ATTACK_COMPONENT = "GenericAttackComponent";
 	static constexpr char* SPRITE_COMPONENT = "SpriteComponent";
 	static constexpr char* BACKGROUND_ACTION_COMPONENT = "BackgroundAction";
+	static constexpr char* AI_LOOK_AT_TARGET_COMPONENT = "LookAtAITargetComponent";
 
 	// Entity actions
 	static constexpr char* AVOID_TARGET_ACTION = "AIAvoidTarget";

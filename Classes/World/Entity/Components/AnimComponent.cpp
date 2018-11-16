@@ -107,7 +107,7 @@ void AnimComponent::update(float deltaTime)
 	UpdateAttackAnimState();
 }
 
-void AnimComponent::PlayLoopingAnimation(int animationId)
+void AnimComponent::PlayLoopingAnimation(int animationId, bool shouldReverse)
 {
 #if LIGHTSOULS_ANIM_DEBUG
 	String animName;
@@ -116,8 +116,7 @@ void AnimComponent::PlayLoopingAnimation(int animationId)
 #endif
 	if (HasAnim(animationId))
 	{
-		AnimationUtils::StartSpriteFrameAnimation(&m_entity,
-			m_animations[animationId]);
+		AnimationUtils::StartSpriteFrameAnimation(&m_entity, m_animations[animationId], shouldReverse);
 		SetCurrentAnimId(animationId);
 	}
 }
@@ -139,10 +138,10 @@ bool AnimComponent::HasAnim(int animId) const
 	return Utils::ContainsKey(m_animations, animId);
 }
 
-void AnimComponent::PlayLoopingAnimation(const String& animName)
+void AnimComponent::PlayLoopingAnimation(const String& animName, bool shoudlRevers)
 {
 	int animationId = AnimationUtils::GetAnimId(animName);
-	PlayLoopingAnimation(animationId);
+	PlayLoopingAnimation(animationId, shoudlRevers);
 }
 
 void AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback)

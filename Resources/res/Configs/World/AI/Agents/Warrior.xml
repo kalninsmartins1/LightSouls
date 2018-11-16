@@ -30,10 +30,17 @@
 				
 		<State  type="Avoid"
 				onSuccess="Signaling"
-				onFailure="Pause"
+				onFailure="Chase"
 				startAvoidDistance="200"
 				stopAvoidDistance="260"
+				failDistance="280"
 				/>
+				
+		<State 	type="Chase"
+				onSuccess="Avoid"
+				onFailure="Avoid"
+				chaseRadius="1000"
+				stopDistance="220"/>
 				
 		<State 	type="Signaling"
 				onSuccess="LineAttack"
@@ -46,6 +53,8 @@
 
 	</Component>
 
+	<Component type="LookAtAITargetComponent">
+	</Component>
 	
 	<Component type="AnimComponent">
 		<SpriteSheet
@@ -69,7 +78,7 @@
 			
 			<Anim	type="Signal"
 					frameNamePattern="warrior_signal%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.1;"
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.5;"
 			/>
 			
 			<Anim	type="Hurt"

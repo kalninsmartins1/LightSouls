@@ -267,6 +267,7 @@
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateIsPlayerClose.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Animation\LSAnimation.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\LSAnimate.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -445,6 +446,7 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Animation\LSAnimation.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\LSAnimate.h" />
+    <ClInclude Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

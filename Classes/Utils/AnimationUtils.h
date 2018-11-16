@@ -23,7 +23,7 @@ public:
 		const AnimationData& animationData, const std::function<void()>& onFinished);
 
 	static void StartSpriteFrameAnimation(cocos2d::Sprite* pSprite, 
-		const AnimationData& animationData);
+		const AnimationData& animationData, bool shouldReverse = false);
 
 	static void LoadAnimationFrames(const tinyxml2::XMLElement* pElem,
 		AnimationData& outAnimationData);

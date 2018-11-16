@@ -4,7 +4,7 @@
 
 
 
-class HitAttackComponent;
+class GenericAttackComponent;
 class Entity;
 
 class StateLineAttack : public AState
@@ -23,12 +23,13 @@ public:
 
 private:
 	void OnSuccessfulAttack();
+	void SetTargetPosition(const Vector2& targetPos);
 
 private:
 	EStateProgress			m_curProgress;	
 	Entity*					m_targetEntity;
-	Vector2					m_beginTargetPos;
-	HitAttackComponent*		m_attackComponent;
+	Vector2					m_targetPos;
+	GenericAttackComponent*	m_attackComponent;
 	float					m_moveSpeed;
 	float					m_deliverDamageDistance;
 	float					m_arriveDistance;

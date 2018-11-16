@@ -10,7 +10,7 @@
 
 
 StateAttack::StateAttack(AIAgent& agent)
-	: AState(agent)	
+	: AState(agent)
 	, m_curProgress(EStateProgress::NONE)
 	, m_targetEntity(nullptr)
 	, m_attackComponent(nullptr)
@@ -21,7 +21,7 @@ StateAttack::StateAttack(AIAgent& agent)
 }
 
 void StateAttack::OnEnter(AnimComponent* animComponent)
-{	
+{
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_animComponent = animComponent;
 	m_attackComponent = GetAgent().GetAttackComponent();
@@ -36,21 +36,19 @@ EStateProgress StateAttack::OnStep()
 		m_curProgress = EStateProgress::DONE;
 	}
 
-	if(m_curProgress == EStateProgress::IN_PROGRESS && m_isAnimFinished)
+	if (m_curProgress == EStateProgress::IN_PROGRESS && m_isAnimFinished &&
+		m_attackComponent->IsReadyToAttack())
 	{
-		if(m_attackComponent->IsReadyToAttack())
-		{
-			// Direction to target
-			AIAgent& agent = GetAgent();
-			const Vector2& targetEntityPosition = AIAgentManager::GetInstance()->GetTargetEntity()->getPosition();
-			Vector2 toTarget = targetEntityPosition - agent.getPosition();
-			m_attackComponent->Attack(toTarget.getNormalized());
-			agent.StartAttacking();
+		// Direction to target
+		AIAgent& agent = GetAgent();
+		const Vector2& targetEntityPosition = AIAgentManager::GetInstance()->GetTargetEntity()->getPosition();
+		Vector2 toTarget = targetEntityPosition - agent.getPosition();
+		m_attackComponent->Attack(toTarget.getNormalized());
+		agent.StartAttacking();
 
-			// Start attack animation
-			m_isAnimFinished = false;
-			m_animComponent->PlayOneShotAnimation(GameConsts::ANIM_TYPE_ATTACK, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
-		}
+		// Start attack animation
+		m_isAnimFinished = false;
+		m_animComponent->PlayOneShotAnimation(GameConsts::ANIM_TYPE_ATTACK, CC_CALLBACK_0(StateAttack::OnAttackFinished, this));
 	}
 	return m_curProgress;
 }
@@ -58,7 +56,7 @@ EStateProgress StateAttack::OnStep()
 void StateAttack::OnExit()
 {
 	m_curProgress = EStateProgress::NONE;
-	m_isAnimFinished = true;
+	StopAttack();
 }
 
 void StateAttack::OnEventReceived(const String & receivedEvent, const AEventData & eventData)
@@ -76,8 +74,7 @@ EAIState StateAttack::GetStateType() const
 
 void StateAttack::OnAttackFinished()
 {
-	m_isAnimFinished = true;
-	GetAgent().StopAttacking();
+	StopAttack();
 	PlayIdleAnimation();
 	m_curProgress = EStateProgress::DONE;
 }
@@ -88,5 +85,11 @@ void StateAttack::PlayIdleAnimation()
 	{
 		m_animComponent->PlayLoopingAnimation(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_IDLE));
 	}
+}
+
+void StateAttack::StopAttack()
+{
+	m_isAnimFinished = true;
+	GetAgent().StopAttacking();
 }
 

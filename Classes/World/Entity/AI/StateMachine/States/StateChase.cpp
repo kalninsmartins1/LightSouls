@@ -6,7 +6,7 @@
 #include "GameConsts.h"
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
-
+#include "Utils/Utils.h"
 
 
 StateChase::StateChase(AIAgent& agent) 
@@ -15,6 +15,7 @@ StateChase::StateChase(AIAgent& agent)
 	, m_targetEntity(nullptr)
 	, m_chaseRadius(0.0f)
 	, m_chaseStopDistance(0.0f)
+	, m_randomTargetOffset(Vector2::ZERO)
 {
 
 }
@@ -23,6 +24,7 @@ void StateChase::OnEnter(AnimComponent* animComponent)
 {
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_curProgress = EStateProgress::IN_PROGRESS;
+	m_randomTargetOffset = Utils::GetRandomPositionWithinCircle(Vector2::ZERO, 150.0f);
 	m_animComponent = animComponent;
 }
 
@@ -33,18 +35,15 @@ EStateProgress StateChase::OnStep()
 	{
 		// Move agent towards target location
 		const Vector2& currentPosition = agent.getPosition();
-		Vector2 toTarget = m_targetEntity->getPosition() - currentPosition;
+		const Vector2& targetPosition = m_targetEntity->getPosition() + m_randomTargetOffset;
+		Vector2 toTarget = targetPosition - currentPosition;
 		const Vector2& toTargetNormalized = toTarget.getNormalized();
 
 		// Update agent move direction
 		agent.SetMoveDirection(toTargetNormalized);
 		float distanceToTarget = toTarget.length();
 
-		// Play run animation if not playing, might be that on enter entity was processing
-		if (!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
-		{
-			m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
-		}
+		HandleAnimationPlaying(agent);
 
 		if (distanceToTarget <= m_chaseStopDistance ||	// Target has been caught
 			distanceToTarget >= m_chaseRadius)			// Target run off 
@@ -68,16 +67,28 @@ void StateChase::OnExit()
 	}
 }
 
-void StateChase::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
-{
-	// ...
-}
-
 void StateChase::LoadXMLData(const XMLElement* xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
 	m_chaseRadius = xmlElement->FloatAttribute(XMLConsts::AI_CHASE_RADIUS_ATTR);
 	m_chaseStopDistance = xmlElement->FloatAttribute(XMLConsts::AI_STOP_DISTANCE);
+}
+
+void StateChase::HandleAnimationPlaying(const AIAgent& agent)
+{
+	// Play run animation if not playing, might be that on enter entity was processing
+	if (!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
+	{
+		float curScale = agent.getScaleX();
+		if (curScale > 0)
+		{
+			m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
+		}
+		else
+		{
+			m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN, true);
+		}
+	}
 }
 
 EAIState StateChase::GetStateType() const

@@ -2,8 +2,6 @@
 
 #include "LightSoulsTypes.h"
 
-
-
 class AnimComponent;
 
 enum class EntityType

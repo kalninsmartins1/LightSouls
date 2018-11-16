@@ -23,6 +23,7 @@ public:
 private:
 	void					OnAttackFinished();
 	void					PlayIdleAnimation();
+	void					StopAttack();
 
 private:
 	EStateProgress			m_curProgress;	

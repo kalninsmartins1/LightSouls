@@ -6,13 +6,13 @@ LSAnimate* LSAnimate::Create(LSAnimation* animation)
 	LSAnimate* animate = new (std::nothrow) LSAnimate();
 	if (animate && animate->initWithAnimation(animation))
 	{
-		animate->autorelease();		
+		animate->autorelease();
 	}
 	else
 	{
-		CC_SAFE_DELETE(animate);		
+		CC_SAFE_DELETE(animate);
 	}
-	
+
 	return animate;
 }
 
@@ -22,7 +22,7 @@ bool LSAnimate::initWithAnimation(cocos2d::Animation *animation)
 	CCASSERT(animation != nullptr, "LSAnimate: argument Animation must be non-nullptr");
 	if (animation == nullptr)
 	{
-		CCLOG("LSAnimate::initWithAnimation: argument Animation must be non-nullptr");		
+		CCLOG("LSAnimate::initWithAnimation: argument Animation must be non-nullptr");
 	}
 
 	float duration = animation->getDuration();
@@ -34,13 +34,13 @@ bool LSAnimate::initWithAnimation(cocos2d::Animation *animation)
 		_executedLoops = 0;
 		_splitTimes->reserve(animation->getFrames().size());
 
-		float accumUnitsOfTime = 0;		
+		float accumUnitsOfTime = 0;
 		auto& frames = animation->getFrames();
 
 		for (auto& frame : frames)
 		{
 			float value = accumUnitsOfTime / duration;
-			_splitTimes->push_back(value);			
+			_splitTimes->push_back(value);
 
 			float frameTime = frame->getDelayUnits();
 			accumUnitsOfTime += frameTime;

@@ -2,9 +2,7 @@
 #include "Utils/Utils.h"
 #include "World/Entity/Entity.h"
 
-
-
-void MirrorSpriteComponent::setOwnerEntity(Entity* ownerEntity)
+void MirrorSpriteComponent::SetOwnerEntity(Entity* ownerEntity)
 {
 	m_ownerEntity = ownerEntity;
 }

@@ -6,10 +6,10 @@ LSAnimation::LSAnimation(const std::vector<float>& frameDelays)
 
 }
 
-LSAnimation* LSAnimation::Create(const cocos2d::Vector<cocos2d::SpriteFrame*>& frames, std::vector<float> frameDelays, unsigned int loops /*= 1*/)
+LSAnimation* LSAnimation::Create(const cocos2d::Vector<cocos2d::SpriteFrame*>& frames, std::vector<float> frameDelays, bool shouldReverse /*= false*/)
 {
 	LSAnimation* animation = new (std::nothrow) LSAnimation(frameDelays);
-	animation->Init(frames);
+	animation->Init(frames, shouldReverse);
 	animation->autorelease();
 
 	return animation;
@@ -26,17 +26,30 @@ float LSAnimation::getDuration() const
 	return duration;
 }
 
-bool LSAnimation::Init(const cocos2d::Vector<cocos2d::SpriteFrame*>& frames)
-{
+bool LSAnimation::Init(const cocos2d::Vector<cocos2d::SpriteFrame*>& frames, bool shouldReverse)
+{	
 	_loops = 1;
-
 	int index = 0;
-	for (auto& spriteFrame : frames)
+
+	if (shouldReverse)
 	{
-		auto animFrame = cocos2d::AnimationFrame::create(spriteFrame, m_frameDelays[index], cocos2d::ValueMap());
-		_frames.pushBack(animFrame);
-		_totalDelayUnits++;
-		index++;
+		for (auto& it = frames.rbegin(); it != frames.rend(); ++it)
+		{
+			auto animFrame = cocos2d::AnimationFrame::create(*it, m_frameDelays[index], cocos2d::ValueMap());
+			_frames.pushBack(animFrame);
+			_totalDelayUnits++;
+			index++;
+		}
+	}
+	else
+	{
+		for (auto& spriteFrame : frames)
+		{
+			auto animFrame = cocos2d::AnimationFrame::create(spriteFrame, m_frameDelays[index], cocos2d::ValueMap());
+			_frames.pushBack(animFrame);
+			_totalDelayUnits++;
+			index++;
+		}
 	}
 
 	return index > 0;

@@ -83,19 +83,20 @@ cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::
 	return sprite->runAction(sequence);
 }
 
-void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const AnimationData& animationData)
+void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const AnimationData& animationData, bool shouldReverse)
 {
 	// Stop any previously started animation
 	sprite->stopActionByTag(GameConsts::ACTION_ANIM);
 
 	// Start character animation
 	const auto animation = LSAnimation::Create(animationData.frames,
-		animationData.timeBetweenFrames);
-	const auto animateAction = LSAnimate::Create(animation);
+		animationData.timeBetweenFrames, shouldReverse);
+	auto animateAction = LSAnimate::Create(animation);	
+	
 	const auto repeatAction = cocos2d::RepeatForever::create(animateAction);
 	repeatAction->setTag(GameConsts::ACTION_ANIM);
 
-	// Start new anim
+	// Start new anim	
 	sprite->runAction(repeatAction);
 }
 

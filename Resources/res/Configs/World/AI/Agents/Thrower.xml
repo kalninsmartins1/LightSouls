@@ -52,6 +52,9 @@
 
 	</Component>
 	
+	<Component type="LookAtAITargetComponent">
+	</Component>
+	
 	<Component type="AnimComponent">
 		<SpriteSheet
 			path="res/Graphics/World/AI/Thrower/throwerAnimations.png" 

@@ -15,8 +15,7 @@ StateAvoid::StateAvoid(AIAgent& agent)
 	, m_attackComponent(nullptr)
 	, m_startAvoidDistance(200.0f)
 	, m_stopAvoidDistance(450.0f)
-	, m_failDistance(560.0f)
-	, m_isAvoiding(false)
+	, m_failDistance(560.0f)	
 	, m_randomTime(0.0f)
 	, m_isRandomTimeExpired(false)
 {
@@ -51,25 +50,20 @@ EStateProgress StateAvoid::OnStep()
 	Vector2 toTargetNormalized = toTarget.getNormalized();
 	float distanceSqrToTarget = toTarget.lengthSquared();
 
-	if (!m_isAvoiding)
+	if (m_attackComponent->IsReadyToAttack() && distanceSqrToTarget <= m_attackComponent->GetAttackRangeSqr() && m_isRandomTimeExpired)
 	{
-		if (m_attackComponent->IsReadyToAttack() && distanceSqrToTarget <= m_attackComponent->GetAttackRangeSqr() && m_isRandomTimeExpired)
-		{
-			m_curProgress = EStateProgress::DONE;			
-		}
-		else if (distanceSqrToTarget < m_startAvoidDistance * m_startAvoidDistance)
-		{
-			agent.SetMoveDirection(toTargetNormalized * -1);			
-			m_isAvoiding = true;
-		}
+		m_curProgress = EStateProgress::DONE;			
 	}
-	else if(distanceSqrToTarget >= m_stopAvoidDistance * m_stopAvoidDistance)
+	else if (distanceSqrToTarget < m_startAvoidDistance * m_startAvoidDistance)
 	{
-		m_isAvoiding = false;
+		agent.SetMoveDirection(toTargetNormalized * -1);						
+	}	
+	else if(distanceSqrToTarget >= m_stopAvoidDistance * m_stopAvoidDistance)
+	{		
 		agent.SetMoveDirection(Vector2::ZERO);		
 	}
 
-	if (distanceSqrToTarget > m_failDistance * m_failDistance)
+	if (m_failDistance > 0 && distanceSqrToTarget > m_failDistance * m_failDistance)
 	{
 		m_curProgress = EStateProgress::FAILED;
 	}
@@ -94,19 +88,22 @@ void StateAvoid::ProcessAnimations()
 	AIAgent& agent = GetAgent();
 	if (!agent.IsProcessing())
 	{
-		if (agent.GetHeading().lengthSquared() > 0)
+		bool isMoving = agent.GetHeading().lengthSquared() > 0;
+		if (isMoving && !m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
 		{
-			if (!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
+			float curScaleX = agent.getScaleX();
+			if (curScaleX > 0)
 			{
 				m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
 			}
-		}
-		else
-		{
-			if (!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_IDLE))
+			else
 			{
-				m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
-			}
+				m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN, true);
+			}			
+		}
+		else if(!isMoving && !m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_IDLE))
+		{
+			m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);			
 		}
 	}
 }

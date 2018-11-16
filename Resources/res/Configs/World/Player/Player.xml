@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <Entity type="Player"
 			moveSpeed="360"
-			baseHealth="10000"
+			baseHealth="100"
 			baseStamina="80"
 			baseDamage="20"
 			staminaRegenerateSpeed="30"

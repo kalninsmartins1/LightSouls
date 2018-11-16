@@ -22,6 +22,7 @@
 #include "World/Entity/AI/SpawnPointConfig.h"
 #include "World/Projectiles/ProjectileConfig.h"
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
+#include "World/Entity/Components/LookAtAITargetComponent.h"
 
 XMLLoader::XMLLoader()
 {
@@ -424,6 +425,12 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 				longSwordAttack->SetComboExpireTime(comboExpireTime);
 				entity.addComponent(longSwordAttack);
 			}
+			else if (componentType == GameConsts::AI_LOOK_AT_TARGET_COMPONENT)
+			{
+				LookAtAITargetComponent* lookAtComponent = LookAtAITargetComponent::create();
+				lookAtComponent->SetOwnerEntity(&entity);
+				entity.addComponent(lookAtComponent);
+			}
 			else if (componentType == GameConsts::HIT_ATTACK_COMPONENT)
 			{
 				const float secondsBetweenAttacks = element->FloatAttribute(XMLConsts::ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
@@ -457,7 +464,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			{
 				MirrorSpriteComponent* pMirrorSprite = MirrorSpriteComponent::create();
 				pMirrorSprite->setName(GameConsts::MIRROR_SPRITE_COMPONENT);
-				pMirrorSprite->setOwnerEntity(dynamic_cast<Entity*>(&entity));
+				pMirrorSprite->SetOwnerEntity(dynamic_cast<Entity*>(&entity));
 				entity.addComponent(pMirrorSprite);
 			}
 			else if (componentType == GameConsts::NODE_COMPONENT)

@@ -15,7 +15,7 @@ StateLineAttack::StateLineAttack(AIAgent& aiAgent)
 	: AState(aiAgent)	
 	, m_curProgress(EStateProgress::NONE)
 	, m_targetEntity(nullptr)
-	, m_beginTargetPos(Vector2::ZERO)
+	, m_targetPos(Vector2::ZERO)
 	, m_attackComponent(nullptr)
 	, m_moveSpeed(100.0f)
 	, m_deliverDamageDistance(40.0f)
@@ -32,20 +32,13 @@ EAIState StateLineAttack::GetStateType() const
 void StateLineAttack::OnEnter(AnimComponent * animComponent)
 {		
 	AIAgent& agent = GetAgent();	
-	m_attackComponent = static_cast<HitAttackComponent*>(agent.GetAttackComponent());	
+	m_attackComponent = agent.GetAttackComponent();	
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	m_beginTargetPos = m_targetEntity->getPosition();
 	animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_ATTACK);
 
-	if (m_attackComponent->IsReadyToAttack())
-	{				
-		m_curProgress = EStateProgress::IN_PROGRESS;				
-		agent.SetCurrentMoveSpeed(m_moveSpeed); // Move with different speed in this state
-	}
-	else
-	{
-		m_curProgress = EStateProgress::FAILED;
-	}	
+	m_curProgress = EStateProgress::IN_PROGRESS;				
+	SetTargetPosition(m_targetEntity->getPosition());
+	agent.SetCurrentMoveSpeed(m_moveSpeed); // Move with different speed in this state	
 }
 
 EStateProgress StateLineAttack::OnStep()
@@ -56,7 +49,7 @@ EStateProgress StateLineAttack::OnStep()
 
 		// Move to target
 		const Vector2 agentPos = agent.getPosition();
-		Vector2 toTarget = m_beginTargetPos - agentPos;
+		Vector2 toTarget = m_targetPos - agentPos;
 		agent.SetMoveDirection(toTarget.getNormalized());
 		
 		// Check if we are already there
@@ -80,10 +73,7 @@ EStateProgress StateLineAttack::OnStep()
 
 void StateLineAttack::OnExit()
 {
-	if(m_curProgress == EStateProgress::DONE)
-	{
-		m_attackComponent->RegisterSuccessfulAttack();
-	}
+	m_attackComponent->Attack(Vector2::ZERO); // Register attack was performed
 	AIAgent& agent = GetAgent();
 	agent.SetMoveDirection(Vector2::ZERO);
 	agent.ResetMoveSpeed();
@@ -115,7 +105,22 @@ void StateLineAttack::LoadXMLData(const XMLElement* xmlElement)
 
 void StateLineAttack::OnSuccessfulAttack()
 {
-	m_curProgress = EStateProgress::DONE;
+	m_curProgress = EStateProgress::DONE;	
 	m_targetEntity->TakeDamage(GetAgent());
+}
+
+void StateLineAttack::SetTargetPosition(const Vector2& targetPos)
+{
+	AIAgent& agent = GetAgent();
+	Vector2 agentPos = agent.getPosition();
+	Vector2 toTarget = targetPos - agentPos;
+	if (toTarget.lengthSquared() > m_attackComponent->GetAttackRangeSqr())
+	{
+		m_targetPos = agentPos + toTarget.getNormalized() * m_attackComponent->GetAttackRange();
+	}
+	else
+	{
+		m_targetPos = targetPos;
+	}
 }
 

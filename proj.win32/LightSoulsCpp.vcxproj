@@ -76,7 +76,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=0;CC_ENABLE_BOX2D_INTEGRATION=1;LIGHTSOULS_ANIM_DEBUG=0;LIGHTSOULS_DEBUG_AI=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=0;CC_ENABLE_BOX2D_INTEGRATION=1;LIGHTSOULS_ANIM_DEBUG=0;LIGHTSOULS_DEBUG_AI=0;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -191,6 +191,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\LongSwordAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\RangedAttackComponent.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\AnimComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\ActionSequence.cpp" />
@@ -253,6 +254,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\LongSwordAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\RangedAttackComponent.h" />
+    <ClInclude Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\MirrorSpriteComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\AnimComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\ActionSequence.h" />

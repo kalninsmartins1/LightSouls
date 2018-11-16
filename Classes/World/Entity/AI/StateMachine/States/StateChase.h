@@ -15,9 +15,10 @@ public:
 	
 	virtual void			OnEnter(AnimComponent* animComponent) override;
 	virtual EStateProgress	OnStep() override;
-	virtual void			OnExit() override;
-	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;	
+	virtual void			OnExit() override;	
 	virtual void			LoadXMLData(const XMLElement* xmlElement) override;
+
+	void HandleAnimationPlaying(const AIAgent& agent);
 
 private:
 	EStateProgress	m_curProgress;
@@ -25,5 +26,6 @@ private:
 	AnimComponent*	m_animComponent;
 	float			m_chaseRadius;
 	float			m_chaseStopDistance;
+	Vector2			m_randomTargetOffset;
 };
 

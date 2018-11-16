@@ -40,8 +40,8 @@ public:
 
 	// Load animation configuration from xml file
 	void LoadConfig(tinyxml2::XMLNode* node);
-	void PlayLoopingAnimation(const String& animName);
-	void PlayLoopingAnimation(int animationId);
+	void PlayLoopingAnimation(const String& animName, bool shouldReverse = false);
+	void PlayLoopingAnimation(int animationId, bool shouldReverse = false);
 	void PlayOneShotAnimation(const String& animName, const AnimationCallback& callback);
 	void PlayOneShotAnimation(int animationId, const AnimationCallback& callback);
 	void PlayAttackAnimation(const AnimationCallback& callback);

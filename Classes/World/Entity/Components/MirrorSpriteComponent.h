@@ -2,8 +2,6 @@
 
 #include "LightSoulsTypes.h"
 
-
-
 class Entity;
 
 class MirrorSpriteComponent: public cocos2d::Component
@@ -11,7 +9,7 @@ class MirrorSpriteComponent: public cocos2d::Component
 public:
 	CREATE_FUNC(MirrorSpriteComponent);
 
-	void setOwnerEntity(Entity* ownerEntity);	
+	void SetOwnerEntity(Entity* ownerEntity);	
 	virtual void update(float delta) override;
 
 private:
