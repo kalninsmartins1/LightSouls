@@ -3,14 +3,15 @@
 namespace GameConsts
 {
 	// Default values
-	static constexpr float		 PI = 3.14159265359f;
-	static constexpr int		 FULL_CIRCLE_DEGREES = 360;
-	static constexpr int		 HALF_CIRCLE_DEGREES = 180;
-	static constexpr int		 MAX_SPRITE_NAME_LENGTH = 100;
-	static constexpr int		 DEFAULT_COLLISION_MASK = 1;
-	static constexpr int		 WORLD_LAYER = -32768;
-	static constexpr float		 LOADING_TIME = 0.1f;
-	static constexpr const char* DEFAULT_FONT = "Arial";
+	static constexpr float			PI = 3.14159265359f;
+	static constexpr int			FULL_CIRCLE_DEGREES = 360;
+	static constexpr int			HALF_CIRCLE_DEGREES = 180;
+	static constexpr int			MAX_SPRITE_NAME_LENGTH = 100;
+	static constexpr int			DEFAULT_COLLISION_MASK = 1;
+	static constexpr int			WORLD_LAYER = -32768;
+	static constexpr float			LOADING_TIME = 0.1f;
+	static constexpr const char*	DEFAULT_FONT = "Arial";
+	static constexpr unsigned char	FULL_OPAQUE = 255;
 
 	// Action tag ids
 	static constexpr int ACTION_MOVE = 0;
