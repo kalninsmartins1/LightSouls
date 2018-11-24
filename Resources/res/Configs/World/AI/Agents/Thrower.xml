@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Entity type="Thrower"
-			moveSpeed="380"
+			moveSpeed="120"
 			baseHealth="40"
 			baseStamina="100"
 			baseDamage="10"
