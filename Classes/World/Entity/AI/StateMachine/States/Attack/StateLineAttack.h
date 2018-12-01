@@ -2,8 +2,6 @@
 
 #include "../AState.h"
 
-
-
 class GenericAttackComponent;
 class Entity;
 

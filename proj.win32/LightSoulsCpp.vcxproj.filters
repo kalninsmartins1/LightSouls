@@ -268,6 +268,8 @@
     <ClCompile Include="..\Classes\World\Entity\Animation\LSAnimation.cpp" />
     <ClCompile Include="..\Classes\World\Entity\CustomActions\LSAnimate.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Animation\BlurAnimation.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Animation\BlurAnimationFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -447,6 +449,8 @@
     <ClInclude Include="..\Classes\World\Entity\Animation\LSAnimation.h" />
     <ClInclude Include="..\Classes\World\Entity\CustomActions\LSAnimate.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.h" />
+    <ClInclude Include="..\Classes\World\Entity\Animation\BlurAnimation.h" />
+    <ClInclude Include="..\Classes\World\Entity\Animation\BlurAnimationFrame.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

@@ -2,8 +2,6 @@
 
 #include "LightSoulsTypes.h"
 
-
-
 struct PhysicsContactInformation;
 class PhysicsBodyConfig;
 
@@ -67,7 +65,6 @@ private:
 	std::vector<PhysicsContactListener> m_beginContactListeners;
 	std::vector<PhysicsContactListener> m_endContactListeners;
 
-	cocos2d::Node* m_context;
-	cocos2d::DrawNode* m_debugDrawNode;
+	cocos2d::Node*		m_context;
+	cocos2d::DrawNode*	m_debugDrawNode;
 };
-

@@ -186,6 +186,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.cpp" />
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Animation\BlurAnimation.cpp" />
+    <ClCompile Include="..\Classes\World\Entity\Animation\BlurAnimationFrame.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Animation\LSAnimation.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.cpp" />
@@ -249,6 +251,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePatrol.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StatePause.h" />
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateSignaling.h" />
+    <ClInclude Include="..\Classes\World\Entity\Animation\BlurAnimation.h" />
+    <ClInclude Include="..\Classes\World\Entity\Animation\BlurAnimationFrame.h" />
     <ClInclude Include="..\Classes\World\Entity\Animation\LSAnimation.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Components\Attack\HitAttackComponent.h" />

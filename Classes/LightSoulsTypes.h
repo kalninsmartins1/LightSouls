@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "tinyxml2/tinyxml2.h"
 
+#define cc cocos2d
 
 using Vector2 = cocos2d::Vec2;
 using Vector3 = cocos2d::Vec3;

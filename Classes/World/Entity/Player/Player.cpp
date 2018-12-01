@@ -229,7 +229,7 @@ void Player::LightAttack()
 void Player::PerformDodge()
 {	
 	StartDodging();
-	GetAnimComponent()->PlayLoopingAnimation(GameConsts::ANIM_TYPE_DODGE);
+	GetAnimComponent()->PlayLoopingAnimation(GameConsts::ANIM_TYPE_DODGE, false, true);
 	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(Player::OnDodgeFinished, this), m_dodgeTime);
 }

@@ -100,7 +100,7 @@ void Utils::ClearCallbackTimers(cocos2d::Node* node, int timerTag)
 
 void Utils::ParseFloatArray(const String& data, std::vector<float>& outArray)
 {
-	int index = 0;
+	unsigned int index = 0;
 	String midResult = "";
 	while (index < data.length())
 	{

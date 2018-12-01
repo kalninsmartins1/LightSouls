@@ -6,8 +6,6 @@
 #include "GameConsts.h"
 #include "World/Entity/Entity.h"
 
-
-
 AnimComponent::AnimComponent(Entity& ownerSprite) 
 	: m_curAnimId(-1)
 	, m_entity(ownerSprite)
@@ -16,6 +14,7 @@ AnimComponent::AnimComponent(Entity& ownerSprite)
 	, m_curAttackAnimId(m_firstAttackAnimId)
 	, m_currentAttackStyle(AttackAnimStyle::FORWARD)
 	, m_animations()
+	, m_blurAnimation(*this)
 {
 
 }
@@ -61,20 +60,24 @@ void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 	m_entity.initWithSpriteFrame(m_animations[AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_IDLE)].frames.at(0));
 }
 
-void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback)
+void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback, bool shouldBlur)
 {
 #if LIGHTSOULS_ANIM_DEBUG
 	String animName;
 	AnimationUtils::GetAnimName(animationId, animName);
 	CCLOG("PlayOneShotAnimation: %s %s", animName.c_str(), getOwner()->getName().c_str());
-#endif
+#endif	
 
 	if (HasAnim(animationId))
 	{
-		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_entity,
-			m_animations[animationId],
-			callback);
+		const AnimationData& data = m_animations[animationId];
+		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_entity, data, callback);
 		SetCurrentAnimId(animationId);
+
+		if (shouldBlur)
+		{
+			AddBlur(data, animationId);
+		}
 	}
 	else
 	{
@@ -105,25 +108,38 @@ void AnimComponent::ResetAttackAnimation()
 void AnimComponent::update(float deltaTime)
 {
 	UpdateAttackAnimState();
+	m_blurAnimation.Update(deltaTime);
 }
 
-void AnimComponent::PlayLoopingAnimation(int animationId, bool shouldReverse)
+void AnimComponent::PlayLoopingAnimation(int animationId, bool shouldReverse, bool shouldBlur)
 {
 #if LIGHTSOULS_ANIM_DEBUG
 	String animName;
 	AnimationUtils::GetAnimName(animationId, animName);
 	CCLOG("PlayLoopingAnimation: %s %s", animName.c_str(), getOwner()->getName().c_str());
-#endif
+#endif	
+
 	if (HasAnim(animationId))
 	{
-		AnimationUtils::StartSpriteFrameAnimation(&m_entity, m_animations[animationId], shouldReverse);
+		const AnimationData& data = m_animations[animationId];
+		AnimationUtils::StartSpriteFrameAnimation(&m_entity, data, shouldReverse);
 		SetCurrentAnimId(animationId);
+		
+		if (shouldBlur)
+		{
+			AddBlur(data, animationId);
+		}
 	}
 }
 
 bool AnimComponent::IsCurrrentlyPlayingAnim(const String& animName) const
 {
 	int animId = AnimationUtils::GetAnimId(animName);
+	return animId == m_curAnimId;
+}
+
+bool AnimComponent::IsCurrrentlyPlayingAnim(int animId) const
+{
 	return animId == m_curAnimId;
 }
 
@@ -138,16 +154,31 @@ bool AnimComponent::HasAnim(int animId) const
 	return Utils::ContainsKey(m_animations, animId);
 }
 
-void AnimComponent::PlayLoopingAnimation(const String& animName, bool shoudlRevers)
+const Entity& AnimComponent::GetOwnerEntity() const
 {
-	int animationId = AnimationUtils::GetAnimId(animName);
-	PlayLoopingAnimation(animationId, shoudlRevers);
+	return m_entity;
 }
 
-void AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback)
+cocos2d::Node* AnimComponent::GetSpriteContainer() const
+{
+	return m_entity.getParent();
+}
+
+cc::SpriteFrame* AnimComponent::GetCurrentSpriteFrame() const
+{
+	return m_entity.getSpriteFrame();
+}
+
+void AnimComponent::PlayLoopingAnimation(const String& animName, bool shoudlRevers, bool shouldBlur)
 {
 	int animationId = AnimationUtils::GetAnimId(animName);
-	PlayOneShotAnimation(animationId, callback);
+	PlayLoopingAnimation(animationId, shoudlRevers, shouldBlur);
+}
+
+void AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback, bool shouldBlur)
+{
+	int animationId = AnimationUtils::GetAnimId(animName);
+	PlayOneShotAnimation(animationId, callback, shouldBlur);
 }
 
 void AnimComponent::SetCurrentAnimId(int currentAnimId)
@@ -189,4 +220,11 @@ void AnimComponent::TransitionAttackAnimDirection(AttackAnimStyle style, int fir
 	m_firstAttackAnimId = firstAttackAnimId;
 	m_curAttackAnimId = m_firstAttackAnimId + curAttackIdDif;
 	m_lastAttackAnimId = lastAttackAnimId;
+}
+
+void AnimComponent::AddBlur(const AnimationData& data, int animationId)
+{
+	m_blurAnimation.AddFrame(data.snapShotDelay, animationId);
+	m_blurAnimation.AddFrame(data.snapShotDelay, animationId, data.secondFrameDelay);
+	m_blurAnimation.AddFrame(data.snapShotDelay, animationId, data.secondFrameDelay * 2.0f);
 }
