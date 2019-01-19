@@ -73,8 +73,20 @@ void PhysicsManager::AddPhysicsBody(cocos2d::Node& attachmentNode,
 	const PhysicsBodyConfig& bodyConfig)
 {
 	using namespace cocos2d;
-	PhysicsBody* physicsBody = PhysicsBody::createBox(bodyConfig.GetSize(),
-		bodyConfig.GetPhysicsMaterial());
+	PhysicsBody* physicsBody = nullptr;
+	switch (bodyConfig.GetBodyType())
+	{				
+		case BodyType::BOX:
+			physicsBody = PhysicsBody::createBox(bodyConfig.GetSize(),
+				bodyConfig.GetPhysicsMaterial());
+			break;
+
+		case BodyType::EDGE_BOX:
+			physicsBody = PhysicsBody::createEdgeBox(bodyConfig.GetSize(),
+				bodyConfig.GetPhysicsMaterial());
+			break;
+	}
+
 	physicsBody->setDynamic(bodyConfig.IsBodyDynamic());
 	physicsBody->setGravityEnable(bodyConfig.IsGravityEnabled());
 

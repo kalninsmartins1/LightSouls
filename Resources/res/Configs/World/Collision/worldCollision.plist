@@ -57,16 +57,16 @@
                         <key>polygons</key>
                         <array>
                             <array>
-                                <string>{ 612.00000,705.00000 }</string>
-                                <string>{ 198.00000,397.00000 }</string>
-                                <string>{ 116.00000,851.00000 }</string>
-                                <string>{ 161.00000,1419.00000 }</string>
+                                <string>{ 100.00000,705.00000 }</string>
+                                <string>{ 100.00000,397.00000 }</string>
+                                <string>{ 100.00000,851.00000 }</string>
+                                <string>{ 100.00000,1419.00000 }</string>
                             </array>
                             <array>
-                                <string>{ 612.00000,705.00000 }</string>
-                                <string>{ 1999.00000,216.00000 }</string>
-                                <string>{ 1048.00000,96.00000 }</string>
-                                <string>{ 198.00000,397.00000 }</string>
+                                <string>{ 600.00000,705.00000 }</string>
+                                <string>{ 600.00000,216.00000 }</string>
+                                <string>{ 600.00000,96.00000 }</string>
+                                <string>{ 600.00000,397.00000 }</string>
                             </array>
                             <array>
                                 <string>{ -1401.00000,1089.00000 }</string>

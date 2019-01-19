@@ -99,6 +99,7 @@ namespace XMLConsts
 	static constexpr char* PHYSICS_FORCE_SCALE_ATTR = "forceScale";
 	static constexpr char* PHYSICS_GRAVITY_ATTR = "isGravityEnabled";
 	static constexpr char* PHYSICS_BODY_BOX_ATTR = "box";
+	static constexpr char* PHYSICS_BODY_EDGE_BOX_ATTR = "edgeBox";
 	static constexpr char* PHYSICS_DESITY_ATTR = "density";
 	static constexpr char* PHYSICS_RESTITUTION_ATTR = "restitution";
 	static constexpr char* PHYSICS_FRICTION_ATTR = "friction";

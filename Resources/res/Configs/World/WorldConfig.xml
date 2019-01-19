@@ -1,5 +1,19 @@
-<WorldConfig>
-	
+<WorldConfig>	
 	<Sprite path="res/Graphics/World/arena.png"/>
-	<CollisionData name="arena" path="res/Configs/World/Collision/worldCollision.plist"/>
+	
+	<Component type="RigidBodyComponent">
+		<AnchorPosition x="0.5" y="0.5" />
+		<PhysicsMaterial density="1000" restitution="0.2" friction="0.6" />
+		<PhysicsBody
+			shape="edgeBox"
+			width="1800"
+			height="800"
+			isDynamic="false" 
+			isGravityEnabled="false" 
+			isRotationEnabled="false"
+			collisionBitMask="1"
+			collisionCategory="1"
+			forceScale="60"
+			/>
+	</Component>
 </WorldConfig>

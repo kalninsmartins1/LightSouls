@@ -15,5 +15,6 @@ using XMLNode = tinyxml2::XMLNode;
 using XMLElement = tinyxml2::XMLElement;
 using XMLDoc = tinyxml2::XMLDocument;
 using XMLError = tinyxml2::XMLError;
+using XMLAttribute = tinyxml2::XMLAttribute;
 
 

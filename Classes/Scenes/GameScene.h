@@ -49,6 +49,6 @@ private:
 	Player*							m_player;
 	ProgressBar*					m_healthBar;
 	ProgressBar*					m_staminaBar;
-	cocos2d::ui::Text*							m_scoreText;
-	bool										m_physicsDebugEnabled;
+	cocos2d::ui::Text*				m_scoreText;
+	bool							m_physicsDebugEnabled;
 };

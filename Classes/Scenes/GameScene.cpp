@@ -176,8 +176,8 @@ void GameScene::InitWolrdLayer()
 	// Create world camera and set it to follow player
 	LS::Camera* worldCamera = LS::Camera::Create("res/Configs/Camera/Camera.xml");
 	worldCamera->setCameraFlag(CameraFlag::USER1);
-	worldCamera->runAction(CameraFollow::Create(m_player));	
-	addChild(worldCamera);	
+	worldCamera->setPosition(m_player->getPosition()); // Make the player position in middle of camera	
+	addChild(worldCamera);
 }
 
 void GameScene::InitUILayer()

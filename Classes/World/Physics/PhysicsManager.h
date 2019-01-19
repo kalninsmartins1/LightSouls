@@ -42,7 +42,7 @@ public:
 
 	// Add physics body as component to given attachment node
 	static void AddPhysicsBody(cocos2d::Node& attachmentNode,
-		const PhysicsBodyConfig& bodyConfig);
+		const PhysicsBodyConfig& bodyConfig);	
 
 	void DebugDrawRect(const cocos2d::Rect& rect);
 

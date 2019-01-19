@@ -470,11 +470,14 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			else if (componentType == GameConsts::NODE_COMPONENT)
 			{
 				cocos2d::Node* node = cocos2d::Node::create();
-				node->setName(entity.getName() + GameConsts::NODE_COMPONENT);
-				node->setContentSize(entity.getContentSize());
-				node->setAnchorPoint(Vector2(0, 0));
-				LoadNodeComponents(node, element);
-				entity.addChild(node);
+				if (node != nullptr)
+				{
+					node->setName(entity.getName() + GameConsts::NODE_COMPONENT);
+					node->setContentSize(entity.getContentSize());
+					node->setAnchorPoint(Vector2(0, 0));
+					LoadNodeComponents(*node, element);
+					entity.addChild(node);
+				}				
 			}
 		}
 	}
@@ -571,13 +574,9 @@ bool XMLLoader::LoadWorld(World& world, const String& pathToXML)
 	{
 		XMLElement* root = doc.RootElement();
 		const XMLElement* sprite = root->FirstChildElement(XMLConsts::NODE_SPRITE);
-		const XMLElement* collisionData = root->FirstChildElement(XMLConsts::NODE_COLLISION_DATA);
-
-		const String& pathToSprite = sprite->Attribute(XMLConsts::PATH_ATTR);
-		const String& pathToCollisionData = collisionData->Attribute(XMLConsts::PATH_ATTR);
-		const String& bodyName = collisionData->Attribute(XMLConsts::NAME_ATTR);
-
-		world.Init(pathToSprite, bodyName, pathToCollisionData);
+		const String& pathToSprite = sprite->Attribute(XMLConsts::PATH_ATTR);		
+		LoadNodeComponents(world, root);		
+		world.Init(pathToSprite);
 	}
 
 	return isSuccessful;
@@ -598,33 +597,47 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(const XMLNode* xmlNode, PhysicsB
 	const int collisionBitMask = physicsBodyElem->IntAttribute(XMLConsts::PHYSICS_BIT_MASK_ATTR);
 	const int collisonCategory = physicsBodyElem->IntAttribute(XMLConsts::PHYSICS_COLLISION_CATEGORY);
 
+	
 	if (bodyType == XMLConsts::PHYSICS_BODY_BOX_ATTR)
 	{
-		cocos2d::PhysicsMaterial material;
-		LoadPhysicsMaterialFromAttributes(xmlNode, material);
-
-		outConfig.SetSize(bodySize);
-		outConfig.SetPhysicsMaterial(material);
 		outConfig.SetBodyType(BodyType::BOX);
-		outConfig.SetCollisionBitMask(collisionBitMask);
-		outConfig.SetCollisionCategory(collisonCategory);
-		outConfig.SetIsDynamic(isBodyDynamic);
-		outConfig.SetIsGravityEnabled(isGravityEnabled);
-		outConfig.SetRotationEnabled(isRotationEnabled);
 	}
+	else if(bodyType == XMLConsts::PHYSICS_BODY_EDGE_BOX_ATTR)
+	{
+		outConfig.SetBodyType(BodyType::EDGE_BOX);
+	}
+	else
+	{
+		CC_ASSERT(false && "XMLLoader::CreatePhysicsBodyFromAttributes - Error unknown body type !");
+	}
+	
+	cocos2d::PhysicsMaterial material;
+	LoadPhysicsMaterialFromAttributes(xmlNode, material);
+	outConfig.SetSize(bodySize);
+	outConfig.SetPhysicsMaterial(material);	
+	outConfig.SetCollisionBitMask(collisionBitMask);
+	outConfig.SetCollisionCategory(collisonCategory);
+	outConfig.SetIsDynamic(isBodyDynamic);
+	outConfig.SetIsGravityEnabled(isGravityEnabled);
+	outConfig.SetRotationEnabled(isRotationEnabled);
 }
 
-void XMLLoader::LoadNodeComponents(cocos2d::Node* node, const XMLElement* root)
+void XMLLoader::LoadNodeComponents(cc::Node& node, const XMLElement* root)
 {
 	for (const XMLElement* element = root->FirstChildElement(); element != nullptr; element = element->NextSiblingElement())
 	{
-		const String& componentType = element->Attribute(XMLConsts::TYPE_ATTR);
-		if (componentType == GameConsts::RIGID_BODY_COMPONENT)
-		{
-			PhysicsBodyConfig config;
-			CreatePhysicsBodyFromAttributes(element, config);
-			PhysicsManager::AddPhysicsBody(*node, config);
+		const XMLAttribute* attribute =  element->FindAttribute(XMLConsts::TYPE_ATTR);
+		if (attribute != nullptr)
+		{		
+			const String& componentType = attribute->Value();
+			if (componentType == GameConsts::RIGID_BODY_COMPONENT)
+			{
+				PhysicsBodyConfig config;
+				CreatePhysicsBodyFromAttributes(element, config);
+				PhysicsManager::AddPhysicsBody(node, config);
+			}
 		}
+	
 	}
 }
 

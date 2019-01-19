@@ -3,7 +3,6 @@
 #include "GameConsts.h"
 #include "Physics/PhysicsBodyConfig.h"
 #include "Physics/PhysicsManager.h"
-#include "3rdParty/Physics/PhysicsShapeCache.h"
 
 const String World::s_nodeName = "World";
 bool World::s_isShapeCacheInitialized = false;
@@ -16,7 +15,7 @@ const String& World::GetNodeName()
 World* World::Create(const String& pathToXML)
 {
 	World* world = new (std::nothrow) World();
-	if (world && world->Init(pathToXML))
+	if (world && world->InitWithXML(pathToXML))
 	{
 		world->autorelease();
 	}
@@ -28,24 +27,24 @@ World* World::Create(const String& pathToXML)
 	return world;
 }
 
-bool World::Init(const String& pathToXML)
+bool World::InitWithXML(const String& pathToXML)
 {
 	return XMLLoader::LoadWorld(*this, pathToXML);
 }
 
-bool World::Init(const String& pathToSprite, const String& bodyName, const String& pathToCollisionData)
+bool World::Init(const String& pathToSprite)
 {
 	bool isSuccessful = initWithFile(pathToSprite);;
-	auto physicsShapeCache = PhysicsShapeCache::getInstance();
-	if (!s_isShapeCacheInitialized)
-	{
-		isSuccessful = isSuccessful && physicsShapeCache->addShapesWithFile(pathToCollisionData);
-		s_isShapeCacheInitialized = true;
-	}	
-
-	isSuccessful = isSuccessful && physicsShapeCache->setBodyOnSprite(bodyName, this);
+	
 	setName(s_nodeName);
 	setLocalZOrder(GameConsts::WORLD_LAYER);
+	cc::PhysicsBody* physicsBody = getPhysicsBody();
+	isSuccessful &= physicsBody != nullptr;	
+	if (isSuccessful) 
+	{
+		cc::Size size = getContentSize();
+		physicsBody->setPositionOffset(Vector2(size.width * 0.5f, size.height * 0.5f));
+	}
 
 	// If all operations were successful then init was successful
 	return isSuccessful;

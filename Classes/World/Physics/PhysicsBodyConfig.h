@@ -2,12 +2,11 @@
 
 #include "LightSoulsTypes.h"
 
-
-
 enum class BodyType
 {
 	NONE,
 	BOX,
+	EDGE_BOX,
 };
 
 class PhysicsBodyConfig

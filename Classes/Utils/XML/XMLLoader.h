@@ -61,7 +61,7 @@ private:
 	static void						GetVector3FromElement(const XMLElement* node, cocos2d::Vec3& outResult);
 	static void						GetVector2FromElement(const XMLElement* element, cocos2d::Vec2& outResult);
 	static void						CreatePhysicsBodyFromAttributes(const XMLNode* xmlNode, PhysicsBodyConfig& outConfig);
-	static void						LoadNodeComponents(cocos2d::Node* node, const XMLElement* root);
+	static void						LoadNodeComponents(cc::Node& node, const XMLElement* root);
 	static GameInputType			StrToGameInputType(const String& inputType);
 };
 
