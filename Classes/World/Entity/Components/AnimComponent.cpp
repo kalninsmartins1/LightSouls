@@ -9,14 +9,37 @@
 AnimComponent::AnimComponent(Entity& ownerSprite) 
 	: m_curAnimId(-1)
 	, m_entity(ownerSprite)
-	, m_firstAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD))
-	, m_lastAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD))
+	, m_firstAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_SIDE))
+	, m_lastAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_SIDE))
 	, m_curAttackAnimId(m_firstAttackAnimId)
-	, m_currentAttackStyle(AttackAnimStyle::FORWARD)
+	, m_currentAnimStyle(AnimStyle::SIDE)
 	, m_animations()
 	, m_blurAnimation(*this)
 {
 
+}
+
+int AnimComponent::GetDirectionalAnimId(const String& animName) const
+{
+	int animationId = AnimationUtils::GetAnimId(animName);
+	if (animationId != -1)
+	{
+		switch (m_currentAnimStyle)
+		{
+			/* We are relaying that directional animations are defined in certain order and
+				comes in pairs of 3, but since its a core level thing it should be fine.
+			*/
+			case AnimStyle::UP:
+				animationId += 1;
+				break;
+
+			case AnimStyle::DOWN:
+				animationId += 2;
+				break;
+		}
+	}
+
+	return animationId;
 }
 
 AnimComponent* AnimComponent::Create(Entity& sprite)
@@ -57,7 +80,24 @@ void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 	}
 
 	// Init parent sprite
-	m_entity.initWithSpriteFrame(m_animations[AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_IDLE)].frames.at(0));
+	int animId = -1;
+	if (HasAnim(GameConsts::ANIM_TYPE_IDLE))
+	{
+		animId = AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_IDLE);
+	}
+	else if (HasAnim(GameConsts::ANIM_TYPE_IDLE_DIR))
+	{
+		animId = AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_IDLE_DIR);
+	}
+
+	if (animId != -1)
+	{
+		m_entity.initWithSpriteFrame(m_animations[animId].frames.at(0));
+	}
+	else
+	{
+		CC_ASSERT(false && "AnimComponent::LoadConfig - Error IDLE animation not found !");
+	}
 }
 
 void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback, bool shouldBlur)
@@ -94,6 +134,32 @@ void AnimComponent::PlayAttackAnimation(const AnimationCallback& callback)
 	PlayOneShotAnimation(m_curAttackAnimId, callback);
 }
 
+void AnimComponent::PlayLoopingDirectionalAnim(const String& animName, bool shouldReverse /*= false*/, bool shouldBlur /*= false*/)
+{
+	int animationId = GetDirectionalAnimId(animName);
+	if (animationId != -1)
+	{
+		PlayLoopingAnimation(animationId, shouldReverse, shouldBlur);		
+	}
+	else
+	{
+		Utils::AssertWithStrFormat(false, "AnimComponent::PlayLoopingDirectionalAnim - animation %s not found", animName);
+	}
+}
+
+void AnimComponent::PlayOneShotDirectionalAnim(const String& animName, const AnimationCallback& callback)
+{
+	int animationId = GetDirectionalAnimId(animName);
+	if (animationId != -1)
+	{
+		PlayOneShotAnimation(animationId, callback);
+	}
+	else
+	{
+		Utils::AssertWithStrFormat(false, "AnimComponent::PlayOneShotDirectionalAnim - animation %s not found", animName);
+	}
+}
+
 void AnimComponent::GoToNextAttackAnimation()
 {
 	// Wrap the index within valid values
@@ -107,7 +173,7 @@ void AnimComponent::ResetAttackAnimation()
 
 void AnimComponent::update(float deltaTime)
 {
-	UpdateAttackAnimState();
+	UpdateAnimState();
 	m_blurAnimation.Update(deltaTime);
 }
 
@@ -135,12 +201,25 @@ void AnimComponent::PlayLoopingAnimation(int animationId, bool shouldReverse, bo
 bool AnimComponent::IsCurrrentlyPlayingAnim(const String& animName) const
 {
 	int animId = AnimationUtils::GetAnimId(animName);
-	return animId == m_curAnimId;
+	return IsCurrrentlyPlayingAnim(animId);
 }
 
 bool AnimComponent::IsCurrrentlyPlayingAnim(int animId) const
 {
 	return animId == m_curAnimId;
+}
+
+bool AnimComponent::IsCurrentlyPlayingDirAnim(const String& animNam) const
+{
+	int animId = AnimationUtils::GetAnimId(animNam);
+	return IsCurrentlyPlayingDirAnim(animId);
+}
+
+bool AnimComponent::IsCurrentlyPlayingDirAnim(int animId) const
+{
+	// Directional animations can be 3 different kinds side, up or down and they are stored in sequence
+	int diff = m_curAnimId - animId;
+	return diff >= 0 && diff <= 2;
 }
 
 bool AnimComponent::HasAnim(const String& animName) const
@@ -186,7 +265,7 @@ void AnimComponent::SetCurrentAnimId(int currentAnimId)
 	m_curAnimId = currentAnimId;
 }
 
-void AnimComponent::UpdateAttackAnimState()
+void AnimComponent::UpdateAnimState()
 {
 	const Vector2& heading = m_entity.GetHeading();
 	const float absoluteXValue = abs(heading.x);
@@ -194,27 +273,29 @@ void AnimComponent::UpdateAttackAnimState()
 
 	if (abs(heading.x) > 0.0f && absoluteXValue > absoluteYValue)
 	{
-		TransitionAttackAnimDirection(AttackAnimStyle::FORWARD,
-			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD),
-			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD));
+		m_currentAnimStyle = AnimStyle::SIDE;
+		TransitionAttackAnimDirection(
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_SIDE),
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_SIDE));
 	}
 	else if (heading.y > 0.0f)
 	{
-		TransitionAttackAnimDirection(AttackAnimStyle::UPWARD,
-			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD),
-			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD));
+		m_currentAnimStyle = AnimStyle::UP;
+		TransitionAttackAnimDirection(
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_UP),
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_UP));
 	}
 	else if (heading.y < 0.0f)
 	{
-		TransitionAttackAnimDirection(AttackAnimStyle::DOWNWARD,
-			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD),
-			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD));
+		m_currentAnimStyle = AnimStyle::DOWN;
+		TransitionAttackAnimDirection(
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_DOWN),
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_DOWN));
 	}
 }
 
-void AnimComponent::TransitionAttackAnimDirection(AttackAnimStyle style, int firstAttackAnimId, int lastAttackAnimId)
-{
-	m_currentAttackStyle = style;
+void AnimComponent::TransitionAttackAnimDirection(int firstAttackAnimId, int lastAttackAnimId)
+{		
 	int curAttackIdDif = m_curAttackAnimId - m_firstAttackAnimId;
 
 	m_firstAttackAnimId = firstAttackAnimId;

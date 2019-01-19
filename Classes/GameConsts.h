@@ -69,21 +69,26 @@ namespace GameConsts
 	static constexpr char* ANIM_TYPE_ATTACK = "Attack";
 	static constexpr char* ANIM_TYPE_SIGNAL = "Signal";
 	
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD = "AttackForward1";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_FORWARD = "AttackForward2";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE_FORWARD = "AttackForward3";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR_FORWARD = "AttackForward4";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD = "AttackForward5";
+	static constexpr char* ANIM_TYPE_RUN_DIR = "RunSide";	
+	static constexpr char* ANIM_TYPE_IDLE_DIR = "IdleSide";	
+	static constexpr char* ANIM_TYPE_DODGE_DIR = "DodgeSide";	
+	static constexpr char* ANIM_TYPE_HURT_DIR = "HurtSide";	
 
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD = "AttackUpward1";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_UPWARD = "AttackUpward2";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE_UPWARD = "AttackUpward3";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR_UPWARD = "AttackUpward4";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD = "AttackUpward5";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_SIDE = "AttackSide1";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_SIDE = "AttackSide2";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE_SIDE = "AttackSide3";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR_SIDE = "AttackSide4";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE_SIDE = "AttackSide5";
 
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD = "AttackDownward1";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_DOWNWARD = "AttackDownward2";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE_DOWNWARD = "AttackDownward3";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR_DOWNWARD = "AttackDownward4";
-	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD = "AttackDownward5";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_UP = "AttackUp1";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_UP = "AttackUp2";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE_UP = "AttackUp3";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR_UP = "AttackUp4";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE_UP = "AttackUp5";
+
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_ONE_DOWN = "AttackDown1";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_TWO_DOWN = "AttackDown2";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_THREE_DOWN = "AttackDown3";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FOUR_DOWN = "AttackDown4";
+	static constexpr char* ANIM_TYPE_ATTACK_COMBO_FIVE_DOWN = "AttackDown5";
 };

@@ -14,12 +14,12 @@ struct AnimationData;
 
 using AnimationCallback = std::function<void()>;
 
-enum class AttackAnimStyle
+enum class AnimStyle
 {
 	NONE,
-	FORWARD,
-	UPWARD,
-	DOWNWARD,
+	SIDE,
+	UP,
+	DOWN,
 };
 
 /*
@@ -32,6 +32,8 @@ class AnimComponent: public cocos2d::Component
 public:
 	bool					IsCurrrentlyPlayingAnim(const String& animName) const;
 	bool					IsCurrrentlyPlayingAnim(int animId) const;
+	bool					IsCurrentlyPlayingDirAnim(const String& animNam) const;
+	bool					IsCurrentlyPlayingDirAnim(int animId) const;
 	bool					HasAnim(const String& animName) const;
 	bool					HasAnim(int animId) const;
 	const Entity&			GetOwnerEntity() const;
@@ -46,7 +48,10 @@ public:
 	void PlayLoopingAnimation(int animationId, bool shouldReverse = false, bool shouldBlur = false);
 	void PlayOneShotAnimation(const String& animName, const AnimationCallback& callback, bool shouldBlur = false);
 	void PlayOneShotAnimation(int animationId, const AnimationCallback& callback, bool shouldBlur = false);
-	void PlayAttackAnimation(const AnimationCallback& callback);
+	
+	void PlayAttackAnimation(const AnimationCallback& callback);	
+	void PlayLoopingDirectionalAnim(const String& animName, bool shouldReverse = false, bool shouldBlur = false);
+	void PlayOneShotDirectionalAnim(const String& animName, const AnimationCallback& callback);
 
 	void			GoToNextAttackAnimation();
 	void			ResetAttackAnimation();
@@ -55,11 +60,13 @@ public:
 private:
 	AnimComponent(Entity& sprite);
 
-private:	
+private:
+	int GetDirectionalAnimId(const String& animName) const;
+
 	void SetCurrentAnimId(int currentAnimId);
 
-	void UpdateAttackAnimState();
-	void TransitionAttackAnimDirection(AttackAnimStyle style, int firstAttackAnimId, int lastAttackAnimId);
+	void UpdateAnimState();
+	void TransitionAttackAnimDirection(int firstAttackAnimId, int lastAttackAnimId);
 	void AddBlur(const AnimationData& data, int animationId);
 
 private:
@@ -67,7 +74,7 @@ private:
 	int								m_firstAttackAnimId;
 	int								m_lastAttackAnimId;
 	int								m_curAttackAnimId;
-	AttackAnimStyle					m_currentAttackStyle;
+	AnimStyle						m_currentAnimStyle;
 	Entity&							m_entity;
 	std::map<int, AnimationData>	m_animations;
 	BlurAnimation					m_blurAnimation;

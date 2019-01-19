@@ -32,106 +32,107 @@
 	
 	<Component type="AnimComponent">
 		<SpriteSheet 
-			path="res/Graphics/World/Player/Run/runAnim.png" 
-			plistPath="res/Graphics/World/Player/Run/runAnim.plist">
+			path="res/Graphics/World/Player/Run/runAnims.png" 
+			plistPath="res/Graphics/World/Player/Run/runAnims.plist">
 			
-			<Anim 	type="Run" 
-					frameNamePattern="run%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.1;0.1;0.1;0.1;0.1;"/>
+			<Anim 	type="RunSide" 
+					frameNamePattern="runSide%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+			/>				
+			<Anim 	type="RunUp" 
+					frameNamePattern="runUp%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+			/>			
+			<Anim 	type="RunDown" 
+					frameNamePattern="runDown%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+			/>
 		</SpriteSheet>
 		<SpriteSheet
-			path="res/Graphics/World/Player/Idle/idleAnim.png" 
-			plistPath="res/Graphics/World/Player/Idle/idleAnim.plist">
+			path="res/Graphics/World/Player/Idle/idleAnims.png" 
+			plistPath="res/Graphics/World/Player/Idle/idleAnims.plist">
 			
-			<Anim 	type="Idle"			
-					frameNamePattern="idle%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;"
+			<Anim 	type="IdleSide"			
+					frameNamePattern="idleSide%d.png"					
+					timeBetweenFrames="0.1;"
+			/>
+			<Anim 	type="IdleUp"			
+					frameNamePattern="idleUp%d.png"					
+					timeBetweenFrames="0.1;"
+			/>
+			<Anim 	type="IdleDown"			
+					frameNamePattern="idleDown%d.png"					
+					timeBetweenFrames="0.1;"
 			/>
 		</SpriteSheet>
 		<SpriteSheet
-			path="res/Graphics/World/Player/Hurt/hurtAnim.png" 
-			plistPath="res/Graphics/World/Player/Hurt/hurtAnim.plist"
-			>
-			<Anim 	type="Hurt"			
-					frameNamePattern="hurt%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;"
+			path="res/Graphics/World/Player/Dodge/dodgeAnims.png" 
+			plistPath="res/Graphics/World/Player/Dodge/dodgeAnims.plist">
+			
+			<Anim 	type="DodgeSide"			
+					frameNamePattern="dodgeSide%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+			/>
+			<Anim 	type="DodgeUp"			
+					frameNamePattern="dodgeUp%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+			/>
+			<Anim 	type="DodgeDown"			
+					frameNamePattern="dodgeDown%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
 			/>
 		</SpriteSheet>
 		<SpriteSheet
-			path="res/Graphics/World/Player/Run/runAnim.png" 
-			plistPath="res/Graphics/World/Player/Run/runAnim.plist"
-			>
-			<Anim 	type="Dodge"			
-					frameNamePattern="run%d.png"
-					frameCount="3"
-					timeBetweenFrames="0.1;0.1;0.1;"
+			path="res/Graphics/World/Player/Hurt/hurtAnims.png" 
+			plistPath="res/Graphics/World/Player/Hurt/hurtAnims.plist">
+			
+			<Anim 	type="HurtSide"			
+					frameNamePattern="hurtSide%d.png"					
+					timeBetweenFrames="0.1;"
 			/>
+			<Anim 	type="HurtUp"			
+					frameNamePattern="hurtUp%d.png"					
+					timeBetweenFrames="0.1;"
+			/>
+			<Anim 	type="HurtDown"			
+					frameNamePattern="hurtDown%d.png"					
+					timeBetweenFrames="0.1;"
+			/>
+		</SpriteSheet>		
+		<SpriteSheet
+			path="res/Graphics/World/Player/Attack/lightAttackAnims1.png" 
+			plistPath="res/Graphics/World/Player/Attack/lightAttackAnims1.plist">
+			
+			<Anim 	type="AttackSide1"					
+					frameNamePattern="attackSide1%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+			/>	
+			<Anim 	type="AttackUp1"					
+					frameNamePattern="attackUp1%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+			/>			
+			<Anim 	type="AttackDown1"					
+					frameNamePattern="attackDown1%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+			/>			
 		</SpriteSheet>
 		<SpriteSheet
-			path="res/Graphics/World/Player/Attack/attack.png" 
-			plistPath="res/Graphics/World/Player/Attack/attack.plist"
-			>
-			<Anim 	type="AttackForward1"					
-					frameNamePattern="AttackForward1%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>		
-			<Anim 	type="AttackForward2"			
-					frameNamePattern="AttackForward2%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackForward3"			
-					frameNamePattern="AttackForward3%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackForward4"			
-					frameNamePattern="AttackForward4%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackForward5"			
-					frameNamePattern="AttackForward5%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackUpward1"					
-					frameNamePattern="AttackUpward1%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackUpward2"			
-					frameNamePattern="AttackUpward2%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackUpward3"			
-					frameNamePattern="AttackUpward3%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackUpward4"			
-					frameNamePattern="AttackUpward4%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackUpward5"			
-					frameNamePattern="AttackUpward5%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackDownward1"					
-					frameNamePattern="AttackDownward1%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackDownward2"			
-					frameNamePattern="AttackDownward2%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackDownward3"			
-					frameNamePattern="AttackDownward3%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackDownward4"			
-					frameNamePattern="AttackDownward4%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-			<Anim 	type="AttackDownward5"			
-					frameNamePattern="AttackDownward5%d.png"					
-					timeBetweenFrames="0.07;0.07;0.07;"
-			/>
-		</SpriteSheet>					
+			path="res/Graphics/World/Player/Attack/lightAttackAnims2.png" 
+			plistPath="res/Graphics/World/Player/Attack/lightAttackAnims2.plist">
+			
+			<Anim 	type="AttackSide2"					
+					frameNamePattern="attackSide1%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+			/>	
+			<Anim 	type="AttackUp2"					
+					frameNamePattern="attackUp1%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+			/>			
+			<Anim 	type="AttackDown2"					
+					frameNamePattern="attackDown1%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+			/>			
+		</SpriteSheet>		
 	</Component>
 
 	<!-- Actually collision detection body -->

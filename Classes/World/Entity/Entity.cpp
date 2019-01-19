@@ -178,14 +178,20 @@ void Entity::TakeDamage(float damage)
 
 	DispatchOnHealthReduceEvent();
 
-	if (!m_isAttacking &&
-		!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_HURT))
+	bool isCurrentlyPlayingHurtAnim = m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_HURT) ||
+		m_animComponent->IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_HURT_DIR);
+
+	if (!m_isAttacking && !isCurrentlyPlayingHurtAnim)
 	{
 		m_isTakingDamage = true;
 		if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT))
 		{
 			m_animComponent->PlayOneShotAnimation(GameConsts::ANIM_TYPE_HURT,
 				CC_CALLBACK_0(Entity::OnDamageTaken, this));			
+		}
+		else if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT_DIR))
+		{
+
 		}
 		else
 		{

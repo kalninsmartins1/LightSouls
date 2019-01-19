@@ -229,7 +229,7 @@ void Player::LightAttack()
 void Player::PerformDodge()
 {	
 	StartDodging();
-	GetAnimComponent()->PlayLoopingAnimation(GameConsts::ANIM_TYPE_DODGE, false, true);
+	GetAnimComponent()->PlayLoopingDirectionalAnim(GameConsts::ANIM_TYPE_DODGE_DIR, false, true);
 	Utils::StartTimerWithCallback(this,
 		CC_CALLBACK_0(Player::OnDodgeFinished, this), m_dodgeTime);
 }
@@ -241,16 +241,16 @@ void Player::PlayRunOrIdleAnimation() const
 	{
 		if (IsRunning() && !m_isDodging)
 		{
-			if (!animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
+			if (!animComponent->IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_RUN_DIR))
 			{
-				animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_RUN);
+				animComponent->PlayLoopingDirectionalAnim(GameConsts::ANIM_TYPE_RUN_DIR);
 			}
 		}
 		else if (!IsRunning())
 		{
-			if (!animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_IDLE))
+			if (!animComponent->IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_IDLE_DIR))
 			{
-				animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
+				animComponent->PlayLoopingDirectionalAnim(GameConsts::ANIM_TYPE_IDLE_DIR);
 			}
 		}
 	}

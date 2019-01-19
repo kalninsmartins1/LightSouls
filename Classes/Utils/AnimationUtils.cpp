@@ -15,24 +15,41 @@ const std::map<String, int> AnimationUtils::s_animTypeToId =
 	{ GameConsts::ANIM_TYPE_HURT, 3 },
 	{ GameConsts::ANIM_TYPE_ATTACK, 4 },
 
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_FORWARD, 5 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_FORWARD, 6 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_FORWARD, 7 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FOUR_FORWARD, 8 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_FORWARD, 9 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_SIDE, 5 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_SIDE, 6 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_SIDE, 7 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FOUR_SIDE, 8 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_SIDE, 9 },
 
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_DOWNWARD, 10 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_DOWNWARD, 11 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_DOWNWARD, 12 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FOUR_DOWNWARD, 13 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_DOWNWARD, 14 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_DOWN, 10 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_DOWN, 11 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_DOWN, 12 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FOUR_DOWN, 13 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_DOWN, 14 },
 
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_UPWARD, 15 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_UPWARD, 16 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_UPWARD, 17 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FOUR_UPWARD, 18 },
-	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_UPWARD, 19 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_UP, 15 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_UP, 16 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_UP, 17 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FOUR_UP, 18 },
+	{ GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_UP, 19 },
+
 	{ GameConsts::ANIM_TYPE_SIGNAL,	20 },
+
+	{ GameConsts::ANIM_TYPE_RUN_DIR, 21 },
+	{ "RunUp", 22 },
+	{ "RunDown", 23 },
+
+	{ GameConsts::ANIM_TYPE_IDLE_DIR, 24 },
+	{ "IdleUp", 25 },
+	{ "IdleDown", 26 },
+
+	{ GameConsts::ANIM_TYPE_DODGE_DIR, 27 },
+	{ "DodgeUp", 28 },
+	{ "DodgeDown", 29 },
+
+	{ GameConsts::ANIM_TYPE_HURT_DIR, 30 },
+	{ "HurtUp", 31 },
+	{ "HurtDown", 32 },
 };
 
 int AnimationUtils::GetAnimId(String animName)

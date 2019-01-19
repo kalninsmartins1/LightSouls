@@ -4,8 +4,6 @@
 #include "World/Entity/Entity.h"
 #include "World/Entity/Components/Attack/LongSwordAttackComponent.h"
 
-
-
 class AnimComponent;
 class GameInput;
 
