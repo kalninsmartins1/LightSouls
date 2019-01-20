@@ -227,11 +227,15 @@ void Player::LightAttack()
 }
 
 void Player::PerformDodge()
-{	
-	StartDodging();
-	GetAnimComponent()->PlayLoopingDirectionalAnim(GameConsts::ANIM_TYPE_DODGE_DIR, false, true);
-	Utils::StartTimerWithCallback(this,
-		CC_CALLBACK_0(Player::OnDodgeFinished, this), m_dodgeTime);
+{		
+	AnimComponent* animComp = GetAnimComponent();
+	if (animComp != nullptr)
+	{
+		StartDodging();
+		GetAnimComponent()->PlayLoopingDirectionalAnim(GameConsts::ANIM_TYPE_DODGE_DIR, false, true);
+		Utils::StartTimerWithCallback(this,
+			CC_CALLBACK_0(Player::OnDodgeFinished, this), m_dodgeTime);
+	}	
 }
 
 void Player::PlayRunOrIdleAnimation() const

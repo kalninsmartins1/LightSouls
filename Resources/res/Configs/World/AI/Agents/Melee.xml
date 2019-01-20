@@ -58,37 +58,37 @@
 	
 	<Component type="AnimComponent">
 		<SpriteSheet
-			path="res/Graphics/World/AI/Warrior/warriorAnimations.png" 
-			plistPath="res/Graphics/World/AI/Warrior/warriorAnimations.plist">
+			path="res/Graphics/World/AI/Melee/meleeAnims.png" 
+			plistPath="res/Graphics/World/AI/Melee/meleeAnims.plist">
 			
 			<Anim 	type="Idle"
-					frameNamePattern="warrior_idle%d.png"					
-					timeBetweenFrames="0.2;0.2;0.2;0.2"
+					frameNamePattern="meleeIdle%d.png"					
+					timeBetweenFrames="0.2;0.2;"
 			/>
 			
 			<Anim 	type="Attack"
-					frameNamePattern="warrior_attack%d.png"					
-					timeBetweenFrames="1.0;"
+					frameNamePattern="meleeAttack%d.png"					
+					timeBetweenFrames="0.3;0.3;"
 			/>
 			
 			<Anim 	type="Run"
-					frameNamePattern="warrior_run%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.1;"
+					frameNamePattern="meleeRun%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;"
 			/>
 			
 			<Anim	type="Signal"
-					frameNamePattern="warrior_signal%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.5;"
+					frameNamePattern="meleeSignal%d.png"					
+					timeBetweenFrames="0.5;"
 			/>
 			
 			<Anim	type="Hurt"
-					frameNamePattern="warrior_hurt%d.png"					
+					frameNamePattern="meleeHurt%d.png"					
 					timeBetweenFrames="1.0;"
 			/>
 		</SpriteSheet>
 	</Component>
 	
-	<Component 	type="HitAttackComponent"
+	<Component 	type="GenericAttackComponent"
 				secondsBetweenAttacks="3" 
 				comboExpireTime="0.6"
 				attackRange="280">
@@ -99,8 +99,8 @@
 		<AnchorPosition x="0" y="0" />
 		<PhysicsBody
 			shape="box"
-			width="110"
-			height="60"
+			width="80"
+			height="40"
 			isDynamic="true" 
 			isGravityEnabled="false"
 			isRotationEnabled="false"

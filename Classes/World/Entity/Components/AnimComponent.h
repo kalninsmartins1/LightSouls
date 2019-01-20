@@ -34,6 +34,7 @@ public:
 	bool					IsCurrrentlyPlayingAnim(int animId) const;
 	bool					IsCurrentlyPlayingDirAnim(const String& animNam) const;
 	bool					IsCurrentlyPlayingDirAnim(int animId) const;
+	bool					IsCurrentlyPlayingDirAnim() const;
 	bool					HasAnim(const String& animName) const;
 	bool					HasAnim(int animId) const;
 	const Entity&			GetOwnerEntity() const;
@@ -67,6 +68,9 @@ private:
 
 	void UpdateAnimState();
 	void TransitionAttackAnimDirection(int firstAttackAnimId, int lastAttackAnimId);
+
+	// Transition run anim in all directions when moving without stopping 
+	void TransitionRunAnimDirection();
 	void AddBlur(const AnimationData& data, int animationId);
 
 private:

@@ -137,12 +137,12 @@
 
 	<!-- Actually collision detection body -->
 	<Component type="RigidBodyComponent">
-		<AnchorPosition x="0" y="0" />
+		<AnchorPosition x="0" y="-0.2" />
 		<PhysicsMaterial density="0.1" restitution="0" friction="0.3" />
 		<PhysicsBody
 			shape="box"
-			width="110"
-			height="70"
+			width="100"
+			height="40"
 			isDynamic="true" 
 			isGravityEnabled="false" 
 			isRotationEnabled="false"

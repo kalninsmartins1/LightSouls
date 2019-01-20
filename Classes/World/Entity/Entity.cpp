@@ -191,7 +191,8 @@ void Entity::TakeDamage(float damage)
 		}
 		else if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT_DIR))
 		{
-
+			m_animComponent->PlayOneShotDirectionalAnim(GameConsts::ANIM_TYPE_HURT_DIR,
+				CC_CALLBACK_0(Entity::OnDamageTaken, this));
 		}
 		else
 		{

@@ -222,6 +222,14 @@ bool AnimComponent::IsCurrentlyPlayingDirAnim(int animId) const
 	return diff >= 0 && diff <= 2;
 }
 
+bool AnimComponent::IsCurrentlyPlayingDirAnim() const
+{
+	return IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_RUN_DIR) ||
+		IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_HURT_DIR) ||
+		IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_IDLE_DIR) ||
+		IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_DODGE_DIR);
+}
+
 bool AnimComponent::HasAnim(const String& animName) const
 {
 	int animationId = AnimationUtils::GetAnimId(animName);
@@ -272,26 +280,28 @@ void AnimComponent::UpdateAnimState()
 	const float absoluteYValue = abs(heading.y);
 
 	if (abs(heading.x) > 0.0f && absoluteXValue > absoluteYValue)
-	{
+	{		
 		m_currentAnimStyle = AnimStyle::SIDE;
 		TransitionAttackAnimDirection(
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_SIDE),
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_SIDE));
 	}
 	else if (heading.y > 0.0f)
-	{
+	{		
 		m_currentAnimStyle = AnimStyle::UP;
 		TransitionAttackAnimDirection(
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_UP),
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_UP));
 	}
 	else if (heading.y < 0.0f)
-	{
+	{	
 		m_currentAnimStyle = AnimStyle::DOWN;
 		TransitionAttackAnimDirection(
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_DOWN),
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_DOWN));
 	}
+
+	TransitionRunAnimDirection();
 }
 
 void AnimComponent::TransitionAttackAnimDirection(int firstAttackAnimId, int lastAttackAnimId)
@@ -301,6 +311,19 @@ void AnimComponent::TransitionAttackAnimDirection(int firstAttackAnimId, int las
 	m_firstAttackAnimId = firstAttackAnimId;
 	m_curAttackAnimId = m_firstAttackAnimId + curAttackIdDif;
 	m_lastAttackAnimId = lastAttackAnimId;
+}
+
+void AnimComponent::TransitionRunAnimDirection()
+{	
+	const String runAnimName = GameConsts::ANIM_TYPE_RUN_DIR;
+	if (IsCurrentlyPlayingDirAnim(runAnimName))
+	{
+		int animId = GetDirectionalAnimId(runAnimName);
+		if (m_curAnimId != animId)
+		{
+			PlayLoopingDirectionalAnim(runAnimName);
+		}
+	}
 }
 
 void AnimComponent::AddBlur(const AnimationData& data, int animationId)
