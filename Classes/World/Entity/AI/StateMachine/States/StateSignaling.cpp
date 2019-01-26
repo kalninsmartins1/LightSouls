@@ -18,13 +18,13 @@ StateSignaling::StateSignaling(AIAgent& aiAgent)
 
 }
 
-void StateSignaling::OnEnter(AnimComponent* animComponent)
+void StateSignaling::OnEnter(AnimComponent& animComponent)
 {
 	AIAgent& agent = GetAgent();	
 	if (agent.GetAttackComponent()->IsReadyToAttack())
 	{
-		m_animComponent = animComponent;		
-		m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_SIGNAL);
+		m_animComponent = &animComponent;		
+		animComponent.PlayLoopingAnimation(GameConsts::ANIM_TYPE_SIGNAL);
 		m_curProgress = EStateProgress::IN_PROGRESS;		
 
 		Utils::StartTimerWithCallback(&agent,
@@ -51,10 +51,10 @@ void StateSignaling::OnExit()
 	}
 }
 
-void StateSignaling::LoadXMLData(const XMLElement* xmlElement)
+void StateSignaling::LoadXMLData(const XMLElement& xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_signalTime = xmlElement->FloatAttribute(XMLConsts::TIME_ATTR);
+	m_signalTime = xmlElement.FloatAttribute(XMLConsts::TIME_ATTR);
 }
 
 void StateSignaling::OnEventReceived(const String& receivedEvent, const AEventData& eventData)

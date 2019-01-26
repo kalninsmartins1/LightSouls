@@ -29,12 +29,12 @@ EAIState StateLineAttack::GetStateType() const
 	return EAIState::LINE_ATTACK;
 }
 
-void StateLineAttack::OnEnter(AnimComponent * animComponent)
+void StateLineAttack::OnEnter(AnimComponent& animComponent)
 {		
 	AIAgent& agent = GetAgent();	
 	m_attackComponent = agent.GetAttackComponent();	
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_ATTACK, false);
+	animComponent.PlayLoopingAnimation(GameConsts::ANIM_TYPE_ATTACK, false);
 
 	m_curProgress = EStateProgress::IN_PROGRESS;				
 	SetTargetPosition(m_targetEntity->getPosition());
@@ -95,12 +95,12 @@ void StateLineAttack::OnEventReceived(const String& receivedEvent, const AEventD
 	}
 }
 
-void StateLineAttack::LoadXMLData(const XMLElement* xmlElement)
+void StateLineAttack::LoadXMLData(const XMLElement& xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_moveSpeed = xmlElement->FloatAttribute(XMLConsts::MOVE_SPEED_ATTR);
-	m_arriveDistance = xmlElement->FloatAttribute(XMLConsts::AI_ARRIVE_DISTANCE);
-	m_deliverDamageDistance = xmlElement->FloatAttribute(XMLConsts::AI_DAMAGE_DISTANCE);
+	m_moveSpeed = xmlElement.FloatAttribute(XMLConsts::MOVE_SPEED_ATTR);
+	m_arriveDistance = xmlElement.FloatAttribute(XMLConsts::AI_ARRIVE_DISTANCE);
+	m_deliverDamageDistance = xmlElement.FloatAttribute(XMLConsts::AI_DAMAGE_DISTANCE);
 }
 
 void StateLineAttack::OnSuccessfulAttack()
@@ -123,4 +123,3 @@ void StateLineAttack::SetTargetPosition(const Vector2& targetPos)
 		m_targetPos = targetPos;
 	}
 }
-

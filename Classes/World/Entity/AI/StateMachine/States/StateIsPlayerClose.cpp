@@ -19,10 +19,9 @@ StateIsPlayerClose::StateIsPlayerClose(AIAgent& aiAgent)
 
 }
 
-void StateIsPlayerClose::OnEnter(AnimComponent* animComponent)
+void StateIsPlayerClose::OnEnter(AnimComponent& animComponent)
 {
-	AIAgent& agent = GetAgent();	
-
+	
 }
 
 EStateProgress StateIsPlayerClose::OnStep()
@@ -38,10 +37,10 @@ void StateIsPlayerClose::OnExit()
 	}
 }
 
-void StateIsPlayerClose::LoadXMLData(const XMLElement* xmlElement)
+void StateIsPlayerClose::LoadXMLData(const XMLElement& xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_closeDistance = xmlElement->FloatAttribute(XMLConsts::DISTANCE);
+	m_closeDistance = xmlElement.FloatAttribute(XMLConsts::DISTANCE);
 }
 
 EAIState StateIsPlayerClose::GetStateType() const

@@ -19,8 +19,8 @@ public:
 	void SetStartState(EAIState stateType);
 
 	// Should be called once to turn on the state machine
-	void Start(AnimComponent* animComponent);
-	void AddAvailableState(EAIState availableState, const XMLElement* xmlElement);
+	void Start(AnimComponent& animComponent);
+	void AddAvailableState(const EAIState& availableState, const XMLElement& xmlElement);
 	void Reset();
 
 	// Should be called periodically to update current state of state machine 

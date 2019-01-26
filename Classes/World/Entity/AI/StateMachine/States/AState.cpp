@@ -63,12 +63,12 @@ void AState::OnEventReceived(const String& receivedEvent, const AEventData& even
 
 }
 
-void AState::LoadXMLData(const XMLElement* xmlElement)
+void AState::LoadXMLData(const XMLElement& xmlElement)
 {
 	String nextSuccessType;
-	XMLLoader::ReadXMLAttribute(xmlElement, XMLConsts::AI_NEXT_STATE_ON_SUCCESS, nextSuccessType);
+	XMLLoader::ReadXMLAttribute(&xmlElement, XMLConsts::AI_NEXT_STATE_ON_SUCCESS, nextSuccessType);
 	String nextFailureType;
-	XMLLoader::ReadXMLAttribute(xmlElement, XMLConsts::AI_NEXT_STATE_ON_FAILURE, nextFailureType);
+	XMLLoader::ReadXMLAttribute(&xmlElement, XMLConsts::AI_NEXT_STATE_ON_FAILURE, nextFailureType);
 
 	m_nextStateOnSuccess = AState::GetStateFromString(nextSuccessType);
 	m_nextStateOnFailure = AState::GetStateFromString(nextFailureType);

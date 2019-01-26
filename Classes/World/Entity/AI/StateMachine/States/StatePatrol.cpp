@@ -25,10 +25,10 @@ StatePatrol::StatePatrol(AIAgent& agent)
 
 }
 
-void StatePatrol::OnEnter(AnimComponent* animComponent)
+void StatePatrol::OnEnter(AnimComponent& animComponent)
 {
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	m_animComponent = animComponent;
+	m_animComponent = &animComponent;
 	m_curProgress = EStateProgress::IN_PROGRESS;
 
 	if (!GetAgent().IsProcessing())
@@ -94,11 +94,11 @@ void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData&
 	}
 }
 
-void StatePatrol::LoadXMLData(const XMLElement* xmlElement)
+void StatePatrol::LoadXMLData(const XMLElement& xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_patrolRadius = xmlElement->FloatAttribute(XMLConsts::AI_PATROL_RADIUS_ATTR);
-	m_patrolPause = xmlElement->FloatAttribute(XMLConsts::AI_PATROL_PAUSE_ATTR);
+	m_patrolRadius = xmlElement.FloatAttribute(XMLConsts::AI_PATROL_RADIUS_ATTR);
+	m_patrolPause = xmlElement.FloatAttribute(XMLConsts::AI_PATROL_PAUSE_ATTR);
 }
 
 EAIState StatePatrol::GetStateType() const

@@ -14,11 +14,11 @@ public:
 public:
 	EAIState				GetStateType() const override;
 
-	virtual void			OnEnter(AnimComponent* animComponent) override;
+	virtual void			OnEnter(AnimComponent& animComponent) override;
 	virtual EStateProgress	OnStep() override;
 	virtual void			OnExit() override;
 	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;
-	virtual void			LoadXMLData(const XMLElement* xmlElement) override;
+	virtual void			LoadXMLData(const XMLElement& xmlElement) override;
 
 private:
 	void					OnRandomTimeExpired();

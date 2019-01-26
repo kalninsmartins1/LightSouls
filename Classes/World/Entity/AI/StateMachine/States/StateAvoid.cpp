@@ -27,9 +27,9 @@ EAIState StateAvoid::GetStateType() const
 	return EAIState::AVOID;
 }
 
-void StateAvoid::OnEnter(AnimComponent* animComponent)
+void StateAvoid::OnEnter(AnimComponent& animComponent)
 {	
-	m_animComponent = animComponent;	
+	m_animComponent = &animComponent;	
 	m_curProgress = EStateProgress::IN_PROGRESS;	
 	AIAgent& agent = GetAgent();
 	m_attackComponent = agent.GetAttackComponent();
@@ -123,11 +123,11 @@ void StateAvoid::OnEventReceived(const String& receivedEvent, const AEventData& 
 	}
 }
 
-void StateAvoid::LoadXMLData(const XMLElement* xmlElement)
+void StateAvoid::LoadXMLData(const XMLElement& xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_stopAvoidDistance = xmlElement->FloatAttribute(XMLConsts::STOP_AVOID_DISTANCE_ATTR);
-	m_startAvoidDistance = xmlElement->FloatAttribute(XMLConsts::START_AVOID_DISTANCE_ATTR);
-	m_failDistance = xmlElement->FloatAttribute(XMLConsts::AI_FAIL_DISTANCE);
+	m_stopAvoidDistance = xmlElement.FloatAttribute(XMLConsts::STOP_AVOID_DISTANCE_ATTR);
+	m_startAvoidDistance = xmlElement.FloatAttribute(XMLConsts::START_AVOID_DISTANCE_ATTR);
+	m_failDistance = xmlElement.FloatAttribute(XMLConsts::AI_FAIL_DISTANCE);
 }
 

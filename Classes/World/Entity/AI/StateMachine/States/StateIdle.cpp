@@ -17,10 +17,10 @@ EAIState StateIdle::GetStateType() const
 	return EAIState::IDLE;
 }
 
-void StateIdle::OnEnter(AnimComponent * animComponent)
+void StateIdle::OnEnter(AnimComponent& animComponent)
 {
 	m_curProgress = EStateProgress::IN_PROGRESS;
-	animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
+	animComponent.PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 }
 
 EStateProgress StateIdle::OnStep()

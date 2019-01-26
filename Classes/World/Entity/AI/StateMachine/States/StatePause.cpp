@@ -20,12 +20,12 @@ StatePause::StatePause(AIAgent& aiAgent)
 
 }
 
-void StatePause::OnEnter(AnimComponent* animComponent)
+void StatePause::OnEnter(AnimComponent& animComponent)
 {
 	AIAgent& agent = GetAgent();	
 	if (!agent.IsProcessing() && agent.IsBackgroundTaskReady())
 	{
-		animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
+		animComponent.PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 	}
 
 	m_curProgress = EStateProgress::IN_PROGRESS;
@@ -58,12 +58,12 @@ void StatePause::OnExit()
 	Utils::ClearCallbackTimers(&GetAgent(), GameConsts::ACTION_PAUSE);
 }
 
-void StatePause::LoadXMLData(const XMLElement* xmlElement)
+void StatePause::LoadXMLData(const XMLElement& xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_pauseTime = xmlElement->FloatAttribute(XMLConsts::TIME_ATTR);
-	m_maxDistaneceToTarget = xmlElement->FloatAttribute(XMLConsts::AI_MAX_DISTANCE_TO_TARGET);
-	m_shouldCheckDistanceToTarget = xmlElement->BoolAttribute(XMLConsts::AI_IS_CHECKING_DISTANCE_TO_TARGET);
+	m_pauseTime = xmlElement.FloatAttribute(XMLConsts::TIME_ATTR);
+	m_maxDistaneceToTarget = xmlElement.FloatAttribute(XMLConsts::AI_MAX_DISTANCE_TO_TARGET);
+	m_shouldCheckDistanceToTarget = xmlElement.BoolAttribute(XMLConsts::AI_IS_CHECKING_DISTANCE_TO_TARGET);
 }
 
 bool StatePause::IsTargetTooFar() const

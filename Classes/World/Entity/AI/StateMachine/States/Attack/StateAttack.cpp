@@ -20,10 +20,10 @@ StateAttack::StateAttack(AIAgent& agent)
 
 }
 
-void StateAttack::OnEnter(AnimComponent* animComponent)
+void StateAttack::OnEnter(AnimComponent& animComponent)
 {
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	m_animComponent = animComponent;
+	m_animComponent = &animComponent;
 	m_attackComponent = GetAgent().GetAttackComponent();
 	m_curProgress = EStateProgress::IN_PROGRESS;
 }

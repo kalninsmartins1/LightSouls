@@ -667,10 +667,13 @@ GameInputType XMLLoader::StrToGameInputType(const String& inputType)
 
 void XMLLoader::ReadXMLAttribute(const XMLElement* element, const String& attributeName, String& outValue)
 {
-	const char* value = element->Attribute(attributeName.c_str());
-	if (value != nullptr)
+	if (element != nullptr)
 	{
-		outValue = value;
+		const char* value = element->Attribute(attributeName.c_str());
+		if (value != nullptr)
+		{
+			outValue = value;
+		}
 	}
 }
 

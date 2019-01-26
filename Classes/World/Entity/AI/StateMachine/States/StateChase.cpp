@@ -20,12 +20,12 @@ StateChase::StateChase(AIAgent& agent)
 
 }
 
-void StateChase::OnEnter(AnimComponent* animComponent)
+void StateChase::OnEnter(AnimComponent& animComponent)
 {
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_curProgress = EStateProgress::IN_PROGRESS;
 	m_randomTargetOffset = Utils::GetRandomPositionWithinCircle(Vector2::ZERO, 150.0f);
-	m_animComponent = animComponent;
+	m_animComponent = &animComponent;
 }
 
 EStateProgress StateChase::OnStep()
@@ -67,11 +67,11 @@ void StateChase::OnExit()
 	}
 }
 
-void StateChase::LoadXMLData(const XMLElement* xmlElement)
+void StateChase::LoadXMLData(const XMLElement& xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
-	m_chaseRadius = xmlElement->FloatAttribute(XMLConsts::AI_CHASE_RADIUS_ATTR);
-	m_chaseStopDistance = xmlElement->FloatAttribute(XMLConsts::AI_STOP_DISTANCE);
+	m_chaseRadius = xmlElement.FloatAttribute(XMLConsts::AI_CHASE_RADIUS_ATTR);
+	m_chaseStopDistance = xmlElement.FloatAttribute(XMLConsts::AI_STOP_DISTANCE);
 }
 
 void StateChase::HandleAnimationPlaying(const AIAgent& agent)

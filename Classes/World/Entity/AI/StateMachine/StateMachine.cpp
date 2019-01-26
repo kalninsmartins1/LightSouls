@@ -39,9 +39,9 @@ void StateMachine::SetStartState(EAIState stateType)
 	m_startState = stateType;
 }
 
-void StateMachine::Start(AnimComponent* animComponent)
+void StateMachine::Start(AnimComponent& animComponent)
 {
-	m_animComponent = animComponent;
+	m_animComponent = &animComponent;
 	if (Utils::ContainsKey(m_availableStates, m_startState))
 	{
 		SwitchState(m_availableStates.at(m_startState));
@@ -52,7 +52,7 @@ void StateMachine::Start(AnimComponent* animComponent)
 	}
 }
 
-void StateMachine::AddAvailableState(EAIState availableState, const XMLElement* xmlElement)
+void StateMachine::AddAvailableState(const EAIState& availableState, const XMLElement& xmlElement)
 {
 	AState* state = nullptr;
 	switch (availableState)
@@ -121,7 +121,10 @@ void StateMachine::SwitchState(AState* newState)
 #endif
 
 	m_curState = newState;
-	m_curState->OnEnter(m_animComponent);
+	if (m_animComponent != nullptr)
+	{
+		m_curState->OnEnter(*m_animComponent);
+	}
 }
 
 void StateMachine::SwitchState(EAIState newState)

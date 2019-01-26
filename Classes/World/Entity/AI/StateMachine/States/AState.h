@@ -3,8 +3,6 @@
 #include "LightSoulsTypes.h"
 #include "Events/AEventData.h"
 
-
-
 class AnimComponent;
 class AIAgent;
 
@@ -47,7 +45,7 @@ public:
 	void			SetNextStateOnFailure(const EAIState& state);
 
 	// Called when state is first entered
-	virtual void			OnEnter(AnimComponent* animComponent) = 0;
+	virtual void			OnEnter(AnimComponent& animComponent) = 0;
 
 	// Called to progress the state, returns current state progress
 	virtual EStateProgress	OnStep() = 0;
@@ -56,7 +54,7 @@ public:
 	virtual void			OnExit() = 0;
 
 	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData);
-	virtual void			LoadXMLData(const XMLElement* xmlElement);
+	virtual void			LoadXMLData(const XMLElement& xmlElement);
 
 	template<typename T>
 	static T*				Create(AIAgent& agent);

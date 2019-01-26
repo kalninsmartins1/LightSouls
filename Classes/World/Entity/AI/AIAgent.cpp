@@ -73,7 +73,15 @@ bool AIAgent::Init(const String& pathToXML)
 		GameScene::GetPhysicsManager()->AddContactBeginListener(getName(),
 			CC_CALLBACK_2(AIAgent::OnContactBegin, this));
 		
-		m_stateMachine.Start(GetAnimComponent());
+		AnimComponent* animComp = GetAnimComponent();
+		if (animComp != nullptr)
+		{
+			m_stateMachine.Start(*animComp);
+		}
+		else
+		{
+			CCASSERT(false, "AIAgen::Init cant start StateMachine no AnimComponent found !");
+		}
 
 		// init was successful only if the attack component are found
 		isInitializedSuccessfully = isInitializedSuccessfully &&  isAttackComponentFound;
@@ -95,12 +103,15 @@ void AIAgent::Init(const XMLElement* element)
 	for (const XMLElement* stateXML = element->FirstChildElement(); stateXML != nullptr;
 		stateXML = stateXML->NextSiblingElement())
 	{
-		String type = stateXML->Attribute(XMLConsts::TYPE_ATTR);
-		EAIState state = AState::GetStateFromString(type);
-		if (state != EAIState::NONE)
-		{			
-			m_stateMachine.AddAvailableState(state, stateXML);
-		}
+		if (stateXML != nullptr)
+		{
+			String type = stateXML->Attribute(XMLConsts::TYPE_ATTR);
+			EAIState state = AState::GetStateFromString(type);
+			if (state != EAIState::NONE && stateXML != nullptr)
+			{
+				m_stateMachine.AddAvailableState(state, *stateXML);
+			}
+		}		
 	}
 }
 
