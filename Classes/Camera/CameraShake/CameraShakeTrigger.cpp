@@ -1,7 +1,6 @@
 #include "CameraShakeTrigger.h"
 
 
-
 CameraShakeTrigger::CameraShakeTrigger(const String& triggerEvent, float moveSpeed, float time, float shakeRadius)
 	: m_triggerEvent(triggerEvent)
 	, m_moveSpeed(moveSpeed)

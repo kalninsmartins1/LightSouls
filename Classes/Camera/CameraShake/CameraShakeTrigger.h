@@ -1,8 +1,10 @@
+/*
+ \author Martins Kalnins
+ \brief POD class for CameraShake component.
+*/
 #pragma once
 
 #include "LightSoulsTypes.h"
-
-
 
 class CameraShakeTrigger
 {

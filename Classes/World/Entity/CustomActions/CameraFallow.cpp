@@ -26,7 +26,7 @@ void CameraFollow::startWithTarget(cocos2d::Node *target)
 CameraFollow::CameraFollow(const cocos2d::Node* followNode)
 	: m_followNode(followNode)
 	, m_cameraState(CameraMoveSate::TARGET_REACHED)
-	, m_curSpeed(0.0f)
+	, m_curSpeed(50.0f)
 	, m_maxSpeed(400.0f)
 	, m_easeInTime(2.0f)
 	, m_easeOutTime(2.0f)	
@@ -44,7 +44,7 @@ void CameraFollow::step(float dt)
 	Vector2 cameraPos = _target->getPosition();
 	Vector2 followedNodePos = m_followNode->getPosition();
 	Vector2 toFollowedNode = (followedNodePos - cameraPos);
-	_target->setPosition(cameraPos + toFollowedNode * 0.1f * 50 * dt);
+	_target->setPosition(cameraPos + toFollowedNode * 0.1f * m_curSpeed * dt);
 }
 
 void CameraFollow::ProcessStateEasingIn(float dt, const Vector2& cameraPos, const Vector2& toFollowNodeNormalized, float distance)

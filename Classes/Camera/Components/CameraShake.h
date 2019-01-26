@@ -1,20 +1,17 @@
+/*
+  \author Martins Kalnins
+  \brief Component for shaking the camera.
+*/
 #pragma once
 
 #include "LightSoulsTypes.h"
-
-namespace tinyxml2
-{
-	class XMLElement;
-};
-
-
 
 class CameraShakeTrigger;
 
 class CameraShake : public cocos2d::Component
 {
 public:	
-	static CameraShake*		Create(tinyxml2::XMLElement* element);
+	static CameraShake*		Create(XMLElement* element);
 	
 	virtual void			update(float deltaTime) override;
 
@@ -23,17 +20,18 @@ private:
 	~CameraShake();
 
 private:
-	bool Init(tinyxml2::XMLElement* element);
+	bool Init(XMLElement* element);
 
-	void OnStartCameraShake(cocos2d::EventCustom* eventData);
+	void OnStartCameraShake(cc::EventCustom* eventData);
 	void OnEndCameraShake();
 	void OnFinishedMoving();
 
 private:
 	std::map<String, CameraShakeTrigger>	m_cameraShakeTriggers;
 	CameraShakeTrigger*						m_curCameraShakeTrigger;
+	cc::EventListener*						m_onStartCameraShakeEventListener;
+	Vector2									m_initialPosition;
 	bool									m_isCameraShakeActive;
 	bool									m_isMovingToNewPosition;
-	cocos2d::EventListener*					m_onStartCameraShakeEventListener;
 };
 

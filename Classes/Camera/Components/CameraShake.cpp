@@ -42,25 +42,42 @@ bool CameraShake::Init(tinyxml2::XMLElement* element)
 		 	getEventDispatcher()->
 		 	addCustomEventListener(triggerEvent,
 		 		CC_CALLBACK_1(CameraShake::OnStartCameraShake, this));
+
+		cc::Node* owner = getOwner();
+		if (owner != nullptr)
+		{
+			m_initialPosition = owner->getPosition();
+		}
 	}
 
 	return true;
 }
 
-void CameraShake::OnStartCameraShake(cocos2d::EventCustom* eventData)
+void CameraShake::OnStartCameraShake(cc::EventCustom* eventData)
 {
-	const String& eventName = eventData->getEventName();
-	if (!m_isCameraShakeActive && Utils::ContainsKey(m_cameraShakeTriggers, eventName))
+	String eventName = "";
+	if (eventData != nullptr)
+	{
+		eventName = eventData->getEventName();
+	}
+	
+	if (!m_isCameraShakeActive && 
+		!eventName.empty() &&
+		Utils::ContainsKey(m_cameraShakeTriggers, eventName))
 	{
 		m_curCameraShakeTrigger = &m_cameraShakeTriggers[eventName];
 		m_isCameraShakeActive = true;
 
 		// Stop any previous actions
-		getOwner()->stopActionByTag(GameConsts::ACTION_CAMERA_SHAKE);
+		cc::Node* owner = getOwner();
+		if (owner != nullptr)
+		{
+			owner->stopActionByTag(GameConsts::ACTION_CAMERA_SHAKE);
 
-		Utils::StartTimerWithCallback(getOwner(),
-			CC_CALLBACK_0(CameraShake::OnEndCameraShake, this),
-			m_curCameraShakeTrigger->GetTime(), GameConsts::ACTION_CAMERA_SHAKE);
+			Utils::StartTimerWithCallback(owner,
+				CC_CALLBACK_0(CameraShake::OnEndCameraShake, this),
+				m_curCameraShakeTrigger->GetTime(), GameConsts::ACTION_CAMERA_SHAKE);
+		}
 	}	
 }
 
@@ -92,22 +109,33 @@ CameraShake* CameraShake::Create(tinyxml2::XMLElement* element)
 
 void CameraShake::update(float deltaTime)
 {
-	if (m_isCameraShakeActive && !m_isMovingToNewPosition)
+	cc::Node* camera = getOwner();
+	if (camera != nullptr && m_curCameraShakeTrigger != nullptr)
 	{
-		auto camera = getOwner();
-		const Vector3& cameraPos = camera->getPosition3D();
-		const float shakeRadius = m_curCameraShakeTrigger->GetShakeRadius();
-		Vector2 randomPosition = Utils::GetRandomPositionWithinCircle(cameraPos, shakeRadius);
-		const Vector3& targetPosition = Vector3(randomPosition.x, randomPosition.y, cameraPos.z);
-		
-		Vector3 toTargetPositionVec3 = targetPosition - cameraPos;
-		const Vector2& toTargetPositionVec2 = Vector2(toTargetPositionVec3.x, toTargetPositionVec3.y);
-		const float moveSpeed = m_curCameraShakeTrigger->GetMoveSpeed();
-		const float moveTime = toTargetPositionVec2.length() / moveSpeed;
+		if (m_isCameraShakeActive && !m_isMovingToNewPosition)
+		{
+			const Vector3& cameraPos = camera->getPosition3D();
+			const float shakeRadius = m_curCameraShakeTrigger->GetShakeRadius();
+			Vector2 randomPosition = Utils::GetRandomPositionWithinCircle(cameraPos, shakeRadius);
+			const Vector3& targetPosition = Vector3(randomPosition.x, randomPosition.y, cameraPos.z);
 
-		auto moveTo = cocos2d::MoveTo::create(moveTime, targetPosition);
-		auto callback = cocos2d::CallFunc::create(CC_CALLBACK_0(CameraShake::OnFinishedMoving, this));		
-		camera->runAction(cocos2d::Sequence::create(moveTo, callback, nullptr));
-	}
+			Vector3 toTargetPositionVec3 = targetPosition - cameraPos;
+			const Vector2& toTargetPositionVec2 = Vector2(toTargetPositionVec3.x, toTargetPositionVec3.y);
+			const float moveSpeed = m_curCameraShakeTrigger->GetMoveSpeed();
+			const float moveTime = toTargetPositionVec2.length() / moveSpeed;
+
+			auto moveTo = cocos2d::MoveTo::create(moveTime, targetPosition);
+			auto callback = cocos2d::CallFunc::create(CC_CALLBACK_0(CameraShake::OnFinishedMoving, this));
+			camera->runAction(cocos2d::Sequence::create(moveTo, callback, nullptr));
+		}
+		else if (!m_isCameraShakeActive)
+		{
+			// When camera is not shaking move back to initial position
+			const Vector2& cameraPos = camera->getPosition();
+			Vector2 toInitialPosition = m_initialPosition - cameraPos;
+			float moveSpeed = m_curCameraShakeTrigger->GetMoveSpeed();
+			camera->setPosition(cameraPos + toInitialPosition * 0.1f * moveSpeed * deltaTime);
+		}
+	}	
 }
 
