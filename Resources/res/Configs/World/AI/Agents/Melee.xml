@@ -64,26 +64,31 @@
 			<Anim 	type="Idle"
 					frameNamePattern="meleeIdle%d.png"					
 					timeBetweenFrames="0.2;0.2;"
+					shouldBlur="false"
 			/>
 			
 			<Anim 	type="Attack"
 					frameNamePattern="meleeAttack%d.png"					
 					timeBetweenFrames="0.3;0.3;"
+					shouldBlur="true"
 			/>
 			
 			<Anim 	type="Run"
 					frameNamePattern="meleeRun%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>
 			
 			<Anim	type="Signal"
 					frameNamePattern="meleeSignal%d.png"					
 					timeBetweenFrames="0.5;"
+					shouldBlur="false"
 			/>
 			
 			<Anim	type="Hurt"
 					frameNamePattern="meleeHurt%d.png"					
 					timeBetweenFrames="1.0;"
+					shouldBlur="false"
 			/>
 		</SpriteSheet>
 	</Component>

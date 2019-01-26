@@ -38,14 +38,17 @@
 			<Anim 	type="RunSide" 
 					frameNamePattern="runSide%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>				
 			<Anim 	type="RunUp" 
 					frameNamePattern="runUp%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>			
 			<Anim 	type="RunDown" 
 					frameNamePattern="runDown%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>
 		</SpriteSheet>
 		<SpriteSheet
@@ -55,14 +58,17 @@
 			<Anim 	type="IdleSide"			
 					frameNamePattern="idleSide%d.png"					
 					timeBetweenFrames="0.1;"
+					shouldBlur="false"
 			/>
 			<Anim 	type="IdleUp"			
 					frameNamePattern="idleUp%d.png"					
 					timeBetweenFrames="0.1;"
+					shouldBlur="false"
 			/>
 			<Anim 	type="IdleDown"			
 					frameNamePattern="idleDown%d.png"					
 					timeBetweenFrames="0.1;"
+					shouldBlur="false"
 			/>
 		</SpriteSheet>
 		<SpriteSheet
@@ -72,14 +78,17 @@
 			<Anim 	type="DodgeSide"			
 					frameNamePattern="dodgeSide%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>
 			<Anim 	type="DodgeUp"			
 					frameNamePattern="dodgeUp%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>
 			<Anim 	type="DodgeDown"			
 					frameNamePattern="dodgeDown%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>
 		</SpriteSheet>
 		<SpriteSheet
@@ -89,14 +98,17 @@
 			<Anim 	type="HurtSide"			
 					frameNamePattern="hurtSide%d.png"					
 					timeBetweenFrames="0.1;"
+					shouldBlur="false"
 			/>
 			<Anim 	type="HurtUp"			
 					frameNamePattern="hurtUp%d.png"					
 					timeBetweenFrames="0.1;"
+					shouldBlur="false"
 			/>
 			<Anim 	type="HurtDown"			
 					frameNamePattern="hurtDown%d.png"					
 					timeBetweenFrames="0.1;"
+					shouldBlur="false"
 			/>
 		</SpriteSheet>		
 		<SpriteSheet
@@ -106,14 +118,17 @@
 			<Anim 	type="AttackSide1"					
 					frameNamePattern="attackSide1%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>	
 			<Anim 	type="AttackUp1"					
 					frameNamePattern="attackUp1%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>			
 			<Anim 	type="AttackDown1"					
 					frameNamePattern="attackDown1%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>			
 		</SpriteSheet>
 		<SpriteSheet
@@ -123,14 +138,17 @@
 			<Anim 	type="AttackSide2"					
 					frameNamePattern="attackSide1%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>	
 			<Anim 	type="AttackUp2"					
 					frameNamePattern="attackUp1%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>			
 			<Anim 	type="AttackDown2"					
 					frameNamePattern="attackDown1%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
 			/>			
 		</SpriteSheet>		
 	</Component>

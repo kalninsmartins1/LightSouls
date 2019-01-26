@@ -76,6 +76,7 @@ namespace XMLConsts
 	static constexpr char* ANIM_PLIST_PATH_ATTR = "plistPath";
 	static constexpr char* ANIM_FRAME_NAME_PATTERN_ATTR = "frameNamePattern";	
 	static constexpr char* ANIM_TIME_BETWEEN_FRAMES_ATTR = "timeBetweenFrames";
+	static constexpr char* ANIM_SHOULD_BLUR = "shouldBlur";
 
 	// XML generic attributes
 	static constexpr char* DISTANCE = "distance";

@@ -45,13 +45,13 @@ public:
 
 	// Load animation configuration from xml file
 	void LoadConfig(tinyxml2::XMLNode* node);
-	void PlayLoopingAnimation(const String& animName, bool shouldReverse = false, bool shouldBlur = false);
-	void PlayLoopingAnimation(int animationId, bool shouldReverse = false, bool shouldBlur = false);
-	void PlayOneShotAnimation(const String& animName, const AnimationCallback& callback, bool shouldBlur = false);
-	void PlayOneShotAnimation(int animationId, const AnimationCallback& callback, bool shouldBlur = false);
+	void PlayLoopingAnimation(const String& animName, bool shouldReverse = false);
+	void PlayLoopingAnimation(int animationId, bool shouldReverse = false);
+	void PlayOneShotAnimation(const String& animName, const AnimationCallback& callback);
+	void PlayOneShotAnimation(int animationId, const AnimationCallback& callback);
 	
 	void PlayAttackAnimation(const AnimationCallback& callback);	
-	void PlayLoopingDirectionalAnim(const String& animName, bool shouldReverse = false, bool shouldBlur = false);
+	void PlayLoopingDirectionalAnim(const String& animName, bool shouldReverse = false);
 	void PlayOneShotDirectionalAnim(const String& animName, const AnimationCallback& callback);
 
 	void			GoToNextAttackAnimation();

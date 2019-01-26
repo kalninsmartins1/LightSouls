@@ -100,7 +100,7 @@ void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 	}
 }
 
-void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback, bool shouldBlur)
+void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallback& callback)
 {
 #if LIGHTSOULS_ANIM_DEBUG
 	String animName;
@@ -114,7 +114,7 @@ void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallbac
 		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_entity, data, callback);
 		SetCurrentAnimId(animationId);
 
-		if (shouldBlur)
+		if (data.shouldBlur)
 		{
 			AddBlur(data, animationId);
 		}
@@ -134,12 +134,12 @@ void AnimComponent::PlayAttackAnimation(const AnimationCallback& callback)
 	PlayOneShotAnimation(m_curAttackAnimId, callback);
 }
 
-void AnimComponent::PlayLoopingDirectionalAnim(const String& animName, bool shouldReverse /*= false*/, bool shouldBlur /*= false*/)
+void AnimComponent::PlayLoopingDirectionalAnim(const String& animName, bool shouldReverse /*= false*/)
 {
 	int animationId = GetDirectionalAnimId(animName);
 	if (animationId != -1)
 	{
-		PlayLoopingAnimation(animationId, shouldReverse, shouldBlur);		
+		PlayLoopingAnimation(animationId, shouldReverse);		
 	}
 	else
 	{
@@ -177,7 +177,7 @@ void AnimComponent::update(float deltaTime)
 	m_blurAnimation.Update(deltaTime);
 }
 
-void AnimComponent::PlayLoopingAnimation(int animationId, bool shouldReverse, bool shouldBlur)
+void AnimComponent::PlayLoopingAnimation(int animationId, bool shouldReverse)
 {
 #if LIGHTSOULS_ANIM_DEBUG
 	String animName;
@@ -191,7 +191,7 @@ void AnimComponent::PlayLoopingAnimation(int animationId, bool shouldReverse, bo
 		AnimationUtils::StartSpriteFrameAnimation(&m_entity, data, shouldReverse);
 		SetCurrentAnimId(animationId);
 		
-		if (shouldBlur)
+		if (data.shouldBlur)
 		{
 			AddBlur(data, animationId);
 		}
@@ -256,16 +256,16 @@ cc::SpriteFrame* AnimComponent::GetCurrentSpriteFrame() const
 	return m_entity.getSpriteFrame();
 }
 
-void AnimComponent::PlayLoopingAnimation(const String& animName, bool shoudlRevers, bool shouldBlur)
+void AnimComponent::PlayLoopingAnimation(const String& animName, bool shoudlRevers)
 {
 	int animationId = AnimationUtils::GetAnimId(animName);
-	PlayLoopingAnimation(animationId, shoudlRevers, shouldBlur);
+	PlayLoopingAnimation(animationId, shoudlRevers);
 }
 
-void AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback, bool shouldBlur)
+void AnimComponent::PlayOneShotAnimation(const String& animName, const AnimationCallback& callback)
 {
 	int animationId = AnimationUtils::GetAnimId(animName);
-	PlayOneShotAnimation(animationId, callback, shouldBlur);
+	PlayOneShotAnimation(animationId, callback);
 }
 
 void AnimComponent::SetCurrentAnimId(int currentAnimId)

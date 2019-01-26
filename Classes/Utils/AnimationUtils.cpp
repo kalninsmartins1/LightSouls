@@ -122,6 +122,7 @@ void AnimationUtils::LoadAnimationFrames(const tinyxml2::XMLElement* animElement
 {
 	// Get template frame name
 	const char* spriteFrameName = animElement->Attribute(XMLConsts::ANIM_FRAME_NAME_PATTERN_ATTR);
+	outAnimationData.shouldBlur = animElement->BoolAttribute(XMLConsts::ANIM_SHOULD_BLUR);
 
 	// Set the time between frames
 	const String frameTimeInfo = animElement->Attribute(XMLConsts::ANIM_TIME_BETWEEN_FRAMES_ATTR);

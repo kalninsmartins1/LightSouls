@@ -11,6 +11,7 @@ struct AnimationData
 {
 	cocos2d::Vector<cocos2d::SpriteFrame*>	frames;	
 	std::vector<float>						timeBetweenFrames;
+	bool									shouldBlur;
 	static constexpr float					secondFrameDelay = 0.06f;	
 	static constexpr float					snapShotDelay = 0.10f;
 };

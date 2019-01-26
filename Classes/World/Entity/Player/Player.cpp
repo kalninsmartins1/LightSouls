@@ -232,7 +232,7 @@ void Player::PerformDodge()
 	if (animComp != nullptr)
 	{
 		StartDodging();
-		GetAnimComponent()->PlayLoopingDirectionalAnim(GameConsts::ANIM_TYPE_DODGE_DIR, false, true);
+		animComp->PlayLoopingDirectionalAnim(GameConsts::ANIM_TYPE_DODGE_DIR, false);
 		Utils::StartTimerWithCallback(this,
 			CC_CALLBACK_0(Player::OnDodgeFinished, this), m_dodgeTime);
 	}	

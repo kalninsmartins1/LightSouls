@@ -34,7 +34,7 @@ void StateLineAttack::OnEnter(AnimComponent * animComponent)
 	AIAgent& agent = GetAgent();	
 	m_attackComponent = agent.GetAttackComponent();	
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_ATTACK, false, true);
+	animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_ATTACK, false);
 
 	m_curProgress = EStateProgress::IN_PROGRESS;				
 	SetTargetPosition(m_targetEntity->getPosition());
