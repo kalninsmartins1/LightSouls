@@ -210,7 +210,8 @@
 	</Component>
 	
 	<!-- Flips the sprite when moving in left direction -->
-	<Component type="MirrorSpriteComponent">
+	<Component type="MirrorSpriteComponent"
+		sensitivity="0.5">
 	</Component>
 	
 </Entity>

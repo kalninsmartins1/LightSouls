@@ -462,9 +462,10 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 			}
 			else if (componentType == GameConsts::MIRROR_SPRITE_COMPONENT)
 			{
+				float sensitivity = element->FloatAttribute(XMLConsts::SENSITIVITY);
 				MirrorSpriteComponent* pMirrorSprite = MirrorSpriteComponent::create();
 				pMirrorSprite->setName(GameConsts::MIRROR_SPRITE_COMPONENT);
-				pMirrorSprite->SetOwnerEntity(dynamic_cast<Entity*>(&entity));
+				pMirrorSprite->Init(entity, sensitivity);
 				entity.addComponent(pMirrorSprite);
 			}
 			else if (componentType == GameConsts::NODE_COMPONENT)

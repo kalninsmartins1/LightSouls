@@ -2,24 +2,37 @@
 #include "Utils/Utils.h"
 #include "World/Entity/Entity.h"
 
-void MirrorSpriteComponent::SetOwnerEntity(Entity* ownerEntity)
+MirrorSpriteComponent::MirrorSpriteComponent()
+	: m_sensitivity(0.1f)
 {
-	m_ownerEntity = ownerEntity;
+
+}
+
+void MirrorSpriteComponent::Init(Entity& ownerEntity, float sensitivity)
+{
+	m_ownerEntity = &ownerEntity;
+	m_sensitivity = sensitivity;
 }
 
 void MirrorSpriteComponent::update(float delta)
 {
-	// Mirror the sprite based on heading direction
-	const Vector2 entityHeading = m_ownerEntity->GetHeading();
-	const float absScaleX = abs(m_ownerEntity->getScaleX());
-	if(entityHeading.x > 0)
-	{		
-		m_ownerEntity->setScaleX(absScaleX);
-	}
-	else if(entityHeading.x < 0)
+	if (m_ownerEntity != nullptr) 
 	{
-		m_ownerEntity->setScaleX(-absScaleX);
-	}
+		// Mirror the sprite based on heading direction
+		const Vector2 entityHeading = m_ownerEntity->GetHeading();
+		if (abs(entityHeading.y) < m_sensitivity)
+		{
+			const float absScaleX = abs(m_ownerEntity->getScaleX());
+			if (entityHeading.x > m_sensitivity)
+			{
+				m_ownerEntity->setScaleX(absScaleX);
+			}
+			else if (entityHeading.x < -m_sensitivity)
+			{
+				m_ownerEntity->setScaleX(-absScaleX);
+			}
+		}		
+	}	
 }
 
 

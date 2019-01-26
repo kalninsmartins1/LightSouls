@@ -91,6 +91,7 @@ namespace XMLConsts
 	static constexpr char* AXIS_X_ATTR = "x";
 	static constexpr char* AXIS_Y_ATTR = "y";
 	static constexpr char* AXIS_Z_ATTR = "z";
+	static constexpr char* SENSITIVITY = "sensitivity";
 
 	// XML physics attributes
 	static constexpr char* PHYSICS_BIT_MASK_ATTR = "collisionBitMask";

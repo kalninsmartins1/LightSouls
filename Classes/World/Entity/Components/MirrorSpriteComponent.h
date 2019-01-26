@@ -7,13 +7,17 @@ class Entity;
 class MirrorSpriteComponent: public cocos2d::Component
 {
 public:
-	CREATE_FUNC(MirrorSpriteComponent);
+	MirrorSpriteComponent();
 
-	void SetOwnerEntity(Entity* ownerEntity);	
+public:
+			CREATE_FUNC(MirrorSpriteComponent);
+	void	Init(Entity& ownerEntity, float sensitivity);
+
 	virtual void update(float delta) override;
 
 private:
-	Entity* m_ownerEntity;
+	Entity*			m_ownerEntity;
+	float			m_sensitivity;
 };
 
 
