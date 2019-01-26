@@ -24,8 +24,8 @@
 	<!-- "secondsBetweenAttacks" - Time when next attack becomes possible -->
 	<!-- "comboExpireTime" - Time before combo resets, if less than "secondsBetweenAttacks" then no combo is possible -->
 	<Component 	type="LongSwordAttackComponent"
-				secondsBetweenAttacks="0.2" 
-				comboExpireTime="0.6" 
+				secondsBetweenAttacks="0.3" 
+				comboExpireTime="0.8" 
 				attackRange="60"
 				paddingFromBody="5">
 	</Component>
@@ -112,8 +112,8 @@
 			/>
 		</SpriteSheet>		
 		<SpriteSheet
-			path="res/Graphics/World/Player/Attack/lightAttackAnims1.png" 
-			plistPath="res/Graphics/World/Player/Attack/lightAttackAnims1.plist">
+			path="res/Graphics/World/Player/Attack/attackAnims1.png" 
+			plistPath="res/Graphics/World/Player/Attack/attackAnims1.plist">
 			
 			<Anim 	type="AttackSide1"					
 					frameNamePattern="attackSide1%d.png"					
@@ -132,22 +132,42 @@
 			/>			
 		</SpriteSheet>
 		<SpriteSheet
-			path="res/Graphics/World/Player/Attack/lightAttackAnims2.png" 
-			plistPath="res/Graphics/World/Player/Attack/lightAttackAnims2.plist">
+			path="res/Graphics/World/Player/Attack/attackAnims2.png" 
+			plistPath="res/Graphics/World/Player/Attack/attackAnims2.plist">
 			
 			<Anim 	type="AttackSide2"					
-					frameNamePattern="attackSide1%d.png"					
+					frameNamePattern="attackSide2%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>	
 			<Anim 	type="AttackUp2"					
-					frameNamePattern="attackUp1%d.png"					
+					frameNamePattern="attackUp2%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>			
 			<Anim 	type="AttackDown2"					
-					frameNamePattern="attackDown1%d.png"					
+					frameNamePattern="attackDown2%d.png"					
 					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
+			/>			
+		</SpriteSheet>
+		<SpriteSheet
+			path="res/Graphics/World/Player/Attack/attackAnims3.png" 
+			plistPath="res/Graphics/World/Player/Attack/attackAnims3.plist">
+			
+			<Anim 	type="AttackSide3"					
+					frameNamePattern="attackSide3%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
+			/>	
+			<Anim 	type="AttackUp3"					
+					frameNamePattern="attackUp3%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
+			/>			
+			<Anim 	type="AttackDown3"					
+					frameNamePattern="attackDown3%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.5;"
 					shouldBlur="false"
 			/>			
 		</SpriteSheet>		

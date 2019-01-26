@@ -138,13 +138,9 @@ void Player::OnDodgeFinished()
 void Player::ManageInput()
 {
 	GameInput* input = GameScene::GetGameInput();
-	if (input->HasAction("LightAttackInput"))
+	if (input->HasAction("LightAttackInput") && m_attackComponent != nullptr)
 	{
-		LightAttack();
-	}
-	else if (input->HasAction("StrongAttackInput"))
-	{
-		//lightAttack();
+		Attack(*m_attackComponent);
 	}
 	else if (input->HasAction("DodgeInput") && IsRunning() && 
 		HasEnoughtStamina(m_dodgeStaminaConsumption))
@@ -205,12 +201,12 @@ void Player::StopDodging()
 	ResetMoveSpeed();
 }
 
-void Player::LightAttack()
+void Player::Attack(GenericAttackComponent& attackComponent)
 {	
-	if (!m_isDodging && m_attackComponent->IsReadyToAttack())
-	{
-		AnimComponent* animComponent = GetAnimComponent();
-		if(!m_attackComponent->IsComboExpired())
+	AnimComponent* animComponent = GetAnimComponent();
+	if (!m_isDodging && animComponent != nullptr && attackComponent.IsReadyToAttack())
+	{		
+		if(!attackComponent.IsComboExpired())
 		{
 			animComponent->GoToNextAttackAnimation();
 		}
@@ -221,7 +217,7 @@ void Player::LightAttack()
 		
 		// Play the attack animation
 		animComponent->PlayAttackAnimation(CC_CALLBACK_0(Entity::StopAttacking, this));
-		m_attackComponent->Attack(m_lastValidMoveDirection);
+		attackComponent.Attack(m_lastValidMoveDirection);
 		StartAttacking();
 	}
 }

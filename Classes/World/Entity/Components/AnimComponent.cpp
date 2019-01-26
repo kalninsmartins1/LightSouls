@@ -10,7 +10,7 @@ AnimComponent::AnimComponent(Entity& ownerSprite)
 	: m_curAnimId(-1)
 	, m_entity(ownerSprite)
 	, m_firstAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_SIDE))
-	, m_lastAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_FIVE_SIDE))
+	, m_lastAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_SIDE))
 	, m_curAttackAnimId(m_firstAttackAnimId)
 	, m_currentAnimStyle(AnimStyle::SIDE)
 	, m_animations()
@@ -284,21 +284,21 @@ void AnimComponent::UpdateAnimState()
 		m_currentAnimStyle = AnimStyle::SIDE;
 		TransitionAttackAnimDirection(
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_SIDE),
-			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_SIDE));
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_SIDE));
 	}
 	else if (heading.y > 0.0f)
 	{		
 		m_currentAnimStyle = AnimStyle::UP;
 		TransitionAttackAnimDirection(
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_UP),
-			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_UP));
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_UP));
 	}
 	else if (heading.y < 0.0f)
 	{	
 		m_currentAnimStyle = AnimStyle::DOWN;
 		TransitionAttackAnimDirection(
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_DOWN),
-			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_DOWN));
+			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_THREE_DOWN));
 	}
 
 	TransitionRunAnimDirection();

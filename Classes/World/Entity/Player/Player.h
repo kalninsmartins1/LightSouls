@@ -42,7 +42,7 @@ private:
 
 	void ManageInput();
 	void FilterMovementDirectionBasedOnCollisionData(Vector2& moveDirection);
-	void LightAttack();
+	void Attack(GenericAttackComponent& attackComponent);
 	void PerformDodge();
 	void PlayRunOrIdleAnimation() const;
 	bool OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
