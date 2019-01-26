@@ -97,17 +97,17 @@
 			
 			<Anim 	type="HurtSide"			
 					frameNamePattern="hurtSide%d.png"					
-					timeBetweenFrames="0.1;"
+					timeBetweenFrames="0.5;"
 					shouldBlur="false"
 			/>
 			<Anim 	type="HurtUp"			
 					frameNamePattern="hurtUp%d.png"					
-					timeBetweenFrames="0.1;"
+					timeBetweenFrames="0.5;"
 					shouldBlur="false"
 			/>
 			<Anim 	type="HurtDown"			
 					frameNamePattern="hurtDown%d.png"					
-					timeBetweenFrames="0.1;"
+					timeBetweenFrames="0.5;"
 					shouldBlur="false"
 			/>
 		</SpriteSheet>		
