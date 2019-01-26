@@ -167,7 +167,7 @@
 			/>			
 			<Anim 	type="AttackDown3"					
 					frameNamePattern="attackDown3%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.5;"
+					timeBetweenFrames="0.1;0.1;0.1;0.1;1.0;"
 					shouldBlur="false"
 			/>			
 		</SpriteSheet>		
