@@ -23,6 +23,7 @@
 #include "World/Projectiles/ProjectileConfig.h"
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
 #include "World/Entity/Components/LookAtAITargetComponent.h"
+#include "World/GameSpeedModifier.h"
 
 XMLLoader::XMLLoader()
 {
@@ -130,6 +131,29 @@ bool XMLLoader::InitializeProjectileConfig(ProjectileConfig& config, const Strin
 	return isSuccessful;
 }
 
+bool XMLLoader::InitializeGameSpeedModifier(GameSpeedModifier& speedModifier, const String& pathToXML)
+{
+	XMLDoc doc;
+	const bool isSuccessful = LoadXMLFile(pathToXML, doc);
+	if (isSuccessful)
+	{
+		XMLElement* data = doc.RootElement();
+		for (XMLElement* element = data->FirstChildElement(); element;
+			element = element->NextSiblingElement())
+		{
+			if (element != nullptr)
+			{
+				const String& eventType = element->Attribute(XMLConsts::TYPE_ATTR);
+				const float speed = element->FloatAttribute(XMLConsts::SPEED_ATTR);
+				const float duration = element->FloatAttribute(XMLConsts::DURATION_ATTR);
+				speedModifier.AddEvent(eventType, speed, duration);
+			}
+		}
+	}
+
+	return isSuccessful;
+}
+
 bool XMLLoader::InitializeCamera(LS::Camera& camera, const String& pathToXML)
 {
 	XMLDoc doc;
@@ -146,11 +170,7 @@ bool XMLLoader::InitializeCamera(LS::Camera& camera, const String& pathToXML)
 			{
 				auto cameraShake = CameraShake::Create(element);
 				camera.addComponent(cameraShake);
-			}
-			else if (type == GameConsts::CAMERA_FOLLOW_COMPONENT)
-			{
-				//camera.addComponent(CameraFollow::Create());
-			}
+			}			
 		}
 	}
 

@@ -37,6 +37,7 @@ public:
 	bool					IsReadyToAttack() const;
 	bool					HasEnoughtStamina(float amount) const;
 	float					GetKnockBackStrenght() const;
+	float					GetTimeModifier() const;
 	
 	void			SetPhysicsBodyForceScale(float scale);
 	void			SetBaseDamage(float baseDamage);
@@ -50,6 +51,7 @@ public:
 	void			SetStaminaRegenerateSpeed(float regenerateSpeed);
 	void			SetStaminaRegenerateDelay(float regenerateDelay);
 	void			SetKnockBackStrenght(float strenght);
+	void			SetTimeModifier(float timeModifier);
 	virtual void	setScale(float scaleX, float scaleY) override;
 	
 
@@ -62,10 +64,11 @@ public:
 	void			TakeDamage(float damage);
 	void			StartAttacking();
 	void			StopAttacking();
+
 	void			ApplyKnockbackEffect(const Entity& attackingEntity);
 	void			ApplyInstantSpeed(float speed);
-	void			ApplyInstantSpeedInDirection(float speed, const Vector2& direction);
-	virtual void	update(float deltaTime) override;
+	void			ApplyInstantSpeedInDirection(float speed, const Vector2& direction);	
+	virtual void	Update(float deltaTime);
 
 protected:
 	virtual void DispatchOnHealthReduceEvent() = 0;
@@ -107,6 +110,6 @@ private:
 	float m_physicsBodyForceScale;
 	float m_staminaRegenerateSpeed;
 	float m_staminaRegenerateDelay;
-	float m_knockBackStrenght;
+	float m_knockBackStrenght;	
 };
 

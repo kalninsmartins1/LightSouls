@@ -119,6 +119,7 @@ Node::Node()
 , _onExitCallback(nullptr)
 , _onEnterTransitionDidFinishCallback(nullptr)
 , _onExitTransitionDidStartCallback(nullptr)
+, _timeModifier(1.0f)
 {
     // set default scheduler and actionManager
     _director = Director::getInstance();
@@ -429,6 +430,11 @@ void Node::setScale(float scale)
     _transformUpdated = _transformDirty = _inverseDirty = true;
 }
 
+void cocos2d::Node::setTimeModifier(float timeModifier)
+{
+	_timeModifier = timeModifier;
+}
+
 /// scaleX getter
 float Node::getScaleX() const
 {
@@ -493,6 +499,11 @@ void Node::setScaleY(float scaleY)
 const Vec2& Node::getPosition() const
 {
     return _position;
+}
+
+float cocos2d::Node::getTimeModifier() const
+{
+	return _timeModifier;
 }
 
 /// position setter

@@ -1,11 +1,13 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "LightSoulsTypes.h"
+#include "World/GameSpeedModifier.h"
 
 class Player;
 class ProgressBar;
 class PhysicsManager;
 class GameInput;
+class ValueChangedEventData;
 
 namespace cocos2d
 {
@@ -24,8 +26,11 @@ public:
 public:
 	static PhysicsManager* GetPhysicsManager();
 	static GameInput*	   GetGameInput();
+	float				   GetTimeModifier() const;
 
-	static cocos2d::Scene* CreateScene();
+	void				   SetTimeModifier(float modifier);
+
+	static cc::Scene* CreateScene();
 	
 	// implement the "static create()" method manually
 	CREATE_FUNC(GameScene);
@@ -39,16 +44,19 @@ private:
 	void StartGameOverFadeIn(float time);
 	void SwitchToGameOverScene();
 	void ProcessDebugPhysicsDraw();
-	void OnPlayerHealthChanged(cocos2d::EventCustom* eventData);
-	void OnPlayerStaminaChanged(cocos2d::EventCustom* eventData);
-	void OnAgentDestroyed(cocos2d::EventCustom* eventData);
+	void HandlePlayerHealthChangedEvent(const ValueChangedEventData& eventData);
+	void OnPlayerHealthChanged(cc::EventCustom* eventData);
+	void OnPlayerStaminaChanged(cc::EventCustom* eventData);
+	void OnAgentDestroyed(cc::EventCustom* eventData);
 
 private:
 	static PhysicsManager*			s_physicsManager;
 	static GameInput*				s_gameInput;
+	GameSpeedModifier				m_gameSpeedModifier;
 	Player*							m_player;
 	ProgressBar*					m_healthBar;
 	ProgressBar*					m_staminaBar;
 	cocos2d::ui::Text*				m_scoreText;
 	bool							m_physicsDebugEnabled;
+	float							m_timeModifier;
 };

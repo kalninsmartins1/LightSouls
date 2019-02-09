@@ -54,13 +54,21 @@ SpawnPoint* SpawnPoint::Create(const SpawnPointConfig& config)
 	return spawnPoint;
 }
 
+void SpawnPoint::SetTimeModifier(float timeModifier)
+{
+	for (auto agent : m_spawnedAgents)
+	{
+		agent->SetTimeModifier(timeModifier);
+	}
+}
+
 void SpawnPoint::Update(float deltaTime)
 {
 	// Update all agents
 	int index = 0;
 	for (auto agent : m_spawnedAgents)
 	{
-		agent->update(deltaTime);
+		agent->Update(deltaTime);
 
 		// Agent went offline
 		if (agent->GetHealth() <= 0 && agent->isVisible())

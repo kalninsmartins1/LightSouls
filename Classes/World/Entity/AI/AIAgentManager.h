@@ -15,6 +15,7 @@ public:
 	void					GetPathToAgentType(const String& type, String& outPath) const;
 		
 	void SetTargetEntity(Entity* entity);
+	void SetTimeModifier(float timeModifier);
 	
 	bool Init(cocos2d::Node* worldLayer, const String& pathToXML);
 	void Update(float deltaTime);

@@ -180,9 +180,6 @@
     <ClCompile Include="..\Classes\World\Entity\Components\AnimComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Events\ProgressBarChangedEventData.cpp">
-      <Filter>src\Events</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Events\OnCollisionBeginEventData.cpp">
       <Filter>src\Events</Filter>
     </ClCompile>
@@ -270,6 +267,10 @@
     <ClCompile Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Animation\BlurAnimation.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Animation\BlurAnimationFrame.cpp" />
+    <ClCompile Include="..\Classes\Events\ValueChangedEventData.cpp">
+      <Filter>src\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\World\GameSpeedModifier.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -358,9 +359,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\AnimComponent.h">
       <Filter>src\World\Entity\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Events\ProgressBarChangedEventData.h">
-      <Filter>src\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Events\OnCollisionBeginEventData.h">
       <Filter>src\Events</Filter>
@@ -451,6 +449,10 @@
     <ClInclude Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Animation\BlurAnimation.h" />
     <ClInclude Include="..\Classes\World\Entity\Animation\BlurAnimationFrame.h" />
+    <ClInclude Include="..\Classes\Events\ValueChangedEventData.h">
+      <Filter>src\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\World\GameSpeedModifier.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

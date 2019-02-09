@@ -7,7 +7,7 @@
 #include "World/Entity/AI/AIAgentManager.h"
 #include "World/Physics/PhysicsManager.h"
 #include "UI/InGameIndicators/ProgressBar.h"
-#include "Events/ProgressBarChangedEventData.h"
+#include "Events/ValueChangedEventData.h"
 #include "Camera/Camera.h"
 #include "LoadingScreenScene.h"
 #include "ENextScene.h"
@@ -20,19 +20,30 @@ PhysicsManager* GameScene::s_physicsManager = nullptr;
 GameInput* GameScene::s_gameInput = nullptr;
 
 GameScene::GameScene()
-	: m_player(nullptr)
+	: m_gameSpeedModifier(*this, *getEventDispatcher())
+	, m_player(nullptr)
 	, m_healthBar(nullptr)
 	, m_staminaBar(nullptr)
 	, m_scoreText(nullptr)
 	, m_physicsDebugEnabled(false)
+	, m_timeModifier(1.0f)
 {
 	// Reset player score upon new game
-	ScoringSystem::GetInstance()->Reset();
+	ScoringSystem* scoringSystem = ScoringSystem::GetInstance();
+	if (scoringSystem != nullptr)
+	{
+		scoringSystem->Reset();
+	}	
 }
 
 GameScene::~GameScene()
-{	
-	AIAgentManager::GetInstance()->Cleanup();
+{
+	AIAgentManager* aiManager = AIAgentManager::GetInstance();
+	if (aiManager != nullptr)
+	{
+		aiManager->Cleanup();
+	}
+	
 	s_physicsManager->release();
 	s_physicsManager = nullptr;
 	s_gameInput->release();
@@ -47,6 +58,26 @@ PhysicsManager* GameScene::GetPhysicsManager()
 GameInput* GameScene::GetGameInput()
 {
 	return s_gameInput;
+}
+
+float GameScene::GetTimeModifier() const
+{
+	return m_timeModifier;
+}
+
+void GameScene::SetTimeModifier(float modifier)
+{
+	m_timeModifier = modifier;
+	if (m_player != nullptr)
+	{
+		m_player->SetTimeModifier(modifier);
+	}
+
+	AIAgentManager* aiManager = AIAgentManager::GetInstance();
+	if (aiManager != nullptr)
+	{
+		aiManager->SetTimeModifier(modifier);
+	}
 }
 
 Scene* GameScene::CreateScene()
@@ -102,13 +133,21 @@ bool GameScene::init()
 }
 
 void GameScene::update(float deltaTime)
-{	
+{
+	deltaTime += m_timeModifier;
+
 	// Keep input events up to date
 	s_gameInput->Update(deltaTime);
 	if (s_gameInput->HasAction("ExitGame"))
 	{
 		Director::getInstance()->end();
 		return;
+	}
+
+	// Update player
+	if (m_player != nullptr)
+	{
+		m_player->Update(deltaTime);
 	}
 
 	// Update AI
@@ -150,16 +189,19 @@ void GameScene::InitWolrdLayer()
 	worldLayer->addChild(m_player);
 	
 	EventDispatcher* eventDispatcher = getEventDispatcher();
-	eventDispatcher->addCustomEventListener(Player::GetEventOnHealthChanged(),
-		CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
-	eventDispatcher->addCustomEventListener(Player::GetEventOnStaminaChanged(),
-		CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
-	eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDestroyed(),
-		CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
+	if (eventDispatcher != nullptr)
+	{
+		eventDispatcher->addCustomEventListener(Player::GetEventOnHealthChanged(),
+			CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
+		eventDispatcher->addCustomEventListener(Player::GetEventOnStaminaChanged(),
+			CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
+		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDestroyed(),
+			CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
+	}
 
 	// Init AI
 	AIAgentManager* agentManager = AIAgentManager::GetInstance();
-	if (agentManager->Init(worldLayer, "res/Configs/World/AI/AIManager.xml"))
+	if (agentManager != nullptr && agentManager->Init(worldLayer, "res/Configs/World/AI/AIManager.xml"))
 	{
 		agentManager->SetTargetEntity(m_player);
 	}
@@ -178,6 +220,9 @@ void GameScene::InitWolrdLayer()
 	worldCamera->setCameraFlag(CameraFlag::USER1);
 	worldCamera->setPosition(m_player->getPosition()); // Make the player position in middle of camera	
 	addChild(worldCamera);
+
+	// Init game speed modifier
+	m_gameSpeedModifier.Init("res/Configs/World/GameSpeedModifier.xml");
 }
 
 void GameScene::InitUILayer()
@@ -246,31 +291,25 @@ void GameScene::StartGameOverFadeIn(float time)
 
 void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 {
-	auto healthData = static_cast<ProgressBarChangedEventData*>(eventData->getUserData());
-	
-	if (healthData != nullptr && m_healthBar != nullptr)
+	if (eventData != nullptr)
 	{
-		m_healthBar->SetCurrentValue(healthData->GetPercentage());
-		if (healthData->GetNewValue() <= 0)
+		auto healthData = static_cast<ValueChangedEventData*>(eventData->getUserData());
+		if (healthData != nullptr)
 		{
-			m_healthBar->MultiplyAnimationSpeed(2.0f);			
-
-			float toNextSceneTime = 2.0f;
-			StartGameOverFadeIn(toNextSceneTime);
-			Utils::StartTimerWithCallback(this,
-				CC_CALLBACK_0(GameScene::SwitchToGameOverScene, this),
-				toNextSceneTime);
+			HandlePlayerHealthChangedEvent(*healthData);
 		}
 	}
 }
 
 void GameScene::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
 {
-	auto staminaData = static_cast<ProgressBarChangedEventData*>(eventData->getUserData());
-
-	if (staminaData != nullptr && m_staminaBar != nullptr)
+	if (eventData != nullptr)
 	{
-		m_staminaBar->SetCurrentValue(staminaData->GetPercentage());
+		auto staminaData = static_cast<ValueChangedEventData*>(eventData->getUserData());
+		if (staminaData != nullptr && m_staminaBar != nullptr)
+		{
+			m_staminaBar->SetCurrentValue(staminaData->GetPercentageNormalized());
+		}
 	}
 }
 
@@ -308,4 +347,22 @@ void GameScene::ProcessDebugPhysicsDraw()
 			world->setDebugDrawCameraMask(CameraFlag::USER8);
 		}
 	}	
+}
+
+void GameScene::HandlePlayerHealthChangedEvent(const ValueChangedEventData& eventData)
+{
+	if (m_healthBar != nullptr)
+	{
+		m_healthBar->SetCurrentValue(eventData.GetPercentageNormalized());
+		if (eventData.GetNewValue() <= 0)
+		{
+			m_healthBar->MultiplyAnimationSpeed(2.0f);
+
+			float toNextSceneTime = 2.0f;
+			StartGameOverFadeIn(toNextSceneTime);
+			Utils::StartTimerWithCallback(this,
+				CC_CALLBACK_0(GameScene::SwitchToGameOverScene, this),
+				toNextSceneTime);
+		}
+	}
 }

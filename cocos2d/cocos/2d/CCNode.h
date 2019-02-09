@@ -319,6 +319,15 @@ public:
      */
     virtual void setScale(float scaleX, float scaleY);
 
+	/**
+	 * Sets time modifier for delta time.
+	 *
+	 * This modifier will be used for all updates for this node.
+	 *
+	 * @param timeModiefier The amount by which time gets modified.
+	 */
+	void setTimeModifier(float timeModifier);
+
     /**
      * Sets the position (x,y) of the node in its parent's coordinate system.
      *
@@ -360,6 +369,15 @@ public:
      * @endcode
      */
     virtual const Vec2& getPosition() const;
+
+   /**
+	* Gets current time modifier for this node.
+	*
+	* @see setTimeModifier(float timeModifier)
+	*
+	* @return Time modifier for this node.	
+	*/
+	float getTimeModifier() const;
 
     /** Returns the normalized position.
      * 
@@ -1922,6 +1940,7 @@ protected:
 
     float _skewX;                   ///< skew angle on x-axis
     float _skewY;                   ///< skew angle on y-axis
+	float _timeModifier;			///< delta time modifier for this node
 
     Vec2 _anchorPointInPoints;      ///< anchor point in points
     Vec2 _anchorPoint;              ///< anchor point normalized (NOT in points)

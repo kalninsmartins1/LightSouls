@@ -26,7 +26,7 @@ public:
 	static Player*	Create(const String& pathToXML);
 	bool			Init(const String& pathToXML);
 	
-	virtual void	update(float deltaTime) override;
+	virtual void	Update(float deltaTime) override;
 
 protected:
 	virtual void DispatchOnHealthReduceEvent() override;

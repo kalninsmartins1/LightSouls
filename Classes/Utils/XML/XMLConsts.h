@@ -83,6 +83,8 @@ namespace XMLConsts
 	static constexpr char* NAME_ATTR = "name";
 	static constexpr char* TIME_ATTR = "time";
 	static constexpr char* MOVE_SPEED_ATTR = "moveSpeed";
+	static constexpr char* SPEED_ATTR = "speed";
+	static constexpr char* DURATION_ATTR = "duration";
 	static constexpr char* TYPE_ATTR = "type";
 	static constexpr char* PATH_ATTR = "path";
 	static constexpr char* SHAPE_ATTR = "shape";

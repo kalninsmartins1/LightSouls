@@ -6,14 +6,12 @@
 #include "Input/GameInput.h"
 #include "physics3d/CCPhysics3DWorld.h"
 #include "World/Physics/PhysicsManager.h"
-#include "Events/ProgressBarChangedEventData.h"
+#include "Events/ValueChangedEventData.h"
 #include "cocos2d/cocos/base/CCEventDispatcher.h"
 #include "Utils/AnimationUtils.h"
 #include "Camera/Components/CameraShake.h"
 #include "Scenes/GameScene.h"
 #include "World/Projectiles/Projectile.h"
-
-
 
 const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
 const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
@@ -70,22 +68,30 @@ bool Player::Init(const String& pathToXML)
 	isSuccessfullyInitialized &= m_attackComponent != nullptr;
 
 	PhysicsManager* physicsManager = GameScene::GetPhysicsManager();
-	physicsManager->AddContactBeginListener(getName(), 
-		CC_CALLBACK_2(Player::OnContactBegin, this));
-	physicsManager->AddContactEndListener(getName(),
-		CC_CALLBACK_2(Player::OnContactEnd, this));
-	physicsManager->AddContactBeginListener(getName() + GameConsts::NODE_COMPONENT,
-		CC_CALLBACK_2(Player::OnProjectileHit, this));
+	if (physicsManager != nullptr)
+	{
+		const String& name = getName();
+		physicsManager->AddContactBeginListener(name,
+			CC_CALLBACK_2(Player::OnContactBegin, this));
+		physicsManager->AddContactEndListener(name,
+			CC_CALLBACK_2(Player::OnContactEnd, this));
+		physicsManager->AddContactBeginListener(name + GameConsts::NODE_COMPONENT,
+			CC_CALLBACK_2(Player::OnProjectileHit, this));
+	}
+	else
+	{
+		isSuccessfullyInitialized = false;
+	}
 
 	return isSuccessfullyInitialized;
 }
 
-void Player::update(float deltaTime)
+void Player::Update(float deltaTime)
 {
 	if (GetCurrentHealth() > 0)
 	{
 		// Call base update
-		Entity::update(deltaTime);
+		Entity::Update(deltaTime);
 
 		// We can move only when we are not attacking
 		if (IsReadyToAttack() && !m_isDodging)
@@ -262,7 +268,7 @@ void Player::DispatchOnHealthReduceEvent()
 	// Dispatch health changed event
 	float currentHealth = GetCurrentHealth();
 	float healthPercentage = Utils::SafeDevide(currentHealth, GetMaxHealth());
-	auto eventData = ProgressBarChangedEventData(GetId(), currentHealth, healthPercentage);
+	auto eventData = ValueChangedEventData(GetId(), currentHealth, healthPercentage);
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerHealthChanged,
 		&eventData);
 }
@@ -271,7 +277,7 @@ void Player::DispatchOnStaminaChangedEvent() const
 {
 	float currentStamina = GetCurrentStamina();
 	float staminaPercentage = Utils::SafeDevide(currentStamina, GetMaxStamina());
-	auto eventData = ProgressBarChangedEventData(GetId(), currentStamina, staminaPercentage);
+	auto eventData = ValueChangedEventData(GetId(), currentStamina, staminaPercentage);
 	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerStaminaChanged,
 		&eventData);
 }

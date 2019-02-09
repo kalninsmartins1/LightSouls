@@ -25,6 +25,14 @@ void AIAgentManager::SetTargetEntity(Entity* pEntity)
 	m_targetEntity = pEntity;
 }
 
+void AIAgentManager::SetTimeModifier(float timeModifier)
+{
+	for (auto spawnPoint : m_allActiveSpawnPoints)
+	{
+		spawnPoint->SetTimeModifier(timeModifier);
+	}
+}
+
 Entity* AIAgentManager::GetTargetEntity() const
 {
 	return m_targetEntity;

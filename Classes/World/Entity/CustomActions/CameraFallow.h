@@ -2,8 +2,6 @@
 
 #include "LightSoulsTypes.h"
 
-
-
 class CameraFollow: public cocos2d::Action
 {
 public:

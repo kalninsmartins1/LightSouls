@@ -12,6 +12,8 @@ class SpawnPoint : public cocos2d::Node
 public:
 	static SpawnPoint* Create(const SpawnPointConfig& config);
 
+	void	SetTimeModifier(float timeModifier);
+
 	void	Update(float deltaTime);
 	void	SpawnAllAgents();
 

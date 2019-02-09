@@ -16,6 +16,7 @@ class UIElementConfig;
 class Camera;
 class ProjectileConfig;
 class PhysicsBodyConfig;
+class GameSpeedModifier;
 enum class GameInputType;
 
 using LoadInputCallback = std::function<void(GameInput&, const XMLElement*,
@@ -31,6 +32,7 @@ public:
 	static bool InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager,
 		const String& pathToXML);
 	static bool InitializeProjectileConfig(ProjectileConfig& config, const String& pathToXML);
+	static bool InitializeGameSpeedModifier(GameSpeedModifier& speedModifier, const String& pathToXML);
 
 	static bool InitializeUIProgressBar(ProgressBar& healthBar, const String& pathToXML);
 	static bool LoadWorld(World& world, const String& pathToXML);

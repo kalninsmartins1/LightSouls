@@ -6,7 +6,6 @@
 #include "World/Entity/Animation/LSAnimation.h"
 #include "World/Entity/CustomActions/LSAnimate.h"
 
-
 const std::map<String, int> AnimationUtils::s_animTypeToId =
 {
 	{ GameConsts::ANIM_TYPE_RUN, 0 },

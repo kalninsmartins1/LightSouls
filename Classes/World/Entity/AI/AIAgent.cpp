@@ -127,12 +127,12 @@ bool AIAgent::OnContactBegin(const Vector2& contactPoint, const cocos2d::Physics
 	return true;
 }
 
-void AIAgent::update(float deltaTime)
+void AIAgent::Update(float deltaTime)
 {
 	Entity* targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	if (targetEntity != nullptr && targetEntity->GetCurrentHealth() > 0)
 	{
-		Entity::update(deltaTime);
+		Entity::Update(deltaTime);
 		m_stateMachine.OnStep();
 	}
 	else

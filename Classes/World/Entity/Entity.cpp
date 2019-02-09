@@ -3,8 +3,6 @@
 #include "GameConsts.h"
 #include "Utils/Utils.h"
 
-
-
 unsigned int Entity::s_uniqueId = 0;
 
 Entity::Entity()
@@ -27,8 +25,9 @@ Entity::Entity()
 	, m_physicsBodyForceScale(1.0f)
 	, m_staminaRegenerateSpeed(0.0f)
 	, m_staminaRegenerateDelay(0.0f)
-	, m_knockBackStrenght(0.0f)
+	, m_knockBackStrenght(0.0f)	
 {
+	
 }
 
 Entity::~Entity()
@@ -75,6 +74,11 @@ void Entity::SetStaminaRegenerateDelay(float regenerateDelay)
 void Entity::SetKnockBackStrenght(float strenght)
 {
 	m_knockBackStrenght = strenght;
+}
+
+void Entity::SetTimeModifier(float timeModifier)
+{
+	setTimeModifier(timeModifier);
 }
 
 void Entity::setScale(float scaleX, float scaleY)
@@ -234,7 +238,7 @@ void Entity::ApplyInstantSpeedInDirection(float speed, const Vector2& direction)
 	_physicsBody->setVelocity(direction * speed);
 }
 
-void Entity::update(float deltaTime)
+void Entity::Update(float deltaTime)
 {
 	Sprite::update(deltaTime);
 	m_isRuning = m_moveDirection.lengthSquared() > 0;
@@ -304,7 +308,7 @@ void Entity::OnEntityInitialized()
 	}
 	else
 	{
-		CCAssert(false, "Error: Did not find player animation component !");
+		CCAssert(false, "Error: Did not find entity animation component !");
 	}
 
 	_physicsBody->setVelocityLimit(m_moveSpeed);
@@ -393,6 +397,11 @@ bool Entity::HasEnoughtStamina(float amount) const
 float Entity::GetKnockBackStrenght() const
 {
 	return m_knockBackStrenght;
+}
+
+float Entity::GetTimeModifier() const
+{
+	return getTimeModifier();
 }
 
 void Entity::SetPhysicsBodyForceScale(float scale)
