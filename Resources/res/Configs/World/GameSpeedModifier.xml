@@ -1,9 +1,9 @@
 <GameSpeedModifier>
 	<Event 	type="EVENT_ON_PLAYER_HEALTH_CHANGED"
 			speed="0.1" 
-			duration="0.3"/>
+			duration="0.2"/>
 			
 	<Event 	type="EVENT_ON_PLAYER_GIVE_DAMAGE"
 			speed="0.1" 
-			duration="0.3"/>
+			duration="0.2"/>
 </GameSpeedModifier>
