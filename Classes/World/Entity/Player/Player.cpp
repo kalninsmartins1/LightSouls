@@ -219,6 +219,7 @@ void Player::Attack(GenericAttackComponent& attackComponent)
 		animComponent->PlayAttackAnimation(CC_CALLBACK_0(Entity::StopAttacking, this));
 		attackComponent.Attack(m_lastValidMoveDirection);
 		StartAttacking();
+		ApplyInstantSpeedInDirection(GetKnockBackStrenght(), m_lastValidMoveDirection);
 	}
 }
 

@@ -36,6 +36,7 @@ public:
 	bool					IsRunning() const;	
 	bool					IsReadyToAttack() const;
 	bool					HasEnoughtStamina(float amount) const;
+	float					GetKnockBackStrenght() const;
 	
 	void			SetPhysicsBodyForceScale(float scale);
 	void			SetBaseDamage(float baseDamage);
@@ -63,6 +64,7 @@ public:
 	void			StopAttacking();
 	void			ApplyKnockbackEffect(const Entity& attackingEntity);
 	void			ApplyInstantSpeed(float speed);
+	void			ApplyInstantSpeedInDirection(float speed, const Vector2& direction);
 	virtual void	update(float deltaTime) override;
 
 protected:

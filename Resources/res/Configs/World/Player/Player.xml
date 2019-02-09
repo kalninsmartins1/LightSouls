@@ -6,7 +6,7 @@
 			baseDamage="20"
 			staminaRegenerateSpeed="30"
 			staminaRegenerateDelay="1"
-			knockBackStrenght="50"
+			knockBackStrenght="80"
 	>
 	
 	<Component type="TransformComponent">
@@ -16,9 +16,9 @@
 	</Component>
 	
 	<Component type="PlayerControllerComponent"
-				dodgeSpeed="1000"
-				dodgeTime="0.2"
-				dodgeStaminaConsumption="20">
+				dodgeSpeed="800"
+				dodgeTime="0.45"
+				dodgeStaminaConsumption="10">
 	</Component>
 	
 	<!-- "secondsBetweenAttacks" - Time when next attack becomes possible -->

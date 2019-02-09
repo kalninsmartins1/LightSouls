@@ -218,17 +218,20 @@ void Entity::StopAttacking()
 
 void Entity::ApplyKnockbackEffect(const Entity& attackingEntity)
 {	
-	float damage = attackingEntity.GetDamage();
-	Vector2 awayFromAttacker = getPosition() - attackingEntity.getPosition();
-	_physicsBody->applyImpulse(awayFromAttacker.getNormalized() * 
-		attackingEntity.m_knockBackStrenght *
-		m_physicsBodyForceScale);
+	const Vector2 awayFromAttacker = getPosition() - attackingEntity.getPosition();
+	const float speed = attackingEntity.m_knockBackStrenght;
+	ApplyInstantSpeedInDirection(speed, awayFromAttacker.getNormalized());
 }
 
 void Entity::ApplyInstantSpeed(float speed)
 {
+	ApplyInstantSpeedInDirection(speed, GetHeading());
+}
+
+void Entity::ApplyInstantSpeedInDirection(float speed, const Vector2& direction)
+{
 	_physicsBody->setVelocityLimit(speed);
-	_physicsBody->setVelocity(GetHeading() * speed);
+	_physicsBody->setVelocity(direction * speed);
 }
 
 void Entity::update(float deltaTime)
@@ -269,7 +272,7 @@ void Entity::Move()
 		// Move entity by applying force
 		_physicsBody->applyImpulse(m_moveDirection * m_moveSpeed * m_physicsBodyForceScale);		
 	}	
-	else
+	else if(!m_isAttacking)
 	{
 		// Instantly stop moving
 		_physicsBody->setVelocity(Vector2::ZERO);
@@ -385,6 +388,11 @@ bool Entity::IsReadyToAttack() const
 bool Entity::HasEnoughtStamina(float amount) const
 {
 	return amount < m_stamina;
+}
+
+float Entity::GetKnockBackStrenght() const
+{
+	return m_knockBackStrenght;
 }
 
 void Entity::SetPhysicsBodyForceScale(float scale)
