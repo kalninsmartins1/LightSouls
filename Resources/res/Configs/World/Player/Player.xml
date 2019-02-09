@@ -157,17 +157,17 @@
 			
 			<Anim 	type="AttackSide3"					
 					frameNamePattern="attackSide3%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;1.0;"
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>	
 			<Anim 	type="AttackUp3"					
 					frameNamePattern="attackUp3%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;1.0;"
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>			
 			<Anim 	type="AttackDown3"					
 					frameNamePattern="attackDown3%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;1.0;"
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>			
 		</SpriteSheet>		
