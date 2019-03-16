@@ -6,7 +6,7 @@
 			baseDamage="20"
 			staminaRegenerateSpeed="30"
 			staminaRegenerateDelay="1"
-			knockBackStrenght="80"
+			knockBackStrenght="200"
 	>
 	
 	<Component type="TransformComponent">

@@ -53,7 +53,6 @@ public:
 	void			SetKnockBackStrenght(float strenght);
 	void			SetTimeModifier(float timeModifier);
 	virtual void	setScale(float scaleX, float scaleY) override;
-	
 
 	void			ResetHealth();
 	void			ResetStamina();
