@@ -9,6 +9,7 @@ namespace GameConsts
 	static constexpr int			MAX_SPRITE_NAME_LENGTH = 100;
 	static constexpr int			DEFAULT_COLLISION_MASK = 1;
 	static constexpr int			WORLD_LAYER = -32768;
+	static constexpr int			DEBUG_LAYER = 2;
 	static constexpr float			LOADING_TIME = 0.1f;
 	static constexpr const char*	DEFAULT_FONT = "Arial";
 	static constexpr unsigned char	FULL_OPAQUE = 255;

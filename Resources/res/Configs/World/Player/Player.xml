@@ -26,7 +26,7 @@
 	<Component 	type="LongSwordAttackComponent"
 				secondsBetweenAttacks="0.3" 
 				comboExpireTime="0.8" 
-				attackRange="60"
+				attackRange="75"
 				paddingFromBody="5">
 	</Component>
 	
@@ -117,17 +117,17 @@
 			
 			<Anim 	type="AttackSide1"					
 					frameNamePattern="attackSide1%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					timeBetweenFrames="0.05;0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>	
 			<Anim 	type="AttackUp1"					
 					frameNamePattern="attackUp1%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					timeBetweenFrames="0.05;0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>			
 			<Anim 	type="AttackDown1"					
 					frameNamePattern="attackDown1%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					timeBetweenFrames="0.05;0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>			
 		</SpriteSheet>
@@ -137,40 +137,20 @@
 			
 			<Anim 	type="AttackSide2"					
 					frameNamePattern="attackSide2%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					timeBetweenFrames="0.05;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>	
 			<Anim 	type="AttackUp2"					
 					frameNamePattern="attackUp2%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					timeBetweenFrames="0.05;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>			
 			<Anim 	type="AttackDown2"					
 					frameNamePattern="attackDown2%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					timeBetweenFrames="0.05;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>			
-		</SpriteSheet>
-		<SpriteSheet
-			path="res/Graphics/World/Player/Attack/attackAnims3.png" 
-			plistPath="res/Graphics/World/Player/Attack/attackAnims3.plist">
-			
-			<Anim 	type="AttackSide3"					
-					frameNamePattern="attackSide3%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
-					shouldBlur="false"
-			/>	
-			<Anim 	type="AttackUp3"					
-					frameNamePattern="attackUp3%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
-					shouldBlur="false"
-			/>			
-			<Anim 	type="AttackDown3"					
-					frameNamePattern="attackDown3%d.png"					
-					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
-					shouldBlur="false"
-			/>			
-		</SpriteSheet>		
+		</SpriteSheet>			
 	</Component>
 
 	<!-- Actually collision detection body -->

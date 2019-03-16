@@ -28,6 +28,7 @@ public:
 
 public:
 	static const String&	GetEventOnCollisionBegin();
+	static const String&	GetEventOnPhysicsBodyAnchorSet();
 	
 	static PhysicsManager*	Create(cocos2d::Node* context);
 	bool					Init(cocos2d::Node* context);
@@ -44,6 +45,7 @@ public:
 	static void AddPhysicsBody(cocos2d::Node& attachmentNode,
 		const PhysicsBodyConfig& bodyConfig);	
 
+	void OnReload();
 	void DebugDrawRect(const cocos2d::Rect& rect);
 
 	// Checks for overlapping entities in queried square area
@@ -59,9 +61,11 @@ private:
 
 	// Physics world callback for when two objects stop colliding
 	bool OnContactEnd(cocos2d::PhysicsContact& contact);
+	void InitDebugDraw();
 
 private:
 	static const String					s_onCollisionBeginEvent;
+	static const String					s_onPhysicsBodyAnchorSet;
 	std::vector<PhysicsContactListener> m_beginContactListeners;
 	std::vector<PhysicsContactListener> m_endContactListeners;
 

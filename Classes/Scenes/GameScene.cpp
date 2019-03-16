@@ -156,10 +156,7 @@ void GameScene::update(float deltaTime)
 #if !defined(LIGHTSOULS_RELEASE)
 	if (s_gameInput->HasAction("ReloadGame"))
 	{
-		removeAllChildren();
-		AIAgentManager::GetInstance()->Cleanup();
-		InitWolrdLayer();
-		InitUILayer();
+		ReloadGame();
 	}
 	
 	ProcessDebugPhysicsDraw();
@@ -181,8 +178,8 @@ void GameScene::InitWolrdLayer()
 	Node* worldLayer = Node::create();
 
 	// Init world
-	World* pWorld = World::Create("res/Configs/World/WorldConfig.xml");
-	worldLayer->addChild(pWorld);
+	World* world = World::Create("res/Configs/World/WorldConfig.xml");
+	worldLayer->addChild(world);
 
 	// Init player
 	m_player = Player::Create("res/Configs/World/Player/Player.xml");
@@ -318,6 +315,25 @@ void GameScene::OnAgentDestroyed(cocos2d::EventCustom* eventData)
 	ScoringSystem* scoringSystem = ScoringSystem::GetInstance();
 	scoringSystem->IncreaseScore();
 	m_scoreText->setString(StringUtils::format("Score: %d", scoringSystem->GetScore()));
+}
+
+void GameScene::ReloadGame()
+{
+	removeAllChildren();
+	auto aiAgentManager = AIAgentManager::GetInstance();
+	if (aiAgentManager != nullptr)
+	{
+		aiAgentManager->Cleanup();
+	}
+
+	auto physicsManager = GetPhysicsManager();
+	if (physicsManager != nullptr)
+	{
+		physicsManager->OnReload();
+	}
+
+	InitWolrdLayer();
+	InitUILayer();
 }
 
 void GameScene::SwitchToGameOverScene()

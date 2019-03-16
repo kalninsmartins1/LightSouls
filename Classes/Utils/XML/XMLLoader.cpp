@@ -30,6 +30,20 @@ XMLLoader::XMLLoader()
 	// Private constructor to prevent instance creation
 }
 
+bool XMLLoader::GetAnchorPosition(const XMLElement* element, Vector2& outPos)
+{
+	const XMLElement* bodyAnchorElem = element->FirstChildElement(XMLConsts::NODE_ANCHOR_POSITION);
+	bool hasResult = false;
+
+	if (bodyAnchorElem != nullptr)
+	{		
+		GetVector2FromElement(bodyAnchorElem, outPos);
+		hasResult = true;
+	}
+
+	return hasResult;
+}
+
 bool XMLLoader::LoadXMLFile(const String& pathToXML, XMLDoc& outDoc)
 {
 	XMLError error = outDoc.LoadFile(pathToXML.c_str());
@@ -656,6 +670,14 @@ void XMLLoader::LoadNodeComponents(cc::Node& node, const XMLElement* root)
 				PhysicsBodyConfig config;
 				CreatePhysicsBodyFromAttributes(element, config);
 				PhysicsManager::AddPhysicsBody(node, config);
+				
+				cc::EventDispatcher* dispatcher = node.getEventDispatcher();
+				Vector2 anchorPos;
+				if (dispatcher != nullptr && GetAnchorPosition(element, anchorPos))
+				{
+					dispatcher->dispatchCustomEvent(PhysicsManager::GetEventOnPhysicsBodyAnchorSet(),
+						&anchorPos);
+				}				
 			}
 		}
 	

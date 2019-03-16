@@ -42,7 +42,8 @@ public:
 private:
 	XMLLoader();
 
-private:	
+private:
+	static bool						GetAnchorPosition(const XMLElement* element, Vector2& outPos);
 	static bool						LoadXMLFile(const String& pathToXML, XMLDoc& outDoc);
 
 	static void						LoadActionTriggers(GameInput& gameInput,

@@ -48,6 +48,7 @@ private:
 	void OnPlayerHealthChanged(cc::EventCustom* eventData);
 	void OnPlayerStaminaChanged(cc::EventCustom* eventData);
 	void OnAgentDestroyed(cc::EventCustom* eventData);
+	void ReloadGame();
 
 private:
 	static PhysicsManager*			s_physicsManager;

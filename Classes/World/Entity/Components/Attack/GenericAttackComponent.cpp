@@ -2,7 +2,7 @@
 #include "Utils/Utils.h"
 #include "World/Entity/Entity.h"
 #include "World/Physics/PhysicsManager.h"
-
+#include "Scenes/GameScene.h"
 
 
 GenericAttackComponent* GenericAttackComponent::Create(float secondsBetweenAttacks, float attackRange)
@@ -76,7 +76,7 @@ void GenericAttackComponent::CheckAffectedObjects(const Entity& attacker,
 		cocos2d::Size(rectWidth, rectHeight));
 
 	// Debug attack collision
-	//PhysicsManager::GetInstance()->DebugDrawRect(rect);
+	//GameScene::GetPhysicsManager()->DebugDrawRect(rect);
 
 	PhysicsManager::QuerryRect(rect, callback);
 }

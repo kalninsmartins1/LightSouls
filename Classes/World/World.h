@@ -2,10 +2,11 @@
 
 #include "LightSoulsTypes.h"
 
-
-
 class World : public cocos2d::Sprite
 {
+public:
+	World();
+
 public:
 	static const String& GetNodeName();
 	
@@ -14,9 +15,10 @@ public:
 
 private:
 	bool InitWithXML(const String& pathToXML);
+	void OnPhysicsBodyAchorSetEvent(cc::EventCustom* eventData);
 
 private:
-	static const String s_nodeName;
-	static bool			s_isShapeCacheInitialized;
+	static const String s_nodeName;	
+	Vector2				m_physicsBodyAnchor;
 };
 

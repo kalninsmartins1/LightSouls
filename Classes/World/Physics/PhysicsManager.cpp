@@ -6,6 +6,7 @@
 
 
 const String PhysicsManager::s_onCollisionBeginEvent = "EVENT_ON_COLLISION_BEGIN";
+const String PhysicsManager::s_onPhysicsBodyAnchorSet = "EVENT_ON_PHYSICS_BODY_OFFSET_SET";
 
 PhysicsManager::~PhysicsManager()
 {
@@ -15,6 +16,11 @@ PhysicsManager::~PhysicsManager()
 const String& PhysicsManager::GetEventOnCollisionBegin()
 {
 	return s_onCollisionBeginEvent;
+}
+
+const String& PhysicsManager::GetEventOnPhysicsBodyAnchorSet()
+{
+	return s_onPhysicsBodyAnchorSet;
 }
 
 PhysicsManager* PhysicsManager::Create(cocos2d::Node* context)
@@ -39,10 +45,8 @@ bool PhysicsManager::Init(cocos2d::Node* context)
 	context->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, 
 		context);
 
-	m_debugDrawNode = cocos2d::DrawNode::create();
-	m_debugDrawNode->setCameraMask(static_cast<unsigned int>(cocos2d::CameraFlag::USER1));
-	m_context->addChild(m_debugDrawNode);
-
+	InitDebugDraw();
+	
 	return context != nullptr;
 }
 
@@ -95,8 +99,13 @@ void PhysicsManager::AddPhysicsBody(cocos2d::Node& attachmentNode,
 	physicsBody->setCategoryBitmask(bodyConfig.GetCollisionCategory());
 
 	physicsBody->setName(GameConsts::RIGID_BODY_COMPONENT);
-	physicsBody->setRotationEnable(bodyConfig.IsRotationEnabled());
+	physicsBody->setRotationEnable(bodyConfig.IsRotationEnabled());	
 	attachmentNode.addComponent(physicsBody);
+}
+
+void PhysicsManager::OnReload()
+{
+	InitDebugDraw();
 }
 
 void PhysicsManager::DebugDrawRect(const cocos2d::Rect& rect)
@@ -108,7 +117,7 @@ void PhysicsManager::DebugDrawRect(const cocos2d::Rect& rect)
 	
 	m_debugDrawNode->clear();
 	m_debugDrawNode->drawRect(pointOne, pointTwo, pointThree, pointFour,
-		cocos2d::Color4F::GREEN);
+		cocos2d::Color4F::RED);
 }
 
 void PhysicsManager::QuerryRect(const cocos2d::Rect& rect, 
@@ -187,5 +196,12 @@ bool PhysicsManager::OnContactEnd(cocos2d::PhysicsContact& contact)
 	return true;
 }
 
+void PhysicsManager::InitDebugDraw()
+{
+	m_debugDrawNode = cocos2d::DrawNode::create();
+	m_debugDrawNode->setCameraMask(static_cast<unsigned int>(cocos2d::CameraFlag::USER1));
+	m_debugDrawNode->setLocalZOrder(GameConsts::DEBUG_LAYER);
+	m_context->addChild(m_debugDrawNode);
+}
 
 
