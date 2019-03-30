@@ -63,6 +63,7 @@ namespace GameConsts
 	static constexpr char* CAMERA_FOLLOW_COMPONENT = "CameraFollow";
 
 	// Animation types
+	static constexpr char* ANIM_TYPE_ACT = "Act";
 	static constexpr char* ANIM_TYPE_RUN = "Run";
 	static constexpr char* ANIM_TYPE_IDLE = "Idle";
 	static constexpr char* ANIM_TYPE_DODGE = "Dodge";

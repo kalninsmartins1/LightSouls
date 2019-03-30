@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<VFX type="Dust">
+	<Component type="AnimComponent">
+		<SpriteSheet path="res/Graphics/World/VFX/Dust/dustAnim.png" 
+			plistPath="res/Graphics/World/VFX/Dust/dustAnim.plist">
+			
+			<Anim 	type="Act"
+					frameNamePattern="dust%d.png"
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
+			/>
+		</SpriteSheet>			
+	</Component>
+</VFX>

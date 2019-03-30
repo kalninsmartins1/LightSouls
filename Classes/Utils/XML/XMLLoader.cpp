@@ -30,14 +30,14 @@ XMLLoader::XMLLoader()
 	// Private constructor to prevent instance creation
 }
 
-bool XMLLoader::GetAnchorPosition(const XMLElement* element, Vector2& outPos)
+bool XMLLoader::GetAnchorPosition(const XMLElement& element, Vector2& outPos)
 {
-	const XMLElement* bodyAnchorElem = element->FirstChildElement(XMLConsts::NODE_ANCHOR_POSITION);
+	const XMLElement* bodyAnchorElem = element.FirstChildElement(XMLConsts::NODE_ANCHOR_POSITION);
 	bool hasResult = false;
 
 	if (bodyAnchorElem != nullptr)
 	{		
-		GetVector2FromElement(bodyAnchorElem, outPos);
+		GetVector2FromElement(*bodyAnchorElem, outPos);
 		hasResult = true;
 	}
 
@@ -86,7 +86,7 @@ bool XMLLoader::InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager, const
 					child = child->NextSiblingElement())
 				{
 					Vector2 position;
-					GetVector2FromElement(child, position);
+					GetVector2FromElement(*child, position);
 					String agentType = child->Attribute(XMLConsts::TYPE_ATTR);
 					int spawnCount = child->IntAttribute(XMLConsts::AI_SPAWN_COUNT);
 					int numAgentsInRow = child->IntAttribute(XMLConsts::AI_NUM_AGENTS_IN_ROW);
@@ -124,14 +124,14 @@ bool XMLLoader::InitializeProjectileConfig(ProjectileConfig& config, const Strin
 		config.SetMoveSpeed(moveSpeed);
 
 		// Loop components
-		for (XMLElement* element = data->FirstChildElement(); element;
+		for (XMLElement* element = data->FirstChildElement(); element != nullptr;
 			element = element->NextSiblingElement())
 		{
 			const String& componentType = element->Attribute(XMLConsts::TYPE_ATTR);
 			if (componentType == GameConsts::RIGID_BODY_COMPONENT)
 			{
 				PhysicsBodyConfig rigidBodyConfig;
-				CreatePhysicsBodyFromAttributes(element, rigidBodyConfig);
+				CreatePhysicsBodyFromAttributes(*element, rigidBodyConfig);
 				config.SetPhysicsBodyConfig(rigidBodyConfig);
 			}
 			else if (componentType == GameConsts::SPRITE_COMPONENT)
@@ -139,6 +139,225 @@ bool XMLLoader::InitializeProjectileConfig(ProjectileConfig& config, const Strin
 				const String& pathToSprite = element->Attribute(XMLConsts::PATH_ATTR);
 				config.SetPathToSprite(pathToSprite);
 			}
+		}
+	}
+
+	return isSuccessful;
+}
+
+bool XMLLoader::InitializeComponents(cc::Node& node, const String& pathToXML)
+{
+	XMLDoc doc;
+	bool isSuccessful = LoadXMLFile(pathToXML, doc);
+
+	if (isSuccessful)
+	{
+		XMLElement* root = doc.RootElement();
+
+		for (XMLElement* element = root->FirstChildElement(); element != nullptr;
+			element = element->NextSiblingElement())
+		{
+			// Check all actor components
+			const String componentType = element->Attribute(XMLConsts::TYPE_ATTR);
+			isSuccessful &= InitializeComponent(node, *element, componentType);
+		}
+	}
+
+	return isSuccessful;
+}
+
+bool XMLLoader::InitializeComponent(cc::Node& node, const XMLElement& element, const String& componentType)
+{
+	bool isSuccessful = true;
+
+	if (componentType == GameConsts::TRANSFORM_COMPONENT)
+	{
+		// Transform component has data types in specific order
+		const XMLElement* positionNode = element.FirstChildElement(XMLConsts::NODE_POSITION);
+		const XMLElement* rotationNode = element.FirstChildElement(XMLConsts::NODE_ROTATION);
+		const XMLElement* scaleNode = element.FirstChildElement(XMLConsts::NODE_SCALE);
+
+		if (positionNode != nullptr && rotationNode != nullptr && scaleNode != nullptr)
+		{
+			Vector3 position;
+			GetVector3FromElement(*positionNode, position);
+
+			Vector3 rotation;
+			GetVector3FromElement(*rotationNode, rotation);
+
+			Vector3 scale;
+			GetVector3FromElement(*scaleNode, scale);
+
+			node.setPosition3D(position);
+			node.setRotation3D(rotation);
+			node.setScale(scale.x, scale.y);
+		}
+		else
+		{
+			isSuccessful = false;
+		}
+	}
+	else if (componentType == GameConsts::PLAYER_CONTROLLER_COMPONENT)
+	{
+		const float dodgeSpeed = element.FloatAttribute(XMLConsts::PLAYER_DODGE_SPEED_ATTR);
+		const float dodgeTime = element.FloatAttribute(XMLConsts::PLAYER_DODGE_TIME_ATTR);
+		const float dodgeStaminaConsumption = element.FloatAttribute(XMLConsts::PLAYER_DODGE_STAMINA_ATTR);
+
+		Player* player = static_cast<Player*>(&node);
+		if (player != nullptr)
+		{
+			player->SetDodgeSpeed(dodgeSpeed);
+			player->SetDodgeTime(dodgeTime);
+			player->SetDodgeStaminaConsumption(dodgeStaminaConsumption);
+		}
+		else
+		{
+			isSuccessful = false;
+		}
+	}
+	else if (componentType == GameConsts::AI_CONTROLLER_COMPONENT)
+	{
+		AIAgent* agent = static_cast<AIAgent*>(&node);
+		const XMLElement* root = element.Parent()? element.Parent()->ToElement() : nullptr;
+		if (agent != nullptr && root != nullptr)
+		{
+			const String& agentType = root->Attribute(XMLConsts::TYPE_ATTR);
+			agent->SetAgentType(agentType);
+			agent->Init(&element);
+		}
+		else
+		{
+			isSuccessful = false;
+			CCASSERT(false, "Trying to add AIController component to entity that is not of type AIAgent !");
+		}
+	}
+	else if (componentType == GameConsts::BACKGROUND_ACTION_COMPONENT)
+	{
+		LoadBackgroundActions(node, element);
+	}
+	else if (componentType == GameConsts::ANIM_COMPONENT)
+	{
+		AnimComponent* animComponent = AnimComponent::Create(node);
+		animComponent->setName(GameConsts::ANIM_COMPONENT);
+		animComponent->LoadConfig(element);
+		node.addComponent(animComponent);
+	}
+	else if (componentType == GameConsts::RANGED_ATTACK_COMPONENT)
+	{
+		const float range = element.FloatAttribute(XMLConsts::ENTITY_ATTACK_RANGE_ATTR);
+		const float secondsBetweenAttacks = element.FloatAttribute(XMLConsts::ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
+
+		const XMLElement* projectileElem = element.FirstChildElement(XMLConsts::NODE_PROJECTILE);
+		if (projectileElem != nullptr)
+		{
+			const String& pathToProjectile = projectileElem->Attribute(XMLConsts::PATH_ATTR);
+			ProjectileConfig config;
+			config.Init(pathToProjectile);
+
+			RangedAttackComponent* rangedAttack = RangedAttackComponent::Create(config, range, secondsBetweenAttacks);
+			rangedAttack->setName(GameConsts::ATTACK_COMPONENT);
+			node.addComponent(rangedAttack);
+		}
+		else
+		{
+			isSuccessful = false;
+		}
+	}
+	else if (componentType == GameConsts::GENERIC_ATTACK_COMPONENT)
+	{
+		const float secondsBetweenAttacks = element.FloatAttribute(XMLConsts::ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
+		const float attackRange = element.FloatAttribute(XMLConsts::ENTITY_ATTACK_RANGE_ATTR);
+		const float staminaConsumption = element.FloatAttribute(XMLConsts::ATTACK_STAMINA_CONSUMPTION_ATTR);
+		const float comboExpireTime = element.FloatAttribute(XMLConsts::ENTITY_COMBO_EXPIRE_TIME_ATTR);
+
+		auto attackComponent = GenericAttackComponent::Create(secondsBetweenAttacks, attackRange);
+		attackComponent->SetComboExpireTime(comboExpireTime);
+		attackComponent->setName(GameConsts::ATTACK_COMPONENT);
+		node.addComponent(attackComponent);
+	}
+	else if (componentType == GameConsts::LONG_SWORD_ATTACK_COMPONENT)
+	{
+		const float secondsBetweenAttacks = element.FloatAttribute(XMLConsts::ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
+		const float attackRange = element.FloatAttribute(XMLConsts::ENTITY_ATTACK_RANGE_ATTR);
+		const float paddingFromBody = element.FloatAttribute(XMLConsts::ENTITY_PADDING_FROM_BODY_ATTR);
+		const float staminaConsumption = element.FloatAttribute(XMLConsts::ATTACK_STAMINA_CONSUMPTION_ATTR);
+		const float comboExpireTime = element.FloatAttribute(XMLConsts::ENTITY_COMBO_EXPIRE_TIME_ATTR);
+
+		LongSwordAttackComponent* longSwordAttack =
+			LongSwordAttackComponent::Create(secondsBetweenAttacks, attackRange,
+				paddingFromBody);
+
+		longSwordAttack->setName(GameConsts::ATTACK_COMPONENT);
+		longSwordAttack->SetComboExpireTime(comboExpireTime);
+		node.addComponent(longSwordAttack);
+	}
+	else if (componentType == GameConsts::AI_LOOK_AT_TARGET_COMPONENT)
+	{
+		LookAtAITargetComponent* lookAtComponent = LookAtAITargetComponent::create();
+		lookAtComponent->SetOwnerEntity(node);
+		node.addComponent(lookAtComponent);
+	}
+	else if (componentType == GameConsts::HIT_ATTACK_COMPONENT)
+	{
+		const float secondsBetweenAttacks = element.FloatAttribute(XMLConsts::ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
+		const float attackRange = element.FloatAttribute(XMLConsts::ENTITY_ATTACK_RANGE_ATTR);
+		const float staminaConsumption = element.FloatAttribute(XMLConsts::ATTACK_STAMINA_CONSUMPTION_ATTR);
+		const float comboExpireTime = element.FloatAttribute(XMLConsts::ENTITY_COMBO_EXPIRE_TIME_ATTR);
+
+		HitAttackComponent* hitAttack = HitAttackComponent::Create(secondsBetweenAttacks, attackRange);
+		hitAttack->setName(GameConsts::ATTACK_COMPONENT);
+		hitAttack->SetComboExpireTime(comboExpireTime);
+		node.addComponent(hitAttack);
+	}
+	else if (componentType == GameConsts::RIGID_BODY_COMPONENT)
+	{
+		PhysicsBodyConfig config;
+		CreatePhysicsBodyFromAttributes(element, config);
+		PhysicsManager::AddPhysicsBody(node, config);
+
+		const XMLElement* physicsBodyElem = element.FirstChildElement(XMLConsts::NODE_PHYSICS_BODY);
+		const XMLElement* bodyAnchorElem = element.FirstChildElement(XMLConsts::NODE_ANCHOR_POSITION);		
+
+		Entity* entity = static_cast<Entity*>(&node);
+		if (entity != nullptr && 
+			physicsBodyElem != nullptr &&
+			bodyAnchorElem != nullptr)
+		{
+			const float forceScale = physicsBodyElem->FloatAttribute(XMLConsts::PHYSICS_FORCE_SCALE_ATTR);
+			Vector2 anchorPosition;
+			GetVector2FromElement(*bodyAnchorElem, anchorPosition);
+
+			entity->SetPhysicsBodyForceScale(forceScale);
+			entity->SetPhysicsBodySize(config.GetSize());
+			entity->SetPhysicsBodyAnchor(anchorPosition);
+		}
+		else
+		{
+			isSuccessful = false;
+		}
+	}
+	else if (componentType == GameConsts::MIRROR_SPRITE_COMPONENT)
+	{
+		float sensitivity = element.FloatAttribute(XMLConsts::SENSITIVITY);
+		MirrorSpriteComponent* mirrorSprite = MirrorSpriteComponent::create();
+		mirrorSprite->setName(GameConsts::MIRROR_SPRITE_COMPONENT);
+		mirrorSprite->Init(node, sensitivity);
+		node.addComponent(mirrorSprite);
+	}
+	else if (componentType == GameConsts::NODE_COMPONENT)
+	{
+		cc::Node* childNode = cc::Node::create();
+		if (childNode != nullptr)
+		{
+			childNode->setName(node.getName() + GameConsts::NODE_COMPONENT);
+			childNode->setContentSize(node.getContentSize());
+			childNode->setAnchorPoint(Vector2(0, 0));
+			LoadNodeComponents(*childNode, element);
+			node.addChild(childNode);
+		}
+		else
+		{
+			isSuccessful = false;
 		}
 	}
 
@@ -228,21 +447,23 @@ void XMLLoader::LoadActionTriggers(GameInput& gameInput, const XMLElement* pElem
 	}
 }
 
-void XMLLoader::LoadBackgroundActions(Entity& entity, const XMLElement* xmlElement)
+void XMLLoader::LoadBackgroundActions(cc::Node& node, const XMLElement& xmlElement)
 {
-	for (auto element = xmlElement->FirstChildElement(); element != nullptr; 
+	for (auto element = xmlElement.FirstChildElement(); element != nullptr; 
 		element = element->NextSiblingElement())
 	{
 		const String& type = element->Attribute(XMLConsts::TYPE_ATTR);		
 		if (type == GameConsts::AVOID_TARGET_ACTION)
 		{
-			AIAgent* agent = static_cast<AIAgent*>(&entity);
+			AIAgent* agent = static_cast<AIAgent*>(&node);
 			CCASSERT(agent != nullptr, "Avoid action added to entity that is not AIAgent !");
-
-			auto avoidAction = AIAvoidTargetAction::Create(*agent);
-			avoidAction->LoadXMLData(element);
-			avoidAction->setTag(GameConsts::ACTION_AI_TASK_AVOID);
-			entity.runAction(avoidAction);
+			if (agent != nullptr)
+			{
+				auto avoidAction = AIAvoidTargetAction::Create(*agent);
+				avoidAction->LoadXMLData(element);
+				avoidAction->setTag(GameConsts::ACTION_AI_TASK_AVOID);
+				node.runAction(avoidAction);
+			}			
 		}
 	}
 }
@@ -298,28 +519,34 @@ void XMLLoader::LoadActionButton(GameInput& gameInput, GameInputType inputType, 
 	}
 }
 
-void XMLLoader::LoadUIElement(const XMLElement* element, UIElementConfig& outUIElement)
+void XMLLoader::LoadUIElement(const XMLElement& element, UIElementConfig& outUIElement)
 {
-	const XMLElement* spriteNode = element->FirstChildElement(XMLConsts::NODE_SPRITE);
-	const XMLElement* anchorPositionNode = element->FirstChildElement(XMLConsts::NODE_NORMALIZED_POSITION);
-	const XMLElement* normalizedPositionNode = element->FirstChildElement(XMLConsts::NODE_NORMALIZED_POSITION);
-	const XMLElement* scaleNode = element->FirstChildElement(XMLConsts::NODE_SCALE);
+	const XMLElement* spriteElement = element.FirstChildElement(XMLConsts::NODE_SPRITE);
+	const XMLElement* anchorPositionElement = element.FirstChildElement(XMLConsts::NODE_NORMALIZED_POSITION);
+	const XMLElement* normalizedPositionElement = element.FirstChildElement(XMLConsts::NODE_NORMALIZED_POSITION);
+	const XMLElement* scaleElement = element.FirstChildElement(XMLConsts::NODE_SCALE);
 
-	const String& pathToSprite = spriteNode->Attribute(XMLConsts::PATH_ATTR);
+	if (spriteElement != nullptr &&
+		anchorPositionElement != nullptr &&
+		normalizedPositionElement != nullptr &&
+		scaleElement != nullptr)
+	{
+		const String& pathToSprite = spriteElement->Attribute(XMLConsts::PATH_ATTR);
 
-	Vector2 anchorPos;
-	GetVector2FromElement(anchorPositionNode, anchorPos);
+		Vector2 anchorPos;
+		GetVector2FromElement(*anchorPositionElement, anchorPos);
 
-	Vector2 normalizedPos;
-	GetVector2FromElement(normalizedPositionNode, normalizedPos);
+		Vector2 normalizedPos;
+		GetVector2FromElement(*normalizedPositionElement, normalizedPos);
 
-	Vector2 scale;
-	GetVector2FromElement(scaleNode, scale);
+		Vector2 scale;
+		GetVector2FromElement(*scaleElement, scale);
 
-	outUIElement.SetPathToSprite(pathToSprite);
-	outUIElement.SetAnchorPosition(anchorPos);
-	outUIElement.SetNormalizedPosition(normalizedPos);
-	outUIElement.SetScale(scale);
+		outUIElement.SetPathToSprite(pathToSprite);
+		outUIElement.SetAnchorPosition(anchorPos);
+		outUIElement.SetNormalizedPosition(normalizedPos);
+		outUIElement.SetScale(scale);
+	}
 }
 
 bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
@@ -327,7 +554,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 {
 	// Load the file
 	XMLDoc doc;
-	const bool isSuccessful = LoadXMLFile(pathToXML, doc);
+	bool isSuccessful = LoadXMLFile(pathToXML, doc);
 
 	if (isSuccessful)
 	{
@@ -355,165 +582,12 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity& entity,
 		entity.SetKnockBackStrenght(knockBackStrenght);
 
 		// Load entity components
-		for (XMLElement* element = root->FirstChildElement(); element;
+		for (XMLElement* element = root->FirstChildElement(); element != nullptr;
 			element = element->NextSiblingElement())
 		{
 			// Check all actor components
 			const String componentType = element->Attribute(XMLConsts::TYPE_ATTR);
-
-			if (componentType == GameConsts::TRANSFORM_COMPONENT)
-			{
-				// Transform component has data types in specific order
-				XMLElement* positionNode = element->FirstChildElement(XMLConsts::NODE_POSITION);
-				XMLElement* rotationNode = element->FirstChildElement(XMLConsts::NODE_ROTATION);
-				XMLElement* scaleNode = element->FirstChildElement(XMLConsts::NODE_SCALE);
-
-				Vector3 position;
-				GetVector3FromElement(positionNode, position);
-
-				Vector3 rotation;
-				GetVector3FromElement(rotationNode, rotation);
-
-				Vector3 scale;
-				GetVector3FromElement(scaleNode, scale);
-
-				entity.setPosition3D(position);
-				entity.setRotation3D(rotation);
-				entity.setScale(scale.x, scale.y);
-			}
-			else if (componentType == GameConsts::PLAYER_CONTROLLER_COMPONENT)
-			{
-				const float dodgeSpeed = element->FloatAttribute(XMLConsts::PLAYER_DODGE_SPEED_ATTR);
-				const float dodgeTime = element->FloatAttribute(XMLConsts::PLAYER_DODGE_TIME_ATTR);
-				const float dodgeStaminaConsumption = element->FloatAttribute(XMLConsts::PLAYER_DODGE_STAMINA_ATTR);
-
-				Player* player = dynamic_cast<Player*>(&entity);
-				player->SetDodgeSpeed(dodgeSpeed);
-				player->SetDodgeTime(dodgeTime);
-				player->SetDodgeStaminaConsumption(dodgeStaminaConsumption);
-			}
-			else if (componentType == GameConsts::AI_CONTROLLER_COMPONENT)
-			{
-				AIAgent* agent = static_cast<AIAgent*>(&entity);
-				if (agent != nullptr)
-				{
-					const String& agentType = root->Attribute(XMLConsts::TYPE_ATTR);
-					agent->SetAgentType(agentType);
-					agent->Init(element);
-				}
-				else
-				{
-					CCASSERT(false, "Trying to add AIController component to entity that is not of type AIAgent !");
-				}
-			}
-			else if (componentType == GameConsts::BACKGROUND_ACTION_COMPONENT)
-			{
-				LoadBackgroundActions(entity, element);
-			}
-			else if (componentType == GameConsts::ANIM_COMPONENT)
-			{
-				AnimComponent* animComponent = AnimComponent::Create(entity);
-				animComponent->setName(GameConsts::ANIM_COMPONENT);
-				animComponent->LoadConfig(element);
-				entity.addComponent(animComponent);
-			}
-			else if (componentType == GameConsts::RANGED_ATTACK_COMPONENT)
-			{
-				const float range = element->FloatAttribute(XMLConsts::ENTITY_ATTACK_RANGE_ATTR);
-				const float secondsBetweenAttacks = element->FloatAttribute(XMLConsts::ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
-
-				XMLElement* projectileElem = element->FirstChildElement(XMLConsts::NODE_PROJECTILE);
-				const String& pathToProjectile = projectileElem->Attribute(XMLConsts::PATH_ATTR);
-				ProjectileConfig config;
-				config.Init(pathToProjectile);
-
-				RangedAttackComponent* rangedAttack = RangedAttackComponent::Create(config, range, secondsBetweenAttacks);
-				rangedAttack->setName(GameConsts::ATTACK_COMPONENT);
-				entity.addComponent(rangedAttack);
-			}
-			else if (componentType == GameConsts::GENERIC_ATTACK_COMPONENT)
-			{
-				const float secondsBetweenAttacks = element->FloatAttribute(XMLConsts::ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
-				const float attackRange = element->FloatAttribute(XMLConsts::ENTITY_ATTACK_RANGE_ATTR);
-				const float staminaConsumption = element->FloatAttribute(XMLConsts::ATTACK_STAMINA_CONSUMPTION_ATTR);
-				const float comboExpireTime = element->FloatAttribute(XMLConsts::ENTITY_COMBO_EXPIRE_TIME_ATTR);
-
-				auto attackComponent = GenericAttackComponent::Create(secondsBetweenAttacks, attackRange);
-				attackComponent->SetComboExpireTime(comboExpireTime);
-				attackComponent->setName(GameConsts::ATTACK_COMPONENT);
-				entity.addComponent(attackComponent);
-			}
-			else if (componentType == GameConsts::LONG_SWORD_ATTACK_COMPONENT)
-			{
-				const float secondsBetweenAttacks = element->FloatAttribute(XMLConsts::ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
-				const float attackRange = element->FloatAttribute(XMLConsts::ENTITY_ATTACK_RANGE_ATTR);
-				const float paddingFromBody = element->FloatAttribute(XMLConsts::ENTITY_PADDING_FROM_BODY_ATTR);
-				const float staminaConsumption = element->FloatAttribute(XMLConsts::ATTACK_STAMINA_CONSUMPTION_ATTR);
-				const float comboExpireTime = element->FloatAttribute(XMLConsts::ENTITY_COMBO_EXPIRE_TIME_ATTR);
-
-				LongSwordAttackComponent* longSwordAttack =
-					LongSwordAttackComponent::Create(secondsBetweenAttacks, attackRange,
-						paddingFromBody);
-
-				longSwordAttack->setName(GameConsts::ATTACK_COMPONENT);
-				longSwordAttack->SetComboExpireTime(comboExpireTime);
-				entity.addComponent(longSwordAttack);
-			}
-			else if (componentType == GameConsts::AI_LOOK_AT_TARGET_COMPONENT)
-			{
-				LookAtAITargetComponent* lookAtComponent = LookAtAITargetComponent::create();
-				lookAtComponent->SetOwnerEntity(&entity);
-				entity.addComponent(lookAtComponent);
-			}
-			else if (componentType == GameConsts::HIT_ATTACK_COMPONENT)
-			{
-				const float secondsBetweenAttacks = element->FloatAttribute(XMLConsts::ENTITY_SECONDS_BETWEEN_ATTACK_ATTR);
-				const float attackRange = element->FloatAttribute(XMLConsts::ENTITY_ATTACK_RANGE_ATTR);
-				const float staminaConsumption = element->FloatAttribute(XMLConsts::ATTACK_STAMINA_CONSUMPTION_ATTR);
-				const float comboExpireTime = element->FloatAttribute(XMLConsts::ENTITY_COMBO_EXPIRE_TIME_ATTR);
-
-				HitAttackComponent* hitAttack = HitAttackComponent::Create(secondsBetweenAttacks, attackRange);
-				hitAttack->setName(GameConsts::ATTACK_COMPONENT);
-				hitAttack->SetComboExpireTime(comboExpireTime);
-				entity.addComponent(hitAttack);
-			}
-			else if (componentType == GameConsts::RIGID_BODY_COMPONENT)
-			{
-				PhysicsBodyConfig config;
-				CreatePhysicsBodyFromAttributes(element, config);
-				PhysicsManager::AddPhysicsBody(entity, config);
-
-				const XMLElement* physicsBodyElem = element->FirstChildElement(XMLConsts::NODE_PHYSICS_BODY);
-				const XMLElement* bodyAnchorElem = element->FirstChildElement(XMLConsts::NODE_ANCHOR_POSITION);
-
-				const float forceScale = physicsBodyElem->FloatAttribute(XMLConsts::PHYSICS_FORCE_SCALE_ATTR);
-				Vector2 anchorPosition;
-				GetVector2FromElement(bodyAnchorElem, anchorPosition);
-
-				entity.SetPhysicsBodyForceScale(forceScale);
-				entity.SetPhysicsBodySize(config.GetSize());
-				entity.SetPhysicsBodyAnchor(anchorPosition);
-			}
-			else if (componentType == GameConsts::MIRROR_SPRITE_COMPONENT)
-			{
-				float sensitivity = element->FloatAttribute(XMLConsts::SENSITIVITY);
-				MirrorSpriteComponent* pMirrorSprite = MirrorSpriteComponent::create();
-				pMirrorSprite->setName(GameConsts::MIRROR_SPRITE_COMPONENT);
-				pMirrorSprite->Init(entity, sensitivity);
-				entity.addComponent(pMirrorSprite);
-			}
-			else if (componentType == GameConsts::NODE_COMPONENT)
-			{
-				cocos2d::Node* node = cocos2d::Node::create();
-				if (node != nullptr)
-				{
-					node->setName(entity.getName() + GameConsts::NODE_COMPONENT);
-					node->setContentSize(entity.getContentSize());
-					node->setAnchorPoint(Vector2(0, 0));
-					LoadNodeComponents(*node, element);
-					entity.addChild(node);
-				}				
-			}
+			isSuccessful &= InitializeComponent(entity, *element, componentType);
 		}
 	}
 	return isSuccessful;
@@ -580,22 +654,27 @@ bool XMLLoader::InitializeUIProgressBar(ProgressBar& healthBar, const String& pa
 	const bool isSuccessful = LoadXMLFile(pathToXML, doc);
 	if (isSuccessful)
 	{
-		const XMLElement* rootNode = doc.RootElement();
-		const XMLElement* bgNode = rootNode->FirstChildElement(XMLConsts::NODE_BACKGROUND);
-		const XMLElement* fgNode = rootNode->FirstChildElement(XMLConsts::NODE_FOREGROUND);
+		const XMLElement* rootElement = doc.RootElement();
+		if (rootElement != nullptr)
+		{
+			const XMLElement* bgElement = rootElement->FirstChildElement(XMLConsts::NODE_BACKGROUND);
+			const XMLElement* fgElement = rootElement->FirstChildElement(XMLConsts::NODE_FOREGROUND);
+			if (bgElement != nullptr && fgElement != nullptr)
+			{
+				UIElementConfig bgConfig;
+				LoadUIElement(*bgElement, bgConfig);
 
-		UIElementConfig bgConfig;
-		LoadUIElement(bgNode, bgConfig);
+				UIElementConfig fgConfig;
+				LoadUIElement(*fgElement, fgConfig);
 
-		UIElementConfig fgConfig;
-		LoadUIElement(fgNode, fgConfig);
+				float animationSpeed = rootElement->FloatAttribute(XMLConsts::UI_ANIMATION_SPEED_ATTR);
+				float minValue = rootElement->FloatAttribute(XMLConsts::UI_MIN_VALUE);
+				float maxValue = rootElement->FloatAttribute(XMLConsts::UI_MAX_VALUE);
 
-		float animationSpeed = rootNode->FloatAttribute(XMLConsts::UI_ANIMATION_SPEED_ATTR);
-		float minValue = rootNode->FloatAttribute(XMLConsts::UI_MIN_VALUE);
-		float maxValue = rootNode->FloatAttribute(XMLConsts::UI_MAX_VALUE);
-
-		healthBar.Init(bgConfig, fgConfig);
-		healthBar.SetAnimationSpeed(animationSpeed);
+				healthBar.Init(bgConfig, fgConfig);
+				healthBar.SetAnimationSpeed(animationSpeed);
+			}
+		}
 	}
 
 	return isSuccessful;
@@ -608,18 +687,21 @@ bool XMLLoader::LoadWorld(World& world, const String& pathToXML)
 	if (isSuccessful)
 	{
 		XMLElement* root = doc.RootElement();
-		const XMLElement* sprite = root->FirstChildElement(XMLConsts::NODE_SPRITE);
-		const String& pathToSprite = sprite->Attribute(XMLConsts::PATH_ATTR);		
-		LoadNodeComponents(world, root);		
-		world.Init(pathToSprite);
+		if (root != nullptr)
+		{
+			const XMLElement* sprite = root->FirstChildElement(XMLConsts::NODE_SPRITE);
+			const String& pathToSprite = sprite->Attribute(XMLConsts::PATH_ATTR);
+			LoadNodeComponents(world, *root);
+			world.Init(pathToSprite);
+		}		
 	}
 
 	return isSuccessful;
 }
 
-void XMLLoader::CreatePhysicsBodyFromAttributes(const XMLNode* xmlNode, PhysicsBodyConfig& outConfig)
+void XMLLoader::CreatePhysicsBodyFromAttributes(const XMLElement& xmlElement, PhysicsBodyConfig& outConfig)
 {
-	const XMLElement* physicsBodyElem = xmlNode->FirstChildElement(XMLConsts::NODE_PHYSICS_BODY);
+	const XMLElement* physicsBodyElem = xmlElement.FirstChildElement(XMLConsts::NODE_PHYSICS_BODY);
 	const String bodyType = physicsBodyElem->Attribute(XMLConsts::SHAPE_ATTR);
 
 	const float width = physicsBodyElem->FloatAttribute(XMLConsts::WIDTH_ATTR);
@@ -647,7 +729,7 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(const XMLNode* xmlNode, PhysicsB
 	}
 	
 	cocos2d::PhysicsMaterial material;
-	LoadPhysicsMaterialFromAttributes(xmlNode, material);
+	LoadPhysicsMaterialFromAttributes(xmlElement, material);
 	outConfig.SetSize(bodySize);
 	outConfig.SetPhysicsMaterial(material);	
 	outConfig.SetCollisionBitMask(collisionBitMask);
@@ -657,9 +739,9 @@ void XMLLoader::CreatePhysicsBodyFromAttributes(const XMLNode* xmlNode, PhysicsB
 	outConfig.SetRotationEnabled(isRotationEnabled);
 }
 
-void XMLLoader::LoadNodeComponents(cc::Node& node, const XMLElement* root)
+void XMLLoader::LoadNodeComponents(cc::Node& node, const XMLElement& root)
 {
-	for (const XMLElement* element = root->FirstChildElement(); element != nullptr; element = element->NextSiblingElement())
+	for (const XMLElement* element = root.FirstChildElement(); element != nullptr; element = element->NextSiblingElement())
 	{
 		const XMLAttribute* attribute =  element->FindAttribute(XMLConsts::TYPE_ATTR);
 		if (attribute != nullptr)
@@ -668,12 +750,12 @@ void XMLLoader::LoadNodeComponents(cc::Node& node, const XMLElement* root)
 			if (componentType == GameConsts::RIGID_BODY_COMPONENT)
 			{
 				PhysicsBodyConfig config;
-				CreatePhysicsBodyFromAttributes(element, config);
+				CreatePhysicsBodyFromAttributes(*element, config);
 				PhysicsManager::AddPhysicsBody(node, config);
 				
 				cc::EventDispatcher* dispatcher = node.getEventDispatcher();
 				Vector2 anchorPos;
-				if (dispatcher != nullptr && GetAnchorPosition(element, anchorPos))
+				if (dispatcher != nullptr && GetAnchorPosition(*element, anchorPos))
 				{
 					dispatcher->dispatchCustomEvent(PhysicsManager::GetEventOnPhysicsBodyAnchorSet(),
 						&anchorPos);
@@ -720,30 +802,30 @@ void XMLLoader::ReadXMLAttribute(const XMLElement* element, const String& attrib
 	}
 }
 
-void XMLLoader::LoadPhysicsMaterialFromAttributes(const tinyxml2::XMLNode* pNode, cocos2d::PhysicsMaterial& outMaterial)
+void XMLLoader::LoadPhysicsMaterialFromAttributes(const XMLElement& element, cocos2d::PhysicsMaterial& outMaterial)
 {
-	const tinyxml2::XMLElement* pPhysicsMaterialElem = pNode->
-		FirstChildElement(XMLConsts::NODE_PHYSICS_MATERIAL);
-	const float density = pPhysicsMaterialElem->FloatAttribute(XMLConsts::PHYSICS_DESITY_ATTR);
-	const float restitution = pPhysicsMaterialElem->FloatAttribute(XMLConsts::PHYSICS_RESTITUTION_ATTR);
-	const float friction = pPhysicsMaterialElem->FloatAttribute(XMLConsts::PHYSICS_FRICTION_ATTR);
+	const XMLElement* materialElement = element.FirstChildElement(XMLConsts::NODE_PHYSICS_MATERIAL);
+	if (materialElement != nullptr)
+	{
+		const float density = materialElement->FloatAttribute(XMLConsts::PHYSICS_DESITY_ATTR);
+		const float restitution = materialElement->FloatAttribute(XMLConsts::PHYSICS_RESTITUTION_ATTR);
+		const float friction = materialElement->FloatAttribute(XMLConsts::PHYSICS_FRICTION_ATTR);
 
-	outMaterial.density = density;
-	outMaterial.restitution = restitution;
-	outMaterial.friction = friction;
+		outMaterial.density = density;
+		outMaterial.restitution = restitution;
+		outMaterial.friction = friction;
+	}
 }
 
-void XMLLoader::GetVector3FromElement(const XMLElement* element, Vector3& outResult)
+void XMLLoader::GetVector3FromElement(const XMLElement& element, Vector3& outResult)
 {
-	outResult.x = element->ToElement()->FloatAttribute(XMLConsts::AXIS_X_ATTR);
-	outResult.y = element->ToElement()->FloatAttribute(XMLConsts::AXIS_Y_ATTR);
-	outResult.z = element->ToElement()->FloatAttribute(XMLConsts::AXIS_Z_ATTR);
+	outResult.x = element.FloatAttribute(XMLConsts::AXIS_X_ATTR);
+	outResult.y = element.FloatAttribute(XMLConsts::AXIS_Y_ATTR);
+	outResult.z = element.FloatAttribute(XMLConsts::AXIS_Z_ATTR);
 }
 
-void XMLLoader::GetVector2FromElement(const XMLElement* element, Vector2& outResult)
+void XMLLoader::GetVector2FromElement(const XMLElement& element, Vector2& outResult)
 {
-	outResult.x = element->ToElement()->FloatAttribute(XMLConsts::AXIS_X_ATTR);
-	outResult.y = element->ToElement()->FloatAttribute(XMLConsts::AXIS_Y_ATTR);
+	outResult.x = element.FloatAttribute(XMLConsts::AXIS_X_ATTR);
+	outResult.y = element.FloatAttribute(XMLConsts::AXIS_Y_ATTR);
 }
-
-

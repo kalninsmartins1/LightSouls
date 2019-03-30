@@ -11,7 +11,7 @@ public:
 
 public:
 			CREATE_FUNC(MirrorSpriteComponent);
-	void	Init(Entity& ownerEntity, float sensitivity);
+	void	Init(cc::Node& ownerEntity, float sensitivity);
 
 	virtual void update(float delta) override;
 

@@ -6,9 +6,9 @@
 #include "GameConsts.h"
 #include "World/Entity/Entity.h"
 
-AnimComponent::AnimComponent(Entity& ownerSprite) 
+AnimComponent::AnimComponent(cc::Sprite& ownerSprite) 
 	: m_curAnimId(-1)
-	, m_entity(ownerSprite)
+	, m_sprite(ownerSprite)
 	, m_firstAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_SIDE))
 	, m_lastAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_SIDE))
 	, m_curAttackAnimId(m_firstAttackAnimId)
@@ -42,11 +42,17 @@ int AnimComponent::GetDirectionalAnimId(const String& animName) const
 	return animationId;
 }
 
-AnimComponent* AnimComponent::Create(Entity& sprite)
+AnimComponent* AnimComponent::Create(cc::Node& node)
 {
-	AnimComponent * ret = new (std::nothrow) AnimComponent(sprite);
+	cc::Sprite* sprite = static_cast<cc::Sprite*>(&node);
+	AnimComponent* ret = nullptr;
 
-	if (ret && ret->init())
+	if (sprite != nullptr)
+	{
+		ret = new (std::nothrow) AnimComponent(*sprite);
+	}
+
+	if (ret != nullptr && ret->init())
 	{
 		ret->autorelease();
 	}
@@ -58,23 +64,23 @@ AnimComponent* AnimComponent::Create(Entity& sprite)
 	return ret;
 }
 
-void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
+void AnimComponent::LoadConfig(const XMLElement& element)
 {
-	for (tinyxml2::XMLElement* spriteSheetNode = node->FirstChildElement();
-		spriteSheetNode != nullptr; spriteSheetNode = spriteSheetNode->NextSiblingElement())
+	for (const XMLElement* spriteSheetElement = element.FirstChildElement();
+		spriteSheetElement != nullptr; spriteSheetElement = spriteSheetElement->NextSiblingElement())
 	{
 		auto spriteCache = cocos2d::SpriteFrameCache::getInstance();
-		const char* plistPath = spriteSheetNode->Attribute(XMLConsts::ANIM_PLIST_PATH_ATTR);
+		const char* plistPath = spriteSheetElement->Attribute(XMLConsts::ANIM_PLIST_PATH_ATTR);
 		spriteCache->addSpriteFramesWithFile(plistPath);
 
-		for (tinyxml2::XMLElement* animNode = spriteSheetNode->FirstChildElement();
-			animNode != nullptr; animNode = animNode->NextSiblingElement())
+		for (const XMLElement* animElement = spriteSheetElement->FirstChildElement();
+			animElement != nullptr; animElement = animElement->NextSiblingElement())
 		{
-			const String& animType = animNode->Attribute(XMLConsts::TYPE_ATTR);
+			const String& animType = animElement->Attribute(XMLConsts::TYPE_ATTR);
 
 			// Load specific animation based on its type
 			AnimationData animationData;
-			AnimationUtils::LoadAnimationFrames(animNode, animationData);
+			AnimationUtils::LoadAnimationFrames(animElement, animationData);
 			m_animations[AnimationUtils::GetAnimId(animType)] = animationData;
 		}
 	}
@@ -92,7 +98,7 @@ void AnimComponent::LoadConfig(tinyxml2::XMLNode* node)
 
 	if (animId != -1)
 	{
-		m_entity.initWithSpriteFrame(m_animations[animId].frames.at(0));
+		m_sprite.initWithSpriteFrame(m_animations[animId].frames.at(0));
 	}
 	else
 	{
@@ -111,7 +117,7 @@ void AnimComponent::PlayOneShotAnimation(int animationId, const AnimationCallbac
 	if (HasAnim(animationId))
 	{
 		const AnimationData& data = m_animations[animationId];
-		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_entity, data, callback);
+		AnimationUtils::StartSpriteFrameAnimationWithCallback(&m_sprite, data, callback);
 		SetCurrentAnimId(animationId);
 
 		if (data.shouldBlur)
@@ -173,7 +179,6 @@ void AnimComponent::ResetAttackAnimation()
 
 void AnimComponent::update(float deltaTime)
 {
-	UpdateAnimState();
 	m_blurAnimation.Update(deltaTime);
 }
 
@@ -188,7 +193,7 @@ void AnimComponent::PlayLoopingAnimation(int animationId, bool shouldReverse)
 	if (HasAnim(animationId))
 	{
 		const AnimationData& data = m_animations[animationId];
-		AnimationUtils::StartSpriteFrameAnimation(&m_entity, data, shouldReverse);
+		AnimationUtils::StartSpriteFrameAnimation(&m_sprite, data, shouldReverse);
 		SetCurrentAnimId(animationId);
 		
 		if (data.shouldBlur)
@@ -241,19 +246,19 @@ bool AnimComponent::HasAnim(int animId) const
 	return Utils::ContainsKey(m_animations, animId);
 }
 
-const Entity& AnimComponent::GetOwnerEntity() const
+const cc::Sprite& AnimComponent::GetOwner() const
 {
-	return m_entity;
+	return m_sprite;
 }
 
 cocos2d::Node* AnimComponent::GetSpriteContainer() const
 {
-	return m_entity.getParent();
+	return m_sprite.getParent();
 }
 
 cc::SpriteFrame* AnimComponent::GetCurrentSpriteFrame() const
 {
-	return m_entity.getSpriteFrame();
+	return m_sprite.getSpriteFrame();
 }
 
 void AnimComponent::PlayLoopingAnimation(const String& animName, bool shoudlRevers)
@@ -273,9 +278,9 @@ void AnimComponent::SetCurrentAnimId(int currentAnimId)
 	m_curAnimId = currentAnimId;
 }
 
-void AnimComponent::UpdateAnimState()
+void AnimComponent::UpdateAnimState(const Entity& entity)
 {
-	const Vector2& heading = m_entity.GetHeading();
+	const Vector2& heading = entity.GetHeading();
 	const float absoluteXValue = abs(heading.x);
 	const float absoluteYValue = abs(heading.y);
 

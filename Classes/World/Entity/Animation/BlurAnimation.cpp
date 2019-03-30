@@ -15,7 +15,7 @@ void BlurAnimation::AddFrame(float fadeTime, int targetAnimationId, float delay)
 {	
 	cc::Sprite* sprite = cc::Sprite::createWithSpriteFrame(m_animComp.GetCurrentSpriteFrame());
 	CC_ASSERT(sprite != nullptr);
-	const Entity& ownerEntity = m_animComp.GetOwnerEntity();
+	const cc::Node& ownerEntity = m_animComp.GetOwner();
 	sprite->setCameraMask(ownerEntity.getCameraMask());
 	sprite->setScale(ownerEntity.getScaleX(), ownerEntity.getScaleY());
 	m_blurFrames.push_back(BlurAnimationFrame(sprite, fadeTime, targetAnimationId));
@@ -68,7 +68,7 @@ void BlurAnimation::LoadNextFrame(BlurAnimationFrame& blurFrame)
 {	
 	blurFrame.SetCurFrame(m_animComp.GetCurrentSpriteFrame());
 
-	const Entity& owner = m_animComp.GetOwnerEntity();
+	const cc::Node& owner = m_animComp.GetOwner();
 	blurFrame.GetSprite()->setPosition(Vector2(owner.getPosition()));
 }
 

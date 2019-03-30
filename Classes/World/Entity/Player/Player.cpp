@@ -12,6 +12,7 @@
 #include "Camera/Components/CameraShake.h"
 #include "Scenes/GameScene.h"
 #include "World/Projectiles/Projectile.h"
+#include "Classes/World/VFX/Vfx.h"
 
 const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
 const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
@@ -20,7 +21,7 @@ const String Player::s_eventOnPlayerGiveDamage = "EVENT_ON_PLAYER_GIVE_DAMAGE";
 Player* Player::Create(const String& pathToXML)
 {
 	Player* player = new (std::nothrow) Player();
-	if (player && player->Init(pathToXML))
+	if (player != nullptr && player->Init(pathToXML))
 	{
 		player->autorelease();
 	}
@@ -35,6 +36,7 @@ Player* Player::Create(const String& pathToXML)
 Player::Player()
 	: m_attackComponent(nullptr)
 	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right
+	, m_dodgeVfx(nullptr)
 	, m_isDodging(false)
 	, m_dodgeSpeed(0.0f)
 	, m_dodgeTime(0.0f)
@@ -83,6 +85,8 @@ bool Player::Init(const String& pathToXML)
 		isSuccessfullyInitialized = false;
 	}
 
+	m_dodgeVfx = Vfx::Create()
+
 	return isSuccessfullyInitialized;
 }
 
@@ -109,6 +113,12 @@ void Player::Update(float deltaTime)
 	{
 		SetMoveDirection(Vector2::ZERO);
 	}
+
+	AnimComponent* animComponent = GetAnimComponent();
+	if (animComponent != nullptr)
+	{
+		animComponent->UpdateAnimState(*this);
+	}
 }
 
 const String& Player::GetEventOnGiveDamage()
@@ -134,6 +144,11 @@ void Player::SetDodgeSpeed(float dodgeSpeed)
 void Player::SetDodgeTime(float dodgeTime)
 {
 	m_dodgeTime = dodgeTime;
+}
+
+void Player::setParent(Node* parent)
+{
+	Entity::setParent(parent);
 }
 
 void Player::OnDodgeFinished()

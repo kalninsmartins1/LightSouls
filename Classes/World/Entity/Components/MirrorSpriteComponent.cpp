@@ -8,9 +8,9 @@ MirrorSpriteComponent::MirrorSpriteComponent()
 
 }
 
-void MirrorSpriteComponent::Init(Entity& ownerEntity, float sensitivity)
-{
-	m_ownerEntity = &ownerEntity;
+void MirrorSpriteComponent::Init(cc::Node& ownerEntity, float sensitivity)
+{	
+	m_ownerEntity = static_cast<Entity*>(&ownerEntity);
 	m_sensitivity = sensitivity;
 }
 

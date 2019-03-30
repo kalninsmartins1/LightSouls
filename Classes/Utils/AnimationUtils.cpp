@@ -49,6 +49,8 @@ const std::map<String, int> AnimationUtils::s_animTypeToId =
 	{ GameConsts::ANIM_TYPE_HURT_DIR, 30 },
 	{ "HurtUp", 31 },
 	{ "HurtDown", 32 },
+
+	{ GameConsts::ANIM_TYPE_ACT, 33 },
 };
 
 int AnimationUtils::GetAnimId(String animName)
@@ -140,7 +142,3 @@ void AnimationUtils::LoadAnimationFrames(const tinyxml2::XMLElement* animElement
 		outAnimationData.frames.pushBack(frame);
 	}	
 }
-
-
-
-

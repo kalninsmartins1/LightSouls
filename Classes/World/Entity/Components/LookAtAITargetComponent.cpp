@@ -1,9 +1,10 @@
 #include "LookAtAITargetComponent.h"
 #include "World/Entity/AI/AIAgentManager.h"
 
-void LookAtAITargetComponent::SetOwnerEntity(Entity* ownerEntity)
+void LookAtAITargetComponent::SetOwnerEntity(cc::Node& ownerEntity)
 {
-	m_ownerEntity = ownerEntity;
+	m_ownerEntity = static_cast<Entity*>(&ownerEntity);	
+	CCASSERT(m_ownerEntity != nullptr, "Error: Component has been added to node that is not an entity !");
 }
 
 void LookAtAITargetComponent::update(float delta)

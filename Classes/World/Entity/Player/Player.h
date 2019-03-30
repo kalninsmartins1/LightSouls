@@ -9,7 +9,6 @@ class GameInput;
 
 class Player: public Entity
 {
-
 public:
 	Player();
 

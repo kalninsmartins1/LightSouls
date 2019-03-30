@@ -207,6 +207,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Physics\PhysicsManager.cpp" />
     <ClCompile Include="..\Classes\World\Projectiles\Projectile.cpp" />
     <ClCompile Include="..\Classes\World\Projectiles\ProjectileConfig.cpp" />
+    <ClCompile Include="..\Classes\World\VFX\Vfx.cpp" />
+    <ClCompile Include="..\Classes\World\VFX\VfxManager.cpp" />
     <ClCompile Include="..\Classes\World\World.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -273,6 +275,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Physics\PhysicsManager.h" />
     <ClInclude Include="..\Classes\World\Projectiles\Projectile.h" />
     <ClInclude Include="..\Classes\World\Projectiles\ProjectileConfig.h" />
+    <ClInclude Include="..\Classes\World\VFX\Vfx.h" />
+    <ClInclude Include="..\Classes\World\VFX\VfxManager.h" />
     <ClInclude Include="..\Classes\World\World.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

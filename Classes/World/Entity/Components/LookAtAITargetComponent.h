@@ -9,7 +9,7 @@ class LookAtAITargetComponent : public cocos2d::Component
 public:
 	CREATE_FUNC(LookAtAITargetComponent);
 
-	void			SetOwnerEntity(Entity* ownerEntity);
+	void			SetOwnerEntity(cc::Node& ownerEntity);
 	virtual void	update(float delta) override;
 
 private:

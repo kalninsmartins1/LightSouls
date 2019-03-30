@@ -37,14 +37,14 @@ public:
 	bool					IsCurrentlyPlayingDirAnim() const;
 	bool					HasAnim(const String& animName) const;
 	bool					HasAnim(int animId) const;
-	const Entity&			GetOwnerEntity() const;
+	const cc::Sprite&		GetOwner() const;
 	cc::Node*				GetSpriteContainer() const;
 	cc::SpriteFrame*		GetCurrentSpriteFrame() const;
 
-	static AnimComponent*	Create(Entity& entity);
+	static AnimComponent*	Create(cc::Node& entity);
 
 	// Load animation configuration from xml file
-	void LoadConfig(tinyxml2::XMLNode* node);
+	void LoadConfig(const XMLElement& element);
 	void PlayLoopingAnimation(const String& animName, bool shouldReverse = false);
 	void PlayLoopingAnimation(int animationId, bool shouldReverse = false);
 	void PlayOneShotAnimation(const String& animName, const AnimationCallback& callback);
@@ -56,17 +56,16 @@ public:
 
 	void			GoToNextAttackAnimation();
 	void			ResetAttackAnimation();
+	void			UpdateAnimState(const Entity& entity);
 	virtual void	update(float deltaTime) override;
 
 private:
-	AnimComponent(Entity& sprite);
+	AnimComponent(cc::Sprite& sprite);
 
 private:
 	int GetDirectionalAnimId(const String& animName) const;
 
-	void SetCurrentAnimId(int currentAnimId);
-
-	void UpdateAnimState();
+	void SetCurrentAnimId(int currentAnimId);	
 	void TransitionAttackAnimDirection(int firstAttackAnimId, int lastAttackAnimId);
 
 	// Transition run anim in all directions when moving without stopping 
@@ -79,7 +78,7 @@ private:
 	int								m_lastAttackAnimId;
 	int								m_curAttackAnimId;
 	AnimStyle						m_currentAnimStyle;
-	Entity&							m_entity;
+	cc::Sprite&						m_sprite;
 	std::map<int, AnimationData>	m_animations;
 	BlurAnimation					m_blurAnimation;
 };

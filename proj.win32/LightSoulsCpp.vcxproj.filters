@@ -271,6 +271,8 @@
       <Filter>src\Events</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\GameSpeedModifier.cpp" />
+    <ClCompile Include="..\Classes\World\VFX\Vfx.cpp" />
+    <ClCompile Include="..\Classes\World\VFX\VfxManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -453,6 +455,8 @@
       <Filter>src\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\GameSpeedModifier.h" />
+    <ClInclude Include="..\Classes\World\VFX\Vfx.h" />
+    <ClInclude Include="..\Classes\World\VFX\VfxManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
