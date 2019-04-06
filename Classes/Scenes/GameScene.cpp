@@ -322,7 +322,6 @@ void GameScene::ReloadGame()
 		physicsManager->OnReload();
 	}
 
-	m_vfxManager.Cleanup();
 	Node* worldLayer = InitWolrdLayer();
 	InitVFXManger(worldLayer);
 	InitUILayer();

@@ -64,7 +64,9 @@ public:
 	void			TakeDamage(float damage);
 	void			StartAttacking();
 	void			StopAttacking();
-
+	
+	void			DispatchEvent(const String& eventType) const;
+	void			DispatchEvent(const String& eventType, AEventData* eventData) const;
 	void			ApplyKnockbackEffect(const Entity& attackingEntity);
 	void			ApplyInstantSpeed(float speed);
 	void			ApplyInstantSpeedInDirection(float speed, const Vector2& direction);	
@@ -73,9 +75,7 @@ public:
 protected:
 	virtual void DispatchOnHealthReduceEvent() = 0;
 	virtual void DispatchOnStaminaChangedEvent() const = 0;
-	virtual void DispatchOnGiveDamageEvent() const = 0;
-	void		 DispatchEvent(const String& eventType) const;
-	void		 DispatchEvent(const String& eventType, AEventData* eventData) const;
+	virtual void DispatchOnGiveDamageEvent() const = 0;	
 	void		 OnEntityInitialized();
 
 private:

@@ -24,8 +24,8 @@ VFX* VFX::Create(cc::Node& container, const String& pathToXML)
 	return vfx;
 }
 
-void VFX::Spawn(const Vector2& pos)
-{
+void VFX::Spawn(const Vector2& pos, const std::function<void(VFX&)>& onFinished)
+{	
 	// Only spawn if has a animation component	
 	if (m_animComp != nullptr)
 	{
@@ -33,7 +33,12 @@ void VFX::Spawn(const Vector2& pos)
 		setPosition(pos);
 		m_animComp->PlayOneShotAnimation(GameConsts::ANIM_TYPE_IDLE,
 			CC_CALLBACK_0(VFX::OnFinishedAnimating, this));
-	}	
+		m_finishCallback = onFinished;
+	}
+	else
+	{
+		onFinished(*this);
+	}
 }
 
 bool VFX::Init(cc::Node& container, const String& pathToXML)
@@ -56,5 +61,6 @@ bool VFX::Init(cc::Node& container, const String& pathToXML)
 void VFX::OnFinishedAnimating()
 {
 	setVisible(false);
+	m_finishCallback(*this);
 }
 

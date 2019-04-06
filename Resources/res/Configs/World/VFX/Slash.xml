@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<VFX type="Slash">
+	<Component type="AnimComponent">
+		<SpriteSheet path="res/Graphics/World/VFX/Slash/slashAnim.png" 
+			plistPath="res/Graphics/World/VFX/Slash/slashAnim.plist">
+			
+			<Anim 	type="Idle"
+					frameNamePattern="slash%d.png"
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
+			/>
+		</SpriteSheet>			
+	</Component>
+	
+	<Component type="TransformComponent">
+		<Position x="0" y="0" z="0" />
+		<Rotation x="0" y="0" z="0" />
+		<Scale x="0.5" y="0.5" z="0.5"/>
+	</Component>
+</VFX>

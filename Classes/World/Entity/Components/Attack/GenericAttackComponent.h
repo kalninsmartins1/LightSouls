@@ -38,8 +38,9 @@ public:
 	virtual void					Attack(const Vector2& direction);
 
 protected:
-	static void CheckAffectedObjects(const Entity& attacker, const GenericAttackComponent& attackComponent, const Vector2& direction, float paddingFromBody, const cocos2d::PhysicsQueryRectCallbackFunc& callback);
-	void		TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) const;
+	static void		CheckAffectedObjects(const Entity& attacker, const GenericAttackComponent& attackComponent, const Vector2& direction, float paddingFromBody, const cocos2d::PhysicsQueryRectCallbackFunc& callback);
+	void			TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) const;
+	virtual void	OnEntityHit(Entity* hitEntity) const;
 
 private:
 	float			GetSecondsSinceLastAttack() const;

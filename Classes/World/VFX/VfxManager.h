@@ -21,8 +21,9 @@ public:
 
 private:
 	void OnVFXEventTriggered(cc::EventCustom* eventData);
+	void OnVFXFinishedCallback(VFX& vfx);
 
 private:
-	cc::Node*				m_container;
-	std::map<String, VFX*>	m_eventToVFX;
+	cc::Node*					m_container;
+	std::map<String, String>	m_eventToVFXPath;
 };

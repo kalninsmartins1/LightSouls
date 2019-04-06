@@ -1,5 +1,8 @@
 <?xml version="1.0" ?>
 <VfxManager>
 	<Event 	type="EVENT_ON_PLAYER_DODGED"			
-			path="res/Configs/World/VFX/Dust.xml"/>	
+			path="res/Configs/World/VFX/Dust.xml"/>
+	
+	<Event 	type="EVENT_ON_ENTITY_SLASHED"			
+			path="res/Configs/World/VFX/Slash.xml"/>
 </VfxManager>

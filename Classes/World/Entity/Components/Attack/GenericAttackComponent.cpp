@@ -89,9 +89,15 @@ void GenericAttackComponent::TryToGiveDamage(cocos2d::PhysicsShape& physicsObjec
 	if (hitEntity != nullptr &&
 		hitEntity->GetId() != ownerEntity->GetId() && // Ignore if hitting self	
 		hitEntity->GetEntityType() != ownerEntity->GetEntityType()) // Ignore hitting self kind
-	{
-		hitEntity->TakeDamage(*GetOwnerEntity());
+	{		
+		OnEntityHit(hitEntity);
+		hitEntity->TakeDamage(*ownerEntity);
 	}
+}
+
+void GenericAttackComponent::OnEntityHit(Entity* hitEntity) const
+{
+
 }
 
 float GenericAttackComponent::GetSecondsSinceLastAttack() const

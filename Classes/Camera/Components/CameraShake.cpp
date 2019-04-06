@@ -2,7 +2,7 @@
 #include "Utils/Utils.h"
 #include "tinyxml2/tinyxml2.h"
 #include "Utils/XML/XMLConsts.h"
-#include "Camera\CameraShake\CameraShakeTrigger.h"
+#include "Camera/CameraShake/CameraShakeTrigger.h"
 
 
 

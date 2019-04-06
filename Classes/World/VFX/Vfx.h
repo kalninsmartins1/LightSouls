@@ -17,12 +17,13 @@ public:
 public:
 	static VFX* Create(cc::Node& container, const String& pathToXML);
 
-	void		Spawn(const Vector2& pos);
+	void		Spawn(const Vector2& pos, const std::function<void(VFX&)>& onFinished);
 
 private:
 	bool Init(cc::Node& container, const String& pathToXML);
 	void OnFinishedAnimating();
 
 private:	
-	AnimComponent*	m_animComp;
+	AnimComponent*				m_animComp;
+	std::function<void(VFX&)>	m_finishCallback;
 };

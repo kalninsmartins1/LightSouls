@@ -23,10 +23,8 @@ VFXManager::VFXManager()
 void VFXManager::AddVFX(const String& eventType, const String& pathToVfx)
 {
 	if (m_container != nullptr)
-	{
-		VFX* vfx = VFX::Create(*m_container, pathToVfx);
-		m_eventToVFX[eventType] = vfx;
-
+	{		
+		m_eventToVFXPath[eventType] = pathToVfx;
 		// Register for this event
 		cc::EventDispatcher* eventDispather = m_container->getEventDispatcher();
 		if (eventDispather != nullptr)
@@ -37,30 +35,40 @@ void VFXManager::AddVFX(const String& eventType, const String& pathToVfx)
 	}
 }
 
-void VFXManager::Cleanup()
-{
-	m_eventToVFX.clear();
-}
-
 bool VFXManager::Init(cc::Node* container, const String& pathToXML)
 {
+	// Clear any previous data
+	m_eventToVFXPath.clear();
+
+	// Get new data
 	m_container = container;
 	return XMLLoader::InitializeVFXManager(*this, pathToXML);
 }
 
 void VFXManager::OnVFXEventTriggered(cc::EventCustom* eventData)
 {
-	if (eventData != nullptr)
+	if (m_container != nullptr && eventData != nullptr)
 	{
 		PositionEventData* vfxEventData = static_cast<PositionEventData*>(eventData->getUserData());
 		if (vfxEventData != nullptr)
 		{
 			const String& evenType = eventData->getEventName();
-			VFX* vfx = m_eventToVFX[evenType];
+			const String& vfxInitPath = m_eventToVFXPath[evenType];
+			VFX* vfx = VFX::Create(*m_container, vfxInitPath);
+
 			if (vfx != nullptr)
 			{
-				vfx->Spawn(vfxEventData->GetPosition());
+				vfx->Spawn(vfxEventData->GetPosition(), 
+					CC_CALLBACK_1(VFXManager::OnVFXFinishedCallback, this));
 			}
 		}
 	}	
+}
+
+void VFXManager::OnVFXFinishedCallback(VFX& vfx)
+{
+	if (m_container != nullptr)
+	{
+		m_container->removeChild(&vfx);
+	}
 }

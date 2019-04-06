@@ -13,6 +13,9 @@ public:
 	static LongSwordAttackComponent*	Create(float secondsBetweenAttacks, float attackRange, float paddingFromBody);	
 	virtual void						Attack(const Vector2& direction) override;
 
+protected:
+	virtual void OnEntityHit(Entity* hitEntity) const override;
+
 private:
 	LongSwordAttackComponent(float secondsBetweenAttacks, float attackRange,
 		float paddingFromBody);
@@ -22,6 +25,7 @@ private:
 		cocos2d::PhysicsShape& physicsObject, void* metaData) const;
 
 private:
-	const float		m_paddingFromBody;
+	static const String s_eventOnSlash;
+	const float			m_paddingFromBody;
 };
 

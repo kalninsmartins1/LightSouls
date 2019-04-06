@@ -1,8 +1,9 @@
 #include "LongSwordAttackComponent.h"
 #include "World/Physics/PhysicsManager.h"
 #include "World/Entity/Entity.h"
+#include "Classes/Events/PositionEventData.h"
 
-
+const String LongSwordAttackComponent::s_eventOnSlash = "EVENT_ON_ENTITY_SLASHED";
 
 LongSwordAttackComponent* LongSwordAttackComponent::Create(float secondsBetweenAttacks,
 	float attackRange, float paddingFromBody)
@@ -47,4 +48,15 @@ void LongSwordAttackComponent::Attack(const Vector2& direction)
 	}
 }
 
+void LongSwordAttackComponent::OnEntityHit(Entity* hitEntity) const
+{
+	const Entity* ownerEntity = GetOwnerEntity();
+	if (ownerEntity != nullptr && hitEntity != nullptr)
+	{
+		const Vector2& ownerPosition = ownerEntity->getPosition();
+		const Vector2& toHitEntity = hitEntity->getPosition() - ownerEntity->getPosition();
+		const Vector2 hitPoint = ownerPosition + (toHitEntity.getNormalized() * GetAttackRange());
+		ownerEntity->DispatchEvent(s_eventOnSlash, &PositionEventData(ownerEntity->GetId(), hitPoint));
+	}
+}
 
