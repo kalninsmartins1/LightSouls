@@ -154,6 +154,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.cpp" />
     <ClCompile Include="..\Classes\Camera\Components\CameraShake.cpp" />
     <ClCompile Include="..\Classes\Events\OnCollisionBeginEventData.cpp" />
+    <ClCompile Include="..\Classes\Events\PositionEventData.cpp" />
     <ClCompile Include="..\Classes\Events\ValueChangedEventData.cpp" />
     <ClCompile Include="..\Classes\Events\AEventData.cpp" />
     <ClCompile Include="..\Classes\Input\GameInput.cpp" />
@@ -207,8 +208,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\World\Physics\PhysicsManager.cpp" />
     <ClCompile Include="..\Classes\World\Projectiles\Projectile.cpp" />
     <ClCompile Include="..\Classes\World\Projectiles\ProjectileConfig.cpp" />
-    <ClCompile Include="..\Classes\World\VFX\Vfx.cpp" />
-    <ClCompile Include="..\Classes\World\VFX\VfxManager.cpp" />
+    <ClCompile Include="..\Classes\World\VFX\VFX.cpp" />
+    <ClCompile Include="..\Classes\World\VFX\VFXManager.cpp" />
     <ClCompile Include="..\Classes\World\World.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -219,6 +220,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.h" />
     <ClInclude Include="..\Classes\Camera\Components\CameraShake.h" />
     <ClInclude Include="..\Classes\Events\OnCollisionBeginEventData.h" />
+    <ClInclude Include="..\Classes\Events\PositionEventData.h" />
     <ClInclude Include="..\Classes\Events\ValueChangedEventData.h" />
     <ClInclude Include="..\Classes\Events\AEventData.h" />
     <ClInclude Include="..\Classes\GameConsts.h" />
@@ -275,8 +277,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\World\Physics\PhysicsManager.h" />
     <ClInclude Include="..\Classes\World\Projectiles\Projectile.h" />
     <ClInclude Include="..\Classes\World\Projectiles\ProjectileConfig.h" />
-    <ClInclude Include="..\Classes\World\VFX\Vfx.h" />
-    <ClInclude Include="..\Classes\World\VFX\VfxManager.h" />
+    <ClInclude Include="..\Classes\World\VFX\VFX.h" />
+    <ClInclude Include="..\Classes\World\VFX\VFXManager.h" />
     <ClInclude Include="..\Classes\World\World.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

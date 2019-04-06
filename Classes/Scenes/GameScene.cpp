@@ -115,7 +115,7 @@ bool GameScene::init()
 		CCASSERT(false, "HelloWorldScene: Failed to initialize PhysicsManager !");
 	}
 
-	InitWolrdLayer();
+	Node* worldLayer = InitWolrdLayer();
 	InitUILayer();	
 
 	// Init Input
@@ -123,10 +123,12 @@ bool GameScene::init()
 	if (s_gameInput == nullptr)
 	{
 		// Halt the game when in debug mode
-		CCASSERT(false, "HelloWorldScene: Failed to load input configuration !");
+		CCASSERT(false, "GameScene: Failed to load input configuration !");
 	}
 
-	// Call update for this scene
+	m_gameSpeedModifier.Init("res/Configs/World/GameSpeedModifier.xml");	
+	InitVFXManger(worldLayer);
+	RegisterForEvents();
 	scheduleUpdate();
     
     return true;
@@ -173,7 +175,7 @@ void GameScene::update(float deltaTime)
 	}
 }
 
-void GameScene::InitWolrdLayer()
+Node* GameScene::InitWolrdLayer()
 {
 	Node* worldLayer = Node::create();
 
@@ -184,17 +186,6 @@ void GameScene::InitWolrdLayer()
 	// Init player
 	m_player = Player::Create("res/Configs/World/Player/Player.xml");
 	worldLayer->addChild(m_player);
-	
-	EventDispatcher* eventDispatcher = getEventDispatcher();
-	if (eventDispatcher != nullptr)
-	{
-		eventDispatcher->addCustomEventListener(Player::GetEventOnHealthChanged(),
-			CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
-		eventDispatcher->addCustomEventListener(Player::GetEventOnStaminaChanged(),
-			CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
-		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDestroyed(),
-			CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
-	}
 
 	// Init AI
 	AIAgentManager* agentManager = AIAgentManager::GetInstance();
@@ -218,8 +209,7 @@ void GameScene::InitWolrdLayer()
 	worldCamera->setPosition(m_player->getPosition()); // Make the player position in middle of camera	
 	addChild(worldCamera);
 
-	// Init game speed modifier
-	m_gameSpeedModifier.Init("res/Configs/World/GameSpeedModifier.xml");
+	return worldLayer;	
 }
 
 void GameScene::InitUILayer()
@@ -332,8 +322,29 @@ void GameScene::ReloadGame()
 		physicsManager->OnReload();
 	}
 
-	InitWolrdLayer();
+	m_vfxManager.Cleanup();
+	Node* worldLayer = InitWolrdLayer();
+	InitVFXManger(worldLayer);
 	InitUILayer();
+}
+
+void GameScene::RegisterForEvents()
+{
+	EventDispatcher* eventDispatcher = getEventDispatcher();
+	if (eventDispatcher != nullptr)
+	{
+		eventDispatcher->addCustomEventListener(Player::GetEventOnHealthChanged(),
+			CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
+		eventDispatcher->addCustomEventListener(Player::GetEventOnStaminaChanged(),
+			CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
+		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDestroyed(),
+			CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
+	}
+}
+
+void GameScene::InitVFXManger(Node* worldLayer)
+{
+	m_vfxManager.Init(worldLayer, "res/Configs/World/VFX/VfxManager.xml");
 }
 
 void GameScene::SwitchToGameOverScene()

@@ -2,6 +2,7 @@
 
 #include "LightSoulsTypes.h"
 #include "World/GameSpeedModifier.h"
+#include "World/VFX/VFXManager.h"
 
 class Player;
 class ProgressBar;
@@ -39,7 +40,7 @@ public:
 	virtual void update(float deltaTime) override;
 
 private:
-	void InitWolrdLayer();
+	Node* InitWolrdLayer(); // Returns world layer
 	void InitUILayer();
 	void StartGameOverFadeIn(float time);
 	void SwitchToGameOverScene();
@@ -49,10 +50,14 @@ private:
 	void OnPlayerStaminaChanged(cc::EventCustom* eventData);
 	void OnAgentDestroyed(cc::EventCustom* eventData);
 	void ReloadGame();
+	void RegisterForEvents();
+	void InitVFXManger(cc::Node* worldLayer);
 
 private:
 	static PhysicsManager*			s_physicsManager;
 	static GameInput*				s_gameInput;
+
+	VFXManager						m_vfxManager;
 	GameSpeedModifier				m_gameSpeedModifier;
 	Player*							m_player;
 	ProgressBar*					m_healthBar;

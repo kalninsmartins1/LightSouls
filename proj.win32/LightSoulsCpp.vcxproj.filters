@@ -271,8 +271,9 @@
       <Filter>src\Events</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\GameSpeedModifier.cpp" />
-    <ClCompile Include="..\Classes\World\VFX\Vfx.cpp" />
-    <ClCompile Include="..\Classes\World\VFX\VfxManager.cpp" />
+    <ClCompile Include="..\Classes\Events\PositionEventData.cpp" />
+    <ClCompile Include="..\Classes\World\VFX\VFXManager.cpp" />
+    <ClCompile Include="..\Classes\World\VFX\VFX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -455,8 +456,9 @@
       <Filter>src\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\GameSpeedModifier.h" />
-    <ClInclude Include="..\Classes\World\VFX\Vfx.h" />
-    <ClInclude Include="..\Classes\World\VFX\VfxManager.h" />
+    <ClInclude Include="..\Classes\Events\PositionEventData.h" />
+    <ClInclude Include="..\Classes\World\VFX\VFXManager.h" />
+    <ClInclude Include="..\Classes\World\VFX\VFX.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

@@ -24,6 +24,7 @@
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
 #include "World/Entity/Components/LookAtAITargetComponent.h"
 #include "World/GameSpeedModifier.h"
+#include "World/VFX/VFXManager.h"
 
 XMLLoader::XMLLoader()
 {
@@ -371,16 +372,32 @@ bool XMLLoader::InitializeGameSpeedModifier(GameSpeedModifier& speedModifier, co
 	if (isSuccessful)
 	{
 		XMLElement* data = doc.RootElement();
-		for (XMLElement* element = data->FirstChildElement(); element;
+		for (XMLElement* element = data->FirstChildElement(); element != nullptr;
 			element = element->NextSiblingElement())
 		{
-			if (element != nullptr)
-			{
-				const String& eventType = element->Attribute(XMLConsts::TYPE_ATTR);
-				const float speed = element->FloatAttribute(XMLConsts::SPEED_ATTR);
-				const float duration = element->FloatAttribute(XMLConsts::DURATION_ATTR);
-				speedModifier.AddEvent(eventType, speed, duration);
-			}
+			const String& eventType = element->Attribute(XMLConsts::TYPE_ATTR);
+			const float speed = element->FloatAttribute(XMLConsts::SPEED_ATTR);
+			const float duration = element->FloatAttribute(XMLConsts::DURATION_ATTR);
+			speedModifier.AddEvent(eventType, speed, duration);	
+		}
+	}
+
+	return isSuccessful;
+}
+
+bool XMLLoader::InitializeVFXManager(VFXManager& vfxManager, const String& pathToXML)
+{
+	XMLDoc doc;
+	const bool isSuccessful = LoadXMLFile(pathToXML, doc);
+	if (isSuccessful)
+	{
+		XMLElement* data = doc.RootElement();
+		for (XMLElement* element = data->FirstChildElement(); element != nullptr;
+			element = element->NextSiblingElement())
+		{
+			const String& eventType = element->Attribute(XMLConsts::TYPE_ATTR);
+			const String& pathToVfx = element->Attribute(XMLConsts::PATH_ATTR);
+			vfxManager.AddVFX(eventType, pathToVfx);
 		}
 	}
 

@@ -3,6 +3,7 @@
 #include "LightSoulsTypes.h"
 
 class AnimComponent;
+class AEventData;
 
 enum class EntityType
 {
@@ -73,7 +74,8 @@ protected:
 	virtual void DispatchOnHealthReduceEvent() = 0;
 	virtual void DispatchOnStaminaChangedEvent() const = 0;
 	virtual void DispatchOnGiveDamageEvent() const = 0;
-
+	void		 DispatchEvent(const String& eventType) const;
+	void		 DispatchEvent(const String& eventType, AEventData* eventData) const;
 	void		 OnEntityInitialized();
 
 private:

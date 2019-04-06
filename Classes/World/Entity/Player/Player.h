@@ -47,12 +47,13 @@ private:
 	bool OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
 	bool OnContactEnd(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
 	bool OnProjectileHit(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
-	void ResetCollisionData();
+	void ResetCollisionData();	
 
 private:
 	static const String			s_eventOnPlayerHealthChanged;
 	static const String			s_eventOnPlayerStaminaChanged;
 	static const String			s_eventOnPlayerGiveDamage;
+	static const String			s_eventOnPlayerDodged;
 	GenericAttackComponent*		m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 

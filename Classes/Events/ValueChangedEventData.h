@@ -6,7 +6,7 @@
 class ValueChangedEventData : public AEventData
 {
 public:
-	ValueChangedEventData(unsigned int receiverId, float newValue, float percetageNormalized);
+	ValueChangedEventData(unsigned int senderId, float newValue, float percetageNormalized);
 	
 	float GetNewValue() const;
 	float GetPercentageNormalized() const;

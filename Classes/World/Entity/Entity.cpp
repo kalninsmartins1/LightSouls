@@ -288,6 +288,7 @@ void Entity::RegenerateStamina(float regenerateSpeedASecond)
 	if (m_stamina < m_baseStamina && m_isStaminaRegenerateDelayExpired)
 	{
 		m_stamina += regenerateSpeedASecond;
+		Utils::ClampValue(m_stamina, 0.0f, m_baseStamina);
 		DispatchOnStaminaChangedEvent();
 	}
 }
@@ -296,6 +297,20 @@ void Entity::OnDamageTaken()
 {
 	m_isTakingDamage = false;
 	m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
+}
+
+void Entity::DispatchEvent(const String& eventType) const
+{
+	DispatchEvent(eventType, nullptr);
+}
+
+void Entity::DispatchEvent(const String& eventType, AEventData* eventData) const
+{
+	cc::EventDispatcher* eventDispatcher = getEventDispatcher();
+	if (eventDispatcher != nullptr)
+	{
+		eventDispatcher->dispatchCustomEvent(eventType, eventData);
+	}
 }
 
 void Entity::OnEntityInitialized()
@@ -408,4 +423,3 @@ void Entity::SetPhysicsBodyForceScale(float scale)
 {
 	m_physicsBodyForceScale = scale;
 }
-

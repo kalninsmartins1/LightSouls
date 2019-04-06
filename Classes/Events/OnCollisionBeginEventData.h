@@ -8,7 +8,7 @@
 class OnCollisionBeginEventData : public AEventData
 {
 public:
-	OnCollisionBeginEventData(unsigned int receiverId, const String& collidedWithName, const Vector2& collisionPoint);
+	OnCollisionBeginEventData(unsigned int senderId, const String& collidedWithName, const Vector2& collisionPoint);
 
 public:
 	const String&	GetCollidedWithName() const;

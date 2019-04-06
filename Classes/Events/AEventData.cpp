@@ -1,7 +1,7 @@
 #include "AEventData.h"
 
-AEventData::AEventData(unsigned int receiversId)
-	: m_receiversId(receiversId)
+AEventData::AEventData(unsigned int senderId)
+	: m_senderId(senderId)
 {
 
 }
@@ -11,7 +11,7 @@ AEventData::~AEventData()
 
 }
 
-unsigned int AEventData::GetReceiversId() const
+unsigned int AEventData::GetSenderId() const
 {
-	return m_receiversId;
+	return m_senderId;
 }

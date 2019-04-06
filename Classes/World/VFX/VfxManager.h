@@ -7,9 +7,22 @@
 
 #include "LightSoulsTypes.h"
 
-class VfxManager
+class VFX;
+
+class VFXManager
 {
 public:
-	static VfxManager Create(const String& pathToXML);
+	VFXManager();
 
+public:
+	bool Init(cc::Node* container, const String& pathToXML);
+	void AddVFX(const String& eventType, const String& pathToVfx);
+	void Cleanup();
+
+private:
+	void OnVFXEventTriggered(cc::EventCustom* eventData);
+
+private:
+	cc::Node*				m_container;
+	std::map<String, VFX*>	m_eventToVFX;
 };

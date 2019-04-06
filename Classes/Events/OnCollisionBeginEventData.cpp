@@ -2,8 +2,8 @@
 
 
 
-OnCollisionBeginEventData::OnCollisionBeginEventData(unsigned int receiverId, const String& collidedWithName, const Vector2& collisionPoint)
-	: AEventData(receiverId)
+OnCollisionBeginEventData::OnCollisionBeginEventData(unsigned int senderId, const String& collidedWithName, const Vector2& collisionPoint)
+	: AEventData(senderId)
 	, m_collidedWithName(collidedWithName)
 	, m_collisionPoint(collisionPoint)
 {

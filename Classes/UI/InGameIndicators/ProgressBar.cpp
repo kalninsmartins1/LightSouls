@@ -6,7 +6,7 @@
 
 void ProgressBar::SetCurrentValue(float value)
 {
-	if (value <= 1 || value >= 0)
+	if (value <= 1.0f && value >= 0.0f)
 	{
 		SetTargetValue(value);
 		m_isAnimating = true;
@@ -121,6 +121,7 @@ void ProgressBar::Update(float deltaTime)
 				FinishAnimating();
 			}
 		}
+		
 		m_progressLine->setScaleX(m_currentValue);
 	}
 }

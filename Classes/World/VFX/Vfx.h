@@ -7,12 +7,17 @@
 
 #include "LightSoulsTypes.h"
 
-class Vfx : public cc::Sprite 
+class AnimComponent;
+
+class VFX : public cc::Sprite 
 {
 public:
-	static Vfx* Create(cc::Node& container, const String& pathToXML);
+	VFX();
 
-	void		Spawn(cc::Node& container, const Vector2& pos);
+public:
+	static VFX* Create(cc::Node& container, const String& pathToXML);
+
+	void		Spawn(const Vector2& pos);
 
 private:
 	bool Init(cc::Node& container, const String& pathToXML);

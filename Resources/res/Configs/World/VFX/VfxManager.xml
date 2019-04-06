@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<VfxManager>
+	<Event 	type="EVENT_ON_PLAYER_DODGED"			
+			path="res/Configs/World/VFX/Dust.xml"/>	
+</VfxManager>

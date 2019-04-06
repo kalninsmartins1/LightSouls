@@ -4,7 +4,7 @@
 		<SpriteSheet path="res/Graphics/World/VFX/Dust/dustAnim.png" 
 			plistPath="res/Graphics/World/VFX/Dust/dustAnim.plist">
 			
-			<Anim 	type="Act"
+			<Anim 	type="Idle"
 					frameNamePattern="dust%d.png"
 					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
 					shouldBlur="false"

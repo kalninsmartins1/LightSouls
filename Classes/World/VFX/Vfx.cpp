@@ -1,17 +1,17 @@
-#include "Vfx.h"
+#include "VFX.h"
 #include "Classes/Utils/XML/XMLLoader.h"
 #include "Classes/GameConsts.h"
 #include "Classes/World/Entity/Components/AnimComponent.h"
 
-Vfx::Vfx(cc::Node& container)
-	: m_container(container)
+VFX::VFX()
+	: m_animComp(nullptr)
 {
 
 }
 
-Vfx* Vfx::Create(cc::Node& container, const String& pathToXML)
+VFX* VFX::Create(cc::Node& container, const String& pathToXML)
 {
-	Vfx* vfx = new (std::nothrow) Vfx();
+	VFX* vfx = new (std::nothrow) VFX();
 	if (vfx != nullptr && vfx->Init(container, pathToXML))
 	{
 		vfx->autorelease();
@@ -24,19 +24,19 @@ Vfx* Vfx::Create(cc::Node& container, const String& pathToXML)
 	return vfx;
 }
 
-void Vfx::Spawn(cc::Node& container, const Vector2& pos)
+void VFX::Spawn(const Vector2& pos)
 {
 	// Only spawn if has a animation component	
 	if (m_animComp != nullptr)
 	{
 		setVisible(true);
 		setPosition(pos);
-		m_animComp->PlayOneShotAnimation(GameConsts::ANIM_TYPE_ACT,
-			CC_CALLBACK_0(Vfx::OnFinishedAnimating, this));
+		m_animComp->PlayOneShotAnimation(GameConsts::ANIM_TYPE_IDLE,
+			CC_CALLBACK_0(VFX::OnFinishedAnimating, this));
 	}	
 }
 
-bool Vfx::Init(cc::Node& container, const String& pathToXML)
+bool VFX::Init(cc::Node& container, const String& pathToXML)
 {
 	bool isSuccessful = XMLLoader::InitializeComponents(*this, pathToXML);
 	m_animComp = static_cast<AnimComponent*>(getComponent(GameConsts::ANIM_COMPONENT));
@@ -45,6 +45,7 @@ bool Vfx::Init(cc::Node& container, const String& pathToXML)
 
 	if (isSuccessful)
 	{
+		setCameraMask(container.getCameraMask());
 		container.addChild(this);
 		setVisible(false);
 	}
@@ -52,7 +53,7 @@ bool Vfx::Init(cc::Node& container, const String& pathToXML)
 	return isSuccessful;
 }
 
-void Vfx::OnFinishedAnimating()
+void VFX::OnFinishedAnimating()
 {
 	setVisible(false);
 }

@@ -1,8 +1,8 @@
 #include "ValueChangedEventData.h"
 
 
-ValueChangedEventData::ValueChangedEventData(unsigned int receiverId, float newValue, float percetageNormalized)
-	: AEventData(receiverId)
+ValueChangedEventData::ValueChangedEventData(unsigned int senderId, float newValue, float percetageNormalized)
+	: AEventData(senderId)
 	, m_newValue(newValue)	
 	, m_percentageNormalized(percetageNormalized)
 {

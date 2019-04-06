@@ -12,7 +12,7 @@
 		<Sprite path="res/Graphics/UI/staminaFill.png"/>
 		<AnchorPosition x="0.0" y="0.0" />
 		<NormalizedPosition x="0.01" y="0.5" />
-		<Scale x="1.08" y="3"/>
+		<Scale x="1.08\" y="3"/>
 	</Foreground>
 	
 </StaminaBar>

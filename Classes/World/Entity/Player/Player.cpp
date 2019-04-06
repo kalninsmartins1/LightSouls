@@ -12,11 +12,13 @@
 #include "Camera/Components/CameraShake.h"
 #include "Scenes/GameScene.h"
 #include "World/Projectiles/Projectile.h"
-#include "Classes/World/VFX/Vfx.h"
+#include "Classes/World/VFX/VFX.h"
+#include "Classes/Events/PositionEventData.h"
 
 const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
 const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
 const String Player::s_eventOnPlayerGiveDamage = "EVENT_ON_PLAYER_GIVE_DAMAGE";
+const String Player::s_eventOnPlayerDodged = "EVENT_ON_PLAYER_DODGED";
 
 Player* Player::Create(const String& pathToXML)
 {
@@ -35,8 +37,7 @@ Player* Player::Create(const String& pathToXML)
 
 Player::Player()
 	: m_attackComponent(nullptr)
-	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right
-	, m_dodgeVfx(nullptr)
+	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right	
 	, m_isDodging(false)
 	, m_dodgeSpeed(0.0f)
 	, m_dodgeTime(0.0f)
@@ -84,8 +85,6 @@ bool Player::Init(const String& pathToXML)
 	{
 		isSuccessfullyInitialized = false;
 	}
-
-	m_dodgeVfx = Vfx::Create()
 
 	return isSuccessfullyInitialized;
 }
@@ -144,11 +143,6 @@ void Player::SetDodgeSpeed(float dodgeSpeed)
 void Player::SetDodgeTime(float dodgeTime)
 {
 	m_dodgeTime = dodgeTime;
-}
-
-void Player::setParent(Node* parent)
-{
-	Entity::setParent(parent);
 }
 
 void Player::OnDodgeFinished()
@@ -211,6 +205,7 @@ void Player::StartDodging()
 	m_isDodging = true;
 	SetCurrentMoveSpeed(0.0f);
 	ApplyInstantSpeed(m_dodgeSpeed);
+	DispatchEvent(s_eventOnPlayerDodged, &PositionEventData(GetId(), getPosition()));
 
 	// Consume stamina
 	ConsumeStamina(m_dodgeStaminaConsumption);
@@ -284,8 +279,7 @@ void Player::DispatchOnHealthReduceEvent()
 	float currentHealth = GetCurrentHealth();
 	float healthPercentage = Utils::SafeDevide(currentHealth, GetMaxHealth());
 	auto eventData = ValueChangedEventData(GetId(), currentHealth, healthPercentage);
-	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerHealthChanged,
-		&eventData);
+	DispatchEvent(s_eventOnPlayerHealthChanged, &eventData);	
 }
 
 void Player::DispatchOnStaminaChangedEvent() const
@@ -293,13 +287,12 @@ void Player::DispatchOnStaminaChangedEvent() const
 	float currentStamina = GetCurrentStamina();
 	float staminaPercentage = Utils::SafeDevide(currentStamina, GetMaxStamina());
 	auto eventData = ValueChangedEventData(GetId(), currentStamina, staminaPercentage);
-	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerStaminaChanged,
-		&eventData);
+	DispatchEvent(s_eventOnPlayerStaminaChanged, &eventData);	
 }
 
 void Player::DispatchOnGiveDamageEvent() const
 {
-	getEventDispatcher()->dispatchCustomEvent(s_eventOnPlayerGiveDamage);
+	DispatchEvent(s_eventOnPlayerGiveDamage);	
 }
 
 bool Player::OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)
