@@ -349,6 +349,7 @@ void Entity::OnDamageTaken()
 {
 	m_isTakingDamage = false;
 	m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
+	ResetMoveSpeed();
 }
 
 void Entity::DispatchEvent(const String& eventType) const
