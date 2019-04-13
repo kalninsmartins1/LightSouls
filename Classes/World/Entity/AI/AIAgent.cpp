@@ -15,7 +15,7 @@
 
 String AIAgent::s_eventAgentHealthChanged = "EVENT_AGENT_HEALTH_CHANGED";
 String AIAgent::s_eventAgentDamageTaken = "EVENT_AGENT_DAMAGE_TAKEN";
-String AIAgent::s_eventAgentDestroyed = "EVENT_AGENT_DESTROYED";
+String AIAgent::s_eventAgentDisappeared = "EVENT_AGENT_DESTROYED";
 
 AIAgent* AIAgent::Create(const String& pathToXML)
 {
@@ -35,6 +35,15 @@ AIAgent* AIAgent::Create(const String& pathToXML)
 void AIAgent::DispatchOnGiveDamageEvent() const
 {
 
+}
+
+void AIAgent::DispatchOnDisappeared() const
+{
+	cc::EventDispatcher* eventDispatcher = getEventDispatcher();	
+	if (GetHealth() <= 0)
+	{
+		eventDispatcher->dispatchCustomEvent(s_eventAgentDisappeared, &BaseEventData(GetId()));
+	}	
 }
 
 AIAgent::AIAgent()
@@ -76,6 +85,7 @@ bool AIAgent::Init(const String& pathToXML)
 		AnimComponent* animComp = GetAnimComponent();
 		if (animComp != nullptr)
 		{
+			animComp->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
 			m_stateMachine.Start(*animComp);
 		}
 		else
@@ -143,10 +153,7 @@ void AIAgent::Update(float deltaTime)
 
 void AIAgent::Reset()
 {
-	ResetMoveSpeed();
-	ResetStamina();
-	ResetHealth();
-	ResetIsTakingDamage();
+	PrepareForRespawn();
 	m_stateMachine.Reset();
 	setPosition(GetBasePosition());
 }
@@ -157,14 +164,10 @@ void AIAgent::DispatchOnStaminaChangedEvent() const
 }
 
 void AIAgent::DispatchOnHealthReduceEvent()
-{
-	m_stateMachine.DispatchEvent(s_eventAgentHealthChanged, AEventData(GetId()));
-	m_stateMachine.DispatchEvent(s_eventAgentDamageTaken, AEventData(GetId()));
-
-	if (GetHealth() <= 0)
-	{
-		getEventDispatcher()->dispatchCustomEvent(s_eventAgentDestroyed);
-	}
+{		
+	BaseEventData data(GetId());
+	m_stateMachine.DispatchEvent(s_eventAgentHealthChanged, data);
+	m_stateMachine.DispatchEvent(s_eventAgentDamageTaken, data);
 }
 
 AIAgent::~AIAgent()
@@ -172,9 +175,9 @@ AIAgent::~AIAgent()
 
 }
 
-const String& AIAgent::GetEventOnDestroyed()
+const String& AIAgent::GetEventOnDisappeared()
 {
-	return s_eventAgentDestroyed;
+	return s_eventAgentDisappeared;
 }
 
 const String& AIAgent::GetEventOnHealthChanged()
@@ -226,5 +229,3 @@ bool AIAgent::IsBackgroundTaskReady() const
 {	
 	return m_avoidAction == nullptr || !m_avoidAction->IsAvoiding();
 }
-
-

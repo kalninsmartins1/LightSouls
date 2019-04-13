@@ -2,6 +2,7 @@
 #include "World/Entity/Components/AnimComponent.h"
 #include "GameConsts.h"
 #include "Utils/Utils.h"
+#include "Classes/Utils/AnimationUtils.h"
 
 unsigned int Entity::s_uniqueId = 0;
 
@@ -13,6 +14,7 @@ Entity::Entity()
 	, m_isRuning(false)
 	, m_isAttacking(false)
 	, m_isTakingDamage(false)
+	, m_isDisappearing(false)
 	, m_isStaminaRegenerateDelayExpired(true)
 	, m_baseMoveSpeed(0.0f)
 	, m_baseHealth(0.0f)
@@ -142,9 +144,18 @@ void Entity::ResetMoveSpeed()
 	SetCurrentMoveSpeed(m_baseMoveSpeed);
 }
 
-void Entity::ResetIsTakingDamage()
+void Entity::PrepareForRespawn()
 {
+	if (m_animComponent != nullptr)
+	{
+		m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
+	}
+
+	ResetMoveSpeed();
+	ResetStamina();
+	ResetHealth();
 	m_isTakingDamage = false;
+	m_isDisappearing = false;
 }
 
 void Entity::ConsumeStamina(float amount)
@@ -181,30 +192,13 @@ void Entity::TakeDamage(float damage)
 	}
 
 	DispatchOnHealthReduceEvent();
-
-	bool isCurrentlyPlayingHurtAnim = m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_HURT) ||
-		m_animComponent->IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_HURT_DIR);
-
-	if (!m_isAttacking && !isCurrentlyPlayingHurtAnim)
+	if (m_health > 0)
 	{
-		m_isTakingDamage = true;
-		if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT))
-		{
-			m_animComponent->PlayOneShotAnimation(GameConsts::ANIM_TYPE_HURT,
-				CC_CALLBACK_0(Entity::OnDamageTaken, this));			
-		}
-		else if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT_DIR))
-		{
-			m_animComponent->PlayOneShotDirectionalAnim(GameConsts::ANIM_TYPE_HURT_DIR,
-				CC_CALLBACK_0(Entity::OnDamageTaken, this));
-		}
-		else
-		{
-			// If no animation then fall-back to one second pause
-			Utils::StartTimerWithCallback(this,
-				CC_CALLBACK_0(Entity::OnDamageTaken, this),
-				1.0f, GameConsts::ACTION_TAKE_DAMAGE);
-		}
+		PlayHurtAnim();
+	}
+	else
+	{
+		PlayDissapearAnim();
 	}
 }
 
@@ -242,7 +236,7 @@ void Entity::Update(float deltaTime)
 {
 	Sprite::update(deltaTime);
 	m_isRuning = m_moveDirection.lengthSquared() > 0;
-	if (!m_isTakingDamage)
+	if (!m_isTakingDamage && !m_isDisappearing)
 	{
 		Move();
 	}
@@ -267,6 +261,64 @@ void Entity::StartStaminaRegenerateDelayTimer()
 void Entity::OnStaminaRegenerateDelayExpired()
 {	
 	m_isStaminaRegenerateDelayExpired = true;	
+}
+
+void Entity::OnDisappeared()
+{
+	DispatchOnDisappeared();
+}
+
+void Entity::PlayHurtAnim()
+{
+	if (m_animComponent != nullptr)
+	{
+		bool isCurrentlyPlayingHurtAnim = m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_HURT) ||
+			m_animComponent->IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_HURT_DIR);
+
+		if (!m_isAttacking && !isCurrentlyPlayingHurtAnim)
+		{
+			m_isTakingDamage = true;
+			if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT))
+			{
+				m_animComponent->PlayOneShotAnimation(GameConsts::ANIM_TYPE_HURT,
+					CC_CALLBACK_0(Entity::OnDamageTaken, this));
+			}
+			else if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT_DIR))
+			{
+				m_animComponent->PlayOneShotDirectionalAnim(GameConsts::ANIM_TYPE_HURT_DIR,
+					CC_CALLBACK_0(Entity::OnDamageTaken, this));
+			}
+			else
+			{
+				// If no animation then fall-back to one second pause
+				Utils::StartTimerWithCallback(this,
+					CC_CALLBACK_0(Entity::OnDamageTaken, this),
+					1.0f, GameConsts::ACTION_TAKE_DAMAGE);
+			}
+		}
+	}
+}
+
+void Entity::PlayDissapearAnim()
+{
+	m_isDisappearing = true;
+	if (m_animComponent != nullptr)
+	{
+		int animId = AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_DISAPPEAR);
+		bool isAlreadyPlaying = m_animComponent->IsCurrrentlyPlayingAnim(animId);
+
+		if (!isAlreadyPlaying)
+		{
+			if (m_animComponent->HasAnim(animId))
+			{
+				m_animComponent->PlayOneShotAnimation(animId, CC_CALLBACK_0(Entity::OnDisappeared, this));				
+			}
+			else
+			{				
+				OnDisappeared();
+			}
+		}		
+	}
 }
 
 void Entity::Move()
@@ -304,7 +356,7 @@ void Entity::DispatchEvent(const String& eventType) const
 	DispatchEvent(eventType, nullptr);
 }
 
-void Entity::DispatchEvent(const String& eventType, AEventData* eventData) const
+void Entity::DispatchEvent(const String& eventType, BaseEventData* eventData) const
 {
 	cc::EventDispatcher* eventDispatcher = getEventDispatcher();
 	if (eventDispatcher != nullptr)
@@ -386,7 +438,7 @@ AnimComponent* Entity::GetAnimComponent() const
 
 bool Entity::IsProcessing() const
 {
-	return m_isTakingDamage;
+	return m_isTakingDamage || m_isDisappearing;
 }
 
 unsigned Entity::GetId() const

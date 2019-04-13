@@ -1,10 +1,10 @@
 #pragma once
 
-class AEventData
+class BaseEventData
 {
 public:
-	AEventData(unsigned int senderId);
-	virtual ~AEventData();
+	BaseEventData(unsigned int senderId);
+	virtual ~BaseEventData();
 
 	unsigned int GetSenderId() const;
 

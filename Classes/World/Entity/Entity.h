@@ -3,7 +3,7 @@
 #include "LightSoulsTypes.h"
 
 class AnimComponent;
-class AEventData;
+class BaseEventData;
 
 enum class EntityType
 {
@@ -58,7 +58,7 @@ public:
 	void			ResetHealth();
 	void			ResetStamina();
 	void			ResetMoveSpeed();
-	void			ResetIsTakingDamage();
+	void			PrepareForRespawn();	
 	void			ConsumeStamina(float amount);
 	void			TakeDamage(const Entity& attackingEntity);
 	void			TakeDamage(float damage);
@@ -66,7 +66,7 @@ public:
 	void			StopAttacking();
 	
 	void			DispatchEvent(const String& eventType) const;
-	void			DispatchEvent(const String& eventType, AEventData* eventData) const;
+	void			DispatchEvent(const String& eventType, BaseEventData* eventData) const;
 	void			ApplyKnockbackEffect(const Entity& attackingEntity);
 	void			ApplyInstantSpeed(float speed);
 	void			ApplyInstantSpeedInDirection(float speed, const Vector2& direction);	
@@ -76,11 +76,15 @@ protected:
 	virtual void DispatchOnHealthReduceEvent() = 0;
 	virtual void DispatchOnStaminaChangedEvent() const = 0;
 	virtual void DispatchOnGiveDamageEvent() const = 0;	
-	void		 OnEntityInitialized();
+	virtual void DispatchOnDisappeared() const = 0;
+	void		 OnEntityInitialized();	
 
 private:
 	void		StartStaminaRegenerateDelayTimer();
 	void		OnStaminaRegenerateDelayExpired();
+	void		OnDisappeared();
+	void		PlayHurtAnim();
+	void		PlayDissapearAnim();
 
 	void		UpdateSortingLayer();
 	void		Move();	
@@ -98,6 +102,7 @@ private:
 	bool m_isRuning;
 	bool m_isAttacking;
 	bool m_isTakingDamage;
+	bool m_isDisappearing;
 	bool m_isStaminaRegenerateDelayExpired;
 
 	float m_baseMoveSpeed;

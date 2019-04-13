@@ -57,7 +57,7 @@ void StateSignaling::LoadXMLData(const XMLElement& xmlElement)
 	m_signalTime = xmlElement.FloatAttribute(XMLConsts::TIME_ATTR);
 }
 
-void StateSignaling::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
+void StateSignaling::OnEventReceived(const String& receivedEvent, const BaseEventData& eventData)
 {
 	if (AIAgent::GetEventOnDamageTaken() == receivedEvent)
 	{

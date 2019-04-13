@@ -1,7 +1,7 @@
 #include "PositionEventData.h"
 
 PositionEventData::PositionEventData(unsigned int senderId, const Vector2& position)
-	: AEventData(senderId)
+	: BaseEventData(senderId)
 	, m_position(position)
 {
 

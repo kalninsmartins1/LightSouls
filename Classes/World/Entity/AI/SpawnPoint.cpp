@@ -3,9 +3,6 @@
 #include "AIAgentManager.h"
 #include "Utils/Utils.h"
 
-
-
-
 SpawnPoint::SpawnPoint(const SpawnPointConfig& config)
 	: m_respawnIndexQueue()
 	, m_spawnedAgents()
@@ -15,6 +12,13 @@ SpawnPoint::SpawnPoint(const SpawnPointConfig& config)
 	, m_curRespawnIndex(-1)
 {
 	setPosition(config.GetPosition());
+
+	cc::EventDispatcher* dispatcher = getEventDispatcher();
+	if (dispatcher != nullptr)
+	{
+		dispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared(),
+			CC_CALLBACK_1(SpawnPoint::OnAgentDisappeared, this));
+	}
 }
 
 void SpawnPoint::GetNextSpawnPosition(const cocos2d::Size& agentSize, Vector2& outPosition)
@@ -37,6 +41,22 @@ void SpawnPoint::GetNextSpawnPosition(const cocos2d::Size& agentSize, Vector2& o
 			(agentSize.height + m_config.GetAgentRowPadding()));
 	}
 	m_lastAgentPos = outPosition;
+}
+
+int SpawnPoint::FindAgentIndexById(int id)
+{
+	int keyIndex = -1;
+	int index = 0;
+	for (auto& agent : m_spawnedAgents)
+	{
+		if (agent->GetId() == id)
+		{
+			keyIndex = index;
+		}
+		++index;
+	}
+
+	return keyIndex;
 }
 
 SpawnPoint* SpawnPoint::Create(const SpawnPointConfig& config)
@@ -64,18 +84,9 @@ void SpawnPoint::SetTimeModifier(float timeModifier)
 
 void SpawnPoint::Update(float deltaTime)
 {
-	// Update all agents
-	int index = 0;
 	for (auto agent : m_spawnedAgents)
 	{
 		agent->Update(deltaTime);
-
-		// Agent went offline
-		if (agent->GetHealth() <= 0 && agent->isVisible())
-		{
-			DespawnAgent(index);
-		}
-		index++;
 	}
 
 	ManageAgentRespawning();
@@ -83,8 +94,12 @@ void SpawnPoint::Update(float deltaTime)
 
 void SpawnPoint::DespawnAgent(unsigned int agentIndex)
 {
-	SetAgentEnabled(agentIndex, false);
-	m_respawnIndexQueue.push(agentIndex);
+	AIAgent* agent = m_spawnedAgents[agentIndex];
+	if (agent != nullptr && agent->isVisible())
+	{
+		SetAgentEnabled(agentIndex, false);
+		m_respawnIndexQueue.push(agentIndex);
+	}	
 }
 
 void SpawnPoint::SpawnAgent(bool isRespawn)
@@ -132,9 +147,16 @@ void SpawnPoint::SpawnAllAgents()
 
 void SpawnPoint::RespawnAgent()
 {	
-	SetAgentEnabled(m_curRespawnIndex, true);
-	m_spawnedAgents[m_curRespawnIndex]->Reset();
-	m_curRespawnIndex = -1;
+	if (m_curRespawnIndex != -1)
+	{
+		AIAgent* agent = m_spawnedAgents[m_curRespawnIndex];
+		if (agent != nullptr)
+		{
+			agent->Reset();
+			SetAgentEnabled(m_curRespawnIndex, true);
+			m_curRespawnIndex = -1;
+		}		
+	}	
 }
 
 void SpawnPoint::SetAgentEnabled(int agentIndex, bool isEnabled)
@@ -143,3 +165,18 @@ void SpawnPoint::SetAgentEnabled(int agentIndex, bool isEnabled)
 	m_spawnedAgents[agentIndex]->getPhysicsBody()->setEnabled(isEnabled);
 }
 
+void SpawnPoint::OnAgentDisappeared(cc::EventCustom* customEvent)
+{
+	if (customEvent != nullptr)
+	{
+		auto data = static_cast<BaseEventData*>(customEvent->getUserData());
+		if(data != nullptr)
+		{
+			int index = FindAgentIndexById(data->GetSenderId());
+			if (index != -1)
+			{				
+				DespawnAgent(index);
+			}
+		}		
+	}	
+}

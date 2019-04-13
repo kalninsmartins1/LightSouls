@@ -174,16 +174,10 @@
     <ClCompile Include="..\Classes\UI\InGameIndicators\ProgressBar.cpp">
       <Filter>src\UI\InGameIndicators</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.cpp">
-      <Filter>src\3rdParty\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Components\AnimComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Events\OnCollisionBeginEventData.cpp">
-      <Filter>src\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Events\AEventData.cpp">
       <Filter>src\Events</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Camera\Camera.cpp">
@@ -274,6 +268,9 @@
     <ClCompile Include="..\Classes\Events\PositionEventData.cpp" />
     <ClCompile Include="..\Classes\World\VFX\VFXManager.cpp" />
     <ClCompile Include="..\Classes\World\VFX\VFX.cpp" />
+    <ClCompile Include="..\Classes\Events\BaseEventData.cpp">
+      <Filter>src\Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -354,9 +351,6 @@
     <ClInclude Include="..\Classes\UI\InGameIndicators\ProgressBar.h">
       <Filter>src\UI\InGameIndicators</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.h">
-      <Filter>src\3rdParty\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\LightSoulsTypes.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -364,9 +358,6 @@
       <Filter>src\World\Entity\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Events\OnCollisionBeginEventData.h">
-      <Filter>src\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Events\AEventData.h">
       <Filter>src\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Camera\Camera.h">
@@ -459,6 +450,9 @@
     <ClInclude Include="..\Classes\Events\PositionEventData.h" />
     <ClInclude Include="..\Classes\World\VFX\VFXManager.h" />
     <ClInclude Include="..\Classes\World\VFX\VFX.h" />
+    <ClInclude Include="..\Classes\Events\BaseEventData.h">
+      <Filter>src\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

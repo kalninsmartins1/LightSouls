@@ -70,6 +70,7 @@ namespace GameConsts
 	static constexpr char* ANIM_TYPE_HURT = "Hurt";
 	static constexpr char* ANIM_TYPE_ATTACK = "Attack";
 	static constexpr char* ANIM_TYPE_SIGNAL = "Signal";
+	static constexpr char* ANIM_TYPE_DISAPPEAR = "Disappear";
 	
 	static constexpr char* ANIM_TYPE_RUN_DIR = "RunSide";	
 	static constexpr char* ANIM_TYPE_IDLE_DIR = "IdleSide";	

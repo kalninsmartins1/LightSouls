@@ -6,9 +6,9 @@
 #pragma once
 
 #include "LightSoulsTypes.h"
-#include "Classes/Events/AEventData.h"
+#include "Classes/Events/BaseEventData.h"
 
-class PositionEventData : public AEventData
+class PositionEventData : public BaseEventData
 {
 public:
 	PositionEventData(unsigned int senderId, const Vector2& spawnPos);

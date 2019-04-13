@@ -33,7 +33,7 @@ void StateIdle::OnExit()
 
 }
 
-void StateIdle::OnEventReceived(const String& receivedEvent, const AEventData & eventData)
+void StateIdle::OnEventReceived(const String& receivedEvent, const BaseEventData & eventData)
 {
 	if (receivedEvent == AIAgent::GetEventOnHealthChanged())
 	{

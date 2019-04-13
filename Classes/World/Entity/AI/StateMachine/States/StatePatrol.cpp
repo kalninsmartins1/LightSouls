@@ -82,7 +82,7 @@ void StatePatrol::OnExit()
 	GetAgent().stopAllActionsByTag(GameConsts::ACTION_TIMER);
 }
 
-void StatePatrol::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
+void StatePatrol::OnEventReceived(const String& receivedEvent, const BaseEventData& eventData)
 {
 	if (receivedEvent == PhysicsManager::GetEventOnCollisionBegin())
 	{

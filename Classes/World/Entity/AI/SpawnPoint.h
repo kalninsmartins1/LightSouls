@@ -22,12 +22,14 @@ private:
 
 private:
 	void GetNextSpawnPosition(const cocos2d::Size& agentSize, Vector2& outPosition);
+	int	 FindAgentIndexById(int id);
 
 	void DespawnAgent(unsigned int agentIndex);
 	void SpawnAgent(bool isRespawn = false);
 	void ManageAgentRespawning();
 	void RespawnAgent();
 	void SetAgentEnabled(int agentIndex, bool isEnabled);
+	void OnAgentDisappeared(cc::EventCustom* customEvent);
 
 private:
 	std::queue<int>			m_respawnIndexQueue;

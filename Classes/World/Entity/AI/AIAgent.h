@@ -12,7 +12,7 @@ public:
 	~AIAgent();
 
 public:	
-	static const String&	 GetEventOnDestroyed();
+	static const String&	 GetEventOnDisappeared();
 	static const String&	 GetEventOnHealthChanged();
 	static const String&	 GetEventOnDamageTaken();
 	float					 GetAttackRange() const;
@@ -36,6 +36,7 @@ protected:
 	virtual void DispatchOnHealthReduceEvent() override;
 	virtual void DispatchOnStaminaChangedEvent() const override;
 	virtual void DispatchOnGiveDamageEvent() const override;
+	virtual void DispatchOnDisappeared() const override;
 
 private:
 	AIAgent();
@@ -46,7 +47,7 @@ private:
 
 private:	
 	static String			s_eventAgentHealthChanged;
-	static String			s_eventAgentDestroyed;
+	static String			s_eventAgentDisappeared;
 	static String			s_eventAgentDamageTaken;
 	StateMachine			m_stateMachine;
 	GenericAttackComponent*	m_attackComponent;

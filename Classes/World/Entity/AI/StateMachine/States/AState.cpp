@@ -58,7 +58,7 @@ void AState::SetNextStateOnFailure(const EAIState& state)
 	m_nextStateOnFailure = state;
 }
 
-void AState::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
+void AState::OnEventReceived(const String& receivedEvent, const BaseEventData& eventData)
 {
 
 }

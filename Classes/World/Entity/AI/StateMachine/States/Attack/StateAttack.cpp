@@ -59,7 +59,7 @@ void StateAttack::OnExit()
 	StopAttack();
 }
 
-void StateAttack::OnEventReceived(const String & receivedEvent, const AEventData & eventData)
+void StateAttack::OnEventReceived(const String & receivedEvent, const BaseEventData & eventData)
 {
 	if (receivedEvent == AIAgent::GetEventOnHealthChanged())
 	{

@@ -1,7 +1,7 @@
 #include "StateMachine.h"
 #include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/Components/AnimComponent.h"
-#include "Events/AEventData.h"
+#include "Events/BaseEventData.h"
 #include "Utils/Utils.h"
 #include "States/Attack/StateAttack.h"
 #include "States/Attack/StateLineAttack.h"
@@ -141,28 +141,31 @@ void StateMachine::SwitchState(EAIState newState)
 
 void StateMachine::OnStep()
 {
-	const EStateProgress& curProgress = m_curState->OnStep();
-	switch (curProgress)
+	if (!m_agent.IsProcessing())
 	{
-		case EStateProgress::IN_PROGRESS:
-			// Wait for state to finish
-			break;
+		const EStateProgress& curProgress = m_curState->OnStep();
+		switch (curProgress)
+		{
+			case EStateProgress::IN_PROGRESS:
+				// Wait for state to finish
+				break;
 
-		case EStateProgress::DONE:
-			OnStateDone();
-			break;
+			case EStateProgress::DONE:
+				OnStateDone();
+				break;
 
-		case EStateProgress::FAILED:
-			OnStateFailed();
-			break;
+			case EStateProgress::FAILED:
+				OnStateFailed();
+				break;
 
-		default:
-			CCLOGERROR("StateMachine: [update] invalid state progress !");
-			break;
-	}
+			default:
+				CCLOGERROR("StateMachine: [update] invalid state progress !");
+				break;
+		}
+	}	
 }
 
-void StateMachine::DispatchEvent(const String& eventType, const AEventData& eventData)
+void StateMachine::DispatchEvent(const String& eventType, const BaseEventData& eventData)
 {
 	if (eventType == PhysicsManager::GetEventOnCollisionBegin()) 
 	{

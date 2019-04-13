@@ -1,7 +1,7 @@
 #pragma once
 
 #include "LightSoulsTypes.h"
-#include "Events/AEventData.h"
+#include "Events/BaseEventData.h"
 
 class AnimComponent;
 class AIAgent;
@@ -53,7 +53,7 @@ public:
 	// Called when state is exited
 	virtual void			OnExit() = 0;
 
-	virtual void			OnEventReceived(const String& receivedEvent, const AEventData& eventData);
+	virtual void			OnEventReceived(const String& receivedEvent, const BaseEventData& eventData);
 	virtual void			LoadXMLData(const XMLElement& xmlElement);
 
 	template<typename T>

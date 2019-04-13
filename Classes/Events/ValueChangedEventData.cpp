@@ -2,7 +2,7 @@
 
 
 ValueChangedEventData::ValueChangedEventData(unsigned int senderId, float newValue, float percetageNormalized)
-	: AEventData(senderId)
+	: BaseEventData(senderId)
 	, m_newValue(newValue)	
 	, m_percentageNormalized(percetageNormalized)
 {

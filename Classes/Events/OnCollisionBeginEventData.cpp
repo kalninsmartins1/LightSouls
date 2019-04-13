@@ -3,7 +3,7 @@
 
 
 OnCollisionBeginEventData::OnCollisionBeginEventData(unsigned int senderId, const String& collidedWithName, const Vector2& collisionPoint)
-	: AEventData(senderId)
+	: BaseEventData(senderId)
 	, m_collidedWithName(collidedWithName)
 	, m_collisionPoint(collisionPoint)
 {

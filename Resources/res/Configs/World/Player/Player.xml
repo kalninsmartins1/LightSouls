@@ -150,7 +150,17 @@
 					timeBetweenFrames="0.05;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>			
-		</SpriteSheet>			
+		</SpriteSheet>
+		<SpriteSheet
+			path="res/Graphics/World/Player/Disappear/disappearAnim.png" 
+			plistPath="res/Graphics/World/Player/Disappear/disappearAnim.plist">
+			
+			<Anim 	type="Disappear"					
+					frameNamePattern="disappear%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
+			/>			
+		</SpriteSheet>		
 	</Component>
 
 	<!-- Actually collision detection body -->

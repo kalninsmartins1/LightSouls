@@ -16,7 +16,7 @@ public:
 	void			OnEnter(AnimComponent& animComponent) override;
 	EStateProgress	OnStep() override;
 	void			OnExit() override;
-	virtual void	OnEventReceived(const String& receivedEvent, const AEventData& eventData) override;	
+	virtual void	OnEventReceived(const String& receivedEvent, const BaseEventData& eventData) override;	
 	virtual void	LoadXMLData(const XMLElement& xmlElement) override;
 
 private:	

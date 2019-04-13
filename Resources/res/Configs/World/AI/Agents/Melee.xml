@@ -3,7 +3,7 @@
 			moveSpeed="100"
 			baseHealth="60"
 			baseStamina="100"
-			baseDamage="10"
+			baseDamage="25"
 			staminaRegenerateSpeed="2"
 			staminaRegenerateDelay="1"
 			knockBackStrenght="0"
@@ -88,6 +88,12 @@
 			<Anim	type="Hurt"
 					frameNamePattern="meleeHurt%d.png"					
 					timeBetweenFrames="1.0;"
+					shouldBlur="false"
+			/>
+			
+			<Anim	type="Disappear"
+					frameNamePattern="meleeDisappear%d.png"					
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>
 		</SpriteSheet>

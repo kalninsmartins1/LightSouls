@@ -148,7 +148,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Camera\Camera.cpp" />
     <ClCompile Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.cpp" />
@@ -156,7 +155,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Events\OnCollisionBeginEventData.cpp" />
     <ClCompile Include="..\Classes\Events\PositionEventData.cpp" />
     <ClCompile Include="..\Classes\Events\ValueChangedEventData.cpp" />
-    <ClCompile Include="..\Classes\Events\AEventData.cpp" />
+    <ClCompile Include="..\Classes\Events\BaseEventData.cpp" />
     <ClCompile Include="..\Classes\Input\GameInput.cpp" />
     <ClCompile Include="..\Classes\Input\InputTypes\AInputDevice.cpp" />
     <ClCompile Include="..\Classes\Input\InputTypes\GameController\GameControllerInput.cpp" />
@@ -214,7 +213,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Classes\3rdParty\Physics\PhysicsShapeCache.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Camera\Camera.h" />
     <ClInclude Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.h" />
@@ -222,7 +220,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Events\OnCollisionBeginEventData.h" />
     <ClInclude Include="..\Classes\Events\PositionEventData.h" />
     <ClInclude Include="..\Classes\Events\ValueChangedEventData.h" />
-    <ClInclude Include="..\Classes\Events\AEventData.h" />
+    <ClInclude Include="..\Classes\Events\BaseEventData.h" />
     <ClInclude Include="..\Classes\GameConsts.h" />
     <ClInclude Include="..\Classes\Input\GameInput.h" />
     <ClInclude Include="..\Classes\Input\InputTypes\AInputDevice.h" />

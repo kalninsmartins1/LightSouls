@@ -79,7 +79,7 @@ void StateLineAttack::OnExit()
 	agent.ResetMoveSpeed();
 }
 
-void StateLineAttack::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
+void StateLineAttack::OnEventReceived(const String& receivedEvent, const BaseEventData& eventData)
 {
 	if (receivedEvent == PhysicsManager::GetEventOnCollisionBegin())
 	{

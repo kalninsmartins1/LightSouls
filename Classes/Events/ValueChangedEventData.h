@@ -1,9 +1,9 @@
 #pragma once
 
 #include "LightSoulsTypes.h"
-#include "AEventData.h"
+#include "BaseEventData.h"
 
-class ValueChangedEventData : public AEventData
+class ValueChangedEventData : public BaseEventData
 {
 public:
 	ValueChangedEventData(unsigned int senderId, float newValue, float percetageNormalized);

@@ -45,9 +45,9 @@ private:
 	void StartGameOverFadeIn(float time);
 	void SwitchToGameOverScene();
 	void ProcessDebugPhysicsDraw();
-	void HandlePlayerHealthChangedEvent(const ValueChangedEventData& eventData);
 	void OnPlayerHealthChanged(cc::EventCustom* eventData);
 	void OnPlayerStaminaChanged(cc::EventCustom* eventData);
+	void OnPlayerDisappeared();
 	void OnAgentDestroyed(cc::EventCustom* eventData);
 	void ReloadGame();
 	void RegisterForEvents();

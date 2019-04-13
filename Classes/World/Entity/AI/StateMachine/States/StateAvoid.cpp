@@ -108,7 +108,7 @@ void StateAvoid::ProcessAnimations()
 	}
 }
 
-void StateAvoid::OnEventReceived(const String& receivedEvent, const AEventData& eventData)
+void StateAvoid::OnEventReceived(const String& receivedEvent, const BaseEventData& eventData)
 {
 	if (PhysicsManager::GetEventOnCollisionBegin() == receivedEvent)
 	{

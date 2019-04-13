@@ -16,6 +16,7 @@ public:
 	static const String& GetEventOnHealthChanged();
 	static const String& GetEventOnStaminaChanged();
 	static const String& GetEventOnGiveDamage();
+	static const String& GetEventOnPlayerDisappeared();
 	virtual EntityType	 GetEntityType() const override;
 
 	void SetDodgeStaminaConsumption(float dodgeStaminaConumption);
@@ -30,7 +31,8 @@ public:
 protected:
 	virtual void DispatchOnHealthReduceEvent() override;
 	virtual void DispatchOnStaminaChangedEvent() const override;
-	virtual void DispatchOnGiveDamageEvent() const override;
+	virtual void DispatchOnGiveDamageEvent() const override;	
+	virtual void DispatchOnDisappeared() const override;
 
 private:
 	void SetCollisionData(cocos2d::Node* otherNode);
@@ -54,6 +56,7 @@ private:
 	static const String			s_eventOnPlayerStaminaChanged;
 	static const String			s_eventOnPlayerGiveDamage;
 	static const String			s_eventOnPlayerDodged;
+	static const String			s_eventOnPlayerDisappeared;
 	GenericAttackComponent*		m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
@@ -66,7 +69,7 @@ private:
 	bool					m_isCollidedFromLeft;
 	bool					m_isCollidedFromRight;
 	bool					m_isCollidedFromTop;
-	bool					m_isCollidedFromBottom;	
+	bool					m_isCollidedFromBottom;
 };
 
 

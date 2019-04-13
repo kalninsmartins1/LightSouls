@@ -51,6 +51,7 @@ const std::map<String, int> AnimationUtils::s_animTypeToId =
 	{ "HurtDown", 32 },
 
 	{ GameConsts::ANIM_TYPE_ACT, 33 },
+	{ GameConsts::ANIM_TYPE_DISAPPEAR, 34},
 };
 
 int AnimationUtils::GetAnimId(String animName)

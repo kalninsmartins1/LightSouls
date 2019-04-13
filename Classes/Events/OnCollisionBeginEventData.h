@@ -1,11 +1,11 @@
 #pragma once
 
 #include "LightSoulsTypes.h"
-#include "AEventData.h"
+#include "BaseEventData.h"
 
 
 
-class OnCollisionBeginEventData : public AEventData
+class OnCollisionBeginEventData : public BaseEventData
 {
 public:
 	OnCollisionBeginEventData(unsigned int senderId, const String& collidedWithName, const Vector2& collisionPoint);

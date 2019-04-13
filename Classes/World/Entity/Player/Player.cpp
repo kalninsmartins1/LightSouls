@@ -19,6 +19,7 @@ const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHAN
 const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
 const String Player::s_eventOnPlayerGiveDamage = "EVENT_ON_PLAYER_GIVE_DAMAGE";
 const String Player::s_eventOnPlayerDodged = "EVENT_ON_PLAYER_DODGED";
+const String Player::s_eventOnPlayerDisappeared = "EVENT_ON_PLAYER_DISAPPEARED";
 
 Player* Player::Create(const String& pathToXML)
 {
@@ -123,6 +124,11 @@ void Player::Update(float deltaTime)
 const String& Player::GetEventOnGiveDamage()
 {
 	return s_eventOnPlayerGiveDamage;
+}
+
+const String& Player::GetEventOnPlayerDisappeared()
+{
+	return s_eventOnPlayerDisappeared;
 }
 
 EntityType Player::GetEntityType() const
@@ -330,6 +336,15 @@ void Player::ResetCollisionData()
 	m_isCollidedFromRight = false;
 	m_isCollidedFromTop = false;
 	m_isCollidedFromBottom = false;
+}
+
+void Player::DispatchOnDisappeared() const
+{
+	cc::EventDispatcher* dispatcher = getEventDispatcher();
+	if (dispatcher != nullptr)
+	{
+		dispatcher->dispatchCustomEvent(s_eventOnPlayerDisappeared);
+	}
 }
 
 void Player::SetCollisionData(cocos2d::Node* otherNode)

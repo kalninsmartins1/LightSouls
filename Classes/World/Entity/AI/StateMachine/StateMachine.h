@@ -1,7 +1,7 @@
 #pragma once
 
 #include "LightSoulsTypes.h"
-#include "Events/AEventData.h"
+#include "Events/BaseEventData.h"
 
 class AnimComponent;
 class AIAgent;
@@ -25,7 +25,7 @@ public:
 
 	// Should be called periodically to update current state of state machine 
 	void OnStep();
-	void DispatchEvent(const String& eventType, const AEventData& eventData);
+	void DispatchEvent(const String& eventType, const BaseEventData& eventData);
 
 private:
 	void SwitchState(AState* newState);

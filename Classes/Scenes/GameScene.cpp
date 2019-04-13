@@ -278,12 +278,12 @@ void GameScene::StartGameOverFadeIn(float time)
 
 void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
 {
-	if (eventData != nullptr)
+	if (m_healthBar != nullptr && eventData != nullptr)
 	{
 		auto healthData = static_cast<ValueChangedEventData*>(eventData->getUserData());
 		if (healthData != nullptr)
 		{
-			HandlePlayerHealthChangedEvent(*healthData);
+			m_healthBar->SetCurrentValue(healthData->GetPercentageNormalized());		
 		}
 	}
 }
@@ -298,6 +298,20 @@ void GameScene::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
 			m_staminaBar->SetCurrentValue(staminaData->GetPercentageNormalized());
 		}
 	}
+}
+
+void GameScene::OnPlayerDisappeared()
+{
+	if (m_healthBar != nullptr)
+	{
+		m_healthBar->MultiplyAnimationSpeed(2.0f);
+	}
+
+	float toNextSceneTime = 2.0f;
+	StartGameOverFadeIn(toNextSceneTime);
+	Utils::StartTimerWithCallback(this,
+		CC_CALLBACK_0(GameScene::SwitchToGameOverScene, this),
+		toNextSceneTime);
 }
 
 void GameScene::OnAgentDestroyed(cocos2d::EventCustom* eventData)
@@ -336,7 +350,9 @@ void GameScene::RegisterForEvents()
 			CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
 		eventDispatcher->addCustomEventListener(Player::GetEventOnStaminaChanged(),
 			CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
-		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDestroyed(),
+		eventDispatcher->addCustomEventListener(Player::GetEventOnPlayerDisappeared(),
+			CC_CALLBACK_0(GameScene::OnPlayerDisappeared, this));
+		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared(),
 			CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
 	}
 }
@@ -348,8 +364,17 @@ void GameScene::InitVFXManger(Node* worldLayer)
 
 void GameScene::SwitchToGameOverScene()
 {
-	getEventDispatcher()->removeAllEventListeners();
-	Director::getInstance()->replaceScene(LoadingScreenScene::CreateScene(ENextScene::GAME_OVER));
+	EventDispatcher* dispatcher = getEventDispatcher();
+	if (dispatcher != nullptr)
+	{
+		dispatcher->removeAllEventListeners();
+	}
+
+	Director* director = Director::getInstance();
+	if (director != nullptr)
+	{
+		director->replaceScene(LoadingScreenScene::CreateScene(ENextScene::GAME_OVER));
+	}
 }
 
 void GameScene::ProcessDebugPhysicsDraw()
@@ -373,22 +398,4 @@ void GameScene::ProcessDebugPhysicsDraw()
 			world->setDebugDrawCameraMask(CameraFlag::USER8);
 		}
 	}	
-}
-
-void GameScene::HandlePlayerHealthChangedEvent(const ValueChangedEventData& eventData)
-{
-	if (m_healthBar != nullptr)
-	{
-		m_healthBar->SetCurrentValue(eventData.GetPercentageNormalized());
-		if (eventData.GetNewValue() <= 0)
-		{
-			m_healthBar->MultiplyAnimationSpeed(2.0f);
-
-			float toNextSceneTime = 2.0f;
-			StartGameOverFadeIn(toNextSceneTime);
-			Utils::StartTimerWithCallback(this,
-				CC_CALLBACK_0(GameScene::SwitchToGameOverScene, this),
-				toNextSceneTime);
-		}
-	}
 }
