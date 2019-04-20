@@ -31,6 +31,7 @@ void VFX::Spawn(const Vector2& pos, const std::function<void(VFX&)>& onFinished)
 	{
 		setVisible(true);
 		setPosition(pos);
+		setLocalZOrder(abs(pos.y) * GameConsts::VFX_LAYER_MULTIPLIER);
 		m_animComp->PlayOneShotAnimation(GameConsts::ANIM_TYPE_IDLE,
 			CC_CALLBACK_0(VFX::OnFinishedAnimating, this));
 		m_finishCallback = onFinished;
@@ -63,4 +64,3 @@ void VFX::OnFinishedAnimating()
 	setVisible(false);
 	m_finishCallback(*this);
 }
-

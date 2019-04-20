@@ -1,4 +1,4 @@
-/*
+/*!
  * \Author Martins Kalnins
  * \Date 30.03.2019
  * \Brief Class for responding to play VFX events.
@@ -17,7 +17,6 @@ public:
 public:
 	bool Init(cc::Node* container, const String& pathToXML);
 	void AddVFX(const String& eventType, const String& pathToVfx);
-	void Cleanup();
 
 private:
 	void OnVFXEventTriggered(cc::EventCustom* eventData);
