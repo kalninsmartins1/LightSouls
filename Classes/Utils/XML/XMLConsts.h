@@ -44,6 +44,7 @@ namespace XMLConsts
 
 	// XML attack attributes
 	static constexpr char* ATTACK_STAMINA_CONSUMPTION_ATTR = "staminaConsumption";
+	static constexpr char* ATTACK_DAMAGE_CHECK_DELAY = "damageCheckDelay";
 
 	// XML AI attributes
 	static constexpr char* AI_CHASE_RADIUS_ATTR = "chaseRadius";

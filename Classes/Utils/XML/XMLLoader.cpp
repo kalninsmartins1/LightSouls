@@ -283,6 +283,7 @@ bool XMLLoader::InitializeComponent(cc::Node& node, const XMLElement& element, c
 		const float paddingFromBody = element.FloatAttribute(XMLConsts::ENTITY_PADDING_FROM_BODY_ATTR);
 		const float staminaConsumption = element.FloatAttribute(XMLConsts::ATTACK_STAMINA_CONSUMPTION_ATTR);
 		const float comboExpireTime = element.FloatAttribute(XMLConsts::ENTITY_COMBO_EXPIRE_TIME_ATTR);
+		const float damageDelayTime = element.FloatAttribute(XMLConsts::ATTACK_DAMAGE_CHECK_DELAY);
 
 		LongSwordAttackComponent* longSwordAttack =
 			LongSwordAttackComponent::Create(secondsBetweenAttacks, attackRange,

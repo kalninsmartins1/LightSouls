@@ -26,7 +26,8 @@ namespace GameConsts
 	static constexpr int ACTION_AI_AVOID = 7;
 	static constexpr int ACTION_AI_SIGNAL = 8;
 	static constexpr int ACTION_TAKE_DAMAGE = 9;
-	static constexpr int ACTION_AI_TASK_AVOID = 10;	
+	static constexpr int ACTION_AI_TASK_AVOID = 10;
+	static constexpr int ACTION_ATTACK_CHECK_DAMAGE = 11;
 
 	// AI states
 	static constexpr const char* AI_STATE_ATTACK = "Attack";
