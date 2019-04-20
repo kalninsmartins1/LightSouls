@@ -2,6 +2,9 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Scenes/GameScene.h"
 
+String GameSpeedModifier::s_eventOnModificationStarted = "EVENT_ON_MODIFICIATION_STARTED";
+String GameSpeedModifier::s_eventOnModificationEnded = "EVENT_ON_MODIFICATION_ENDED";
+
 GameSpeedModifier::GameSpeedModifier(GameScene& gameScene, cc::EventDispatcher& eventDispatcher)
 	: m_gameScene(gameScene)
 	, m_eventDispatcher(eventDispatcher)
@@ -13,6 +16,16 @@ GameSpeedModifier::GameSpeedModifier(GameScene& gameScene, cc::EventDispatcher& 
 GameSpeedModifier::~GameSpeedModifier()
 {
 
+}
+
+const String& GameSpeedModifier::GetEventOnModificationStarted()
+{
+	return s_eventOnModificationStarted;
+}
+
+const String& GameSpeedModifier::GetEventOnModificationEnded()
+{
+	return s_eventOnModificationEnded;
 }
 
 bool GameSpeedModifier::Init(const String& pathToXML)
@@ -86,6 +99,7 @@ void GameSpeedModifier::OnEventTriggered(cc::EventCustom* eventData)
 		auto director = cc::Director::getInstance();
 		m_gameScene.runAction(sequence);
 		m_isModificationActive = true;
+		m_eventDispatcher.dispatchCustomEvent(s_eventOnModificationStarted);
 	}
 }
 
@@ -94,5 +108,5 @@ void GameSpeedModifier::OnSpeedModificationFinished()
 	m_isModificationActive = false;
 	m_gameScene.SetTimeModifier(m_originalTimeScale);
 	SetPhysicsWorldSpeed(m_originalTimeScale);
+	m_eventDispatcher.dispatchCustomEvent(s_eventOnModificationEnded);
 }
-

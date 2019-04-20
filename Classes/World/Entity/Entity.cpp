@@ -3,6 +3,7 @@
 #include "GameConsts.h"
 #include "Utils/Utils.h"
 #include "Classes/Utils/AnimationUtils.h"
+#include "Classes/World/GameSpeedModifier.h"
 
 unsigned int Entity::s_uniqueId = 0;
 
@@ -16,6 +17,7 @@ Entity::Entity()
 	, m_isTakingDamage(false)
 	, m_isDisappearing(false)
 	, m_isStaminaRegenerateDelayExpired(true)
+	, m_isGameSpeedBeingModified(false)
 	, m_baseMoveSpeed(0.0f)
 	, m_baseHealth(0.0f)
 	, m_baseDamage(0.0f)
@@ -177,8 +179,8 @@ void Entity::TakeDamage(const Entity& attackingEntity)
 {	
 	if (m_health > 0)
 	{		
+		attackingEntity.DispatchOnGiveDamageEvent();
 		TakeDamage(attackingEntity.GetDamage());
-		attackingEntity.DispatchOnGiveDamageEvent();		
 		ApplyKnockbackEffect(attackingEntity);
 	}
 }
@@ -198,7 +200,11 @@ void Entity::TakeDamage(float damage)
 	}
 	else
 	{
-		PlayDissapearAnim();
+		m_isDisappearing = true;
+		if (!m_isGameSpeedBeingModified)
+		{
+			PlayDissapearAnim();
+		}
 	}
 }
 
@@ -301,7 +307,6 @@ void Entity::PlayHurtAnim()
 
 void Entity::PlayDissapearAnim()
 {
-	m_isDisappearing = true;
 	if (m_animComponent != nullptr)
 	{
 		int animId = AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_DISAPPEAR);
@@ -318,6 +323,18 @@ void Entity::PlayDissapearAnim()
 				OnDisappeared();
 			}
 		}		
+	}
+}
+
+void Entity::RegisterToEvents()
+{
+	cc::EventDispatcher* dispatcher = getEventDispatcher();
+	if (dispatcher != nullptr)
+	{
+		dispatcher->addCustomEventListener(GameSpeedModifier::GetEventOnModificationStarted(),
+			CC_CALLBACK_0(Entity::OnGameSpeedModificationStarted, this));
+		dispatcher->addCustomEventListener(GameSpeedModifier::GetEventOnModificationEnded(),
+			CC_CALLBACK_0(Entity::OnGameSpeedModificationEnded, this));
 	}
 }
 
@@ -352,6 +369,20 @@ void Entity::OnDamageTaken()
 	ResetMoveSpeed();
 }
 
+void Entity::OnGameSpeedModificationStarted()
+{
+	m_isGameSpeedBeingModified = true;
+}
+
+void Entity::OnGameSpeedModificationEnded()
+{
+	if (m_isGameSpeedBeingModified && m_isDisappearing)
+	{
+		PlayDissapearAnim();
+	}
+	m_isGameSpeedBeingModified = false;
+}
+
 void Entity::DispatchEvent(const String& eventType) const
 {
 	DispatchEvent(eventType, nullptr);
@@ -380,6 +411,7 @@ void Entity::OnEntityInitialized()
 	}
 
 	_physicsBody->setVelocityLimit(m_moveSpeed);
+	RegisterToEvents();
 }
 
 float Entity::GetCurrentMoveSpeed() const

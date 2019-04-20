@@ -17,6 +17,9 @@ public:
 	~GameSpeedModifier();
 
 public:
+	static const String& GetEventOnModificationStarted();
+	static const String& GetEventOnModificationEnded();
+
 	bool Init(const String& pathToXML);
 
 	void AddEvent(const String& eventName, float speed, float duration);
@@ -31,6 +34,8 @@ private:
 	void OnSpeedModificationFinished();
 
 private:
+	static String						s_eventOnModificationStarted;
+	static String						s_eventOnModificationEnded;
 	GameScene&							m_gameScene;
 	cc::EventDispatcher&				m_eventDispatcher;	
 	std::map<String, EventParameters>	m_eventData;

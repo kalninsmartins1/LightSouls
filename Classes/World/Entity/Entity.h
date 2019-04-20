@@ -85,11 +85,14 @@ private:
 	void		OnDisappeared();
 	void		PlayHurtAnim();
 	void		PlayDissapearAnim();
+	void		RegisterToEvents();
 
 	void		UpdateSortingLayer();
 	void		Move();	
 	void		RegenerateStamina(float regenerateSpeedASecond);
 	void		OnDamageTaken();
+	void		OnGameSpeedModificationStarted();
+	void		OnGameSpeedModificationEnded();
 
 private:	
 	static unsigned int			s_uniqueId;
@@ -104,6 +107,7 @@ private:
 	bool m_isTakingDamage;
 	bool m_isDisappearing;
 	bool m_isStaminaRegenerateDelayExpired;
+	bool m_isGameSpeedBeingModified;
 
 	float m_baseMoveSpeed;
 	float m_baseHealth;
