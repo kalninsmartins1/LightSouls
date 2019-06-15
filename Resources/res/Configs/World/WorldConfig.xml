@@ -2,12 +2,12 @@
 	<Sprite path="res/Graphics/World/arena.png"/>
 	
 	<Component type="RigidBodyComponent">
-		<AnchorPosition x="0.5" y="0.40" />
+		<AnchorPosition x="0.49" y="0.35" />
 		<PhysicsMaterial density="1000" restitution="0.2" friction="0.6" />
 		<PhysicsBody
 			shape="edgeBox"
-			width="1300"
-			height="750"
+			width="1450"
+			height="650"
 			isDynamic="false" 
 			isGravityEnabled="false" 
 			isRotationEnabled="false"
