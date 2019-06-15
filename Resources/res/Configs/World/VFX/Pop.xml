@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
-<VFX type="Slash">
+<VFX type="Pop">
 	<Component type="AnimComponent">
-		<SpriteSheet path="res/Graphics/World/VFX/Slash/slashAnim.png" 
-			plistPath="res/Graphics/World/VFX/Slash/slashAnim.plist">
+		<SpriteSheet path="res/Graphics/World/VFX/Pop/popAnim.png" 
+			plistPath="res/Graphics/World/VFX/Pop/popAnim.plist">
 			
 			<Anim 	type="Idle"
-					frameNamePattern="slash%d.png"
-					timeBetweenFrames="0.1;0.1;0.1;0.1;"
+					frameNamePattern="pop%d.png"
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
 					shouldBlur="false"
 			/>
 		</SpriteSheet>			

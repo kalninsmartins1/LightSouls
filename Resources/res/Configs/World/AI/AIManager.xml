@@ -4,24 +4,24 @@
 		<AgentConfig type="Thrower" path="res/Configs/World/AI/Agents/Thrower.xml"/>
 	</AgentConfigList>
 	<SpawnPoints>
-		<SpawnPoint type="Melee" x="0" y="-350" 
-					numAgentsInRow="5"
-					rowPadding="100" columnPadding="80"
-					spawnDelay="2.0" 
-					spawnCount="1">
-		</SpawnPoint>
-		<SpawnPoint type="Melee" x="-450" y="-100" 
-					numAgentsInRow="5"
-					rowPadding="100" columnPadding="80"
-					spawnDelay="2.0" 
-					spawnCount="1">
-		</SpawnPoint>
-		<SpawnPoint type="Melee" x="450" y="-100" 
-					numAgentsInRow="5"
-					rowPadding="100" columnPadding="80"
-					spawnDelay="2.0" 
-					spawnCount="1">
-		</SpawnPoint>
+		<!-- <SpawnPoint type="Melee" x="0" y="-350"  -->
+					<!-- numAgentsInRow="5" -->
+					<!-- rowPadding="100" columnPadding="80" -->
+					<!-- spawnDelay="2.0"  -->
+					<!-- spawnCount="1"> -->
+		<!-- </SpawnPoint> -->
+		<!-- <SpawnPoint type="Melee" x="-450" y="-100"  -->
+					<!-- numAgentsInRow="5" -->
+					<!-- rowPadding="100" columnPadding="80" -->
+					<!-- spawnDelay="2.0"  -->
+					<!-- spawnCount="1"> -->
+		<!-- </SpawnPoint> -->
+		<!-- <SpawnPoint type="Melee" x="450" y="-100"  -->
+					<!-- numAgentsInRow="5" -->
+					<!-- rowPadding="100" columnPadding="80" -->
+					<!-- spawnDelay="2.0"  -->
+					<!-- spawnCount="1"> -->
+		<!-- </SpawnPoint> -->
 		<!--<SpawnPoint type="Thrower" x="0" y="260" 
 					numAgentsInRow="1"
 					rowPadding="100" columnPadding="80"

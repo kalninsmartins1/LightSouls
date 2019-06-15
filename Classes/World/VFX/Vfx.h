@@ -17,7 +17,7 @@ public:
 public:
 	static VFX* Create(cc::Node& container, const String& pathToXML);
 
-	void		Spawn(const Vector2& pos, const std::function<void(VFX&)>& onFinished);
+	void		Spawn(const Vector2& pos, float rotationAngle, const std::function<void(VFX&)>& onFinished);
 
 private:
 	bool Init(cc::Node& container, const String& pathToXML);

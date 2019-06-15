@@ -2,10 +2,11 @@
 
 #include "2d/CCSprite.h"
 #include "World/Entity/Entity.h"
-#include "World/Entity/Components/Attack/LongSwordAttackComponent.h"
 
 class AnimComponent;
 class GameInput;
+class LongSwordAttackComponent;
+class GenericAttackComponent;
 
 class Player: public Entity
 {
@@ -46,10 +47,12 @@ private:
 	void Attack(GenericAttackComponent& attackComponent);
 	void PerformDodge();
 	void PlayRunOrIdleAnimation() const;
+	void ResetCollisionData();
+
 	bool OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
 	bool OnContactEnd(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
 	bool OnProjectileHit(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
-	void ResetCollisionData();	
+	bool InitAttackComponent();
 
 private:
 	static const String			s_eventOnPlayerHealthChanged;
@@ -57,7 +60,7 @@ private:
 	static const String			s_eventOnPlayerGiveDamage;
 	static const String			s_eventOnPlayerDodged;
 	static const String			s_eventOnPlayerDisappeared;
-	GenericAttackComponent*		m_attackComponent;
+	LongSwordAttackComponent*	m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 
 	bool					m_isDodging;

@@ -14,6 +14,7 @@
 #include "World/Projectiles/Projectile.h"
 #include "Classes/World/VFX/VFX.h"
 #include "Classes/Events/PositionEventData.h"
+#include "World/Entity/Components/Attack/LongSwordAttackComponent.h"
 
 const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
 const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
@@ -68,8 +69,7 @@ bool Player::Init(const String& pathToXML)
 	isSuccessfullyInitialized &= XMLLoader::InitializeEntityUsingXMLFile(*this, pathToXML);
 	
 	OnEntityInitialized();
-	m_attackComponent = static_cast<GenericAttackComponent*>(getComponent(GameConsts::ATTACK_COMPONENT));
-	isSuccessfullyInitialized &= m_attackComponent != nullptr;
+	isSuccessfullyInitialized &= InitAttackComponent();
 
 	PhysicsManager* physicsManager = GameScene::GetPhysicsManager();
 	if (physicsManager != nullptr)
@@ -225,23 +225,10 @@ void Player::StopDodging()
 
 void Player::Attack(GenericAttackComponent& attackComponent)
 {	
-	AnimComponent* animComponent = GetAnimComponent();
-	if (!m_isDodging && animComponent != nullptr && attackComponent.IsReadyToAttack())
-	{		
-		if(!attackComponent.IsComboExpired())
-		{
-			animComponent->GoToNextAttackAnimation();
-		}
-		else
-		{
-			animComponent->ResetAttackAnimation();
-		}
-		
-		// Play the attack animation
-		animComponent->PlayAttackAnimation(CC_CALLBACK_0(Entity::StopAttacking, this));
+	if (!m_isDodging && attackComponent.IsReadyToAttack())
+	{
 		attackComponent.Attack(m_lastValidMoveDirection);
-		StartAttacking();
-		ApplyInstantSpeedInDirection(GetKnockBackStrenght(), m_lastValidMoveDirection);
+		StartAttacking();		
 	}
 }
 
@@ -336,6 +323,20 @@ void Player::ResetCollisionData()
 	m_isCollidedFromRight = false;
 	m_isCollidedFromTop = false;
 	m_isCollidedFromBottom = false;
+}
+
+bool Player::InitAttackComponent()
+{	
+	bool isSucessfullyInitialized = false;
+	m_attackComponent = static_cast<LongSwordAttackComponent*>(getComponent(GameConsts::ATTACK_COMPONENT));
+
+	if (m_attackComponent != nullptr)
+	{
+		m_attackComponent->SetAttackFinishCallback(CC_CALLBACK_0(Entity::StopAttacking, this));
+		isSucessfullyInitialized = true;
+	}
+
+	return isSucessfullyInitialized;
 }
 
 void Player::DispatchOnDisappeared() const

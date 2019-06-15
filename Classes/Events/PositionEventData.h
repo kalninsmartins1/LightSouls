@@ -11,7 +11,7 @@
 class PositionEventData : public BaseEventData
 {
 public:
-	PositionEventData(unsigned int senderId, const Vector2& spawnPos);
+	PositionEventData(unsigned int senderId, const Vector2& postion);
 
 public:
 	const Vector2& GetPosition() const;

@@ -11,7 +11,7 @@
 
 #include "VFXManager.h"
 #include "VFX.h"
-#include "Classes/Events/PositionEventData.h"
+#include "Classes/Events/TransformEventData.h"
 #include "Classes/Utils/XML/XMLLoader.h"
 
 VFXManager::VFXManager()
@@ -49,18 +49,12 @@ void VFXManager::OnVFXEventTriggered(cc::EventCustom* eventData)
 {
 	if (m_container != nullptr && eventData != nullptr)
 	{
-		PositionEventData* vfxEventData = static_cast<PositionEventData*>(eventData->getUserData());
+		TransformEventData* vfxEventData = static_cast<TransformEventData*>(eventData->getUserData());
 		if (vfxEventData != nullptr)
 		{
-			const String& evenType = eventData->getEventName();
-			const String& vfxInitPath = m_eventToVFXPath[evenType];
-			VFX* vfx = VFX::Create(*m_container, vfxInitPath);
-
-			if (vfx != nullptr)
-			{
-				vfx->Spawn(vfxEventData->GetPosition(), 
-					CC_CALLBACK_1(VFXManager::OnVFXFinishedCallback, this));
-			}
+			const Vector2& position = vfxEventData->GetPosition();
+			float rotationAngle = vfxEventData->GetRotationAngle();
+			SpawnVFX(eventData->getEventName(), position, rotationAngle);
 		}
 	}	
 }
@@ -70,5 +64,17 @@ void VFXManager::OnVFXFinishedCallback(VFX& vfx)
 	if (m_container != nullptr)
 	{
 		m_container->removeChild(&vfx);
+	}
+}
+
+void VFXManager::SpawnVFX(const String& eventType, const Vector2 & pos, float rotationAngle)
+{
+	const String& vfxInitPath = m_eventToVFXPath[eventType];
+	VFX* vfx = VFX::Create(*m_container, vfxInitPath);
+
+	if (vfx != nullptr)
+	{
+		vfx->Spawn(pos, rotationAngle,
+			CC_CALLBACK_1(VFXManager::OnVFXFinishedCallback, this));
 	}
 }

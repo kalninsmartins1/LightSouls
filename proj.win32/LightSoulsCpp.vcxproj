@@ -154,6 +154,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Camera\Components\CameraShake.cpp" />
     <ClCompile Include="..\Classes\Events\OnCollisionBeginEventData.cpp" />
     <ClCompile Include="..\Classes\Events\PositionEventData.cpp" />
+    <ClCompile Include="..\Classes\Events\TransformEventData.cpp" />
     <ClCompile Include="..\Classes\Events\ValueChangedEventData.cpp" />
     <ClCompile Include="..\Classes\Events\BaseEventData.cpp" />
     <ClCompile Include="..\Classes\Input\GameInput.cpp" />
@@ -219,6 +220,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Camera\Components\CameraShake.h" />
     <ClInclude Include="..\Classes\Events\OnCollisionBeginEventData.h" />
     <ClInclude Include="..\Classes\Events\PositionEventData.h" />
+    <ClInclude Include="..\Classes\Events\TransformEventData.h" />
     <ClInclude Include="..\Classes\Events\ValueChangedEventData.h" />
     <ClInclude Include="..\Classes\Events\BaseEventData.h" />
     <ClInclude Include="..\Classes\GameConsts.h" />
