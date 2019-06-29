@@ -41,6 +41,8 @@ namespace XMLConsts
 	static constexpr char* PLAYER_DODGE_STAMINA_ATTR = "dodgeStaminaConsumption";
 	static constexpr char* PLAYER_DODGE_SPEED_ATTR = "dodgeSpeed";
 	static constexpr char* PLAYER_DODGE_TIME_ATTR = "dodgeTime";
+	static constexpr char* PLAYER_CURSOR_DISTANCE = "distanceFromPlayer";
+	static constexpr char* PLAYER_PATH_TO_CURSOR = "pathToCursor";
 
 	// XML attack attributes
 	static constexpr char* ATTACK_STAMINA_CONSUMPTION_ATTR = "staminaConsumption";
@@ -117,6 +119,8 @@ namespace XMLConsts
 	static constexpr char* INPUT_VALUE_TO_ATTR = "valueTo";
 	static constexpr char* INPUT_BUTTON_CODE_ATTR = "buttonCode";
 	static constexpr char* INPUT_AXIS_NAME = "axisCode";
+	static constexpr char* INPUT_VERTICAL_AXIS_NAME = "verticalInputAxisName";
+	static constexpr char* INPUT_HORIZONTAL_AXIS_NAME = "horizontalInputAxisName";
 
 	// XML input types
 	static constexpr char* INPUT_AXIS = "Axis";

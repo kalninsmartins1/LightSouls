@@ -272,6 +272,7 @@
       <Filter>src\Events</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Events\TransformEventData.cpp" />
+    <ClCompile Include="..\Classes\World\Cursor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -455,6 +456,7 @@
       <Filter>src\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Events\TransformEventData.h" />
+    <ClInclude Include="..\Classes\World\Cursor.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

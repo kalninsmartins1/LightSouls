@@ -15,6 +15,7 @@
 #include "Classes/World/VFX/VFX.h"
 #include "Classes/Events/PositionEventData.h"
 #include "World/Entity/Components/Attack/LongSwordAttackComponent.h"
+#include "World/Cursor.h"
 
 const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
 const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
@@ -40,6 +41,7 @@ Player* Player::Create(const String& pathToXML)
 Player::Player()
 	: m_attackComponent(nullptr)
 	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right	
+	, m_cursor(nullptr)
 	, m_isDodging(false)
 	, m_dodgeSpeed(0.0f)
 	, m_dodgeTime(0.0f)
@@ -97,6 +99,11 @@ void Player::Update(float deltaTime)
 		// Call base update
 		Entity::Update(deltaTime);
 
+		if (m_cursor != nullptr)
+		{
+			m_cursor->Update(deltaTime);
+		}
+
 		// We can move only when we are not attacking
 		if (IsReadyToAttack() && !m_isDodging)
 		{
@@ -118,6 +125,15 @@ void Player::Update(float deltaTime)
 	if (animComponent != nullptr)
 	{
 		animComponent->UpdateAnimState(*this);
+	}
+}
+
+void Player::setParent(Node * parent)
+{
+	Entity::setParent(parent);
+	if (parent != nullptr && m_cursor != nullptr)
+	{
+		m_cursor->OnOwnerParented(*parent);
 	}
 }
 
@@ -337,6 +353,17 @@ bool Player::InitAttackComponent()
 	}
 
 	return isSucessfullyInitialized;
+}
+
+bool Player::InitCursor(const String& pathToXML)
+{
+	GameInput* gameInput = GameScene::GetGameInput();
+	if (gameInput != nullptr)
+	{
+		m_cursor = Cursor::Create(*this, *gameInput, pathToXML);
+	}
+
+	return m_cursor != nullptr;
 }
 
 void Player::DispatchOnDisappeared() const

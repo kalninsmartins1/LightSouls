@@ -5,6 +5,7 @@
 
 enum class X360Axes;
 enum class X360Button;
+enum class MouseAxisType : char;
 
 using MouseButtonCode = cocos2d::EventMouse::MouseButton;
 using KeyCode = cocos2d::EventKeyboard::KeyCode;
@@ -42,6 +43,7 @@ public:
 	static void LogVector3(const Vector3& v);
 	static void AssertWithStrFormat(bool condition, const String& msg, const String& param);
 
+	static MouseAxisType	ConvertStringToMouseAxisType(const String& axisName);
 	static MouseButtonCode	ConvertStringToMouseButtonCode(const String& mouseButtonStr);
 	static KeyCode			ConvertStringToKeyCode(const String& keyCodeStr);
 	static X360Axes			ConvertStringToGameControllerAxis(const String& controllerAxisStr);

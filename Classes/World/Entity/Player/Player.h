@@ -7,6 +7,7 @@ class AnimComponent;
 class GameInput;
 class LongSwordAttackComponent;
 class GenericAttackComponent;
+class Cursor;
 
 class Player: public Entity
 {
@@ -26,8 +27,9 @@ public:
 
 	static Player*	Create(const String& pathToXML);
 	bool			Init(const String& pathToXML);
-	
+	bool			InitCursor(const String& pathToXML);
 	virtual void	Update(float deltaTime) override;
+	virtual void	setParent(Node* parent) override;
 
 protected:
 	virtual void DispatchOnHealthReduceEvent() override;
@@ -62,6 +64,7 @@ private:
 	static const String			s_eventOnPlayerDisappeared;
 	LongSwordAttackComponent*	m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
+	Cursor*						m_cursor;
 
 	bool					m_isDodging;
 	float					m_dodgeSpeed;

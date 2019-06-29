@@ -1,9 +1,6 @@
 #include "KeyboardInput.h"
 #include "Utils/Utils.h"
 
-
-
-
 KeyboardInput::KeyboardInput()
 {
 	if (!Init())
@@ -127,7 +124,7 @@ void KeyboardInput::SetKeyboardAxisState(bool bIsPressed, KeyCode keyCode)
 float KeyboardInput::GetAxisInput(const String& axisName) const
 {
 	float value = 0;
-	if (Utils::ContainsKey(m_keyboardAxis, axisName))
+	if (HasAxisInput(axisName))
 	{
 		// Return the sum of all axis key values
 		value = m_keyboardAxis.at(axisName).currentValue;

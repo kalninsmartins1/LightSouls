@@ -32,6 +32,9 @@ public:
 	// Return current normalized axis value
 	float				GetInputAxis(const String& axis) const;
 
+	// Returs axisA as x and axisB as y current normalized values
+	void				GetCombinedInputAxis(const String& axisA, const String& axisB, Vector2& outResult) const;
+
 	static GameInput* Create(const String& pathToConfig);
 	void Update(float deltaTime);
 	void AddAxisActionInput(GameInputType inputType, const String& actionName,
@@ -55,6 +58,8 @@ private:
 
 	void AddMouseActionButton(const String& actionName, const String& inputCode) const;
 	void AddMouseStateButton(const String& actionName, const String& inputCode) const;
+	void AddMouseAxis(const String& actionName, const String& axisName,
+		float valueFrom, float valueTo) const;
 
 	void AddGameControllerActionButtons(const String& actionName, const String& inputCode) const;
 	void AddGameControllerStateButtons(const String& actionName, const String& inputCode) const;

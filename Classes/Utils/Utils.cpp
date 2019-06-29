@@ -3,8 +3,7 @@
 #include "World/Entity/Components/MirrorSpriteComponent.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "Input/InputTypes/GameController/GameControllerInput.h"
-
-
+#include "Input/InputTypes/Mouse/MouseInput.h"
 
 Utils::Utils()
 {
@@ -169,6 +168,22 @@ float Utils::GetSignedRadiansBetweenVectors(const Vector2& v1, const Vector2& v2
 	{
 		result += 2 * GameConsts::PI;
 	}
+	return result;
+}
+
+MouseAxisType Utils::ConvertStringToMouseAxisType(const String & axisName)
+{
+	MouseAxisType result = MouseAxisType::NONE;
+
+	if (axisName == "X")
+	{
+		result = MouseAxisType::X;
+	}
+	else if (axisName == "Y")
+	{
+		result = MouseAxisType::Y;
+	}
+
 	return result;
 }
 

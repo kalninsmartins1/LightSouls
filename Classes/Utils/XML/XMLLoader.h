@@ -18,6 +18,7 @@ class ProjectileConfig;
 class PhysicsBodyConfig;
 class GameSpeedModifier;
 class VFXManager;
+class Cursor;
 enum class GameInputType;
 
 using LoadInputCallback = std::function<void(GameInput&, const XMLElement*,
@@ -33,6 +34,7 @@ public:
 	static bool InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager,
 		const String& pathToXML);
 	static bool InitializeProjectileConfig(ProjectileConfig& config, const String& pathToXML);
+	static bool InitializeCursor(Cursor& cursor, const String& pathToXML);
 	static bool InitializeComponents(cc::Node& node, const String& pathToXML);
 	static bool InitializeComponent(cc::Node& node, const XMLElement& element, const String& componentType);
 	static bool InitializeGameSpeedModifier(GameSpeedModifier& speedModifier, const String& pathToXML);
@@ -55,9 +57,7 @@ private:
 		LoadInputCallback onMouseInput, LoadInputCallback onGameControllerInput);
 
 	static void						LoadBackgroundActions(cc::Node& noed, const XMLElement& xmlElement);
-	static void						LoadKeyboardAxis(GameInput& gameInput,
-		const XMLElement* pElement, const String& actionName);
-	static void						LoadGameControllerAxis(GameInput& gameInput,
+	static void						LoadInputAxis(GameInput& gameInput, GameInputType inputType,
 		const XMLElement* element, const String& actionName);
 
 	static void						LoadActionButton(GameInput& gameInput, GameInputType inputType,

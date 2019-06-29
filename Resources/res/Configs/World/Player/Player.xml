@@ -18,7 +18,8 @@
 	<Component type="PlayerControllerComponent"
 				dodgeSpeed="800"
 				dodgeTime="0.45"
-				dodgeStaminaConsumption="10">
+				dodgeStaminaConsumption="10"
+				pathToCursor="res/Configs/World/Player/Cursor.xml">
 	</Component>
 	
 	<!-- "secondsBetweenAttacks" - Time when next attack becomes possible -->

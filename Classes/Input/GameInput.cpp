@@ -5,8 +5,6 @@
 #include "Input/InputTypes/GameController/GameControllerInput.h"
 #include "Utils/Utils.h"
 
-
-
 GameInput::GameInput()
 	: m_keyboard(nullptr)
 	, m_mouseInput(nullptr)
@@ -71,6 +69,12 @@ float GameInput::GetInputAxis(const String& axisAction) const
 	}
 
 	return value;
+}
+
+void GameInput::GetCombinedInputAxis(const String& axisA, const String& axisB, Vector2& outResult) const
+{
+	outResult.x = GetInputAxis(axisA);
+	outResult.y = GetInputAxis(axisB);	
 }
 
 GameInput* GameInput::Create(const String& pathToConfig)
@@ -156,11 +160,12 @@ void GameInput::AddAxisActionInput(GameInputType inputType, const String& action
 	switch (inputType)
 	{
 	case GameInputType::KEYBOARD:
+		// Keyboard needs to buttons to simulate axis
 		AddKeyboardAxis(actionName, keyCodeFromStr, keyCodeToStr, valueFrom, valueTo);
 		break;
 
 	case GameInputType::MOUSE:
-		// Currently there is no axis input for mouse
+		AddMouseAxis(actionName, keyCodeFromStr, valueFrom, valueTo);
 		break;
 
 	case GameInputType::GAME_CONTROLLER:
@@ -257,6 +262,15 @@ void GameInput::AddMouseStateButton(const String& actionName, const String& inpu
 {
 	const int buttonCode = static_cast<int>(Utils::ConvertStringToMouseButtonCode(inputCode));
 	m_mouseInput->AddStateButton(actionName, buttonCode);
+}
+
+void GameInput::AddMouseAxis(const String & actionName, const String & axisName, float valueFrom, float valueTo) const
+{
+	if (m_mouseInput != nullptr)
+	{
+		const MouseAxisType type = Utils::ConvertStringToMouseAxisType(axisName);
+		m_mouseInput->AddAxisAction(actionName, MouseAxis(type, valueFrom, valueTo));
+	}
 }
 
 void GameInput::AddGameControllerActionButtons(const String& actionName, const String& inputCode) const

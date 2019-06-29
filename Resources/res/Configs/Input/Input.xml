@@ -16,6 +16,24 @@
 		</GameController>
 	</Axis>
 	
+	<Axis name="VerticalLook">
+		<Mouse>
+			<MouseAxis axisCode="Y" valueFrom="-1" valueTo="1"/>
+		</Mouse>
+		<GameController>
+			<ControllerAxis axisCode="RIGHT_STICK_Y" valueFrom="-1" valueTo="1"/>
+		</GameController>
+	</Axis>
+	
+	<Axis name="HorizontalLook">
+		<Mouse>
+			<MouseAxis axisCode="X" valueFrom="-1" valueTo="1"/>
+		</Mouse>
+		<GameController>
+			<ControllerAxis axisCode="RIGHT_STICK_X" valueFrom="-1" valueTo="1"/>
+		</GameController>
+	</Axis>
+	
 	<ActionButton name="LightAttackInput">
 		<Mouse>
 			<MouseButton buttonCode="LeftButton"/>

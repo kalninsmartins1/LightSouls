@@ -71,7 +71,7 @@ private:
 	
 private:
 	std::map<String, KeyboardAxis> m_keyboardAxis;
-	std::map<KeyCode, String> m_keyCodeToAxisAction;	
+	std::map<KeyCode, String>      m_keyCodeToAxisAction;	
 };
 
 

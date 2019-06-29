@@ -115,9 +115,6 @@ bool GameScene::init()
 		CCASSERT(false, "HelloWorldScene: Failed to initialize PhysicsManager !");
 	}
 
-	Node* worldLayer = InitWolrdLayer();
-	InitUILayer();	
-
 	// Init Input
 	s_gameInput = GameInput::Create("res/Configs/Input/Input.xml");
 	if (s_gameInput == nullptr)
@@ -125,6 +122,9 @@ bool GameScene::init()
 		// Halt the game when in debug mode
 		CCASSERT(false, "GameScene: Failed to load input configuration !");
 	}
+
+	Node* worldLayer = InitWolrdLayer();
+	InitUILayer();	
 
 	m_gameSpeedModifier.Init("res/Configs/World/GameSpeedModifier.xml");	
 	InitVFXManger(worldLayer);
