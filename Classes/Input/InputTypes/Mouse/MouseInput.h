@@ -4,8 +4,6 @@
 #include "Input/InputTypes/AInputDevice.h"
 #include "Utils/Utils.h"
 
-
-
 using MouseButtonCode = cocos2d::EventMouse::MouseButton;
 
 enum class MouseAxisType : char
@@ -49,21 +47,28 @@ public:
 public:	
 	virtual bool	HasAxisInput(const String& axisName) const override;
 	virtual float	GetAxisInput(const String& axisName) const override;
+	const Vector2&	GetMousePos() const;
 
 	void			AddAxisAction(const String& actionName, const MouseAxis& axis);
+	void			InitSettings(const XMLElement& element);
 	bool			Init();
 	
 private:
 	void SetActionButtonState(bool isActive, const MouseButtonCode& keyCode);
 	void SetStateButtonState(bool isPressed, const MouseButtonCode& keyCode);
 	
-	void UpdateMouseAxis(const Vector2& moveDirection);
-	void OnMouseButtonDown(cc::EventMouse* eventData);
-	void OnMouseButtonUp(cc::EventMouse* eventData);
-	void OnMouseMoved(cc::EventMouse* eventData);
+	void	InitAxisDiffValues();
+	float	GetPosInTargetRange(const Range<float>& curRange, const Range<float>& targetRange, const float pos);
+	void	UpdateMouseAxis(const Vector2& newPos);
+	void	OnMouseButtonDown(cc::EventMouse* eventData);
+	void	OnMouseButtonUp(cc::EventMouse* eventData);
+	void	OnMouseMoved(cc::EventMouse* eventData);
 
 private:
 	std::map<String, MouseAxis> m_mouseAxis;
+	Range<float>				m_xAxisRange;
+	Range<float>				m_yAxisRange;
+	Vector2						m_lastMousePos;
 };
 
 

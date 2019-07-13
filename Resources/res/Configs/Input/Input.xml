@@ -1,4 +1,5 @@
 <InputSettings>
+	
 	<Axis name="VerticalMovement">
 		<Keyboard>
 			<KeyboardAxis keyCodeFrom="W" keyCodeTo="S" valueFrom="1" valueTo="-1"/>

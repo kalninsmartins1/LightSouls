@@ -77,6 +77,22 @@ void GameInput::GetCombinedInputAxis(const String& axisA, const String& axisB, V
 	outResult.y = GetInputAxis(axisB);	
 }
 
+bool GameInput::GetMousePos(Vector2& outPos) const
+{
+	bool hasResult = false;
+	if (m_gameControllerInput == nullptr || !m_gameControllerInput->IsConnected())
+	{
+		outPos = m_mouseInput->GetMousePos();
+		hasResult = true;
+	}
+	else
+	{
+		outPos = Vector2::ZERO;
+	}
+
+	return hasResult;
+}
+
 GameInput* GameInput::Create(const String& pathToConfig)
 {
 	GameInput* input = new (std::nothrow) GameInput();
@@ -229,6 +245,14 @@ void GameInput::ResetInputState()
 	m_keyboard->ResetInputState();
 	m_mouseInput->ResetInputState();
 	m_gameControllerInput->ResetInputState();
+}
+
+void GameInput::InitMouseSettings(const XMLElement& element)
+{
+	if (m_mouseInput.get() != nullptr)
+	{
+		m_mouseInput->InitSettings(element);
+	}
 }
 
 void GameInput::AddKeyboardActionKey(const String& actionName, const String& inputCode) const

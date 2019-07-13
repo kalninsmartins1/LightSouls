@@ -89,7 +89,7 @@ void Entity::setScale(float scaleX, float scaleY)
 {
 	Sprite::setScale(scaleX, scaleY);
 	float entityScale = Utils::Avg(scaleX, scaleY);
-	SetBaseMoveSpeed(m_baseMoveSpeed * entityScale * Utils::SafeDevide(1.0f, Utils::GetScaleFactor()));
+	SetBaseMoveSpeed(m_baseMoveSpeed * entityScale * Utils::SafeDivide(1.0f, Utils::GetScaleFactor()));
 }
 
 void Entity::ResetHealth()

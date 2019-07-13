@@ -1,6 +1,7 @@
 #include "Cursor.h"
 #include "Classes/Utils/XML/XMLLoader.h"
 #include "Classes/Input/GameInput.h"
+#include "Classes/Utils/Utils.h"
 
 Cursor* Cursor::Create(cc::Node& owner, const GameInput& gameInput, const String& pathToXML)
 {
@@ -24,13 +25,23 @@ const Vector2& Cursor::GetLookAtDirection() const
 
 void Cursor::Update(float deltaTime)
 {
-	const Vector2& playerPos = m_owner.getPosition();
 	Vector2 axisInput;
-	m_gameInput.GetCombinedInputAxis(m_horizontalInputAxisName, m_verticalInputAxisName, axisInput);
-	axisInput.normalize();
+	GetAxisInput(axisInput);
 
-	Vector2 cursorPos = playerPos + axisInput * m_distanceFromPlayer;
-	setPosition(cursorPos);
+	if (axisInput.lengthSquared() > 0.0f)
+	{
+		axisInput.normalize();
+		UpdatePosition(axisInput);
+
+		if (!isVisible())
+		{
+			setVisible(true);
+		}
+	}
+	else if(isVisible())
+	{
+		setVisible(false);
+	}
 }
 
 void Cursor::SetDistanceFromPlayer(float distance)
@@ -59,11 +70,47 @@ Cursor::Cursor(const cc::Node& owner, const GameInput& gameInput)
 	: m_owner(owner)
 	, m_gameInput(gameInput)
 	, m_distanceFromPlayer(0.0f)
+	, m_windowSize(Vector2::ZERO)
 {
 
 }
 
+void Cursor::GetAxisInput(Vector2& outInput) const
+{
+	Vector2 mousePos;
+	const Vector2& playerPos = m_owner.getPosition();
+
+	if (m_gameInput.GetMousePos(mousePos))
+	{
+		Vector2 worldPos;
+		GetWorldPos(mousePos, worldPos);
+		outInput = (worldPos - playerPos).getNormalized();
+	}
+	else
+	{
+		m_gameInput.GetCombinedInputAxis(m_horizontalInputAxisName, m_verticalInputAxisName, outInput);
+	}
+}
+
+void Cursor::GetWorldPos(const Vector2& mousePos, Vector2& outPos) const
+{
+	outPos = mousePos - (m_windowSize / 2.0f);
+}
+
 bool Cursor::Init(cc::Node& owner, const String& pathToXML)
 {
-	return XMLLoader::InitializeCursor(*this, pathToXML);
+	cc::Director* director = cc::Director::getInstance();
+	if (director != nullptr)
+	{
+		m_windowSize = director->getVisibleSize();
+	}
+
+	return m_windowSize.width > 0 && XMLLoader::InitializeCursor(*this, pathToXML);
+}
+
+void Cursor::UpdatePosition(const Vector2& axisInput)
+{
+	const Vector2& playerPos = m_owner.getPosition();
+	Vector2 cursorPos = playerPos + axisInput * m_distanceFromPlayer;
+	setPosition(cursorPos);
 }

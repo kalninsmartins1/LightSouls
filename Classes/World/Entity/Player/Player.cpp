@@ -286,7 +286,7 @@ void Player::DispatchOnHealthReduceEvent()
 {
 	// Dispatch health changed event
 	float currentHealth = GetCurrentHealth();
-	float healthPercentage = Utils::SafeDevide(currentHealth, GetMaxHealth());
+	float healthPercentage = Utils::SafeDivide(currentHealth, GetMaxHealth());
 	auto eventData = ValueChangedEventData(GetId(), currentHealth, healthPercentage);
 	DispatchEvent(s_eventOnPlayerHealthChanged, &eventData);	
 }
@@ -294,7 +294,7 @@ void Player::DispatchOnHealthReduceEvent()
 void Player::DispatchOnStaminaChangedEvent() const
 {
 	float currentStamina = GetCurrentStamina();
-	float staminaPercentage = Utils::SafeDevide(currentStamina, GetMaxStamina());
+	float staminaPercentage = Utils::SafeDivide(currentStamina, GetMaxStamina());
 	auto eventData = ValueChangedEventData(GetId(), currentStamina, staminaPercentage);
 	DispatchEvent(s_eventOnPlayerStaminaChanged, &eventData);	
 }

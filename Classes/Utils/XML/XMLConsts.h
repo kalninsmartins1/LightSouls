@@ -121,6 +121,7 @@ namespace XMLConsts
 	static constexpr char* INPUT_AXIS_NAME = "axisCode";
 	static constexpr char* INPUT_VERTICAL_AXIS_NAME = "verticalInputAxisName";
 	static constexpr char* INPUT_HORIZONTAL_AXIS_NAME = "horizontalInputAxisName";
+	static constexpr char* INPUT_MOUSE_AXIS_THRESHOLD = "mouseAxisThreshold";
 
 	// XML input types
 	static constexpr char* INPUT_AXIS = "Axis";

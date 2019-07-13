@@ -61,7 +61,7 @@ const cocos2d::Size& Utils::GetScreenSize()
 	return cocos2d::Director::getInstance()->getWinSize();
 }
 
-float Utils::SafeDevide(const float& up, const float& down)
+float Utils::SafeDivide(const float& up, const float& down)
 {
 	float result = 0;
 	if (down > 0)

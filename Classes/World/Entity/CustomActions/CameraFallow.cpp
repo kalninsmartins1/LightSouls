@@ -50,7 +50,7 @@ void CameraFollow::step(float dt)
 void CameraFollow::ProcessStateEasingIn(float dt, const Vector2& cameraPos, const Vector2& toFollowNodeNormalized, float distance)
 {	
 	// Make sure we reach max speed during ease in time
-	m_curSpeed += Utils::SafeDevide(m_maxSpeed, m_easeInTime) * dt;
+	m_curSpeed += Utils::SafeDivide(m_maxSpeed, m_easeInTime) * dt;
 
 	float moveAmount = m_curSpeed * dt;
 	if (m_curSpeed >= m_maxSpeed || distance <= moveAmount)
@@ -81,7 +81,7 @@ void CameraFollow::ProcessStateFullSpeed(float dt, const Vector2& cameraPos, con
 void CameraFollow::ProcessStateEasingOut(float dt, const Vector2& cameraPos, const Vector2& toFollowNodeNormalized, float distance)
 {
 	// Cur speed reaches 0 in ease out time	
-	m_curSpeed -= Utils::SafeDevide(m_maxSpeed, m_easeOutTime) * dt; 
+	m_curSpeed -= Utils::SafeDivide(m_maxSpeed, m_easeOutTime) * dt; 
 
 	float moveAmount = m_curSpeed * dt;
 	if (m_curSpeed <= 0 || distance <= moveAmount)

@@ -1,7 +1,11 @@
 #include "MouseInput.h"
 #include "Utils/Utils.h"
+#include "Utils/XML/XMLConsts.h"
 
 MouseInput::MouseInput()
+	: m_xAxisRange(0.0f, 0.0f)
+	, m_yAxisRange(0.0f, 0.0f)
+	, m_lastMousePos(Vector2::ZERO)
 {
 	if(!Init())
 	{
@@ -12,6 +16,11 @@ MouseInput::MouseInput()
 void MouseInput::AddAxisAction(const String& actionName, const MouseAxis& axis)
 {
 	m_mouseAxis[actionName] = axis;
+}
+
+void MouseInput::InitSettings(const XMLElement& element)
+{
+	// TODO: Consider unpacking XML values within here
 }
 
 bool MouseInput::Init()
@@ -26,7 +35,8 @@ bool MouseInput::Init()
 
 	auto eventDispatcher = Director::getInstance()->getEventDispatcher();
 	eventDispatcher->addEventListenerWithFixedPriority(mouseListener, 1);
-		
+	InitAxisDiffValues();
+
 	return eventDispatcher != nullptr;
 }
 
@@ -40,33 +50,54 @@ float MouseInput::GetAxisInput(const String& axisName) const
 	return value;
 }
 
-bool MouseInput::HasAxisInput(const String& axisName) const
+const Vector2& MouseInput::GetMousePos() const
 {
-	return Utils::ContainsKey(m_mouseAxis, axisName);;
+	return m_lastMousePos;
 }
 
-void MouseInput::UpdateMouseAxis(const Vector2& moveDirection)
+bool MouseInput::HasAxisInput(const String& axisName) const
 {
+	return Utils::ContainsKey(m_mouseAxis, axisName);
+}
+
+void MouseInput::InitAxisDiffValues()
+{
+	cc::Director* director = cc::Director::getInstance();
+	if (director != nullptr)
+	{
+		cc::Size winSize = director->getVisibleSize();
+		m_xAxisRange.maxVal = winSize.width;
+		m_yAxisRange.maxVal = winSize.height;
+	}
+}
+
+float MouseInput::GetPosInTargetRange(const Range<float>& curRange, const Range<float>& targetRange, const float pos)
+{
+	float newRangeValue = pos;
+	Utils::MapValueToBidirectionalRange(curRange, targetRange, newRangeValue);
+	return newRangeValue;
+}
+
+void MouseInput::UpdateMouseAxis(const Vector2& newPos)
+{
+	Vector2 posDiff = newPos - m_lastMousePos;
 	for (auto& axis : m_mouseAxis)
 	{
 		MouseAxis& mouseAxis = axis.second;
 		const MouseAxisType curType = mouseAxis.type;
-		const float minValue = mouseAxis.valueFrom;
-		const float maxValue = mouseAxis.valueTo;
-		float newValue = 0.0f;
+		const Range<float> targetRange(mouseAxis.valueFrom, mouseAxis.valueTo);
 
 		if (curType == MouseAxisType::X)
 		{
-			newValue = moveDirection.x;
+			mouseAxis.curValue = GetPosInTargetRange(m_xAxisRange, targetRange, posDiff.x);
 		}
 		else if (curType == MouseAxisType::Y)
 		{
-			newValue = moveDirection.y;
+			mouseAxis.curValue = GetPosInTargetRange(m_yAxisRange, targetRange, posDiff.y);
 		}
-
-		Utils::ClampValue(newValue, minValue, maxValue);
-		mouseAxis.curValue = newValue;
 	}
+
+	m_lastMousePos = newPos;
 }
 
 void MouseInput::OnMouseButtonDown(cocos2d::EventMouse* pEvent)
@@ -87,8 +118,8 @@ void MouseInput::OnMouseButtonUp(cocos2d::EventMouse* pEvent)
 void MouseInput::OnMouseMoved(cc::EventMouse* eventData)
 {
 	if (eventData != nullptr)
-	{
-		UpdateMouseAxis(eventData->getDelta());
+	{	
+		UpdateMouseAxis(eventData->getLocationInView());
 	}
 }
 

@@ -62,7 +62,7 @@ void BlurAnimationFrame::Update(float deltaTime)
 	if (m_delayTime <= 0 && !m_isFadeOutFinished && m_sprite != nullptr)
 	{
 		m_curTime += deltaTime;		
-		float opacity = GameConsts::FULL_OPAQUE * Utils::SafeDevide(m_curTime, m_fadeOutTime);
+		float opacity = GameConsts::FULL_OPAQUE * Utils::SafeDivide(m_curTime, m_fadeOutTime);
 		m_sprite->setOpacity(opacity);
 		if (m_curTime >= m_fadeOutTime)
 		{

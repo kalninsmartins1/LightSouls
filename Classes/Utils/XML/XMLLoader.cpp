@@ -661,6 +661,11 @@ bool XMLLoader::LoadInputSettings(GameInput & gameInput, const String & pathToCo
 		const XMLElement* pRootNode = doc.RootElement();
 		const XMLElement* pFirstElement = pRootNode->FirstChildElement();
 
+		if (pRootNode != nullptr)
+		{
+			gameInput.InitMouseSettings(*pRootNode);
+		}
+
 		// Load all input configurations
 		for (const XMLElement* pElem = pFirstElement; pElem != nullptr;
 			pElem = pElem->NextSiblingElement())

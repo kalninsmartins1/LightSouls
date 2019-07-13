@@ -10,6 +10,25 @@ enum class MouseAxisType : char;
 using MouseButtonCode = cocos2d::EventMouse::MouseButton;
 using KeyCode = cocos2d::EventKeyboard::KeyCode;
 
+template <typename T>
+struct Range
+{
+	T minVal;
+	T maxVal;
+
+	Range()
+	{
+
+	}
+
+	Range(T minVal, T maxVal)
+		: minVal(minVal)
+		, maxVal(maxVal)
+	{
+
+	}
+};
+
 class Utils
 {	
 public:
@@ -32,7 +51,7 @@ public:
 	static long long			GetTimeStampInMilliseconds();
 	static float				GetScaleFactor();
 
-	static float		SafeDevide(const float& up, const float& down);
+	static float		SafeDivide(const float& up, const float& down);
 	static float		ConvertMillisecondsToSeconds(long long milliseconds);
 	static void			StartTimerWithCallback(cocos2d::Node* node,
 							std::function<void()> callback, float time, int tag = GameConsts::ACTION_TIMER);
@@ -64,8 +83,15 @@ public:
 	template <typename T>
 	static void ClampValue(T& value, const T& minValue, const T& maxValue);
 	
+	// If value is less than threshold, then it is set to 0
+	template <typename T>
+	static void ThresholdAbsValue(T& value, const T& tresholdValue);
+
 	template <typename T>
 	static void WrapValue(T& value, const T& startValue, const T& endValue);
+	
+	template <typename T>
+	static void MapValueToBidirectionalRange(const Range<T>& curRange, const Range<T>& targetRange, T& value);
 
 private:
 	Utils();
@@ -132,6 +158,15 @@ void Utils::ClampValue(T& value, const T& minValue, const T& maxValue)
 	}	
 }
 
+template<typename T>
+inline void Utils::ThresholdAbsValue(T& value, const T& tresholdValue)
+{
+	if (abs(value) < tresholdValue)
+	{
+		value = 0.0f;
+	}
+}
+
 template <typename T>
 void Utils::WrapValue(T& value, const T& startValue, const T& endValue)
 {
@@ -143,5 +178,27 @@ void Utils::WrapValue(T& value, const T& startValue, const T& endValue)
 	{
 		value = endValue;
 	}
+}
+
+template<typename T>
+inline void Utils::MapValueToBidirectionalRange(const Range<T>& curRange, const Range<T>& targetRange, T& value)
+{
+	/* Maps value on bidirectional range which means
+	 * that the value from mid point of range can grow
+	 * towards range start or to range end.
+	 *
+	 * Example
+	 * (-1920) - 1920 ---> -1 - 1 | 1920 - (-1920) = 3840
+	 * 600 ---> 600/3840 = 0.15625
+	 * (-1) -1 = 2 * 0.15625 = 0.3125
+	*/
+
+	// Get cur value range ratio
+	T curRangeMagnitude = curRange.maxVal - curRange.minVal;
+	T curValueRangeRatio = SafeDivide(value, curRangeMagnitude);
+
+	// Use range ratio to get same portion of target range
+	T targetRangeMagnitude = targetRange.maxVal - targetRange.minVal;
+	value = targetRangeMagnitude * curValueRangeRatio;
 }
 

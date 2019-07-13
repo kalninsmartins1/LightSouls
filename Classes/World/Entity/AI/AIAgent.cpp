@@ -197,7 +197,7 @@ float AIAgent::GetAttackRange() const
 
 float AIAgent::GetStoppingDistance() const
 {
-	return Utils::SafeDevide(GetCurrentMoveSpeed(), GetPhysicsBodyForceScale());
+	return Utils::SafeDivide(GetCurrentMoveSpeed(), GetPhysicsBodyForceScale());
 }
 
 const String& AIAgent::GetType() const

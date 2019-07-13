@@ -3,8 +3,6 @@
 #include "LightSoulsTypes.h"
 #include <memory>
 
-
-
 class KeyboardInput;
 class MouseInput;
 class GameControllerInput;
@@ -35,6 +33,9 @@ public:
 	// Returs axisA as x and axisB as y current normalized values
 	void				GetCombinedInputAxis(const String& axisA, const String& axisB, Vector2& outResult) const;
 
+	// Returns true if mouse is currently being used
+	bool				GetMousePos(Vector2& outPos) const;
+
 	static GameInput* Create(const String& pathToConfig);
 	void Update(float deltaTime);
 	void AddAxisActionInput(GameInputType inputType, const String& actionName,
@@ -43,6 +44,7 @@ public:
 	void AddActionInput(GameInputType inputType, const String& actionName, const String& buttonCode) const;
 	void AddStateInput(GameInputType inputType, const String& actionName, const String& buttonCode) const;
 	void ResetInputState();
+	void InitMouseSettings(const XMLElement& element);
 
 private:
 	GameInput();
