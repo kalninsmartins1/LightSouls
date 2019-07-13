@@ -88,7 +88,7 @@ void StateAvoid::ProcessAnimations()
 	AIAgent& agent = GetAgent();
 	if (!agent.IsProcessing())
 	{
-		bool isMoving = agent.GetHeading().lengthSquared() > 0;
+		bool isMoving = agent.GetMoveDirection().lengthSquared() > 0;
 		if (isMoving && !m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
 		{
 			float curScaleX = agent.getScaleX();

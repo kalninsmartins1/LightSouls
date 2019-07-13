@@ -32,6 +32,7 @@ void Cursor::Update(float deltaTime)
 	{
 		axisInput.normalize();
 		UpdatePosition(axisInput);
+		m_lookAtDirection = axisInput;
 
 		if (!isVisible())
 		{

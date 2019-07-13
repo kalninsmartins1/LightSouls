@@ -21,7 +21,8 @@ public:
 public:
 	virtual EntityType		GetEntityType() const;
 	float					GetCurrentMoveSpeed() const;
-	const Vector2&			GetHeading() const;
+	const Vector2&			GetMoveDirection() const;
+	const Vector2&			GetLookAtDirection() const;
 	const cocos2d::Size&	GetPhysicsBodySizeScaled() const;
 	float					GetHealth() const;
 	float					GetDamage() const;	
@@ -46,6 +47,7 @@ public:
 	void			SetBaseStamina(float baseStamina);
 	void			SetBaseMoveSpeed(float moveSpeed);
 	void			SetMoveDirection(const Vector2& direction);
+	void			SetLookAtDirection(const Vector2& direction);
 	void			SetPhysicsBodySize(const cocos2d::Size& size);
 	void			SetPhysicsBodyAnchor(const Vector2& achorPos);	
 	void			SetCurrentMoveSpeed(float moveSpeed);
@@ -100,6 +102,7 @@ private:
 
 	AnimComponent*			m_animComponent;
 	Vector2					m_moveDirection;
+	Vector2					m_lookAtDirection;
 	cocos2d::Size			m_physicsBodyScaledSize;
 	
 	bool m_isRuning;

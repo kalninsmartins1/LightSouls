@@ -102,6 +102,7 @@ void Player::Update(float deltaTime)
 		if (m_cursor != nullptr)
 		{
 			m_cursor->Update(deltaTime);
+			SetLookAtDirection(m_cursor->GetLookAtDirection());
 		}
 
 		// We can move only when we are not attacking
@@ -243,7 +244,7 @@ void Player::Attack(GenericAttackComponent& attackComponent)
 {	
 	if (!m_isDodging && attackComponent.IsReadyToAttack())
 	{
-		attackComponent.Attack(m_lastValidMoveDirection);
+		attackComponent.Attack(GetLookAtDirection());
 		StartAttacking();		
 	}
 }

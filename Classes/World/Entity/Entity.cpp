@@ -125,6 +125,11 @@ void Entity::SetMoveDirection(const Vector2& direction)
 	m_moveDirection = direction;
 }
 
+void Entity::SetLookAtDirection(const Vector2& direction)
+{
+	m_lookAtDirection = direction;
+}
+
 void Entity::SetPhysicsBodySize(const cocos2d::Size& size)
 {
 	const float scaleFactor = Utils::GetScaleFactor();
@@ -229,7 +234,7 @@ void Entity::ApplyKnockbackEffect(const Entity& attackingEntity)
 
 void Entity::ApplyInstantSpeed(float speed)
 {
-	ApplyInstantSpeedInDirection(speed, GetHeading());
+	ApplyInstantSpeedInDirection(speed, GetMoveDirection());
 }
 
 void Entity::ApplyInstantSpeedInDirection(float speed, const Vector2& direction)
@@ -419,9 +424,14 @@ float Entity::GetCurrentMoveSpeed() const
 	return m_moveSpeed;
 }
 
-const Vector2& Entity::GetHeading() const
+const Vector2& Entity::GetMoveDirection() const
 {	
 	return m_moveDirection;
+}
+
+const Vector2& Entity::GetLookAtDirection() const
+{
+	return m_lookAtDirection;
 }
 
 const cocos2d::Size& Entity::GetPhysicsBodySizeScaled() const

@@ -19,15 +19,15 @@ void MirrorSpriteComponent::update(float delta)
 	if (m_ownerEntity != nullptr) 
 	{
 		// Mirror the sprite based on heading direction
-		const Vector2 entityHeading = m_ownerEntity->GetHeading();
-		if (abs(entityHeading.y) < m_sensitivity)
+		const Vector2 lookAt = m_ownerEntity->GetLookAtDirection();
+		if (abs(lookAt.y) < m_sensitivity)
 		{
 			const float absScaleX = abs(m_ownerEntity->getScaleX());
-			if (entityHeading.x > m_sensitivity)
+			if (lookAt.x > m_sensitivity)
 			{
 				m_ownerEntity->setScaleX(absScaleX);
 			}
-			else if (entityHeading.x < -m_sensitivity)
+			else if (lookAt.x < -m_sensitivity)
 			{
 				m_ownerEntity->setScaleX(-absScaleX);
 			}

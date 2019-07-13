@@ -57,7 +57,7 @@ void AIAvoidTargetAction::OnCollisionCheck()
 	const Vector2& curPosition = m_agent.getPosition();
 	PhysicsManager::Raycast(CC_CALLBACK_3(AIAvoidTargetAction::OnRayCastCallback, this),
 		curPosition,
-		curPosition + m_agent.GetHeading() * m_startAvoidingDistance);
+		curPosition + m_agent.GetMoveDirection() * m_startAvoidingDistance);
 }
 
 bool AIAvoidTargetAction::OnRayCastCallback(cocos2d::PhysicsWorld& world, const cocos2d::PhysicsRayCastInfo& info, void* data)
@@ -110,7 +110,7 @@ void AIAvoidTargetAction::StartAvoiding(const Entity* targetEntity)
 	const Vector2& curPosition = m_agent.getPosition();
 	PhysicsManager::Raycast(CC_CALLBACK_3(AIAvoidTargetAction::OnRayCastCallback, this),
 		curPosition,
-		curPosition + m_agent.GetHeading() * m_startAvoidingDistance);
+		curPosition + m_agent.GetMoveDirection() * m_startAvoidingDistance);
 
 	Vector2 awayFromTarget = m_agent.getPosition() - targetEntity->getPosition();
 	awayFromTarget.normalize();

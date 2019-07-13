@@ -280,7 +280,7 @@ void AnimComponent::SetCurrentAnimId(int currentAnimId)
 
 void AnimComponent::UpdateAnimState(const Entity& entity)
 {
-	const Vector2& heading = entity.GetHeading();
+	const Vector2& heading = entity.GetMoveDirection();
 	const float absoluteXValue = abs(heading.x);
 	const float absoluteYValue = abs(heading.y);
 
