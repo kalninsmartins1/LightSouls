@@ -36,7 +36,7 @@ public:
 	// implement the "static create()" method manually
 	CREATE_FUNC(GameScene);
 
-    virtual bool init() override;    
+    virtual bool init() override;
 	virtual void update(float deltaTime) override;
 
 private:
@@ -44,6 +44,7 @@ private:
 	void InitUILayer();
 	void StartGameOverFadeIn(float time);
 	void SwitchToGameOverScene();
+	void DisableMouseCursor();
 	void ProcessDebugPhysicsDraw();
 	void OnPlayerHealthChanged(cc::EventCustom* eventData);
 	void OnPlayerStaminaChanged(cc::EventCustom* eventData);

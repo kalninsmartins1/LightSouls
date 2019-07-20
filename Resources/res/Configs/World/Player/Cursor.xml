@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Cursor distanceFromPlayer="100"
+<Cursor distanceFromPlayer="120"
 		verticalInputAxisName="VerticalLook"
 		horizontalInputAxisName="HorizontalLook">
 	<Component type="SpriteComponent" path="res/Graphics/World/Player/cursor.png" />

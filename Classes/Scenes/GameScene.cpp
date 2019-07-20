@@ -130,8 +130,22 @@ bool GameScene::init()
 	InitVFXManger(worldLayer);
 	RegisterForEvents();
 	scheduleUpdate();
-    
+	DisableMouseCursor();
+
     return true;
+}
+
+void GameScene::DisableMouseCursor()
+{
+	auto* director = Director::getInstance();
+	if (director != nullptr)
+	{
+		auto* gameView = director->getOpenGLView();
+		if (gameView != nullptr)
+		{
+			gameView->setCursorVisible(false);
+		}
+	}
 }
 
 void GameScene::update(float deltaTime)
