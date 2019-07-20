@@ -16,8 +16,8 @@
 	</Component>
 	
 	<Component type="PlayerControllerComponent"
-				dodgeSpeed="800"
-				dodgeTime="0.45"
+				dodgeSpeed="1600"
+				dodgeTime="0.225"
 				dodgeStaminaConsumption="10"
 				pathToCursor="res/Configs/World/Player/Cursor.xml">
 	</Component>
