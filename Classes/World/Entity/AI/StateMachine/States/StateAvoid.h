@@ -1,10 +1,17 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
 #include "AState.h"
+#include "Classes/Core/Math/Vector2.h"
+
+namespace tinyxml2
+{
+	class XMLElement;
+};
 
 class Entity;
 class GenericAttackComponent;
+
+using XMLElement = tinyxml2::XMLElement;
 
 class StateAvoid : public AState
 {

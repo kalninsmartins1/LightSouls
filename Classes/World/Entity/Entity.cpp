@@ -4,14 +4,17 @@
 #include "Utils/Utils.h"
 #include "Classes/Utils/AnimationUtils.h"
 #include "Classes/World/GameSpeedModifier.h"
+#include "Classes/Core/String/String.h"
 
 unsigned int Entity::s_uniqueId = 0;
 
 Entity::Entity()
 	: m_id(s_uniqueId++)
 	, m_animComponent(nullptr)
-	, m_moveDirection(Vector2::ZERO)
-	, m_physicsBodyScaledSize(cocos2d::Size::ZERO)
+	, m_pos(Vector2::GetZero())
+	, m_lookAtDirection(Vector2::GetZero())
+	, m_moveDirection(Vector2::GetZero())
+	, m_physicsBodyScaledSize(cocos2d::Vec2::ZERO)
 	, m_isRuning(false)
 	, m_isAttacking(false)
 	, m_isTakingDamage(false)
@@ -85,6 +88,12 @@ void Entity::SetTimeModifier(float timeModifier)
 	setTimeModifier(timeModifier);
 }
 
+void Entity::SetPos(const Vector2& pos)
+{
+	setPosition(pos.GetX(), pos.GetY());
+	UpdatePos();
+}
+
 void Entity::setScale(float scaleX, float scaleY)
 {
 	Sprite::setScale(scaleX, scaleY);
@@ -140,10 +149,10 @@ void Entity::SetPhysicsBodySize(const cocos2d::Size& size)
 void Entity::SetPhysicsBodyAnchor(const Vector2& achorPos)
 {
 	const cocos2d::Size& size = GetPhysicsBodySizeScaled();
-	float physicsBodyAnchorX = achorPos.x * size.width;
-	float physicsBodyAnchorY = -size.height + (achorPos.y * size.height);
+	float physicsBodyAnchorX = achorPos.GetX() * size.width;
+	float physicsBodyAnchorY = -size.height + (achorPos.GetY() * size.height);
 
-	_physicsBody->setPositionOffset(Vector2(physicsBodyAnchorX, physicsBodyAnchorY));
+	_physicsBody->setPositionOffset(cocos2d::Vec2(physicsBodyAnchorX, physicsBodyAnchorY));
 }
 
 void Entity::ResetMoveSpeed()
@@ -227,9 +236,9 @@ void Entity::StopAttacking()
 
 void Entity::ApplyKnockbackEffect(const Entity& attackingEntity)
 {	
-	const Vector2 awayFromAttacker = getPosition() - attackingEntity.getPosition();
+	const cocos2d::Vec2 awayFromAttacker = getPosition() - attackingEntity.getPosition();
 	const float speed = attackingEntity.m_knockBackStrenght;
-	ApplyInstantSpeedInDirection(speed, awayFromAttacker.getNormalized());
+	ApplyInstantSpeedInDirection(speed, Vector2(awayFromAttacker.x, awayFromAttacker.y));
 }
 
 void Entity::ApplyInstantSpeed(float speed)
@@ -240,13 +249,21 @@ void Entity::ApplyInstantSpeed(float speed)
 void Entity::ApplyInstantSpeedInDirection(float speed, const Vector2& direction)
 {
 	_physicsBody->setVelocityLimit(speed);
-	_physicsBody->setVelocity(direction * speed);
+	Vector2 finalResult = direction * speed;
+	_physicsBody->setVelocity(cocos2d::Vec2(finalResult.GetX(), finalResult.GetY()));
+}
+
+void Entity::UpdatePos()
+{
+	m_pos.Set(getPositionX(), getPositionY());
 }
 
 void Entity::Update(float deltaTime)
 {
 	Sprite::update(deltaTime);
-	m_isRuning = m_moveDirection.lengthSquared() > 0;
+	UpdatePos();
+
+	m_isRuning = m_moveDirection.GetLenghtSquared() > 0;
 	if (!m_isTakingDamage && !m_isDisappearing)
 	{
 		Move();
@@ -288,7 +305,7 @@ void Entity::PlayHurtAnim()
 
 		if (!m_isAttacking && !isCurrentlyPlayingHurtAnim)
 		{
-			m_isTakingDamage = true;
+			m_isTakingDamage = true;			
 			if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT))
 			{
 				m_animComponent->PlayOneShotAnimation(GameConsts::ANIM_TYPE_HURT,
@@ -333,27 +350,30 @@ void Entity::PlayDissapearAnim()
 
 void Entity::RegisterToEvents()
 {
-	cc::EventDispatcher* dispatcher = getEventDispatcher();
+	cocos2d::EventDispatcher* dispatcher = getEventDispatcher();
 	if (dispatcher != nullptr)
 	{
-		dispatcher->addCustomEventListener(GameSpeedModifier::GetEventOnModificationStarted(),
+		const char* modificationStartedEvent = GameSpeedModifier::GetEventOnModificationStarted().GetCStr();
+		const char* modificationEndedEvent = GameSpeedModifier::GetEventOnModificationEnded().GetCStr();
+		dispatcher->addCustomEventListener(modificationStartedEvent,
 			CC_CALLBACK_0(Entity::OnGameSpeedModificationStarted, this));
-		dispatcher->addCustomEventListener(GameSpeedModifier::GetEventOnModificationEnded(),
+		dispatcher->addCustomEventListener(modificationEndedEvent,
 			CC_CALLBACK_0(Entity::OnGameSpeedModificationEnded, this));
 	}
 }
 
 void Entity::Move()
 {
-	if (abs(m_moveDirection.x) > 0 || abs(m_moveDirection.y) > 0)
+	if (abs(m_moveDirection.GetX()) > 0 || abs(m_moveDirection.GetY()) > 0)
 	{
 		// Move entity by applying force
-		_physicsBody->applyImpulse(m_moveDirection * m_moveSpeed * m_physicsBodyForceScale);		
+		const IVector2& impulse = m_moveDirection * m_moveSpeed * m_physicsBodyForceScale;
+		_physicsBody->applyImpulse(cocos2d::Vec2(impulse.GetX(), impulse.GetY()));
 	}	
 	else if(!m_isAttacking)
 	{
 		// Instantly stop moving
-		_physicsBody->setVelocity(Vector2::ZERO);
+		_physicsBody->setVelocity(cocos2d::Vec2::ZERO);
 	}
 }
 
@@ -395,10 +415,10 @@ void Entity::DispatchEvent(const String& eventType) const
 
 void Entity::DispatchEvent(const String& eventType, BaseEventData* eventData) const
 {
-	cc::EventDispatcher* eventDispatcher = getEventDispatcher();
+	cocos2d::EventDispatcher* eventDispatcher = getEventDispatcher();
 	if (eventDispatcher != nullptr)
 	{
-		eventDispatcher->dispatchCustomEvent(eventType, eventData);
+		eventDispatcher->dispatchCustomEvent(eventType.GetCStr(), eventData);
 	}
 }
 
@@ -432,6 +452,11 @@ const Vector2& Entity::GetMoveDirection() const
 const Vector2& Entity::GetLookAtDirection() const
 {
 	return m_lookAtDirection;
+}
+
+const Vector2& Entity::GetPos() const
+{
+	return m_pos;
 }
 
 const cocos2d::Size& Entity::GetPhysicsBodySizeScaled() const

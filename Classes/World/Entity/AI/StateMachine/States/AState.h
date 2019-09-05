@@ -1,10 +1,19 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
-#include "Events/BaseEventData.h"
+#include "Classes/Core/Events/BaseEventData.h"
+#include "Classes/External/CocosEngine.h"
 
 class AnimComponent;
 class AIAgent;
+class String;
+
+namespace tinyxml2
+{
+	class XMLElement;
+};
+
+using XMLElement = tinyxml2::XMLElement;
+
 
 enum class EStateProgress
 {
@@ -38,7 +47,7 @@ public:
 	virtual EAIState	GetStateType() const = 0;
 	EAIState			GetNextStateOnSuccess() const;
 	EAIState			GetNextStateOnFailure() const;
-	static EAIState		GetStateFromString(String stateType);
+	static EAIState		GetStateFromString(const String& stateType);
 	static String		GetStringFromState(EAIState state);
 
 	void			SetNextStateOnSuccess(const EAIState& state);

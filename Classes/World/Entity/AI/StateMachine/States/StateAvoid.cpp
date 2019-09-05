@@ -4,10 +4,11 @@
 #include "World/Entity/Components/Attack/GenericAttackComponent.h"
 #include "World/Physics/PhysicsManager.h"
 #include "World/World.h"
-#include "Events/OnCollisionBeginEventData.h"
+#include "Classes/Core/Events/OnCollisionBeginEventData.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "Utils/Utils.h"
 #include "Utils/XML/XMLConsts.h"
+#include "cocos2d/external/tinyxml2/tinyxml2.h"
 
 StateAvoid::StateAvoid(AIAgent& agent)
 	: AState(agent)
@@ -44,11 +45,11 @@ EStateProgress StateAvoid::OnStep()
 {
 	AIAgent& agent = GetAgent();
 	Entity* targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-
-	const Vector2& targetPosition = targetEntity->getPosition() + m_randomTargetOffset;
-	Vector2 toTarget = targetPosition - agent.getPosition();
-	Vector2 toTargetNormalized = toTarget.getNormalized();
-	float distanceSqrToTarget = toTarget.lengthSquared();
+	
+	const Vector2 targetPosition = targetEntity->GetPos() + m_randomTargetOffset;
+	Vector2 toTarget = targetPosition - agent.GetPos();
+	float distanceSqrToTarget = toTarget.GetLenghtSquared();
+	toTarget.Normalize();
 
 	if (m_attackComponent->IsReadyToAttack() && distanceSqrToTarget <= m_attackComponent->GetAttackRangeSqr() && m_isRandomTimeExpired)
 	{
@@ -56,11 +57,11 @@ EStateProgress StateAvoid::OnStep()
 	}
 	else if (distanceSqrToTarget < m_startAvoidDistance * m_startAvoidDistance)
 	{
-		agent.SetMoveDirection(toTargetNormalized * -1);						
+		agent.SetMoveDirection(toTarget * -1);
 	}	
 	else if(distanceSqrToTarget >= m_stopAvoidDistance * m_stopAvoidDistance)
 	{		
-		agent.SetMoveDirection(Vector2::ZERO);		
+		agent.SetMoveDirection(Vector2::GetZero());		
 	}
 
 	if (m_failDistance > 0 && distanceSqrToTarget > m_failDistance * m_failDistance)
@@ -75,7 +76,7 @@ EStateProgress StateAvoid::OnStep()
 
 void StateAvoid::OnExit()
 {
-	GetAgent().SetMoveDirection(Vector2::ZERO);
+	GetAgent().SetMoveDirection(Vector2::GetZero());
 }
 
 void StateAvoid::OnRandomTimeExpired()
@@ -88,7 +89,7 @@ void StateAvoid::ProcessAnimations()
 	AIAgent& agent = GetAgent();
 	if (!agent.IsProcessing())
 	{
-		bool isMoving = agent.GetMoveDirection().lengthSquared() > 0;
+		bool isMoving = agent.GetMoveDirection().GetLenghtSquared() > 0;
 		if (isMoving && !m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
 		{
 			float curScaleX = agent.getScaleX();
@@ -117,13 +118,14 @@ void StateAvoid::OnEventReceived(const String& receivedEvent, const BaseEventDat
 		{
 			const Vector2& collisionPoint = collisionData.GetCollisionPoint();
 			AIAgent& agent = GetAgent();
-			Vector2 awayFromCollision = agent.getPosition() - collisionPoint;
-			agent.SetMoveDirection(awayFromCollision.getNormalized());
+			Vector2 awayFromCollision = agent.GetPos() - collisionPoint;
+			awayFromCollision.Normalize();
+			agent.SetMoveDirection(awayFromCollision);
 		}
 	}
 }
 
-void StateAvoid::LoadXMLData(const XMLElement& xmlElement)
+void StateAvoid::LoadXMLData(const tinyxml2::XMLElement& xmlElement)
 {
 	AState::LoadXMLData(xmlElement);
 	m_stopAvoidDistance = xmlElement.FloatAttribute(XMLConsts::STOP_AVOID_DISTANCE_ATTR);

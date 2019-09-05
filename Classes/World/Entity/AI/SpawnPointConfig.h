@@ -1,8 +1,7 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
-
-
+#include "Classes/Core/Math/Vector2.h"
+#include "Classes/Core/String/String.h"
 
 class SpawnPointConfig
 {

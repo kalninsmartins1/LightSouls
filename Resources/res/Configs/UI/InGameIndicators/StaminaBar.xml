@@ -2,17 +2,17 @@
 	animationSpeed="0.3">
 	
 	<Background>
-		<Sprite path="res/Graphics/UI/healthBarBg.png"/>
+		<Sprite path="res/Graphics/UI/ProgressBars/progressBg.png"/>
 		<AnchorPosition x="0.0" y="0.0" />
-		<NormalizedPosition x="0" y="0.94" />
+		<NormalizedPosition x="0.025" y="0.93" />
 		<Scale x="1" y="1"/>
 	</Background>
 	
 	<Foreground>
-		<Sprite path="res/Graphics/UI/staminaFill.png"/>
+		<Sprite path="res/Graphics/UI/ProgressBars/staminaFill.png"/>
 		<AnchorPosition x="0.0" y="0.0" />
-		<NormalizedPosition x="0.01" y="0.5" />
-		<Scale x="1.08\" y="3"/>
+		<NormalizedPosition x="0" y="0.5" />
+		<Scale x="1" y="1"/>
 	</Foreground>
 	
 </StaminaBar>

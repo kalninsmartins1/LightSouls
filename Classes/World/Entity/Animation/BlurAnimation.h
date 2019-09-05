@@ -4,7 +4,6 @@
 	Class for representing animation blur frame.
 */
 
-#include "LightSoulsTypes.h"
 #include "BlurAnimationFrame.h"
 
 class AnimComponent;

@@ -7,8 +7,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
 #include "World/Entity/AI/AIAgentManager.h"
-
-
+#include "cocos2d/external/tinyxml2/tinyxml2.h"
 
 StateIsPlayerClose::StateIsPlayerClose(AIAgent& aiAgent)
 	: AState(aiAgent)

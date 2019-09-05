@@ -1,12 +1,16 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 #include "GameConsts.h"
+
+class Vector2;
+class String;
 
 enum class X360Axes;
 enum class X360Button;
 enum class MouseAxisType : char;
 
+using Vector3 = cocos2d::Vec3;
 using MouseButtonCode = cocos2d::EventMouse::MouseButton;
 using KeyCode = cocos2d::EventKeyboard::KeyCode;
 
@@ -41,12 +45,12 @@ public:
 	// minValue [inclusive], maxValue [exclusive]
 	static float				GetRandValueWithinRange(float minValue, int maxValue);
 
-	static Vector2				GetRandomPositionWithinCircle(const Vector2& centerPos, float radius);
-	static Vector2				GetRandomPositionWithinCircle(const Vector3& centerPos, float radius);
+	static Vector2		GetRandomPositionWithinCircle(const Vector2& centerPos, float radius);
+	static Vector2		GetRandomPositionWithinCircle(const Vector3& centerPos, float radius);
 	static float				GetRandAngleInRadians();
 	static float				GetSignedAngleBetweenVectors(const Vector2& v1, const Vector2& v2);
 	static float				GetSignedRadiansBetweenVectors(const Vector2& v1, const Vector2& v2);
-	static Vector2				GetScreenFillScale(const cocos2d::Size& curSize);
+	static Vector2		GetScreenFillScale(const cocos2d::Size& curSize);
 	static const cocos2d::Size& GetScreenSize();
 	static long long			GetTimeStampInMilliseconds();
 	static float				GetScaleFactor();

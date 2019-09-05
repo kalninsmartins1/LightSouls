@@ -2,42 +2,46 @@
 #include "AIAgent.h"
 #include "AIAgentManager.h"
 #include "Utils/Utils.h"
+#include "Classes/Core/Events/BaseEventData.h"
 
 SpawnPoint::SpawnPoint(const SpawnPointConfig& config)
 	: m_respawnIndexQueue()
 	, m_spawnedAgents()
 	, m_config(config)
 	, m_curRowCount(0)
-	, m_lastAgentPos(Vector2::ZERO)	
+	, m_lastAgentPos(Vector2::GetZero())	
 	, m_curRespawnIndex(-1)
 {
-	setPosition(config.GetPosition());
+	const Vector2 pos = config.GetPosition();
+	setPosition(pos.GetX(), pos.GetY());
 
 	cc::EventDispatcher* dispatcher = getEventDispatcher();
 	if (dispatcher != nullptr)
 	{
-		dispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared(),
+		dispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared().GetCStr(),
 			CC_CALLBACK_1(SpawnPoint::OnAgentDisappeared, this));
 	}
 }
 
 void SpawnPoint::GetNextSpawnPosition(const cocos2d::Size& agentSize, Vector2& outPosition)
 {
-	if (m_lastAgentPos == Vector2::ZERO) 
+	if (m_lastAgentPos.GetX() == 0 && m_lastAgentPos.GetY() == 0)
 	{
-		getPosition(&outPosition.x, &outPosition.y);
+		float x, y;
+		getPosition(&x, &y);
+		outPosition.Set(x, y);
 		m_curRowCount++;
 	}
 	else if(m_curRowCount < m_config.GetNumAgentsInRow())
 	{
-		outPosition = m_lastAgentPos + Vector2::UNIT_X * 
+		outPosition = m_lastAgentPos + Vector2::GetOneX() * 
 			(agentSize.width + m_config.GetAgentColumnPadding());
 		m_curRowCount++;
 	}
 	else
 	{
 		m_curRowCount = 0;
-		outPosition = Vector2(getPositionX(), m_lastAgentPos.y + 
+		outPosition = Vector2(getPositionX(), m_lastAgentPos.GetY() + 
 			(agentSize.height + m_config.GetAgentRowPadding()));
 	}
 	m_lastAgentPos = outPosition;
@@ -107,7 +111,7 @@ void SpawnPoint::SpawnAgent(bool isRespawn)
 	String pathToXML;
 	AIAgentManager::GetInstance()->GetPathToAgentType(m_config.GetAgentType(), pathToXML);
 
-	if (!pathToXML.empty())
+	if (!pathToXML.IsEmpty())
 	{
 		AIAgent* agent = AIAgent::Create(pathToXML);
 		m_spawnedAgents.push_back(agent);
@@ -120,7 +124,7 @@ void SpawnPoint::SpawnAgent(bool isRespawn)
 		// Actors spawn position is also his base position
 		Vector2 basePositon;
 		GetNextSpawnPosition(agent->GetPhysicsBodySizeScaled(), basePositon);
-		agent->setPosition(basePositon);
+		agent->SetPos(basePositon);
 		agent->SetBasePosition(basePositon);
 	}
 }

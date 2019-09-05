@@ -2,8 +2,7 @@
 
 #include "AIAgent.h"
 
-
-
+class String;
 class SpawnPoint;
 class SpawnPointConfig;
 

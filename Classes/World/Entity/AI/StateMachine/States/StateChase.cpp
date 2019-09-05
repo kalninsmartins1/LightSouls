@@ -7,7 +7,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
 #include "Utils/Utils.h"
-
+#include "cocos2d/external/tinyxml2/tinyxml2.h"
 
 StateChase::StateChase(AIAgent& agent) 
 	: AState(agent)	
@@ -15,7 +15,7 @@ StateChase::StateChase(AIAgent& agent)
 	, m_targetEntity(nullptr)
 	, m_chaseRadius(0.0f)
 	, m_chaseStopDistance(0.0f)
-	, m_randomTargetOffset(Vector2::ZERO)
+	, m_randomTargetOffset(Vector2::GetZero())
 {
 
 }
@@ -24,7 +24,7 @@ void StateChase::OnEnter(AnimComponent& animComponent)
 {
 	m_targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
 	m_curProgress = EStateProgress::IN_PROGRESS;
-	m_randomTargetOffset = Utils::GetRandomPositionWithinCircle(Vector2::ZERO, 150.0f);
+	m_randomTargetOffset = Utils::GetRandomPositionWithinCircle(Vector2::GetZero(), 150.0f);
 	m_animComponent = &animComponent;
 }
 
@@ -34,14 +34,15 @@ EStateProgress StateChase::OnStep()
 	if (!agent.IsProcessing())
 	{
 		// Move agent towards target location
-		const Vector2& currentPosition = agent.getPosition();
-		const Vector2& targetPosition = m_targetEntity->getPosition() + m_randomTargetOffset;
+		const Vector2& currentPosition = agent.GetPos();
+		const Vector2& targetPosition = m_targetEntity->GetPos() + m_randomTargetOffset;
 		Vector2 toTarget = targetPosition - currentPosition;
-		const Vector2& toTargetNormalized = toTarget.getNormalized();
+		Vector2 toTargetNormalized = toTarget;
+		toTargetNormalized.Normalize();
 
 		// Update agent move direction
 		agent.SetMoveDirection(toTargetNormalized);
-		float distanceToTarget = toTarget.length();
+		float distanceToTarget = toTarget.GetLenght();
 
 		HandleAnimationPlaying(agent);
 
@@ -59,7 +60,7 @@ void StateChase::OnExit()
 {
 	AIAgent& agent = GetAgent();
 	m_curProgress = EStateProgress::NONE;
-	agent.SetMoveDirection(Vector2::ZERO);
+	agent.SetMoveDirection(Vector2::GetZero());
 
 	if (!agent.IsProcessing())
 	{

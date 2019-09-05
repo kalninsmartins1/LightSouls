@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "cocos2d.h"
+#include "Classes/External/CocosEngine.h"
 
 class ActionSequnce : public cocos2d::Action
 {

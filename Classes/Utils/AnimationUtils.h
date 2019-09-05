@@ -1,15 +1,19 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 
 namespace tinyxml2
 {
 	class XMLElement;
 };
 
+class String;
+
+using XMLElement = tinyxml2::XMLElement;
+
 struct AnimationData
 {
-	cocos2d::Vector<cocos2d::SpriteFrame*>	frames;	
+	cc::Vector<cc::SpriteFrame*>			frames;	
 	std::vector<float>						timeBetweenFrames;
 	bool									shouldBlur;
 	static constexpr float					secondFrameDelay = 0.06f;	
@@ -19,16 +23,16 @@ struct AnimationData
 class AnimationUtils
 {
 public:
-	static int		GetAnimId(String animName);
+	static int		GetAnimId(const String& animName);
 	static void		GetAnimName(int animId, String& outAnimName);
 
-	static cocos2d::Action* StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* pSprite,
+	static cc::Action* StartSpriteFrameAnimationWithCallback(cc::Sprite* pSprite,
 		const AnimationData& animationData, const std::function<void()>& onFinished);
 
-	static void StartSpriteFrameAnimation(cocos2d::Sprite* pSprite, 
+	static void StartSpriteFrameAnimation(cc::Sprite* pSprite, 
 		const AnimationData& animationData, bool shouldReverse = false);
 
-	static void LoadAnimationFrames(const tinyxml2::XMLElement* pElem,
+	static void LoadAnimationFrames(const XMLElement* pElem,
 		AnimationData& outAnimationData);
 
 private:

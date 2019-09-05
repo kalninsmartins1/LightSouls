@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 #include "World/GameSpeedModifier.h"
 #include "World/VFX/VFXManager.h"
 
@@ -31,7 +31,7 @@ public:
 
 	void				   SetTimeModifier(float modifier);
 
-	static cc::Scene* CreateScene();
+	static cocos2d::Scene* CreateScene();
 	
 	// implement the "static create()" method manually
 	CREATE_FUNC(GameScene);
@@ -46,13 +46,13 @@ private:
 	void SwitchToGameOverScene();
 	void DisableMouseCursor();
 	void ProcessDebugPhysicsDraw();
-	void OnPlayerHealthChanged(cc::EventCustom* eventData);
-	void OnPlayerStaminaChanged(cc::EventCustom* eventData);
+	void OnPlayerHealthChanged(cocos2d::EventCustom* eventData);
+	void OnPlayerStaminaChanged(cocos2d::EventCustom* eventData);
 	void OnPlayerDisappeared();
-	void OnAgentDestroyed(cc::EventCustom* eventData);
+	void OnAgentDestroyed(cocos2d::EventCustom* eventData);
 	void ReloadGame();
 	void RegisterForEvents();
-	void InitVFXManger(cc::Node* worldLayer);
+	void InitVFXManger(cocos2d::Node* worldLayer);
 
 private:
 	static PhysicsManager*			s_physicsManager;

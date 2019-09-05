@@ -1,16 +1,14 @@
 #include "Projectile.h"
 #include "ProjectileConfig.h"
 #include "World/Physics/PhysicsManager.h"
-#include "World/Entity/Entity.h"
+#include "Classes/World/Entity/Entity.h"
 #include "Utils/Utils.h"
-
-
 
 Projectile::Projectile(const Entity& shooter, const ProjectileConfig& config, const Vector2& shootDirection, float attackRange)
 	: m_shooterEntity(shooter)
 	, m_config(config)	
 	, m_shootDirection(shootDirection)
-	, m_startPosition(shooter.getPosition())
+	, m_startPosition(shooter.GetPos())
 	, m_attackRange(attackRange)
 	, m_damage(shooter.GetDamage())
 	, m_extraSpriteOne(nullptr)
@@ -47,9 +45,10 @@ Projectile* Projectile::Create(const Entity& shooter, const ProjectileConfig& co
 
 bool Projectile::Init()
 {
-	bool isSuccessfull = initWithFile(m_config.GetPathToSprite());
+	bool isSuccessfull = initWithFile(m_config.GetPathToSprite().GetCStr());
 	PhysicsManager::AddPhysicsBody(*this, m_config.GetPhysicsBodyConfig());
-	setPosition(m_startPosition);
+	setPositionX(m_startPosition.GetX());
+	setPositionY(m_startPosition.GetY());
 	_physicsBody->setRotationOffset(90.0f); // For some reason physics body rotation is always offset
 	RotateProjectileInDirectionOfMovement();
 
@@ -58,13 +57,15 @@ bool Projectile::Init()
 
 void Projectile::InitProjectilePastFrameAnimation()
 {
-	m_extraSpriteOne = Sprite::create(m_config.GetPathToSprite());
+	using namespace cocos2d;
+
+	m_extraSpriteOne = Sprite::create(m_config.GetPathToSprite().GetCStr());
 	m_extraSpriteOne->setPosition(getPosition());
 	m_extraSpriteOne->setRotation(getRotation());
-	m_extraSpriteTwo = Sprite::create(m_config.GetPathToSprite());
+	m_extraSpriteTwo = Sprite::create(m_config.GetPathToSprite().GetCStr());
 	m_extraSpriteTwo->setOpacity(0.0f);
 
-	Node* parent = getParent();
+	cc::Node* parent = getParent();
 	parent->addChild(m_extraSpriteOne);
 	parent->addChild(m_extraSpriteTwo);
 
@@ -72,29 +73,30 @@ void Projectile::InitProjectilePastFrameAnimation()
 	m_extraSpriteTwo->setCameraMask(parent->getCameraMask());
 	
 	StartSpriteFadeOut(m_extraSpriteOne);
-	using namespace cocos2d;
 	auto sequence = Sequence::create(DelayTime::create(0.1f), CallFunc::create(CC_CALLBACK_0(Projectile::OnSpriteFaded, this)), nullptr);
 	m_extraSpriteTwo->runAction(sequence);
 }
 
 void Projectile::update(float deltaTime)
 {
-	const Vector2& curPosition = getPosition();
-	float distanceCoveredSqrt = m_startPosition.distanceSquared(curPosition);
+	Vector2 curPosition(getPositionX(), getPositionY());
+	float distanceCoveredSqrt = (m_startPosition - curPosition).GetLenghtSquared();
 	if (distanceCoveredSqrt > (m_attackRange*m_attackRange))
 	{
 		Destroy();
 	}
 	else
 	{
-		setPosition(curPosition + m_shootDirection * m_config.GetMoveSpeed() * deltaTime);		
+		Vector2 finalPos = curPosition + m_shootDirection * m_config.GetMoveSpeed() * deltaTime;
+		setPositionX(finalPos.GetX());		
+		setPositionY(finalPos.GetY());
 		RotateProjectileInDirectionOfMovement();
 	}
 }
 
-void Projectile::setParent(Node* parent)
+void Projectile::setParent(cc::Node* parent) // CC classes should be pushed out to adapters
 {
-	Node::setParent(parent);
+	cc::Node::setParent(parent);
 	if (parent != nullptr)
 	{
 		InitProjectilePastFrameAnimation();
@@ -117,26 +119,28 @@ void Projectile::RotateProjectileInDirectionOfMovement()
 
 void Projectile::OnSpriteFaded()
 {
- 	const Vector2& curPosition = getPosition();
+ 	const Vector2& curPosition = Vector2(getPositionX(), getPositionY());
 	const float& curRotation = getRotation();
 
 	if (m_extraSpriteOne->getOpacity() <= 0)
 	{
-		m_extraSpriteOne->setPosition(curPosition);
+		m_extraSpriteOne->setPositionX(curPosition.GetX());
+		m_extraSpriteOne->setPositionY(curPosition.GetY());
 		m_extraSpriteOne->setRotation(curRotation);
 		m_extraSpriteOne->setOpacity(GameConsts::FULL_OPAQUE);
 		StartSpriteFadeOut(m_extraSpriteOne);
 	}
 	else
 	{
-		m_extraSpriteTwo->setPosition(curPosition);
+		m_extraSpriteTwo->setPositionX(curPosition.GetX());
+		m_extraSpriteTwo->setPositionY(curPosition.GetY());
 		m_extraSpriteTwo->setRotation(curRotation);
 		m_extraSpriteTwo->setOpacity(GameConsts::FULL_OPAQUE);
 		StartSpriteFadeOut(m_extraSpriteTwo);
 	}
 }
 
-void Projectile::StartSpriteFadeOut(Sprite* sprite)
+void Projectile::StartSpriteFadeOut(cc::Sprite* sprite)
 {
 	using namespace cocos2d;
 	auto sequence = Sequence::create(FadeOut::create(m_extraSpriteFadeTime),

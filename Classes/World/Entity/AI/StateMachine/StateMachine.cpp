@@ -1,7 +1,7 @@
 #include "StateMachine.h"
 #include "World/Entity/AI/AIAgent.h"
 #include "World/Entity/Components/AnimComponent.h"
-#include "Events/BaseEventData.h"
+#include "Classes/Core/Events/BaseEventData.h"
 #include "Utils/Utils.h"
 #include "States/Attack/StateAttack.h"
 #include "States/Attack/StateLineAttack.h"
@@ -14,10 +14,11 @@
 #include "States/StateIsPlayerClose.h"
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
 #include "World/Physics/PhysicsManager.h"
-#include "Events/OnCollisionBeginEventData.h"
+#include "Classes/Core/Events/OnCollisionBeginEventData.h"
 #include "World/Entity/AI/AIAgentManager.h"
-
-
+#include "Classes/Core/Events/BaseEventData.h"
+#include "Classes/Core/String/String.h"
+#include "Classes/External/CocosEngine.h"
 
 StateMachine::StateMachine(AIAgent& agent)
 	: m_agent(agent)

@@ -5,7 +5,7 @@
 #include "../Utils.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "World/Entity/Components/MirrorSpriteComponent.h"
-#include "Input/GameInput.h"
+#include "Classes/Core/Input/GameInput.h"
 #include "World/World.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "GameConsts.h"
@@ -14,11 +14,11 @@
 #include "World/Entity/Components/Attack/HitAttackComponent.h"
 #include "World/Physics/PhysicsBodyConfig.h"
 #include "World/Physics/PhysicsManager.h"
-#include "UI/InGameIndicators/ProgressBar.h"
+#include "Classes/Core/UI/InGameIndicators/ProgressBar.h"
 #include "World/Entity/AI/AIAgentManager.h"
-#include "UI/UIElementConfig.h"
-#include "Camera/Camera.h"
-#include "Camera/Components/CameraShake.h"
+#include "Classes/Core/UI/ElementConfig.h"
+#include "Classes/Core/Camera/Camera.h"
+#include "Classes/Core/Camera/Components/CameraShake.h"
 #include "World/Entity/AI/SpawnPointConfig.h"
 #include "World/Projectiles/ProjectileConfig.h"
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
@@ -26,6 +26,9 @@
 #include "World/GameSpeedModifier.h"
 #include "World/VFX/VFXManager.h"
 #include "World/Cursor.h"
+#include "cocos2d/external/tinyxml2/tinyxml2.h"
+
+using namespace UI;
 
 XMLLoader::XMLLoader()
 {
@@ -48,7 +51,8 @@ bool XMLLoader::GetAnchorPosition(const XMLElement& element, Vector2& outPos)
 
 bool XMLLoader::LoadXMLFile(const String& pathToXML, XMLDoc& outDoc)
 {
-	XMLError error = outDoc.LoadFile(pathToXML.c_str());
+	using namespace tinyxml2;
+	XMLError error = outDoc.LoadFile(pathToXML.GetCStr());
 
 	if (error != XMLError::XML_NO_ERROR)
 	{
@@ -388,7 +392,7 @@ bool XMLLoader::InitializeComponent(cc::Node& node, const XMLElement& element, c
 
 		if (sprite != nullptr)
 		{
-			sprite->initWithFile(pathToSprite);
+			sprite->initWithFile(pathToSprite.GetCStr());
 		}
 	}
 	else if (componentType == GameConsts::NODE_COMPONENT)
@@ -398,7 +402,7 @@ bool XMLLoader::InitializeComponent(cc::Node& node, const XMLElement& element, c
 		{
 			childNode->setName(node.getName() + GameConsts::NODE_COMPONENT);
 			childNode->setContentSize(node.getContentSize());
-			childNode->setAnchorPoint(Vector2(0, 0));
+			childNode->setAnchorPoint(cc::Vec2(0.0f, 0.0f));
 			LoadNodeComponents(*childNode, element);
 			node.addChild(childNode);
 		}
@@ -565,7 +569,7 @@ void XMLLoader::LoadActionButton(GameInput & gameInput, GameInputType inputType,
 	for (const XMLElement* pChild = pElement->FirstChildElement();
 		pChild != nullptr; pChild = pChild->NextSiblingElement())
 	{
-		const char* buttonCode = pChild->Attribute(xmlAttributeName.c_str());
+		const char* buttonCode = pChild->Attribute(xmlAttributeName.GetCStr());
 		if (buttonCode != nullptr)
 		{
 			gameInput.AddActionInput(inputType, actionName, buttonCode);
@@ -577,7 +581,7 @@ void XMLLoader::LoadActionButton(GameInput & gameInput, GameInputType inputType,
 	}
 }
 
-void XMLLoader::LoadUIElement(const XMLElement & element, UIElementConfig & outUIElement)
+void XMLLoader::LoadUIElement(const XMLElement & element, UI::ElementConfig& outUIElement)
 {
 	const XMLElement* spriteElement = element.FirstChildElement(XMLConsts::NODE_SPRITE);
 	const XMLElement* anchorPositionElement = element.FirstChildElement(XMLConsts::NODE_NORMALIZED_POSITION);
@@ -600,7 +604,7 @@ void XMLLoader::LoadUIElement(const XMLElement & element, UIElementConfig & outU
 		Vector2 scale;
 		GetVector2FromElement(*scaleElement, scale);
 
-		outUIElement.SetPathToSprite(pathToSprite);
+		outUIElement.SetPathToImage(pathToSprite);
 		outUIElement.SetAnchorPosition(anchorPos);
 		outUIElement.SetNormalizedPosition(normalizedPos);
 		outUIElement.SetScale(scale);
@@ -629,7 +633,7 @@ bool XMLLoader::InitializeEntityUsingXMLFile(Entity & entity,
 		const float	knockBackStrenght = root->FloatAttribute(XMLConsts::ENTITY_KNOCK_BACK_STRENGHT);
 
 		std::ostringstream strStream;
-		strStream << actorType << entity.GetId();
+		strStream << actorType.GetCStr() << entity.GetId();
 		entity.setName(strStream.str());
 		entity.SetBaseMoveSpeed(moveSpeed);
 		entity.SetBaseDamage(baseDamage);
@@ -725,10 +729,10 @@ bool XMLLoader::InitializeUIProgressBar(ProgressBar & healthBar, const String & 
 			const XMLElement* fgElement = rootElement->FirstChildElement(XMLConsts::NODE_FOREGROUND);
 			if (bgElement != nullptr && fgElement != nullptr)
 			{
-				UIElementConfig bgConfig;
+				ElementConfig bgConfig;
 				LoadUIElement(*bgElement, bgConfig);
 
-				UIElementConfig fgConfig;
+				ElementConfig fgConfig;
 				LoadUIElement(*fgElement, fgConfig);
 
 				float animationSpeed = rootElement->FloatAttribute(XMLConsts::UI_ANIMATION_SPEED_ATTR);
@@ -807,7 +811,7 @@ void XMLLoader::LoadNodeComponents(cc::Node & node, const XMLElement & root)
 {
 	for (const XMLElement* element = root.FirstChildElement(); element != nullptr; element = element->NextSiblingElement())
 	{
-		const XMLAttribute* attribute = element->FindAttribute(XMLConsts::TYPE_ATTR);
+		const tinyxml2::XMLAttribute* attribute = element->FindAttribute(XMLConsts::TYPE_ATTR);
 		if (attribute != nullptr)
 		{
 			const String& componentType = attribute->Value();
@@ -821,7 +825,7 @@ void XMLLoader::LoadNodeComponents(cc::Node & node, const XMLElement & root)
 				Vector2 anchorPos;
 				if (dispatcher != nullptr && GetAnchorPosition(*element, anchorPos))
 				{
-					dispatcher->dispatchCustomEvent(PhysicsManager::GetEventOnPhysicsBodyAnchorSet(),
+					dispatcher->dispatchCustomEvent(PhysicsManager::GetEventOnPhysicsBodyAnchorSet().GetCStr(),
 						&anchorPos);
 				}
 			}
@@ -858,7 +862,7 @@ void XMLLoader::ReadXMLAttribute(const XMLElement * element, const String & attr
 {
 	if (element != nullptr)
 	{
-		const char* value = element->Attribute(attributeName.c_str());
+		const char* value = element->Attribute(attributeName.GetCStr());
 		if (value != nullptr)
 		{
 			outValue = value;
@@ -866,7 +870,7 @@ void XMLLoader::ReadXMLAttribute(const XMLElement * element, const String & attr
 	}
 }
 
-void XMLLoader::LoadPhysicsMaterialFromAttributes(const XMLElement & element, cocos2d::PhysicsMaterial & outMaterial)
+void XMLLoader::LoadPhysicsMaterialFromAttributes(const XMLElement & element, cc::PhysicsMaterial & outMaterial)
 {
 	const XMLElement* materialElement = element.FirstChildElement(XMLConsts::NODE_PHYSICS_MATERIAL);
 	if (materialElement != nullptr)
@@ -881,15 +885,15 @@ void XMLLoader::LoadPhysicsMaterialFromAttributes(const XMLElement & element, co
 	}
 }
 
-void XMLLoader::GetVector3FromElement(const XMLElement & element, Vector3 & outResult)
+void XMLLoader::GetVector3FromElement(const XMLElement& element, Vector3& outResult)
 {
 	outResult.x = element.FloatAttribute(XMLConsts::AXIS_X_ATTR);
 	outResult.y = element.FloatAttribute(XMLConsts::AXIS_Y_ATTR);
 	outResult.z = element.FloatAttribute(XMLConsts::AXIS_Z_ATTR);
 }
 
-void XMLLoader::GetVector2FromElement(const XMLElement & element, Vector2 & outResult)
+void XMLLoader::GetVector2FromElement(const XMLElement& element, Vector2& outResult)
 {
-	outResult.x = element.FloatAttribute(XMLConsts::AXIS_X_ATTR);
-	outResult.y = element.FloatAttribute(XMLConsts::AXIS_Y_ATTR);
+	outResult.SetX(element.FloatAttribute(XMLConsts::AXIS_X_ATTR));
+	outResult.SetY(element.FloatAttribute(XMLConsts::AXIS_Y_ATTR));
 }

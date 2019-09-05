@@ -1,18 +1,21 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 #include "World/Entity/Animation/BlurAnimation.h"
 
 namespace tinyxml2
 {
 	class XMLNode;
+	class XMLElement;
 };
 
+class String;
 class Entity;
 enum class AnimationKind;
 struct AnimationData;
 
 using AnimationCallback = std::function<void()>;
+using XMLElement = tinyxml2::XMLElement;
 
 enum class AnimStyle
 {
@@ -27,7 +30,7 @@ enum class AnimStyle
  * type entity, because entity is everything that moves in the world.
  * And since animation is needed for movement, entity requirement is perfect fit.
  */
-class AnimComponent: public cocos2d::Component
+class AnimComponent: public cc::Component
 {
 public:
 	bool					IsCurrrentlyPlayingAnim(const String& animName) const;
@@ -37,11 +40,12 @@ public:
 	bool					IsCurrentlyPlayingDirAnim() const;
 	bool					HasAnim(const String& animName) const;
 	bool					HasAnim(int animId) const;
-	const cc::Sprite&		GetOwner() const;
-	cc::Node*				GetSpriteContainer() const;
-	cc::SpriteFrame*		GetCurrentSpriteFrame() const;
 
-	static AnimComponent*	Create(cc::Node& entity);
+	const cocos2d::Sprite&		GetOwner() const;
+	cocos2d::Node*				GetSpriteContainer() const;
+	cocos2d::SpriteFrame*		GetCurrentSpriteFrame() const;
+
+	static AnimComponent*	Create(cocos2d::Node& entity);
 
 	// Load animation configuration from xml file
 	void LoadConfig(const XMLElement& element);
@@ -60,7 +64,7 @@ public:
 	virtual void	update(float deltaTime) override;
 
 private:
-	AnimComponent(cc::Sprite& sprite);
+	AnimComponent(cocos2d::Sprite& sprite);
 
 private:
 	int GetDirectionalAnimId(const String& animName) const;

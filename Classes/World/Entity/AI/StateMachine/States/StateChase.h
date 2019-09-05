@@ -3,7 +3,12 @@
 #include "AState.h"
 #include "World/Entity/Entity.h"
 
+namespace tinyxml2
+{
+	class XMLElement;
+};
 
+using XMLElement = tinyxml2::XMLElement;
 
 class StateChase: public AState
 {

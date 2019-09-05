@@ -40,7 +40,7 @@ void GameSpeedModifier::AddEvent(const String& eventName, float speed, float dur
 	params.duration = duration;
 	m_eventData[eventName] = params;
 
-	m_eventDispatcher.addCustomEventListener(eventName,
+	m_eventDispatcher.addCustomEventListener(eventName.GetCStr(),
 		CC_CALLBACK_1(GameSpeedModifier::OnEventTriggered, this));
 }
 
@@ -99,7 +99,7 @@ void GameSpeedModifier::OnEventTriggered(cc::EventCustom* eventData)
 		auto director = cc::Director::getInstance();
 		m_gameScene.runAction(sequence);
 		m_isModificationActive = true;
-		m_eventDispatcher.dispatchCustomEvent(s_eventOnModificationStarted);
+		m_eventDispatcher.dispatchCustomEvent(s_eventOnModificationStarted.GetCStr());
 	}
 }
 
@@ -108,5 +108,5 @@ void GameSpeedModifier::OnSpeedModificationFinished()
 	m_isModificationActive = false;
 	m_gameScene.SetTimeModifier(m_originalTimeScale);
 	SetPhysicsWorldSpeed(m_originalTimeScale);
-	m_eventDispatcher.dispatchCustomEvent(s_eventOnModificationEnded);
+	m_eventDispatcher.dispatchCustomEvent(s_eventOnModificationEnded.GetCStr());
 }

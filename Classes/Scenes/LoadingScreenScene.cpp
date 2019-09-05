@@ -1,7 +1,7 @@
 #include "LoadingScreenScene.h"
 #include "MainMenuScene.h"
 #include "GameScene.h"
-#include "Input/GameInput.h"
+#include "Classes/Core/Input/GameInput.h"
 #include "ui/CocosGUI.h"
 #include "Utils/Utils.h"
 #include "GameConsts.h"

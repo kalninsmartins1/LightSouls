@@ -114,26 +114,6 @@
 			/>
 		</SpriteSheet>
 		<SpriteSheet
-			path="res/Graphics/World/Player/Attack/attackAnims2.png" 
-			plistPath="res/Graphics/World/Player/Attack/attackAnims2.plist">
-			
-			<Anim 	type="AttackSide2"					
-					frameNamePattern="attackSide2%d.png"					
-					timeBetweenFrames="0.05;0.1;0.1;0.1;"
-					shouldBlur="false"
-			/>	
-			<Anim 	type="AttackUp2"					
-					frameNamePattern="attackUp2%d.png"					
-					timeBetweenFrames="0.05;0.1;0.1;0.1;"
-					shouldBlur="false"
-			/>			
-			<Anim 	type="AttackDown2"					
-					frameNamePattern="attackDown2%d.png"					
-					timeBetweenFrames="0.05;0.1;0.1;0.1;"
-					shouldBlur="false"
-			/>			
-		</SpriteSheet>
-		<SpriteSheet
 			path="res/Graphics/World/Player/Disappear/disappearAnim.png" 
 			plistPath="res/Graphics/World/Player/Disappear/disappearAnim.plist">
 			

@@ -1,17 +1,19 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 
-class CameraFollow: public cocos2d::Action
+class Vector2;
+
+class CameraFollow: public cc::Action
 {
 public:
-	CameraFollow(const cocos2d::Node* followNode);
+	CameraFollow(const cc::Node* followNode);
 
 public:
 	virtual bool isDone() const override;
 
-	static CameraFollow*	Create(cocos2d::Node *followedNode);
-	virtual void			startWithTarget(cocos2d::Node *target) override;
+	static CameraFollow*	Create(cc::Node *followedNode);
+	virtual void			startWithTarget(cc::Node *target) override;
 	virtual void			step(float dt) override;
 
 private:
@@ -33,11 +35,11 @@ private:
 	void		Reset();
 
 private:
-	const cocos2d::Node*	m_followNode;
-	CameraMoveSate			m_cameraState;
-	float					m_curSpeed;
-	float					m_maxSpeed;
-	float					m_easeInTime;
-	float					m_easeOutTime;
+	const cc::Node*				m_followNode;
+	CameraMoveSate				m_cameraState;
+	float						m_curSpeed;
+	float						m_maxSpeed;
+	float						m_easeInTime;
+	float						m_easeOutTime;
 };
 

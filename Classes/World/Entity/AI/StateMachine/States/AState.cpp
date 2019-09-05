@@ -2,8 +2,7 @@
 #include "Utils/Utils.h"
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
-
-
+#include "Classes/Core/String/String.h"
 
 std::map<EAIState, String> AState::s_stateToString =
 {
@@ -34,7 +33,7 @@ EAIState AState::GetNextStateOnFailure() const
 	return m_nextStateOnFailure;
 }
 
-EAIState AState::GetStateFromString(String stateTypeStr)
+EAIState AState::GetStateFromString(const String& stateTypeStr)
 {
 	EAIState state = EAIState::NONE;
 	Utils::FindKeyByValue(s_stateToString, stateTypeStr, state);

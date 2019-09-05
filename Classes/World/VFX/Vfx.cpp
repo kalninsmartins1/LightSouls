@@ -2,6 +2,8 @@
 #include "Classes/Utils/XML/XMLLoader.h"
 #include "Classes/GameConsts.h"
 #include "Classes/World/Entity/Components/AnimComponent.h"
+#include "Classes/Core/Math/Vector2.h"
+#include "Classes/Core/String/String.h"
 
 VFX::VFX()
 	: m_animComp(nullptr)
@@ -30,9 +32,9 @@ void VFX::Spawn(const Vector2& pos, float rotationAngle, const std::function<voi
 	if (m_animComp != nullptr)
 	{
 		setVisible(true);
-		setPosition(pos);
+		setPosition(pos.GetX(), pos.GetY());
 		setRotation(rotationAngle);
-		setLocalZOrder(abs(pos.y) * GameConsts::VFX_LAYER_MULTIPLIER);
+		setLocalZOrder(abs(pos.GetY()) * GameConsts::VFX_LAYER_MULTIPLIER);
 		m_animComp->PlayOneShotAnimation(GameConsts::ANIM_TYPE_IDLE,
 			CC_CALLBACK_0(VFX::OnFinishedAnimating, this));
 		m_finishCallback = onFinished;

@@ -1,14 +1,14 @@
 #include "GameScene.h"
 #include "World/Entity/Player/Player.h"
-#include "Input/GameInput.h"
+#include "Classes/Core/Input/GameInput.h"
 #include "World/World.h"
 #include "World/Entity/CustomActions/CameraFallow.h"
 #include "Utils/Utils.h"
 #include "World/Entity/AI/AIAgentManager.h"
 #include "World/Physics/PhysicsManager.h"
-#include "UI/InGameIndicators/ProgressBar.h"
-#include "Events/ValueChangedEventData.h"
-#include "Camera/Camera.h"
+#include "Classes/Core/UI/InGameIndicators/ProgressBar.h"
+#include "Classes/Core/Events/ValueChangedEventData.h"
+#include "Classes/Core/Camera/Camera.h"
 #include "LoadingScreenScene.h"
 #include "ENextScene.h"
 #include "ScoringSystem/ScoringSystem.h"
@@ -233,8 +233,8 @@ void GameScene::InitUILayer()
 	uiLayer->setContentSize(Utils::GetScreenSize());
 
 	Sprite* screenOverlay = Sprite::create("res/Graphics/UI/screenOverlay.png");
-	const Vec2 scale = Utils::GetScreenFillScale(screenOverlay->getContentSize());
-	screenOverlay->setScale(scale.x, scale.y);
+	const Vector2& scale = Utils::GetScreenFillScale(screenOverlay->getContentSize());
+	screenOverlay->setScale(scale.GetX(), scale.GetY());
 	screenOverlay->setAnchorPoint(Vec2::ZERO);
 
 	m_healthBar = ProgressBar::Create("res/Configs/UI/InGameIndicators/HealthBar.xml");
@@ -269,8 +269,8 @@ void GameScene::InitUILayer()
 void GameScene::StartGameOverFadeIn(float time)
 {
 	Sprite* fadeSprite = Sprite::create("res/Graphics/pixel.png");
-	const Vec2& scale = Utils::GetScreenFillScale(fadeSprite->getContentSize());
-	fadeSprite->setScale(scale.x, scale.y);
+	const Vector2& scale = Utils::GetScreenFillScale(fadeSprite->getContentSize());
+	fadeSprite->setScale(scale.GetX(), scale.GetY());
 	fadeSprite->setColor(Color3B::BLACK);
 	fadeSprite->setAnchorPoint(Vec2::ZERO);
 	fadeSprite->setOpacity(0);
@@ -360,13 +360,13 @@ void GameScene::RegisterForEvents()
 	EventDispatcher* eventDispatcher = getEventDispatcher();
 	if (eventDispatcher != nullptr)
 	{
-		eventDispatcher->addCustomEventListener(Player::GetEventOnHealthChanged(),
+		eventDispatcher->addCustomEventListener(Player::GetEventOnHealthChanged().GetCStr(),
 			CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
-		eventDispatcher->addCustomEventListener(Player::GetEventOnStaminaChanged(),
+		eventDispatcher->addCustomEventListener(Player::GetEventOnStaminaChanged().GetCStr(),
 			CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
-		eventDispatcher->addCustomEventListener(Player::GetEventOnPlayerDisappeared(),
+		eventDispatcher->addCustomEventListener(Player::GetEventOnPlayerDisappeared().GetCStr(),
 			CC_CALLBACK_0(GameScene::OnPlayerDisappeared, this));
-		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared(),
+		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared().GetCStr(),
 			CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
 	}
 }

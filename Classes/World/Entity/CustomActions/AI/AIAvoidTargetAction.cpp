@@ -7,6 +7,7 @@
 #include "Utils/Utils.h"
 #include "World/Entity/AI/StateMachine/States/AState.h"
 #include "World/Entity/Components/AnimComponent.h"
+#include "cocos2d/external/tinyxml2/tinyxml2.h"
 
 
 AIAvoidTargetAction::AIAvoidTargetAction(AIAgent& agent)
@@ -54,16 +55,17 @@ void AIAvoidTargetAction::OnCollisionCheck()
 		m_collisionCheckInterval, GameConsts::ACTION_COLLISION_CHECK);
 
 	Entity* target = AIAgentManager::GetInstance()->GetTargetEntity();
-	const Vector2& curPosition = m_agent.getPosition();
+	const Vector2& curPosition = m_agent.GetPos();
 	PhysicsManager::Raycast(CC_CALLBACK_3(AIAvoidTargetAction::OnRayCastCallback, this),
 		curPosition,
 		curPosition + m_agent.GetMoveDirection() * m_startAvoidingDistance);
 }
 
-bool AIAvoidTargetAction::OnRayCastCallback(cocos2d::PhysicsWorld& world, const cocos2d::PhysicsRayCastInfo& info, void* data)
+bool AIAvoidTargetAction::OnRayCastCallback(cc::PhysicsWorld& world, const cc::PhysicsRayCastInfo& info, void* data)
 {
-	Vector2 awayFromTargetAndCollision = info.normal.getPerp();
-	awayFromTargetAndCollision.normalize();
+	auto vec = info.normal.getPerp();
+	Vector2 awayFromTargetAndCollision(vec.x, vec.y);
+	awayFromTargetAndCollision.Normalize();
 	m_agent.SetMoveDirection(awayFromTargetAndCollision);
 
 	return true;
@@ -92,7 +94,7 @@ void AIAvoidTargetAction::OnAvoidTimerFinished()
 void AIAvoidTargetAction::StopAvoiding()
 {
 	m_isAvoiding = false;
-	m_agent.SetMoveDirection(Vector2::ZERO);
+	m_agent.SetMoveDirection(Vector2::GetZero());
 	AnimComponent* animComponent = m_agent.GetAnimComponent();
 	if (!m_agent.IsProcessing() && !animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_SIGNAL))
 	{
@@ -107,13 +109,13 @@ void AIAvoidTargetAction::StartAvoiding(const Entity* targetEntity)
 		CC_CALLBACK_0(AIAvoidTargetAction::OnCollisionCheck, this),
 		m_collisionCheckInterval, GameConsts::ACTION_COLLISION_CHECK);
 
-	const Vector2& curPosition = m_agent.getPosition();
+	const Vector2& curPosition = m_agent.GetPos();
 	PhysicsManager::Raycast(CC_CALLBACK_3(AIAvoidTargetAction::OnRayCastCallback, this),
 		curPosition,
 		curPosition + m_agent.GetMoveDirection() * m_startAvoidingDistance);
 
-	Vector2 awayFromTarget = m_agent.getPosition() - targetEntity->getPosition();
-	awayFromTarget.normalize();
+	Vector2 awayFromTarget = curPosition - targetEntity->GetPos();
+	awayFromTarget.Normalize();
 	m_agent.SetMoveDirection(awayFromTarget);
 
 	AnimComponent* animComponent = m_agent.GetAnimComponent();

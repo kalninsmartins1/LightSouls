@@ -1,13 +1,15 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
+#include "Classes/Core/String/String.h"
 
-struct PhysicsContactInformation;
+class Vector2;
 class PhysicsBodyConfig;
+struct PhysicsContactInformation;
 
-using ContactCallback = std::function<bool(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)>;
-using QueryRectCallback = cocos2d::PhysicsQueryRectCallbackFunc;
-using RaycastCallback = cocos2d::PhysicsRayCastCallbackFunc;
+using ContactCallback = std::function<bool(const Vector2& contactPoint, const cc::PhysicsBody* otherBody)>;
+using QueryRectCallback = cc::PhysicsQueryRectCallbackFunc;
+using RaycastCallback = cc::PhysicsRayCastCallbackFunc;
 
 struct PhysicsContactListener
 {
@@ -24,13 +26,10 @@ struct PhysicsContactListener
 class PhysicsManager : public cocos2d::Ref
 {
 public:
-	~PhysicsManager();
-
-public:
 	static const String&	GetEventOnCollisionBegin();
 	static const String&	GetEventOnPhysicsBodyAnchorSet();
 	
-	static PhysicsManager*	Create(cocos2d::Node* context);
+	static PhysicsManager*	Create(cc::Node* context);
 	bool					Init(cocos2d::Node* context);
 	void					RemoveContactBeginListener(const String& bodyName);
 	
@@ -57,10 +56,10 @@ private:
 	bool DispatchContactEventsToListeners(const Vector2& contactPoint, const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners);
 
 	// Physics world callback for when two objects begin colliding
-	bool OnContactBegin(cocos2d::PhysicsContact& contact);
+	bool OnContactBegin(cc::PhysicsContact& contact);
 
 	// Physics world callback for when two objects stop colliding
-	bool OnContactEnd(cocos2d::PhysicsContact& contact);
+	bool OnContactEnd(cc::PhysicsContact& contact);
 	void InitDebugDraw();
 
 private:
@@ -69,6 +68,6 @@ private:
 	std::vector<PhysicsContactListener> m_beginContactListeners;
 	std::vector<PhysicsContactListener> m_endContactListeners;
 
-	cocos2d::Node*		m_context;
-	cocos2d::DrawNode*	m_debugDrawNode;
+	cc::Node*		m_context;
+	cc::DrawNode*	m_debugDrawNode;
 };

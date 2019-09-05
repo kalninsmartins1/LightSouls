@@ -1,9 +1,8 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 #include "SpawnPointConfig.h"
-
-
+#include "Classes/Core/Math/Vector2.h"
 
 class AIAgent;
 
@@ -29,7 +28,7 @@ private:
 	void ManageAgentRespawning();
 	void RespawnAgent();
 	void SetAgentEnabled(int agentIndex, bool isEnabled);
-	void OnAgentDisappeared(cc::EventCustom* customEvent);
+	void OnAgentDisappeared(cocos2d::EventCustom* customEvent);
 
 private:
 	std::queue<int>			m_respawnIndexQueue;

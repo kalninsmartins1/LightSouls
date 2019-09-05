@@ -3,7 +3,7 @@
 #include "World/Entity/Entity.h"
 #include "World/Physics/PhysicsManager.h"
 #include "Scenes/GameScene.h"
-
+#include "Classes/Core/Math/Vector2.h"
 
 GenericAttackComponent* GenericAttackComponent::Create(float secondsBetweenAttacks, float attackRange)
 {
@@ -63,16 +63,16 @@ void GenericAttackComponent::CheckAffectedObjects(const Entity& attacker,
 	const cocos2d::Size bodySize = attacker.GetPhysicsBodySizeScaled();
 	const float bodyWidthScaled = bodySize.width;
 
-	Vector2 rectOrgin = attacker.getPosition() + direction *
+	Vector2 rectOrgin = attacker.GetPos() + direction *
 		(bodyWidthScaled + paddingFromBody);
 
 	const float rectWidth = attackComponent.GetAttackRange();
 	const float rectHeight = rectWidth * 2;
 
 	// Move the rect anchor to middle
-	rectOrgin -= Vector2(rectWidth / 2, rectHeight / 2);
+	rectOrgin = rectOrgin - Vector2(rectWidth / 2, rectHeight / 2);
 
-	const cocos2d::Rect rect(rectOrgin,
+	const cocos2d::Rect rect(cc::Vec2(rectOrgin.GetX(), rectOrgin.GetY()),
 		cocos2d::Size(rectWidth, rectHeight));
 
 	// Debug attack collision

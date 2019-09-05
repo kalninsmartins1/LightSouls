@@ -4,18 +4,18 @@
 #include "World/Physics/PhysicsManager.h"
 #include "World/Entity/Components/Attack/HitAttackComponent.h"
 #include "World/Entity/Entity.h"
-#include "Events/OnCollisionBeginEventData.h"
+#include "Classes/Core/Events/OnCollisionBeginEventData.h"
 #include "Utils/XML/XMLConsts.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "GameConsts.h"
-
+#include "cocos2d/external/tinyxml2/tinyxml2.h"
 
 
 StateLineAttack::StateLineAttack(AIAgent& aiAgent)	
 	: AState(aiAgent)	
 	, m_curProgress(EStateProgress::NONE)
 	, m_targetEntity(nullptr)
-	, m_targetPos(Vector2::ZERO)
+	, m_targetPos(Vector2::GetZero())
 	, m_attackComponent(nullptr)
 	, m_moveSpeed(100.0f)
 	, m_deliverDamageDistance(40.0f)
@@ -37,7 +37,7 @@ void StateLineAttack::OnEnter(AnimComponent& animComponent)
 	animComponent.PlayLoopingAnimation(GameConsts::ANIM_TYPE_ATTACK, false);
 
 	m_curProgress = EStateProgress::IN_PROGRESS;				
-	SetTargetPosition(m_targetEntity->getPosition());
+	SetTargetPosition(m_targetEntity->GetPos());
 	agent.SetCurrentMoveSpeed(m_moveSpeed); // Move with different speed in this state	
 }
 
@@ -48,16 +48,18 @@ EStateProgress StateLineAttack::OnStep()
 		AIAgent& agent = GetAgent();
 
 		// Move to target
-		const Vector2 agentPos = agent.getPosition();
+		const Vector2 agentPos = agent.GetPos();
 		Vector2 toTarget = m_targetPos - agentPos;
-		agent.SetMoveDirection(toTarget.getNormalized());
+		Vector2 toTargetNormalized = toTarget;
+		toTargetNormalized.Normalize();
+		agent.SetMoveDirection(toTargetNormalized);
 		
 		// Check if we are already there
-		if (toTarget.lengthSquared() <= m_arriveDistance * m_arriveDistance)
+		if (toTarget.GetLenghtSquared() <= m_arriveDistance * m_arriveDistance)
 		{
-			const Vector2& actualTargetPos = m_targetEntity->getPosition();
+			const Vector2& actualTargetPos = m_targetEntity->GetPos();
 			Vector2 toActualPos = agentPos - actualTargetPos;
-			if (toActualPos.lengthSquared() < m_deliverDamageDistance * m_deliverDamageDistance)
+			if (toActualPos.GetLenghtSquared() < m_deliverDamageDistance * m_deliverDamageDistance)
 			{
 				OnSuccessfulAttack();
 			}
@@ -73,9 +75,9 @@ EStateProgress StateLineAttack::OnStep()
 
 void StateLineAttack::OnExit()
 {
-	m_attackComponent->Attack(Vector2::ZERO); // Register attack was performed
+	m_attackComponent->Attack(Vector2::GetZero()); // Register attack was performed
 	AIAgent& agent = GetAgent();
-	agent.SetMoveDirection(Vector2::ZERO);
+	agent.SetMoveDirection(Vector2::GetZero());
 	agent.ResetMoveSpeed();
 }
 
@@ -112,11 +114,11 @@ void StateLineAttack::OnSuccessfulAttack()
 void StateLineAttack::SetTargetPosition(const Vector2& targetPos)
 {
 	AIAgent& agent = GetAgent();
-	Vector2 agentPos = agent.getPosition();
+	Vector2 agentPos = agent.GetPos();
 	Vector2 toTarget = targetPos - agentPos;
-	if (toTarget.lengthSquared() > m_attackComponent->GetAttackRangeSqr())
+	if (toTarget.GetLenghtSquared() > m_attackComponent->GetAttackRangeSqr())
 	{
-		m_targetPos = agentPos + toTarget.getNormalized() * m_attackComponent->GetAttackRange();
+		m_targetPos = agentPos + toTarget.GetNormalized() * m_attackComponent->GetAttackRange();
 	}
 	else
 	{

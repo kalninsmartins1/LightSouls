@@ -1,10 +1,8 @@
 #pragma once
 
 #include "GenericAttackComponent.h"
-#include "LightSoulsTypes.h"
 
-
-
+class Vector2;
 class Entity;
 
 class HitAttackComponent : public GenericAttackComponent

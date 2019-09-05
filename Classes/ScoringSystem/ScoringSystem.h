@@ -1,9 +1,5 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
-
-
-
 class ScoringSystem
 {
 public:

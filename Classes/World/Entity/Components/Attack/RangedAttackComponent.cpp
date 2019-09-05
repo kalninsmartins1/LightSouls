@@ -1,10 +1,8 @@
 #include "RangedAttackComponent.h"
-#include "2d/CCNode.h"
 #include "Utils/Utils.h"
 #include "World/Entity/Entity.h"
+#include "Classes/Core/Math/Vector2.h"
 #include "World/Projectiles/Projectile.h"
-
-
 
 RangedAttackComponent* RangedAttackComponent::Create(const ProjectileConfig& config, float range, float secondsBetweenAttacks)
 {
@@ -25,6 +23,7 @@ RangedAttackComponent::RangedAttackComponent(const ProjectileConfig& config, flo
 	: GenericAttackComponent(secondsBetweenAttacks, attackRange)
 	, m_projectileConfig(config)
 {
+
 }
 
 void RangedAttackComponent::Attack(const Vector2& direction)
@@ -33,15 +32,14 @@ void RangedAttackComponent::Attack(const Vector2& direction)
 	GenericAttackComponent::Attack(direction);
 
 	const Entity* ownerEntity = GetOwnerEntity();
-	Vector2 startPosition = ownerEntity->getPosition();
 	Projectile* projectile = Projectile::Create(*ownerEntity, m_projectileConfig,
-		direction, GetAttackRange());
+												direction, GetAttackRange());
 	
 	// Spawn arrow in world
-	cocos2d::Node* parent = _owner->getParent();
+	cc::Node* parent = _owner->getParent();
 
 	// Set the same camera mask to make arrow visible to camera
 	projectile->setCameraMask(parent->getCameraMask());
-	parent->addChild(projectile);	
+	parent->addChild(projectile);
 }
 

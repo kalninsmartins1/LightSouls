@@ -4,7 +4,6 @@
 #include "World/Projectiles/ProjectileConfig.h"
 
 
-
 class RangedAttackComponent: public GenericAttackComponent
 {
 public:

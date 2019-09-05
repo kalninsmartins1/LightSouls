@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 
 class LSAnimation : public cocos2d::Animation
 {

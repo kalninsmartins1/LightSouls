@@ -1,6 +1,6 @@
 #include "Cursor.h"
 #include "Classes/Utils/XML/XMLLoader.h"
-#include "Classes/Input/GameInput.h"
+#include "Classes/Core/Input/GameInput.h"
 #include "Classes/Utils/Utils.h"
 
 Cursor* Cursor::Create(cc::Node& owner, const GameInput& gameInput, const String& pathToXML)
@@ -28,9 +28,9 @@ void Cursor::Update(float deltaTime)
 	Vector2 axisInput;
 	GetAxisInput(axisInput);
 
-	if (axisInput.lengthSquared() > 0.0f)
+	if (axisInput.GetLenghtSquared() > 0.0f)
 	{
-		axisInput.normalize();
+		axisInput.Normalize();
 		UpdatePosition(axisInput);
 		m_lookAtDirection = axisInput;
 
@@ -71,7 +71,7 @@ Cursor::Cursor(const cc::Node& owner, const GameInput& gameInput)
 	: m_owner(owner)
 	, m_gameInput(gameInput)
 	, m_distanceFromPlayer(0.0f)
-	, m_windowSize(Vector2::ZERO)
+	, m_windowSize(Vector2::GetZero())
 {
 
 }
@@ -79,13 +79,15 @@ Cursor::Cursor(const cc::Node& owner, const GameInput& gameInput)
 void Cursor::GetAxisInput(Vector2& outInput) const
 {
 	Vector2 mousePos;
-	const Vector2& playerPos = m_owner.getPosition();
+	auto pos = m_owner.getPosition();
+	Vector2 playerPos(pos.x, pos.y);
 
 	if (m_gameInput.GetMousePos(mousePos))
 	{
 		Vector2 worldPos;
 		GetWorldPos(mousePos, worldPos);
-		outInput = (worldPos - playerPos).getNormalized();
+		outInput = (worldPos - playerPos);
+		outInput.Normalize();
 	}
 	else
 	{
@@ -103,15 +105,17 @@ bool Cursor::Init(cc::Node& owner, const String& pathToXML)
 	cc::Director* director = cc::Director::getInstance();
 	if (director != nullptr)
 	{
-		m_windowSize = director->getVisibleSize();
+		auto size = director->getVisibleSize();
+		m_windowSize.Set(size.width, size.height);
 	}
 
-	return m_windowSize.width > 0 && XMLLoader::InitializeCursor(*this, pathToXML);
+	return m_windowSize.GetX() > 0 && XMLLoader::InitializeCursor(*this, pathToXML);
 }
 
 void Cursor::UpdatePosition(const Vector2& axisInput)
 {
-	const Vector2& playerPos = m_owner.getPosition();
+	auto pos = m_owner.getPosition();
+	Vector2 playerPos(pos.x, pos.y);
 	Vector2 cursorPos = playerPos + axisInput * m_distanceFromPlayer;
-	setPosition(cursorPos);
+	setPosition(cursorPos.GetX(), cursorPos.GetY());
 }

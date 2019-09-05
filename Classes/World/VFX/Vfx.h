@@ -5,9 +5,11 @@
 */
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 
 class AnimComponent;
+class Vector2;
+class String;
 
 class VFX : public cc::Sprite 
 {

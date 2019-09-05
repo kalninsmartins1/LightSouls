@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../AState.h"
+#include "Classes/Core/Math/Vector2.h"
 
 class GenericAttackComponent;
 class Entity;

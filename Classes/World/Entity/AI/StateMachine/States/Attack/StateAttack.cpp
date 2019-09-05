@@ -41,9 +41,10 @@ EStateProgress StateAttack::OnStep()
 	{
 		// Direction to target
 		AIAgent& agent = GetAgent();
-		const Vector2& targetEntityPosition = AIAgentManager::GetInstance()->GetTargetEntity()->getPosition();
-		Vector2 toTarget = targetEntityPosition - agent.getPosition();
-		m_attackComponent->Attack(toTarget.getNormalized());
+		const Vector2& targetEntityPosition = AIAgentManager::GetInstance()->GetTargetEntity()->GetPos();
+		Vector2 toTarget = targetEntityPosition - agent.GetPos();
+		toTarget.Normalize();
+		m_attackComponent->Attack(toTarget);
 		agent.StartAttacking();
 
 		// Start attack animation

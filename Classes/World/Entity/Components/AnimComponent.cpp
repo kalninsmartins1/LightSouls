@@ -5,8 +5,11 @@
 #include "Utils/AnimationUtils.h"
 #include "GameConsts.h"
 #include "World/Entity/Entity.h"
+#include "Classes/Core/String/String.h"
 
-AnimComponent::AnimComponent(cc::Sprite& ownerSprite) 
+using namespace cocos2d;
+
+AnimComponent::AnimComponent(Sprite& ownerSprite) 
 	: m_curAnimId(-1)
 	, m_sprite(ownerSprite)
 	, m_firstAttackAnimId(AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_SIDE))
@@ -281,24 +284,24 @@ void AnimComponent::SetCurrentAnimId(int currentAnimId)
 void AnimComponent::UpdateAnimState(const Entity& entity)
 {
 	const Vector2& heading = entity.GetMoveDirection();
-	const float absoluteXValue = abs(heading.x);
-	const float absoluteYValue = abs(heading.y);
+	const float absoluteXValue = abs(heading.GetX());
+	const float absoluteYValue = abs(heading.GetY());
 
-	if (abs(heading.x) > 0.0f && absoluteXValue > absoluteYValue)
+	if (abs(heading.GetX()) > 0.0f && absoluteXValue > absoluteYValue)
 	{		
 		m_currentAnimStyle = AnimStyle::SIDE;
 		TransitionAttackAnimDirection(
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_SIDE),
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_SIDE));
 	}
-	else if (heading.y > 0.0f)
+	else if (heading.GetY() > 0.0f)
 	{		
 		m_currentAnimStyle = AnimStyle::UP;
 		TransitionAttackAnimDirection(
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_ONE_UP),
 			AnimationUtils::GetAnimId(GameConsts::ANIM_TYPE_ATTACK_COMBO_TWO_UP));
 	}
-	else if (heading.y < 0.0f)
+	else if (heading.GetY() < 0.0f)
 	{	
 		m_currentAnimStyle = AnimStyle::DOWN;
 		TransitionAttackAnimDirection(

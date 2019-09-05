@@ -2,8 +2,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/Utils.h"
 #include "SpawnPoint.h"
-
-
+#include "Classes/Core/String/String.h"
 
 AIAgentManager::AIAgentManager()
 	: m_worldLayer(nullptr)

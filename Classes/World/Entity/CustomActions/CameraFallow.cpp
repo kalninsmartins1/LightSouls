@@ -1,7 +1,8 @@
 #include "CameraFallow.h"
 #include "Utils/Utils.h"
+#include "Classes/Core/Math/Vector2.h"
 
-CameraFollow* CameraFollow::Create(cocos2d::Node* followedNode)
+CameraFollow* CameraFollow::Create(cc::Node* followedNode)
 {
 	CameraFollow *follow = new (std::nothrow) CameraFollow(followedNode);
 
@@ -17,13 +18,13 @@ CameraFollow* CameraFollow::Create(cocos2d::Node* followedNode)
 	return follow;
 }
 
-void CameraFollow::startWithTarget(cocos2d::Node *target)
+void CameraFollow::startWithTarget(cc::Node *target)
 {
 	Action::startWithTarget(target);
 	_target->setPosition(m_followNode->getPosition());
 }
 
-CameraFollow::CameraFollow(const cocos2d::Node* followNode)
+CameraFollow::CameraFollow(const cc::Node* followNode)
 	: m_followNode(followNode)
 	, m_cameraState(CameraMoveSate::TARGET_REACHED)
 	, m_curSpeed(50.0f)
@@ -41,10 +42,14 @@ bool CameraFollow::isDone() const
 
 void CameraFollow::step(float dt)
 {
-	Vector2 cameraPos = _target->getPosition();
-	Vector2 followedNodePos = m_followNode->getPosition();
-	Vector2 toFollowedNode = (followedNodePos - cameraPos);
-	_target->setPosition(cameraPos + toFollowedNode * 0.1f * m_curSpeed * dt);
+	auto pos = _target->getPosition();
+	Vector2 cameraPos(pos.x, pos.y);
+
+	auto followPos = m_followNode->getPosition();
+	const Vector2 followedNodePos(followPos.x, followPos.y);
+	const Vector2 toFollowedNode = (followedNodePos - cameraPos);
+	const Vector2 newPos = cameraPos + toFollowedNode * 0.1f * m_curSpeed * dt;
+	_target->setPosition(newPos.GetX(), newPos.GetY());
 }
 
 void CameraFollow::ProcessStateEasingIn(float dt, const Vector2& cameraPos, const Vector2& toFollowNodeNormalized, float distance)
@@ -61,7 +66,8 @@ void CameraFollow::ProcessStateEasingIn(float dt, const Vector2& cameraPos, cons
 	}
 	else
 	{
-		_target->setPosition(cameraPos + toFollowNodeNormalized * moveAmount);
+		const Vector2 newPos = cameraPos + toFollowNodeNormalized * moveAmount;
+		_target->setPosition(newPos.GetX(), newPos.GetY());
 	}	
 }
 
@@ -74,7 +80,8 @@ void CameraFollow::ProcessStateFullSpeed(float dt, const Vector2& cameraPos, con
 	}
 	else
 	{
-		_target->setPosition(cameraPos + toFollowNodeNormalized * m_curSpeed * dt);
+		const Vector2 newPos = cameraPos + toFollowNodeNormalized * m_curSpeed * dt;
+		_target->setPosition(newPos.GetX(), newPos.GetY());
 	}
 }
 
@@ -92,7 +99,8 @@ void CameraFollow::ProcessStateEasingOut(float dt, const Vector2& cameraPos, con
 	}
 	else
 	{
-		_target->setPosition(cameraPos + toFollowNodeNormalized * moveAmount);
+		const Vector2 vec = cameraPos + toFollowNodeNormalized * moveAmount;
+		_target->setPosition(vec.GetX(), vec.GetY());
 	}	
 }
 

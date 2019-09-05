@@ -1,13 +1,12 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 #include "World/Projectiles/ProjectileConfig.h"
-
-
+#include "Classes/Core/Math/Vector2.h"
 
 class Entity;
 
-class Projectile : public cocos2d::Sprite
+class Projectile : public cc::Sprite
 {
 public:
 	Projectile(const Entity& shooter, const ProjectileConfig& config, const Vector2& shootDirection, float attackRange);
@@ -18,7 +17,7 @@ public:
 
 	static Projectile*  Create(const Entity& shooter, const ProjectileConfig& config, const Vector2& shootDirection, float attackRange);
 	void				update(float deltaTime) override;
-	virtual void		setParent(Node* parent) override;
+	virtual void		setParent(cc::Node* parent) override;
 	void				Destroy();
 
 private:
@@ -26,12 +25,13 @@ private:
 	void				InitProjectilePastFrameAnimation();
 	void				RotateProjectileInDirectionOfMovement();
 	void				OnSpriteFaded();
-	void				StartSpriteFadeOut(Sprite* sprite);
+	void				StartSpriteFadeOut(cc::Sprite* sprite);
 
 private:
-	const Entity&	 m_shooterEntity;
-	Sprite*			 m_extraSpriteOne;
-	Sprite*			 m_extraSpriteTwo;
+	const Entity&		m_shooterEntity;
+	cc::Sprite*			m_extraSpriteOne;
+	cc::Sprite*			m_extraSpriteTwo;
+
 	ProjectileConfig m_config;
 	Vector2			 m_shootDirection;
 	Vector2			 m_startPosition;

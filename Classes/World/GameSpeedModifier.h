@@ -1,6 +1,7 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
+#include "Classes/Core/String/String.h"
 
 class GameScene;
 
@@ -25,19 +26,19 @@ public:
 	void AddEvent(const String& eventName, float speed, float duration);
 
 private:
-	cc::PhysicsWorld* GetPhysicsWorld() const;
-	float			  GetPhysicsWorldSpeed() const;
+	cocos2d::PhysicsWorld*	GetPhysicsWorld() const;
+	float					GetPhysicsWorldSpeed() const;
 
-	void			  SetPhysicsWorldSpeed(float speed) const;
+	void					SetPhysicsWorldSpeed(float speed) const;
 
-	void OnEventTriggered(cc::EventCustom* eventData);
+	void OnEventTriggered(cocos2d::EventCustom* eventData);
 	void OnSpeedModificationFinished();
 
 private:
 	static String						s_eventOnModificationStarted;
 	static String						s_eventOnModificationEnded;
 	GameScene&							m_gameScene;
-	cc::EventDispatcher&				m_eventDispatcher;	
+	cocos2d::EventDispatcher&			m_eventDispatcher;
 	std::map<String, EventParameters>	m_eventData;
 	float								m_originalTimeScale;	
 	bool								m_isModificationActive;

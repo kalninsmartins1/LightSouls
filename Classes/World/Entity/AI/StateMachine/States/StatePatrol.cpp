@@ -4,19 +4,18 @@
 #include "Utils/Utils.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "World/Physics/PhysicsManager.h"
-#include "Events/OnCollisionBeginEventData.h"
+#include "Classes/Core/Events/OnCollisionBeginEventData.h"
 #include "World/World.h"
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
-
-
+#include "Classes/Utils/XML/XMLTypes.h"
 
 StatePatrol::StatePatrol(AIAgent& agent)
 	: AState(agent)
 	, m_targetEntity(nullptr)
 	, m_curProgress(EStateProgress::NONE)
 	, m_animComponent(nullptr)
-	, m_curTargetPosition(Vector2::ZERO)
+	, m_curTargetPosition(Vector2::GetZero())
 	, m_isLookingAround(false)
 	, m_isCollided(false)
 	, m_patrolRadius(0.0f)
@@ -50,8 +49,8 @@ EStateProgress StatePatrol::OnStep()
 		}
 		else if(!m_isLookingAround && !agent.IsProcessing())
 		{
-			Vector2 toTargetPosition = m_curTargetPosition - agent.getPosition();
-			agent.SetMoveDirection(toTargetPosition.getNormalized());
+			Vector2 toTargetPosition = m_curTargetPosition - agent.GetPos();
+			agent.SetMoveDirection(toTargetPosition.GetNormalized());
 
 			if (!m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_RUN))
 			{
@@ -59,7 +58,7 @@ EStateProgress StatePatrol::OnStep()
 			}
 			
 			float stoppingDistance = agent.GetStoppingDistance();
-			if (toTargetPosition.length() <= stoppingDistance || m_isCollided)
+			if (toTargetPosition.GetLenght() <= stoppingDistance || m_isCollided)
 			{
 				// Target position reached
 				m_isLookingAround = true;
@@ -109,24 +108,24 @@ EAIState StatePatrol::GetStateType() const
 bool StatePatrol::HasTargetBeenSpotted() const
 {		
 	// Check if target has been spotted
-	const Vector2& agentPosition = GetAgent().getPosition();
-	const Vector2& targetEntityPosition = m_targetEntity->getPosition();
-	const float distanceToTargetEntity = targetEntityPosition
-		.distance(agentPosition);
+	const Vector2& agentPosition = GetAgent().GetPos();
+	const Vector2& targetEntityPosition = m_targetEntity->GetPos();
+	const Vector2& toTargetEntity = targetEntityPosition - agentPosition;
+	const float distanceToTargetEntity = toTargetEntity.GetLenght();
 
 	return distanceToTargetEntity < m_patrolRadius;
 }
 
 void StatePatrol::GetRandomPositionInRange(Vector2& outRandomPosition) const
 {	
-	outRandomPosition = Utils::GetRandomPositionWithinCircle(GetAgent().getPosition(),
+	outRandomPosition = Utils::GetRandomPositionWithinCircle(GetAgent().GetPos(),
 		m_patrolRadius);	
 }
 
 void StatePatrol::StartLookingAround()
 {	
 	m_animComponent->PlayLoopingAnimation(GameConsts::ANIM_TYPE_IDLE);
-	GetAgent().SetMoveDirection(Vector2::ZERO); // We are not moving while looking around
+	GetAgent().SetMoveDirection(Vector2::GetZero()); // We are not moving while looking around
 
 	Utils::StartTimerWithCallback(&GetAgent(), 
 		CC_CALLBACK_0(StatePatrol::OnFinishedLookingAround, this),

@@ -7,8 +7,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
 #include "World/Entity/AI/AIAgentManager.h"
-
-
+#include "Classes/Utils/XML/XMLTypes.h"
 
 StateSignaling::StateSignaling(AIAgent& aiAgent)
 	: AState(aiAgent)

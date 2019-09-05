@@ -69,7 +69,7 @@ void BlurAnimation::LoadNextFrame(BlurAnimationFrame& blurFrame)
 	blurFrame.SetCurFrame(m_animComp.GetCurrentSpriteFrame());
 
 	const cc::Node& owner = m_animComp.GetOwner();
-	blurFrame.GetSprite()->setPosition(Vector2(owner.getPosition()));
+	blurFrame.GetSprite()->setPosition(owner.getPosition());
 }
 
 void BlurAnimation::RemoveBlurFrame(int index)

@@ -1,8 +1,10 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
+#include "Classes/Core/Math/Vector2.h"
+#include "Classes/Core/String/String.h"
 
-class World : public cocos2d::Sprite
+class World : public cc::Sprite
 {
 public:
 	World();

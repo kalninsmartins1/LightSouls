@@ -3,15 +3,8 @@
 #include "GameConsts.h"
 #include "World/Entity/Entity.h"
 
-
-
 const String PhysicsManager::s_onCollisionBeginEvent = "EVENT_ON_COLLISION_BEGIN";
 const String PhysicsManager::s_onPhysicsBodyAnchorSet = "EVENT_ON_PHYSICS_BODY_OFFSET_SET";
-
-PhysicsManager::~PhysicsManager()
-{
-
-}
 
 const String& PhysicsManager::GetEventOnCollisionBegin()
 {
@@ -23,7 +16,7 @@ const String& PhysicsManager::GetEventOnPhysicsBodyAnchorSet()
 	return s_onPhysicsBodyAnchorSet;
 }
 
-PhysicsManager* PhysicsManager::Create(cocos2d::Node* context)
+PhysicsManager* PhysicsManager::Create(cc::Node* context)
 {
 	PhysicsManager* manager = new (std::nothrow) PhysicsManager();
 	if (manager == nullptr || !manager->Init(context))
@@ -110,10 +103,10 @@ void PhysicsManager::OnReload()
 
 void PhysicsManager::DebugDrawRect(const cocos2d::Rect& rect)
 {
-	const Vector2 pointOne(rect.getMinX(), rect.getMinY());
-	const Vector2 pointTwo(rect.getMaxX(), rect.getMinY());
-	const Vector2 pointThree(rect.getMaxX(), rect.getMaxY());
-	const Vector2 pointFour(rect.getMinX(), rect.getMaxY());
+	const cc::Vec2 pointOne(rect.getMinX(), rect.getMinY());
+	const cc::Vec2 pointTwo(rect.getMaxX(), rect.getMinY());
+	const cc::Vec2 pointThree(rect.getMaxX(), rect.getMaxY());
+	const cc::Vec2 pointFour(rect.getMinX(), rect.getMaxY());
 	
 	m_debugDrawNode->clear();
 	m_debugDrawNode->drawRect(pointOne, pointTwo, pointThree, pointFour,
@@ -133,8 +126,9 @@ void PhysicsManager::Raycast(RaycastCallback callback, const Vector2& startPoint
 	using namespace cocos2d;
 	Director* director = Director::getInstance();
 	PhysicsWorld* world = director->getRunningScene()->getPhysicsWorld();
-
-	world->rayCast(callback, startPoint, endPoint, data);	
+	cc::Vec2 ccStartPoint = cc::Vec2(startPoint.GetX(), startPoint.GetY());
+	cc::Vec2 ccEndPoint = cc::Vec2(endPoint.GetX(), endPoint.GetY());
+	world->rayCast(callback, ccStartPoint, ccEndPoint, data);	
 }
 
 bool PhysicsManager::DispatchContactEventsToListeners(const Vector2& contactPoint, const cocos2d::PhysicsBody* bodyA, const cocos2d::PhysicsBody* bodyB, const std::vector<PhysicsContactListener>& listeners)
@@ -177,7 +171,9 @@ bool PhysicsManager::OnContactBegin(cocos2d::PhysicsContact& contact)
 	bool shouldCollide = true;
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
-		shouldCollide = DispatchContactEventsToListeners(contact.getContactData()->points[0], bodyA, bodyB, m_beginContactListeners);
+		auto ccVec = contact.getContactData()->points[0];
+		const Vector2 vec(ccVec.x, ccVec.y);
+		shouldCollide = DispatchContactEventsToListeners(vec, bodyA, bodyB, m_beginContactListeners);
 	}
 
 	return shouldCollide;
@@ -190,7 +186,9 @@ bool PhysicsManager::OnContactEnd(cocos2d::PhysicsContact& contact)
 
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
-		DispatchContactEventsToListeners(contact.getContactData()->points[0], bodyA, bodyB, m_endContactListeners);
+		auto ccVec = contact.getContactData()->points[0];
+		const Vector2 vec(ccVec.x, ccVec.y);
+		DispatchContactEventsToListeners(vec, bodyA, bodyB, m_endContactListeners);
 	}
 
 	return true;

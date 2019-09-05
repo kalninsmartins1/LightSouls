@@ -1,7 +1,7 @@
 #include "LongSwordAttackComponent.h"
 #include "World/Physics/PhysicsManager.h"
 #include "World/Entity/Entity.h"
-#include "Classes/Events/TransformEventData.h"
+#include "Classes/Core/Events/TransformEventData.h"
 #include "Classes/GameConsts.h"
 #include "Classes/Utils/Utils.h"
 
@@ -36,7 +36,7 @@ LongSwordAttackComponent::LongSwordAttackComponent(float secondsBetweenAttacks,
 	: GenericAttackComponent(secondsBetweenAttacks, attackRange)
 	, m_paddingFromBody(paddingFromBody)
 	, m_damageCheckDelay(0.0f)
-	, m_lastAttackDirection(Vector2::ZERO)
+	, m_lastAttackDirection(Vector2::GetZero())
 {
 
 }
@@ -66,7 +66,7 @@ void LongSwordAttackComponent::DispatchStartAttackEvent(const Vector2& direction
 	if (ownerEntity != nullptr)
 	{
 		float angle = Utils::GetSignedAngleBetweenVectors(direction, Vector2(1, 0));
-		Vector2 position = ownerEntity->getPosition() + direction * GetAttackRange();
+		Vector2 position = ownerEntity->GetPos() + direction * GetAttackRange();
 		TransformEventData transformData(ownerEntity->GetId(), position, angle);
 
 		ownerEntity->DispatchEvent(s_eventOnLongSwordAttackStarted, &transformData);
@@ -97,9 +97,9 @@ void LongSwordAttackComponent::OnEntityHit(Entity* hitEntity) const
 	const Entity* ownerEntity = GetOwnerEntity();
 	if (ownerEntity != nullptr && hitEntity != nullptr)
 	{
-		const Vector2& ownerPosition = ownerEntity->getPosition();
-		const Vector2& toHitEntity = hitEntity->getPosition() - ownerEntity->getPosition();
-		const Vector2 hitPoint = ownerPosition + (toHitEntity.getNormalized() * GetAttackRange());
+		const Vector2& ownerPosition = ownerEntity->GetPos();
+		const Vector2& toHitEntity = hitEntity->GetPos() - ownerEntity->GetPos();
+		const Vector2 hitPoint = ownerPosition + (toHitEntity.GetNormalized() * GetAttackRange());
 
 		TransformEventData transformData(ownerEntity->GetId(), hitPoint, 0.0f);
 		ownerEntity->DispatchEvent(s_eventOnSlash, &transformData);

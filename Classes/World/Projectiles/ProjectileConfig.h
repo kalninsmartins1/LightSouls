@@ -1,9 +1,7 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
 #include "World/Physics/PhysicsBodyConfig.h"
-
-
+#include "Classes/Core/String/String.h"
 
 class ProjectileConfig
 {

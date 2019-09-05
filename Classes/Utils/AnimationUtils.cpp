@@ -5,6 +5,7 @@
 #include "XML/XMLConsts.h"
 #include "World/Entity/Animation/LSAnimation.h"
 #include "World/Entity/CustomActions/LSAnimate.h"
+#include "Classes/Core/String/String.h"
 
 const std::map<String, int> AnimationUtils::s_animTypeToId =
 {
@@ -54,7 +55,7 @@ const std::map<String, int> AnimationUtils::s_animTypeToId =
 	{ GameConsts::ANIM_TYPE_DISAPPEAR, 34},
 };
 
-int AnimationUtils::GetAnimId(String animName)
+int AnimationUtils::GetAnimId(const String& animName)
 {
 	int animId = -1;
 	if (Utils::ContainsKey(s_animTypeToId, animName))
@@ -63,7 +64,7 @@ int AnimationUtils::GetAnimId(String animName)
 	}
 	else
 	{
-		CCLOGERROR("No animation %s found !", animName.c_str());
+		CCLOGERROR("No animation %s found !", animName.GetCStr());
 	}
 
 	return animId;
@@ -80,7 +81,7 @@ void AnimationUtils::GetAnimName(int animId, String& outAnimName)
 	}
 }
 
-cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::Sprite* sprite,
+cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cc::Sprite* sprite,
 	const AnimationData& animationData,
 	const std::function<void()>& onFinished)
 {
@@ -90,19 +91,19 @@ cocos2d::Action* AnimationUtils::StartSpriteFrameAnimationWithCallback(cocos2d::
 	// Start character animation
 	const auto animation = LSAnimation::Create(animationData.frames, animationData.timeBetweenFrames);
 	const auto animate = LSAnimate::Create(animation);
-	const auto callbackAction = cocos2d::CallFunc::create(onFinished);
+	const auto callbackAction = cc::CallFunc::create(onFinished);
 
 	/* According to cocos2d documentation last parameter to Sequnce::create must be nullptr
 	 * http://www.cocos2d-x.org/docs/cocos2d-x/en/actions/sequences.html
 	*/
-	auto sequence = cocos2d::Sequence::create(animate, callbackAction, nullptr);
+	auto sequence = cc::Sequence::create(animate, callbackAction, nullptr);
 	sequence->setTag(GameConsts::ACTION_ANIM);
 
 	// Start new anim
 	return sprite->runAction(sequence);
 }
 
-void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const AnimationData& animationData, bool shouldReverse)
+void AnimationUtils::StartSpriteFrameAnimation(cc::Sprite* sprite, const AnimationData& animationData, bool shouldReverse)
 {
 	// Stop any previously started animation
 	sprite->stopActionByTag(GameConsts::ACTION_ANIM);
@@ -112,14 +113,14 @@ void AnimationUtils::StartSpriteFrameAnimation(cocos2d::Sprite* sprite, const An
 		animationData.timeBetweenFrames, shouldReverse);
 	auto animateAction = LSAnimate::Create(animation);	
 	
-	const auto repeatAction = cocos2d::RepeatForever::create(animateAction);
+	const auto repeatAction = cc::RepeatForever::create(animateAction);
 	repeatAction->setTag(GameConsts::ACTION_ANIM);
 
 	// Start new anim	
 	sprite->runAction(repeatAction);
 }
 
-void AnimationUtils::LoadAnimationFrames(const tinyxml2::XMLElement* animElement,
+void AnimationUtils::LoadAnimationFrames(const XMLElement* animElement,
 	AnimationData& outAnimationData)
 {
 	// Get template frame name
@@ -134,12 +135,12 @@ void AnimationUtils::LoadAnimationFrames(const tinyxml2::XMLElement* animElement
 	const int frameCount = outAnimationData.timeBetweenFrames.size();
 
 	// Load all the frame for the animation
-	auto spriteCache = cocos2d::SpriteFrameCache::getInstance();
+	auto spriteCache = cc::SpriteFrameCache::getInstance();
 	char curSpriteFrameName[GameConsts::MAX_SPRITE_NAME_LENGTH] = { 0 };
 	for (int i = 0; i < frameCount; i++)
 	{
 		sprintf(curSpriteFrameName, spriteFrameName, i);
-		cocos2d::SpriteFrame* frame = spriteCache->getSpriteFrameByName(curSpriteFrameName);
+		cc::SpriteFrame* frame = spriteCache->getSpriteFrameByName(curSpriteFrameName);
 		outAnimationData.frames.pushBack(frame);
 	}	
 }

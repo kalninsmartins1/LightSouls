@@ -1,6 +1,5 @@
 #pragma once
 
-#include "2d/CCSprite.h"
 #include "World/Entity/Entity.h"
 
 class AnimComponent;
@@ -51,9 +50,9 @@ private:
 	void PlayRunOrIdleAnimation() const;
 	void ResetCollisionData();
 
-	bool OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
-	bool OnContactEnd(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
-	bool OnProjectileHit(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
+	bool OnContactBegin(const Vector2& contactPoint, const cc::PhysicsBody* otherBody);
+	bool OnContactEnd(const Vector2& contactPoint, const cc::PhysicsBody* otherBody);
+	bool OnProjectileHit(const Vector2& contactPoint, const cc::PhysicsBody* otherBody);
 	bool InitAttackComponent();
 
 private:

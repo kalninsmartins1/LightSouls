@@ -6,12 +6,13 @@
 #include "World/Entity/AI/StateMachine/StateMachine.h"
 #include "World/Entity/Components/AnimComponent.h"
 #include "World/Physics/PhysicsManager.h"
-#include "Events/OnCollisionBeginEventData.h"
+#include "Classes/Core/Events/OnCollisionBeginEventData.h"
 #include "Utils/XML/XMLConsts.h"
 #include "World/Entity/AI/StateMachine/States/AState.h"
 #include "Scenes/GameScene.h"
 #include "World/Entity/AI/AIAgentManager.h"
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
+#include "cocos2d/external/tinyxml2/tinyxml2.h"
 
 String AIAgent::s_eventAgentHealthChanged = "EVENT_AGENT_HEALTH_CHANGED";
 String AIAgent::s_eventAgentDamageTaken = "EVENT_AGENT_DAMAGE_TAKEN";
@@ -42,13 +43,13 @@ void AIAgent::DispatchOnDisappeared() const
 	cc::EventDispatcher* eventDispatcher = getEventDispatcher();	
 	if (GetHealth() <= 0)
 	{
-		eventDispatcher->dispatchCustomEvent(s_eventAgentDisappeared, &BaseEventData(GetId()));
+		eventDispatcher->dispatchCustomEvent(s_eventAgentDisappeared.GetCStr(), &BaseEventData(GetId()));
 	}	
 }
 
 AIAgent::AIAgent()
 	: m_stateMachine(*this)
-	, m_basePosition(Vector2::ZERO)	
+	, m_basePosition(Vector2::GetZero())	
 {
 
 }
@@ -147,7 +148,7 @@ void AIAgent::Update(float deltaTime)
 	}
 	else
 	{
-		SetMoveDirection(Vector2::ZERO);
+		SetMoveDirection(Vector2::GetZero());
 	}
 }
 
@@ -155,7 +156,7 @@ void AIAgent::Reset()
 {
 	PrepareForRespawn();
 	m_stateMachine.Reset();
-	setPosition(GetBasePosition());
+	SetPos(GetBasePosition());
 }
 
 void AIAgent::DispatchOnStaminaChangedEvent() const

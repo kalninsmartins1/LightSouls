@@ -1,9 +1,11 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
+#include "Classes/Core/Math/Vector2.h"
 
 class AnimComponent;
 class BaseEventData;
+class String;
 
 enum class EntityType
 {
@@ -12,7 +14,7 @@ enum class EntityType
 	AIAGENT
 };
 
-class Entity: public cocos2d::Sprite
+class Entity: public cc::Sprite
 {
 public:
 	Entity();
@@ -23,6 +25,7 @@ public:
 	float					GetCurrentMoveSpeed() const;
 	const Vector2&			GetMoveDirection() const;
 	const Vector2&			GetLookAtDirection() const;
+	const Vector2&			GetPos() const;
 	const cocos2d::Size&	GetPhysicsBodySizeScaled() const;
 	float					GetHealth() const;
 	float					GetDamage() const;	
@@ -34,12 +37,12 @@ public:
 	AnimComponent*			GetAnimComponent() const;
 	bool					IsProcessing() const;
 	
-	unsigned int			GetId() const;
-	bool					IsRunning() const;	
-	bool					IsReadyToAttack() const;
-	bool					HasEnoughtStamina(float amount) const;
-	float					GetKnockBackStrenght() const;
-	float					GetTimeModifier() const;
+	unsigned int				GetId() const;
+	bool						IsRunning() const;	
+	bool						IsReadyToAttack() const;
+	bool						HasEnoughtStamina(float amount) const;
+	float						GetKnockBackStrenght() const;
+	float						GetTimeModifier() const;
 	
 	void			SetPhysicsBodyForceScale(float scale);
 	void			SetBaseDamage(float baseDamage);
@@ -55,6 +58,7 @@ public:
 	void			SetStaminaRegenerateDelay(float regenerateDelay);
 	void			SetKnockBackStrenght(float strenght);
 	void			SetTimeModifier(float timeModifier);
+	void			SetPos(const Vector2& pos);
 	virtual void	setScale(float scaleX, float scaleY) override;
 
 	void			ResetHealth();
@@ -72,6 +76,7 @@ public:
 	void			ApplyKnockbackEffect(const Entity& attackingEntity);
 	void			ApplyInstantSpeed(float speed);
 	void			ApplyInstantSpeedInDirection(float speed, const Vector2& direction);	
+	void			UpdatePos();
 	virtual void	Update(float deltaTime);
 
 protected:
@@ -100,11 +105,12 @@ private:
 	static unsigned int			s_uniqueId;
 	unsigned int				m_id;
 
-	AnimComponent*			m_animComponent;
-	Vector2					m_moveDirection;
-	Vector2					m_lookAtDirection;
-	cocos2d::Size			m_physicsBodyScaledSize;
-	
+	AnimComponent*				m_animComponent;
+	Vector2						m_pos;
+	Vector2						m_moveDirection;
+	Vector2						m_lookAtDirection;
+	cocos2d::Size				m_physicsBodyScaledSize;
+
 	bool m_isRuning;
 	bool m_isAttacking;
 	bool m_isTakingDamage;

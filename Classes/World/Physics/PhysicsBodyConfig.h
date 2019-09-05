@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 
 enum class BodyType
 {
@@ -25,8 +25,8 @@ public:
 	bool							IsRotationEnabled() const;
 
 	void			SetRotationEnabled(bool isEnabled);
-	void			SetSize(const cocos2d::Size& size);
-	void			SetPhysicsMaterial(const cocos2d::PhysicsMaterial& material);
+	void			SetSize(const cc::Size& size);
+	void			SetPhysicsMaterial(const cc::PhysicsMaterial& material);
 	void			SetBodyType(const BodyType& type);
 	void			SetCollisionBitMask(int collisionBitMask);
 	void			SetCollisionCategory(int collisionCategory);
@@ -34,8 +34,8 @@ public:
 	void			SetIsGravityEnabled(bool isGravityEnabled);
 
 private:
-	cocos2d::Size				m_bodySize;
-	cocos2d::PhysicsMaterial	m_physicsMaterial;
+	cc::Size					m_bodySize;
+	cc::PhysicsMaterial			m_physicsMaterial;
 	BodyType					m_bodyType;
 	int							m_collisionBitMask;
 	int							m_collisionCategory;

@@ -1,6 +1,10 @@
 #include "AState.h"
 
-
+namespace tinyxml2
+{
+	class XMLElement;
+};
+using XMLElement = tinyxml2::XMLElement;
 
 class StateIsPlayerClose : public AState
 {

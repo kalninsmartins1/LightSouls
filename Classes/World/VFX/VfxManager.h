@@ -5,8 +5,10 @@
 */
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 
+class Vector2;
+class String;
 class VFX;
 
 class VFXManager
@@ -21,7 +23,7 @@ public:
 private:
 	void OnVFXEventTriggered(cc::EventCustom* eventData);
 	void OnVFXFinishedCallback(VFX& vfx);
-	void SpawnVFX(const String& eventType, const Vector2 & pos, float rotationAngle);
+	void SpawnVFX(const String& eventType, const Vector2& pos, float rotationAngle);
 
 private:
 	cc::Node*					m_container;

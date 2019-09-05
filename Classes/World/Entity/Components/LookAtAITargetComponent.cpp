@@ -15,11 +15,11 @@ void LookAtAITargetComponent::update(float delta)
 		Entity* targetEntity = aiManager->GetTargetEntity();
 		if (targetEntity != nullptr)
 		{
-			const Vector2& targetPosition = targetEntity->getPosition();
-			const Vector2& ownerPosition = getOwner()->getPosition();
+			const Vector2& targetPosition = targetEntity->GetPos();
+			const Vector2& ownerPosition = m_ownerEntity->GetPos();
 
 			float curScaleX = abs(m_ownerEntity->getScaleX());
-			if (targetPosition.x > ownerPosition.x)
+			if (targetPosition.GetX() > ownerPosition.GetX())
 			{
 				m_ownerEntity->setScaleX(-curScaleX);
 			}

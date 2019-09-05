@@ -7,7 +7,7 @@
 #include "Utils/XML/XMLLoader.h"
 #include "Utils/XML/XMLConsts.h"
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
-
+#include "Classes/Utils/XML/XMLTypes.h"
 
 StatePause::StatePause(AIAgent& aiAgent)
 	: AState(aiAgent)	
@@ -47,7 +47,7 @@ EStateProgress StatePause::OnStep()
 	AIAgent& agent = GetAgent();
 	if (!agent.IsProcessing())
 	{
-		agent.SetMoveDirection(Vector2::ZERO);
+		agent.SetMoveDirection(Vector2::GetZero());
 	}
 
 	return m_curProgress;
@@ -69,8 +69,8 @@ void StatePause::LoadXMLData(const XMLElement& xmlElement)
 bool StatePause::IsTargetTooFar() const
 {
 	Entity* targetEntity = AIAgentManager::GetInstance()->GetTargetEntity();
-	Vector2 toTarget = targetEntity->getPosition() - GetAgent().getPosition();
-	return  toTarget.lengthSquared() >= m_maxDistaneceToTarget * m_maxDistaneceToTarget;
+	Vector2 toTarget = targetEntity->GetPos() - GetAgent().GetPos();
+	return  toTarget.GetLenghtSquared() >= m_maxDistaneceToTarget * m_maxDistaneceToTarget;
 }
 
 void StatePause::OnPauseExpired()

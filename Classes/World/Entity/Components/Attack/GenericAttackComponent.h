@@ -1,10 +1,9 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
-
-
+#include "Classes/External/CocosEngine.h"
 
 class Entity;
+class Vector2;
 
 class GenericAttackComponent : public cocos2d::Component
 {

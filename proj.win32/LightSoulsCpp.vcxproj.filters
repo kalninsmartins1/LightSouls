@@ -114,21 +114,6 @@
     <ClCompile Include="..\Classes\Utils\AnimationUtils.cpp">
       <Filter>src\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Input\GameInput.cpp">
-      <Filter>src\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Input\InputTypes\Keyboard\KeyboardInput.cpp">
-      <Filter>src\Input\InputTypes\Keyboard</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Input\InputTypes\Mouse\MouseInput.cpp">
-      <Filter>src\Input\InputTypes\Mouse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Input\InputTypes\AInputDevice.cpp">
-      <Filter>src\Input\InputTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Input\InputTypes\GameController\GameControllerInput.cpp">
-      <Filter>src\Input\InputTypes\GameController</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\World.cpp">
       <Filter>src\World</Filter>
     </ClCompile>
@@ -168,26 +153,8 @@
     <ClCompile Include="..\Classes\World\Physics\PhysicsBodyConfig.cpp">
       <Filter>src\World\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\UI\UIElementConfig.cpp">
-      <Filter>src\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\UI\InGameIndicators\ProgressBar.cpp">
-      <Filter>src\UI\InGameIndicators</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\Components\AnimComponent.cpp">
       <Filter>src\World\Entity\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Events\OnCollisionBeginEventData.cpp">
-      <Filter>src\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Camera\Camera.cpp">
-      <Filter>src\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Camera\Components\CameraShake.cpp">
-      <Filter>src\Camera\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.cpp">
-      <Filter>src\Camera\CameraShake</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\World\Entity\AI\StateMachine\States\StateIdle.cpp">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
@@ -237,9 +204,6 @@
     <ClCompile Include="..\Classes\World\Entity\Components\Attack\GenericAttackComponent.cpp">
       <Filter>src\World\Entity\Components\Attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\World\Projectiles\Projectile.cpp">
-      <Filter>src\World\Projectiles</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\Projectiles\ProjectileConfig.cpp">
       <Filter>src\World\Projectiles</Filter>
     </ClCompile>
@@ -261,18 +225,32 @@
     <ClCompile Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Animation\BlurAnimation.cpp" />
     <ClCompile Include="..\Classes\World\Entity\Animation\BlurAnimationFrame.cpp" />
-    <ClCompile Include="..\Classes\Events\ValueChangedEventData.cpp">
-      <Filter>src\Events</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\World\GameSpeedModifier.cpp" />
-    <ClCompile Include="..\Classes\Events\PositionEventData.cpp" />
     <ClCompile Include="..\Classes\World\VFX\VFXManager.cpp" />
     <ClCompile Include="..\Classes\World\VFX\VFX.cpp" />
-    <ClCompile Include="..\Classes\Events\BaseEventData.cpp">
-      <Filter>src\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Events\TransformEventData.cpp" />
     <ClCompile Include="..\Classes\World\Cursor.cpp" />
+    <ClCompile Include="..\Classes\Core\Camera\Camera.cpp" />
+    <ClCompile Include="..\Classes\Core\Camera\CameraShake\CameraShakeTrigger.cpp" />
+    <ClCompile Include="..\Classes\Core\Camera\Components\CameraShake.cpp" />
+    <ClCompile Include="..\Classes\Core\Events\BaseEventData.cpp" />
+    <ClCompile Include="..\Classes\Core\Events\OnCollisionBeginEventData.cpp" />
+    <ClCompile Include="..\Classes\Core\Events\PositionEventData.cpp" />
+    <ClCompile Include="..\Classes\Core\Events\TransformEventData.cpp" />
+    <ClCompile Include="..\Classes\Core\Events\ValueChangedEventData.cpp" />
+    <ClCompile Include="..\Classes\Core\Input\GameInput.cpp" />
+    <ClCompile Include="..\Classes\Core\Input\InputTypes\AInputDevice.cpp" />
+    <ClCompile Include="..\Classes\Core\Input\InputTypes\GameController\GameControllerInput.cpp" />
+    <ClCompile Include="..\Classes\Core\Input\InputTypes\Keyboard\KeyboardInput.cpp" />
+    <ClCompile Include="..\Classes\Core\Input\InputTypes\Mouse\MouseInput.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\ElementConfig.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\InGameIndicators\ProgressBar.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Panel\VerticalPanel.cpp" />
+    <ClCompile Include="..\Classes\Core\Math\Vector2.cpp" />
+    <ClCompile Include="..\Classes\External\Adapters\UI\Panel\VerticalPanelCCImplAdapter.cpp" />
+    <ClCompile Include="..\Classes\Core\Factories\UI\ElementFactory.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Panel\IVerticalPanelImpl.cpp" />
+    <ClCompile Include="..\Classes\Core\String\String.cpp" />
+    <ClCompile Include="..\Classes\World\Projectiles\Projectile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -289,21 +267,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Utils\AnimationUtils.h">
       <Filter>src\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Input\GameInput.h">
-      <Filter>src\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Input\InputTypes\Keyboard\KeyboardInput.h">
-      <Filter>src\Input\InputTypes\Keyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Input\InputTypes\Mouse\MouseInput.h">
-      <Filter>src\Input\InputTypes\Mouse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Input\InputTypes\AInputDevice.h">
-      <Filter>src\Input\InputTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Input\InputTypes\GameController\GameControllerInput.h">
-      <Filter>src\Input\InputTypes\GameController</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\World.h">
       <Filter>src\World</Filter>
@@ -347,29 +310,8 @@
     <ClInclude Include="..\Classes\World\Physics\PhysicsBodyConfig.h">
       <Filter>src\World\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\UI\UIElementConfig.h">
-      <Filter>src\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\UI\InGameIndicators\ProgressBar.h">
-      <Filter>src\UI\InGameIndicators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\LightSoulsTypes.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\Components\AnimComponent.h">
       <Filter>src\World\Entity\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Events\OnCollisionBeginEventData.h">
-      <Filter>src\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Camera\Camera.h">
-      <Filter>src\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Camera\Components\CameraShake.h">
-      <Filter>src\Camera\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Camera\CameraShake\CameraShakeTrigger.h">
-      <Filter>src\Camera\CameraShake</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\World\Entity\AI\StateMachine\States\StateIdle.h">
       <Filter>src\World\Entity\AI\StateMachine\States</Filter>
@@ -445,18 +387,37 @@
     <ClInclude Include="..\Classes\World\Entity\Components\LookAtAITargetComponent.h" />
     <ClInclude Include="..\Classes\World\Entity\Animation\BlurAnimation.h" />
     <ClInclude Include="..\Classes\World\Entity\Animation\BlurAnimationFrame.h" />
-    <ClInclude Include="..\Classes\Events\ValueChangedEventData.h">
-      <Filter>src\Events</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\World\GameSpeedModifier.h" />
-    <ClInclude Include="..\Classes\Events\PositionEventData.h" />
     <ClInclude Include="..\Classes\World\VFX\VFXManager.h" />
     <ClInclude Include="..\Classes\World\VFX\VFX.h" />
-    <ClInclude Include="..\Classes\Events\BaseEventData.h">
-      <Filter>src\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Events\TransformEventData.h" />
     <ClInclude Include="..\Classes\World\Cursor.h" />
+    <ClInclude Include="..\Classes\Core\Math\IVector2.h" />
+    <ClInclude Include="..\Classes\Core\Camera\Camera.h" />
+    <ClInclude Include="..\Classes\Core\Camera\CameraShake\CameraShakeTrigger.h" />
+    <ClInclude Include="..\Classes\Core\Camera\Components\CameraShake.h" />
+    <ClInclude Include="..\Classes\Core\Events\BaseEventData.h" />
+    <ClInclude Include="..\Classes\Core\Events\OnCollisionBeginEventData.h" />
+    <ClInclude Include="..\Classes\Core\Events\PositionEventData.h" />
+    <ClInclude Include="..\Classes\Core\Events\TransformEventData.h" />
+    <ClInclude Include="..\Classes\Core\Events\ValueChangedEventData.h" />
+    <ClInclude Include="..\Classes\Core\Input\GameInput.h" />
+    <ClInclude Include="..\Classes\Core\Input\InputTypes\AInputDevice.h" />
+    <ClInclude Include="..\Classes\Core\Input\InputTypes\GameController\GameControllerInput.h" />
+    <ClInclude Include="..\Classes\Core\Input\InputTypes\Keyboard\KeyboardInput.h" />
+    <ClInclude Include="..\Classes\Core\Input\InputTypes\Mouse\MouseInput.h" />
+    <ClInclude Include="..\Classes\Core\UI\ElementConfig.h" />
+    <ClInclude Include="..\Classes\Core\UI\IElement.h" />
+    <ClInclude Include="..\Classes\Core\UI\InGameIndicators\ProgressBar.h" />
+    <ClInclude Include="..\Classes\Core\UI\Panel\IPanel.h" />
+    <ClInclude Include="..\Classes\Core\UI\Panel\VerticalPanel.h" />
+    <ClInclude Include="..\Classes\Core\Math\Vector2.h" />
+    <ClInclude Include="..\Classes\External\Adapters\UI\Panel\VerticalPanelCCImplAdapter.h" />
+    <ClInclude Include="..\Classes\Core\UI\Panel\IVerticalPanelImpl.h" />
+    <ClInclude Include="..\Classes\Core\Factories\UI\ElementFactory.h" />
+    <ClInclude Include="..\Classes\Core\Factories\UI\IElementFactory.h" />
+    <ClInclude Include="..\Classes\Utils\XML\XMLTypes.h" />
+    <ClInclude Include="..\Classes\Core\String\String.h" />
+    <ClInclude Include="..\Classes\External\CocosEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

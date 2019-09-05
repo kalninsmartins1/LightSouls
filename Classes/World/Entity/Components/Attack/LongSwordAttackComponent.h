@@ -10,9 +10,11 @@
 #pragma once
 
 #include "GenericAttackComponent.h"
-#include "LightSoulsTypes.h"
+#include "Classes/Core/Math/Vector2.h"
+#include "Classes/Core/String/String.h"
 
 class Entity;
+
 using AttackFinishedCallback = std::function<void()>;
 
 class LongSwordAttackComponent : public GenericAttackComponent
@@ -46,4 +48,3 @@ private:
 	Vector2					m_lastAttackDirection;
 	AttackFinishedCallback	m_attackFinishedCallback;
 };
-

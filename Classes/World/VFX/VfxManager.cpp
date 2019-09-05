@@ -11,8 +11,10 @@
 
 #include "VFXManager.h"
 #include "VFX.h"
-#include "Classes/Events/TransformEventData.h"
+#include "Classes/Core/Events/TransformEventData.h"
 #include "Classes/Utils/XML/XMLLoader.h"
+#include "Classes/Core/Math/Vector2.h"
+#include "Classes/Core/String/String.h"
 
 VFXManager::VFXManager()
 	: m_container(nullptr)
@@ -29,7 +31,7 @@ void VFXManager::AddVFX(const String& eventType, const String& pathToVfx)
 		cc::EventDispatcher* eventDispather = m_container->getEventDispatcher();
 		if (eventDispather != nullptr)
 		{
-			eventDispather->addCustomEventListener(eventType,
+			eventDispather->addCustomEventListener(eventType.GetCStr(),
 				CC_CALLBACK_1(VFXManager::OnVFXEventTriggered, this));
 		}
 	}
@@ -67,7 +69,7 @@ void VFXManager::OnVFXFinishedCallback(VFX& vfx)
 	}
 }
 
-void VFXManager::SpawnVFX(const String& eventType, const Vector2 & pos, float rotationAngle)
+void VFXManager::SpawnVFX(const String& eventType, const Vector2& pos, float rotationAngle)
 {
 	const String& vfxInitPath = m_eventToVFXPath[eventType];
 	VFX* vfx = VFX::Create(*m_container, vfxInitPath);

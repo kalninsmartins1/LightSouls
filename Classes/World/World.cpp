@@ -7,12 +7,12 @@
 const String World::s_nodeName = "World";
 
 World::World()
-	: m_physicsBodyAnchor(Vector2::ZERO)
+	: m_physicsBodyAnchor(Vector2::GetZero())
 {	
 	cc::EventDispatcher* eventDispatcher = getEventDispatcher();
 	if (eventDispatcher != nullptr)
 	{
-		eventDispatcher->addCustomEventListener(PhysicsManager::GetEventOnPhysicsBodyAnchorSet(),
+		eventDispatcher->addCustomEventListener(PhysicsManager::GetEventOnPhysicsBodyAnchorSet().GetCStr(),
 			CC_CALLBACK_1(World::OnPhysicsBodyAchorSetEvent, this));
 	}
 }
@@ -56,8 +56,8 @@ void World::OnPhysicsBodyAchorSetEvent(cc::EventCustom* eventData)
 
 bool World::Init(const String& pathToSprite)
 {
-	bool isSuccessful = initWithFile(pathToSprite);;	
-	setName(s_nodeName);
+	bool isSuccessful = initWithFile(pathToSprite.GetCStr());;	
+	setName(s_nodeName.GetCStr());
 	setLocalZOrder(GameConsts::WORLD_LAYER);
 
 	cc::PhysicsBody* physicsBody = getPhysicsBody();
@@ -66,8 +66,8 @@ bool World::Init(const String& pathToSprite)
 	if (isSuccessful) 
 	{
 		cc::Size size = getContentSize();
-		physicsBody->setPositionOffset(Vector2(size.width * m_physicsBodyAnchor.x,
-			size.height * m_physicsBodyAnchor.y));
+		physicsBody->setPositionOffset(cc::Vec2(size.width * m_physicsBodyAnchor.GetX(),
+			size.height * m_physicsBodyAnchor.GetY()));
 	}
 
 	// If all operations were successful then init was successful

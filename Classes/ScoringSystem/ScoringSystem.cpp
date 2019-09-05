@@ -1,7 +1,6 @@
 #include "ScoringSystem.h"
 
 
-
 ScoringSystem* ScoringSystem::GetInstance()
 {
 	static ScoringSystem scoreSystem;

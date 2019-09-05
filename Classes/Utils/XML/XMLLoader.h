@@ -1,10 +1,21 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 
 namespace LS
 {
 	class Camera;
+};
+
+namespace tinyxml2
+{
+	class XMLElement;
+	class XMLDocument;
+};
+
+namespace UI
+{
+	class ElementConfig;
 };
 
 class GameInput;
@@ -12,15 +23,20 @@ class World;
 class ProgressBar;
 class AIAgentManager;
 class Entity;
-class UIElementConfig;
 class Camera;
 class ProjectileConfig;
 class PhysicsBodyConfig;
 class GameSpeedModifier;
 class VFXManager;
 class Cursor;
+class Vector2;
+class String;
 enum class GameInputType;
 
+
+using Vector3 = cc::Vec3;
+using XMLElement = tinyxml2::XMLElement;
+using XMLDoc = tinyxml2::XMLDocument;
 using LoadInputCallback = std::function<void(GameInput&, const XMLElement*,
 	const String&)>;
 
@@ -63,7 +79,7 @@ private:
 	static void						LoadActionButton(GameInput& gameInput, GameInputType inputType,
 		const XMLElement* element, const String& actionName, const String& xmlAttributeName);
 
-	static void						LoadUIElement(const XMLElement& element, UIElementConfig& outUIElement);
+	static void						LoadUIElement(const XMLElement& element, UI::ElementConfig& outUIElement);
 	static void						LoadPhysicsMaterialFromAttributes(const XMLElement& element, cocos2d::PhysicsMaterial& outMaterial);
 	static void						GetVector3FromElement(const XMLElement& element, Vector3& outResult);
 	static void						GetVector2FromElement(const XMLElement& element, Vector2& outResult);

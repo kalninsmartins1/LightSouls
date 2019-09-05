@@ -1,11 +1,17 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 
+namespace tinyxml2
+{
+	class XMLElement;
+};
 
 class Entity;
 class AIAgent;
 enum class EAIState;
+
+using XMLElement = tinyxml2::XMLElement;
 
 class AIAvoidTargetAction : public cocos2d::Action
 {

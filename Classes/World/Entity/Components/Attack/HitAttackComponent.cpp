@@ -1,7 +1,6 @@
 #include "HitAttackComponent.h"
 #include "World/Entity/Entity.h"
-
-
+#include "Classes/Core/Math/Vector2.h"
 
 
 HitAttackComponent::HitAttackComponent(float secondsBetweenAttacks, float attackRange)
@@ -43,6 +42,6 @@ void HitAttackComponent::Attack(const Vector2& direction)
 
 void HitAttackComponent::RegisterSuccessfulAttack()
 {
-	GenericAttackComponent::Attack(Vector2::ZERO);
+	GenericAttackComponent::Attack(Vector2::GetZero());
 }
 

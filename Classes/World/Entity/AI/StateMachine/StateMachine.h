@@ -1,12 +1,21 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
-#include "Events/BaseEventData.h"
+#include "Classes/External/CocosEngine.h"
+
+namespace tinyxml2
+{
+	class XMLElement;
+};
 
 class AnimComponent;
+class BaseEventData;
 class AIAgent;
 class AState;
+class String;
 enum class EAIState;
+
+using XMLElement = tinyxml2::XMLElement;
+
 
 class StateMachine
 {
@@ -38,7 +47,7 @@ private:
 	EAIState									m_startState;
 	AState*										m_curState;
 	AnimComponent*								m_animComponent;
-	cocos2d::Map<EAIState, AState*>				m_availableStates;
+	cc::Map<EAIState, AState*>					m_availableStates;
 };
 
 

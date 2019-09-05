@@ -5,7 +5,9 @@
 */
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
+#include "Classes/Core/Math/Vector2.h"
+#include "Classes/Core/String/String.h"
 
 class GameInput;
 
@@ -43,5 +45,5 @@ private:
 	Vector2			m_lookAtDirection;
 	String			m_verticalInputAxisName;
 	String			m_horizontalInputAxisName;
-	cc::Size		m_windowSize;
+	Vector2			m_windowSize;
 };

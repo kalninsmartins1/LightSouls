@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LightSoulsTypes.h"
+#include "Classes/External/CocosEngine.h"
 
 class Entity;
 
@@ -11,7 +11,7 @@ public:
 
 public:
 			CREATE_FUNC(MirrorSpriteComponent);
-	void	Init(cc::Node& ownerEntity, float sensitivity);
+	void	Init(cocos2d::Node& ownerEntity, float sensitivity);
 
 	virtual void update(float delta) override;
 

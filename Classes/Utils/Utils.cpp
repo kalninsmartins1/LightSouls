@@ -1,9 +1,11 @@
 #include "Utils.h"
-#include "Input/InputTypes/Keyboard/KeyboardInput.h"
+#include "Classes/Core/Input/InputTypes/Keyboard/KeyboardInput.h"
 #include "World/Entity/Components/MirrorSpriteComponent.h"
 #include "World/Entity/Components/AnimComponent.h"
-#include "Input/InputTypes/GameController/GameControllerInput.h"
-#include "Input/InputTypes/Mouse/MouseInput.h"
+#include "Classes/Core/Input/InputTypes/GameController/GameControllerInput.h"
+#include "Classes/Core/Input/InputTypes/Mouse/MouseInput.h"
+#include "Classes/Core/Math/Vector2.h"
+#include "Classes/Core/String/String.h"
 
 Utils::Utils()
 {
@@ -29,7 +31,7 @@ float Utils::ConvertMillisecondsToSeconds(long long milliseconds)
 
 void Utils::LogVector2(const Vector2& v)
 {
-	CCLOG("(X: %f, Y: %f)", v.x, v.y);
+	CCLOG("(X: %f, Y: %f)", v.GetX(), v.GetY());
 }
 
 void Utils::LogVector3(const Vector3& v)
@@ -40,17 +42,17 @@ void Utils::LogVector3(const Vector3& v)
 void Utils::AssertWithStrFormat(bool condition, const String& msg,
 	const String& param)
 {
-	CCASSERT(condition, cocos2d::StringUtils::format(msg.c_str(), param.c_str()).c_str());
+	CCASSERT(condition, cc::StringUtils::format(msg.GetCStr(), param.GetCStr()).c_str());
 }
 
-Vector2 Utils::GetScreenFillScale(const cocos2d::Size& curSize)
+Vector2 Utils::GetScreenFillScale(const cc::Size& curSize)
 {
-	Vector2 scale = Vector2::ZERO;
+	Vector2 scale = Vector2::GetZero();
 	if(curSize.width > 0 && curSize.height > 0)
 	{
 		const cocos2d::Size& winSize = GetScreenSize();
-		scale.x = winSize.width / curSize.width;
-		scale.y = winSize.height / curSize.height;
+		scale.SetX(winSize.width / curSize.width);
+		scale.SetY(winSize.height / curSize.height);
 	}
 	
 	return scale;
@@ -101,11 +103,11 @@ void Utils::ParseFloatArray(const String& data, std::vector<float>& outArray)
 {
 	unsigned int index = 0;
 	String midResult = "";
-	while (index < data.length())
+	while (index < data.GetLength())
 	{
 		if (data[index] == ';')
 		{
-			outArray.push_back(atof(midResult.c_str()));
+			outArray.push_back(atof(midResult.GetCStr()));
 			midResult = "";
 		}
 		else
@@ -163,7 +165,7 @@ float Utils::GetSignedAngleBetweenVectors(const Vector2& v1, const Vector2& v2)
 
 float Utils::GetSignedRadiansBetweenVectors(const Vector2& v1, const Vector2& v2)
 {
-	float result = atan2(v2.y, v2.x) - atan2(v1.y, v1.x);
+	float result = atan2(v2.GetY(), v2.GetX()) - atan2(v1.GetY(), v1.GetX());
 	if (result < 0)
 	{
 		result += 2 * GameConsts::PI;

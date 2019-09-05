@@ -3,17 +3,17 @@
 #include "../Components/AnimComponent.h"
 #include "Utils/XML/XMLLoader.h"
 #include "GameConsts.h"
-#include "Input/GameInput.h"
+#include "Classes/Core/Input/GameInput.h"
 #include "physics3d/CCPhysics3DWorld.h"
 #include "World/Physics/PhysicsManager.h"
-#include "Events/ValueChangedEventData.h"
+#include "Classes/Core/Events/ValueChangedEventData.h"
 #include "cocos2d/cocos/base/CCEventDispatcher.h"
 #include "Utils/AnimationUtils.h"
-#include "Camera/Components/CameraShake.h"
+#include "Classes/Core/Camera/Components/CameraShake.h"
 #include "Scenes/GameScene.h"
 #include "World/Projectiles/Projectile.h"
 #include "Classes/World/VFX/VFX.h"
-#include "Classes/Events/PositionEventData.h"
+#include "Classes/Core/Events/PositionEventData.h"
 #include "World/Entity/Components/Attack/LongSwordAttackComponent.h"
 #include "World/Cursor.h"
 
@@ -39,8 +39,9 @@ Player* Player::Create(const String& pathToXML)
 }
 
 Player::Player()
-	: m_attackComponent(nullptr)
-	, m_lastValidMoveDirection(Vector2::UNIT_X) // By default start out moving right	
+	: Entity()
+	, m_attackComponent(nullptr)
+	, m_lastValidMoveDirection(Vector2::GetOneX()) // By default start out moving right	
 	, m_cursor(nullptr)
 	, m_isDodging(false)
 	, m_dodgeSpeed(0.0f)
@@ -119,7 +120,7 @@ void Player::Update(float deltaTime)
 	}
 	else
 	{
-		SetMoveDirection(Vector2::ZERO);
+		SetMoveDirection(Vector2::GetZero());
 	}
 
 	AnimComponent* animComponent = GetAnimComponent();
@@ -189,10 +190,10 @@ void Player::ManageInput()
 	// Player movement
 	const float horizontalValue = input->GetInputAxis("HorizontalMovement");
 	const float vertiacalValue = input->GetInputAxis("VerticalMovement");
-	Vector2& moveDirection = Vector2(horizontalValue, vertiacalValue);
+	Vector2 moveDirection(horizontalValue, vertiacalValue);
 
 	// Make sure we are not moving faster diagonally
-	moveDirection.normalize();
+	moveDirection.Normalize();
 	FilterMovementDirectionBasedOnCollisionData(moveDirection);
 	SetMoveDirection(moveDirection);
 
@@ -205,21 +206,21 @@ void Player::ManageInput()
 
 void Player::FilterMovementDirectionBasedOnCollisionData(Vector2& moveDirection)
 {
-	if (m_isCollidedFromLeft && moveDirection.x < 0.0f)
+	if (m_isCollidedFromLeft && moveDirection.GetX() < 0.0f)
 	{
-		 moveDirection.x = 0.0f;
+		 moveDirection.SetX(0.0f);
 	}
-	else if (m_isCollidedFromRight && moveDirection.x > 0.0f)
+	else if (m_isCollidedFromRight && moveDirection.GetX() > 0.0f)
 	{
-		moveDirection.x = 0.0f;
+		moveDirection.SetX(0.0f);
 	}
-	else if (m_isCollidedFromTop && moveDirection.y > 0.0f)
+	else if (m_isCollidedFromTop && moveDirection.GetY() > 0.0f)
 	{
-		moveDirection.y = 0.0f;
+		moveDirection.SetY(0.0f);
 	}
-	else if (m_isCollidedFromBottom && moveDirection.y < 0.0f)
+	else if (m_isCollidedFromBottom && moveDirection.GetY() < 0.0f)
 	{
-		moveDirection.y = 0.0f;
+		moveDirection.SetY(0.0f);
 	}
 }
 
@@ -228,7 +229,10 @@ void Player::StartDodging()
 	m_isDodging = true;
 	SetCurrentMoveSpeed(0.0f);
 	ApplyInstantSpeed(m_dodgeSpeed);
-	DispatchEvent(s_eventOnPlayerDodged, &PositionEventData(GetId(), getPosition()));
+	
+	auto pos = getPosition();
+	DispatchEvent(s_eventOnPlayerDodged, 
+		&PositionEventData(GetId(), Vector2(pos.x, pos.y)));
 
 	// Consume stamina
 	ConsumeStamina(m_dodgeStaminaConsumption);
@@ -316,13 +320,13 @@ bool Player::OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsB
 	return true;
 }
 
-bool Player::OnContactEnd(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)
+bool Player::OnContactEnd(const Vector2& contactPoint, const cc::PhysicsBody* otherBody)
 {
 	ResetCollisionData();
 	return true;
 }
 
-bool Player::OnProjectileHit(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)
+bool Player::OnProjectileHit(const Vector2& contactPoint, const cc::PhysicsBody* otherBody)
 {
 	auto projectile = static_cast<Projectile*>(otherBody->getNode());
 	if (projectile != nullptr)
@@ -372,15 +376,15 @@ void Player::DispatchOnDisappeared() const
 	cc::EventDispatcher* dispatcher = getEventDispatcher();
 	if (dispatcher != nullptr)
 	{
-		dispatcher->dispatchCustomEvent(s_eventOnPlayerDisappeared);
+		dispatcher->dispatchCustomEvent(s_eventOnPlayerDisappeared.GetCStr());
 	}
 }
 
-void Player::SetCollisionData(cocos2d::Node* otherNode)
+void Player::SetCollisionData(cc::Node* otherNode)
 {
-	if (abs(m_lastValidMoveDirection.x) > abs(m_lastValidMoveDirection.y))
+	if (abs(m_lastValidMoveDirection.GetX()) > abs(m_lastValidMoveDirection.GetY()))
 	{
-		if (m_lastValidMoveDirection.x < 0)
+		if (m_lastValidMoveDirection.GetX() < 0)
 		{
 			m_isCollidedFromLeft = true;
 		}
@@ -391,7 +395,7 @@ void Player::SetCollisionData(cocos2d::Node* otherNode)
 	}
 	else
 	{
-		if (m_lastValidMoveDirection.y < 0)
+		if (m_lastValidMoveDirection.GetY() < 0)
 		{
 			m_isCollidedFromBottom = true;
 		}
