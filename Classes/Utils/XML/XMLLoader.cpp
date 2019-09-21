@@ -14,9 +14,8 @@
 #include "World/Entity/Components/Attack/HitAttackComponent.h"
 #include "World/Physics/PhysicsBodyConfig.h"
 #include "World/Physics/PhysicsManager.h"
-#include "Classes/Core/UI/InGameIndicators/ProgressBar.h"
 #include "World/Entity/AI/AIAgentManager.h"
-#include "Classes/Core/UI/ElementConfig.h"
+#include "Classes/Core/UI/Configs/ElementConfig.h"
 #include "Classes/Core/Camera/Camera.h"
 #include "Classes/Core/Camera/Components/CameraShake.h"
 #include "World/Entity/AI/SpawnPointConfig.h"
@@ -26,6 +25,7 @@
 #include "World/GameSpeedModifier.h"
 #include "World/VFX/VFXManager.h"
 #include "World/Cursor.h"
+#include "Classes/Core/UI/Configs/Loaders/ElementConfigLoader.h"
 #include "cocos2d/external/tinyxml2/tinyxml2.h"
 
 using namespace UI;
@@ -61,6 +61,23 @@ bool XMLLoader::LoadXMLFile(const String& pathToXML, XMLDoc& outDoc)
 	}
 
 	return !error;
+}
+
+void XMLLoader::LoadElementConfigs(const XMLElement& xmlElement, std::vector<UI::ElementConfig>& outConfigs)
+{
+	using namespace UI;
+
+	for (const XMLElement* childElem = xmlElement.FirstChildElement();
+		childElem != nullptr;
+		childElem = childElem->NextSiblingElement())
+	{
+		// Looks like this might create a potential memory leak
+		ElementConfig config;
+		if (ElementConfigLoader::LoadConfig(childElem->Attribute(XMLConsts::PATH_ATTR), config))
+		{
+			outConfigs.emplace_back(config);
+		}
+	}
 }
 
 bool XMLLoader::InitializeAIManagerUsingXMLFile(AIAgentManager& aiManager, const String& pathToXML)
@@ -581,36 +598,6 @@ void XMLLoader::LoadActionButton(GameInput & gameInput, GameInputType inputType,
 	}
 }
 
-void XMLLoader::LoadUIElement(const XMLElement & element, UI::ElementConfig& outUIElement)
-{
-	const XMLElement* spriteElement = element.FirstChildElement(XMLConsts::NODE_SPRITE);
-	const XMLElement* anchorPositionElement = element.FirstChildElement(XMLConsts::NODE_NORMALIZED_POSITION);
-	const XMLElement* normalizedPositionElement = element.FirstChildElement(XMLConsts::NODE_NORMALIZED_POSITION);
-	const XMLElement* scaleElement = element.FirstChildElement(XMLConsts::NODE_SCALE);
-
-	if (spriteElement != nullptr &&
-		anchorPositionElement != nullptr &&
-		normalizedPositionElement != nullptr &&
-		scaleElement != nullptr)
-	{
-		const String& pathToSprite = spriteElement->Attribute(XMLConsts::PATH_ATTR);
-
-		Vector2 anchorPos;
-		GetVector2FromElement(*anchorPositionElement, anchorPos);
-
-		Vector2 normalizedPos;
-		GetVector2FromElement(*normalizedPositionElement, normalizedPos);
-
-		Vector2 scale;
-		GetVector2FromElement(*scaleElement, scale);
-
-		outUIElement.SetPathToImage(pathToSprite);
-		outUIElement.SetAnchorPosition(anchorPos);
-		outUIElement.SetNormalizedPosition(normalizedPos);
-		outUIElement.SetScale(scale);
-	}
-}
-
 bool XMLLoader::InitializeEntityUsingXMLFile(Entity & entity,
 	const String & pathToXML)
 {
@@ -709,38 +696,6 @@ bool XMLLoader::LoadInputSettings(GameInput & gameInput, const String & pathToCo
 						LoadActionButton(gameInput, GameInputType::GAME_CONTROLLER, pElem,
 							actionName, XMLConsts::INPUT_BUTTON_CODE_ATTR);
 					});
-			}
-		}
-	}
-
-	return isSuccessful;
-}
-
-bool XMLLoader::InitializeUIProgressBar(ProgressBar & healthBar, const String & pathToXML)
-{
-	XMLDoc doc;
-	const bool isSuccessful = LoadXMLFile(pathToXML, doc);
-	if (isSuccessful)
-	{
-		const XMLElement* rootElement = doc.RootElement();
-		if (rootElement != nullptr)
-		{
-			const XMLElement* bgElement = rootElement->FirstChildElement(XMLConsts::NODE_BACKGROUND);
-			const XMLElement* fgElement = rootElement->FirstChildElement(XMLConsts::NODE_FOREGROUND);
-			if (bgElement != nullptr && fgElement != nullptr)
-			{
-				ElementConfig bgConfig;
-				LoadUIElement(*bgElement, bgConfig);
-
-				ElementConfig fgConfig;
-				LoadUIElement(*fgElement, fgConfig);
-
-				float animationSpeed = rootElement->FloatAttribute(XMLConsts::UI_ANIMATION_SPEED_ATTR);
-				float minValue = rootElement->FloatAttribute(XMLConsts::UI_MIN_VALUE);
-				float maxValue = rootElement->FloatAttribute(XMLConsts::UI_MAX_VALUE);
-
-				healthBar.Init(bgConfig, fgConfig);
-				healthBar.SetAnimationSpeed(animationSpeed);
 			}
 		}
 	}

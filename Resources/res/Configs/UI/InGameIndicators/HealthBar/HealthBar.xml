@@ -1,0 +1,13 @@
+<UIElement type="StackPanel">
+	<TransformAttribute>
+		<AnchorPosition x="0" y="0.5" />
+		<NormalizedPosition x="0.0" y="0.0" />
+		<Scale x="1" y="1"/>
+	</TransformAttribute>
+	
+	<ImageAttribute path="res/Graphics/UI/ProgressBars/progressBg.png"/>
+	
+	<StackPanelAttribute>
+		<Child path="res/Configs/UI/InGameIndicators/HealthBar/HealthFill.xml"/>
+	</StackPanelAttribute>
+</UIElement>

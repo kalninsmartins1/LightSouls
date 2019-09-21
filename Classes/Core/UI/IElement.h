@@ -14,6 +14,5 @@ namespace UI
 	{
 	public:
 		virtual bool GetNormalizedPos(Vector2& outPos) const = 0;
-		virtual bool GetPathToImage(String& pathToImage) const = 0;
 	};
 };

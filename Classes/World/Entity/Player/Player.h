@@ -65,16 +65,16 @@ private:
 	Vector2						m_lastValidMoveDirection;
 	Cursor*						m_cursor;
 
-	bool					m_isDodging;
-	float					m_dodgeSpeed;
-	float					m_dodgeTime;
-	float					m_timeBetweenComboInput;
-	float					m_dodgeStaminaConsumption;
+	bool	m_isDodging;
+	float	m_dodgeSpeed;
+	float	m_dodgeTime;
+	float	m_timeBetweenComboInput;
+	float	m_dodgeStaminaConsumption;
 	
-	bool					m_isCollidedFromLeft;
-	bool					m_isCollidedFromRight;
-	bool					m_isCollidedFromTop;
-	bool					m_isCollidedFromBottom;
+	bool	m_isCollidedFromLeft;
+	bool	m_isCollidedFromRight;
+	bool	m_isCollidedFromTop;
+	bool	m_isCollidedFromBottom;
 };
 
 

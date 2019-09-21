@@ -64,6 +64,11 @@ namespace GameConsts
 	static constexpr char* CAMERA_SHAKE_COMPONENT = "CameraShake";
 	static constexpr char* CAMERA_FOLLOW_COMPONENT = "CameraFollow";
 
+	// UI Element types
+	static constexpr char* UI_ELEMENT_CONFIG = "Element";
+	static constexpr char* UI_CONTAINER_CONFIG = "Container";
+	static constexpr char* UI_ANIMATION_CONFIG = "Animation";
+
 	// Animation types
 	static constexpr char* ANIM_TYPE_ACT = "Act";
 	static constexpr char* ANIM_TYPE_RUN = "Run";

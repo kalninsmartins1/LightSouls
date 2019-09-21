@@ -6,12 +6,19 @@
 #include "Utils/Utils.h"
 #include "World/Entity/AI/AIAgentManager.h"
 #include "World/Physics/PhysicsManager.h"
-#include "Classes/Core/UI/InGameIndicators/ProgressBar.h"
 #include "Classes/Core/Events/ValueChangedEventData.h"
 #include "Classes/Core/Camera/Camera.h"
 #include "LoadingScreenScene.h"
 #include "ENextScene.h"
 #include "ScoringSystem/ScoringSystem.h"
+#include "Classes/Core/UI/Configs/ElementConfig.h"
+#include "Classes/Core/UI/Configs/Loaders/ElementConfigLoader.h"
+#include "Classes/Core/UI/Configs/Loaders/ImageAttributeLoader.h"
+#include "Classes/Core/UI/Configs/Loaders/TransformAttributeLoader.h"
+#include "Classes/Core/UI/Configs/Loaders/StackPanelAttributeLoader.h"
+#include "Classes/Core/UI/Configs/Loaders/VerticalPanelAttributeLoader.h"
+#include "Classes/Core/UI/Configs/Loaders/ProgressBarAttributeLoader.h"
+#include "Classes/Core/UI/Element.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
@@ -22,8 +29,6 @@ GameInput* GameScene::s_gameInput = nullptr;
 GameScene::GameScene()
 	: m_gameSpeedModifier(*this, *getEventDispatcher())
 	, m_player(nullptr)
-	, m_healthBar(nullptr)
-	, m_staminaBar(nullptr)
 	, m_scoreText(nullptr)
 	, m_physicsDebugEnabled(false)
 	, m_timeModifier(1.0f)
@@ -33,7 +38,7 @@ GameScene::GameScene()
 	if (scoringSystem != nullptr)
 	{
 		scoringSystem->Reset();
-	}	
+	}
 }
 
 GameScene::~GameScene()
@@ -108,6 +113,8 @@ bool GameScene::init()
 		return false;
 	}	
 
+	RegisterSystems();
+
 	// Init physics manager
 	s_physicsManager = PhysicsManager::Create(this);
 	if (s_physicsManager == nullptr)
@@ -177,16 +184,20 @@ void GameScene::update(float deltaTime)
 	
 	ProcessDebugPhysicsDraw();
 #endif
+}
 
-	if (m_healthBar != nullptr)
-	{
-		m_healthBar->Update(deltaTime);
-	}
+void GameScene::RegisterSystems()
+{
+	RegisterAttributeLoaders();
+}
 
-	if (m_staminaBar != nullptr)
-	{
-		m_staminaBar->Update(deltaTime);
-	}
+void GameScene::RegisterAttributeLoaders()
+{
+	UI::ElementConfigLoader::RegisterConfigLoader(UI::ImageAttributeLoader());
+	UI::ElementConfigLoader::RegisterConfigLoader(UI::TransformAttributeLoader());
+	UI::ElementConfigLoader::RegisterConfigLoader(UI::StackPanelAttributeLoader());
+	UI::ElementConfigLoader::RegisterConfigLoader(UI::VerticalPanelAttributeLoader());
+	UI::ElementConfigLoader::RegisterConfigLoader(UI::ProgressBarAttributeLoader());
 }
 
 Node* GameScene::InitWolrdLayer()
@@ -231,22 +242,18 @@ void GameScene::InitUILayer()
 	// Init UI
 	Node* uiLayer = Node::create();
 	uiLayer->setContentSize(Utils::GetScreenSize());
-
+	
 	Sprite* screenOverlay = Sprite::create("res/Graphics/UI/screenOverlay.png");
 	const Vector2& scale = Utils::GetScreenFillScale(screenOverlay->getContentSize());
 	screenOverlay->setScale(scale.GetX(), scale.GetY());
 	screenOverlay->setAnchorPoint(Vec2::ZERO);
 
-	m_healthBar = ProgressBar::Create("res/Configs/UI/InGameIndicators/HealthBar.xml");
-	if (m_healthBar == nullptr)
+	UI::ElementConfig config;
+	UI::ElementConfigLoader::LoadConfig("res/Configs/UI/InGameIndicators/IndicatorPanelStack.xml", config);
+	UI::Element* indicatorPanel = config.Create();
+	if (indicatorPanel == nullptr)
 	{
-		CCLOG("HelloWorldScene: Failed to initialize health bar !");
-	}
-
-	m_staminaBar = ProgressBar::Create("res/Configs/UI/InGameIndicators/StaminaBar.xml");
-	if (m_staminaBar == nullptr)
-	{
-		CCLOG("HelloWorldScene: Failed to initialize stamina bar!");
+		CCLOG("GameScene: Failed to initialize game indicator panel !");
 	}
 
 	m_scoreText = ui::Text::create(StringUtils::format("Score: %d", ScoringSystem::GetInstance()->GetScore()),
@@ -254,8 +261,7 @@ void GameScene::InitUILayer()
 	m_scoreText->setNormalizedPosition(Vec2(0.5f, 0.82f)); 
 
 	uiLayer->addChild(screenOverlay);
-	uiLayer->addChild(m_healthBar);
-	uiLayer->addChild(m_staminaBar);
+	uiLayer->addChild(indicatorPanel);
 	uiLayer->addChild(m_scoreText);	
 	uiLayer->setCameraMask(static_cast<unsigned short int>(CameraFlag::USER2));	
 	addChild(uiLayer);
@@ -290,37 +296,8 @@ void GameScene::StartGameOverFadeIn(float time)
 	addChild(fadeContainer);
 }
 
-void GameScene::OnPlayerHealthChanged(EventCustom* eventData)
-{
-	if (m_healthBar != nullptr && eventData != nullptr)
-	{
-		auto healthData = static_cast<ValueChangedEventData*>(eventData->getUserData());
-		if (healthData != nullptr)
-		{
-			m_healthBar->SetCurrentValue(healthData->GetPercentageNormalized());		
-		}
-	}
-}
-
-void GameScene::OnPlayerStaminaChanged(cocos2d::EventCustom* eventData)
-{
-	if (eventData != nullptr)
-	{
-		auto staminaData = static_cast<ValueChangedEventData*>(eventData->getUserData());
-		if (staminaData != nullptr && m_staminaBar != nullptr)
-		{
-			m_staminaBar->SetCurrentValue(staminaData->GetPercentageNormalized());
-		}
-	}
-}
-
 void GameScene::OnPlayerDisappeared()
 {
-	if (m_healthBar != nullptr)
-	{
-		m_healthBar->MultiplyAnimationSpeed(2.0f);
-	}
-
 	float toNextSceneTime = 2.0f;
 	StartGameOverFadeIn(toNextSceneTime);
 	Utils::StartTimerWithCallback(this,
@@ -328,7 +305,7 @@ void GameScene::OnPlayerDisappeared()
 		toNextSceneTime);
 }
 
-void GameScene::OnAgentDestroyed(cocos2d::EventCustom* eventData)
+void GameScene::OnAgentDestroyed(cc::EventCustom* eventData)
 {	
 	ScoringSystem* scoringSystem = ScoringSystem::GetInstance();
 	scoringSystem->IncreaseScore();
@@ -337,6 +314,8 @@ void GameScene::OnAgentDestroyed(cocos2d::EventCustom* eventData)
 
 void GameScene::ReloadGame()
 {
+	unscheduleUpdate();
+	m_player = nullptr;
 	removeAllChildren();
 	auto aiAgentManager = AIAgentManager::GetInstance();
 	if (aiAgentManager != nullptr)
@@ -353,6 +332,7 @@ void GameScene::ReloadGame()
 	Node* worldLayer = InitWolrdLayer();
 	InitVFXManger(worldLayer);
 	InitUILayer();
+	scheduleUpdate();
 }
 
 void GameScene::RegisterForEvents()
@@ -360,10 +340,6 @@ void GameScene::RegisterForEvents()
 	EventDispatcher* eventDispatcher = getEventDispatcher();
 	if (eventDispatcher != nullptr)
 	{
-		eventDispatcher->addCustomEventListener(Player::GetEventOnHealthChanged().GetCStr(),
-			CC_CALLBACK_1(GameScene::OnPlayerHealthChanged, this));
-		eventDispatcher->addCustomEventListener(Player::GetEventOnStaminaChanged().GetCStr(),
-			CC_CALLBACK_1(GameScene::OnPlayerStaminaChanged, this));
 		eventDispatcher->addCustomEventListener(Player::GetEventOnPlayerDisappeared().GetCStr(),
 			CC_CALLBACK_0(GameScene::OnPlayerDisappeared, this));
 		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared().GetCStr(),

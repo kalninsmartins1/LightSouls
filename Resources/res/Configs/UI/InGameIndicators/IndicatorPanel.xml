@@ -1,8 +1,13 @@
-<Panel>
-	<Background>
-		<Sprite path="res/Graphics/UI/ProgressBars/progressFrame.png"/>
-		<AnchorPosition x="0.0" y="0.0" />
-		<NormalizedPosition x="0.025" y="0.97" />
+<?xml version="1.0" ?>
+<UIElement type="VerticalPanel">
+	<TransformAttribute>
+		<AnchorPosition x="0" y="0" />
+		<NormalizedPosition x="0" y="0" />
 		<Scale x="1" y="1"/>
-	</Background>
-</Panel>
+	</TransformAttribute>
+
+	<VerticalPanelAttribute spacing="3" leftPadding="5" topPadding="0">
+		<Child path="res/Configs/UI/InGameIndicators/HealthBar/HealthBar.xml"/>
+		<Child path="res/Configs/UI/InGameIndicators/StaminaBar/StaminaBar.xml"/>
+	</VerticalPanelAttribute>
+</UIElement>

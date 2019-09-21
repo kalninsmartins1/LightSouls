@@ -131,6 +131,10 @@ void Entity::SetBaseMoveSpeed(float moveSpeed)
 
 void Entity::SetMoveDirection(const Vector2& direction)
 {
+	if (direction.GetLenght() > 1)
+	{
+		auto a = 5;
+	}
 	m_moveDirection = direction;
 }
 
@@ -236,9 +240,9 @@ void Entity::StopAttacking()
 
 void Entity::ApplyKnockbackEffect(const Entity& attackingEntity)
 {	
-	const cocos2d::Vec2 awayFromAttacker = getPosition() - attackingEntity.getPosition();
+	const Vector2 awayFromAttacker = (GetPos() - attackingEntity.GetPos()).GetNormalized();
 	const float speed = attackingEntity.m_knockBackStrenght;
-	ApplyInstantSpeedInDirection(speed, Vector2(awayFromAttacker.x, awayFromAttacker.y));
+	ApplyInstantSpeedInDirection(speed, awayFromAttacker);
 }
 
 void Entity::ApplyInstantSpeed(float speed)
@@ -367,13 +371,13 @@ void Entity::Move()
 	if (abs(m_moveDirection.GetX()) > 0 || abs(m_moveDirection.GetY()) > 0)
 	{
 		// Move entity by applying force
-		const IVector2& impulse = m_moveDirection * m_moveSpeed * m_physicsBodyForceScale;
-		_physicsBody->applyImpulse(cocos2d::Vec2(impulse.GetX(), impulse.GetY()));
+		const Vector2& impulse = m_moveDirection * m_moveSpeed * m_physicsBodyForceScale;
+		_physicsBody->applyImpulse(cc::Vec2(impulse.GetX(), impulse.GetY()));
 	}	
 	else if(!m_isAttacking)
 	{
 		// Instantly stop moving
-		_physicsBody->setVelocity(cocos2d::Vec2::ZERO);
+		_physicsBody->setVelocity(cc::Vec2::ZERO);
 	}
 }
 

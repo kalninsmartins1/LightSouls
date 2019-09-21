@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<UIElement type="StackPanel">
+	<TransformAttribute>
+		<AnchorPosition x="0.0" y="0.0" />
+		<NormalizedPosition x="0.02" y="0.91" />
+		<Scale x="1" y="1"/>
+	</TransformAttribute>
+
+	<StackPanelAttribute>
+		<Child path="res/Configs/UI/InGameIndicators/IndicatorPanel.xml" />
+		<Child path="res/Configs/UI/InGameIndicators/ImageElement.xml" />
+	</StackPanelAttribute>
+</UIElement>

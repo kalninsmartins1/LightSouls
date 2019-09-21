@@ -1,0 +1,14 @@
+<UIElement type="Element">
+	<ImageAttribute path="res/Graphics/UI/ProgressBars/staminaFill.png"/>
+	
+	<TransformAttribute>
+		<AnchorPosition x="0" y="0.0" />
+		<NormalizedPosition x="0" y="0" />
+		<Scale x="1" y="1"/>
+	</TransformAttribute>
+	
+	<ProgressBarAttribute 
+			animationSpeed="0.3" 
+			event="EVENT_ON_PLAYER_STAMINA_CHANGED"
+			/>
+</UIElement>

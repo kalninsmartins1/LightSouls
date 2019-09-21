@@ -5,7 +5,6 @@
 #include "World/VFX/VFXManager.h"
 
 class Player;
-class ProgressBar;
 class PhysicsManager;
 class GameInput;
 class ValueChangedEventData;
@@ -18,7 +17,7 @@ namespace cocos2d
 	};
 };
 
-class GameScene : public cocos2d::Scene
+class GameScene : public cc::Scene
 {
 public:
 	GameScene();
@@ -31,7 +30,7 @@ public:
 
 	void				   SetTimeModifier(float modifier);
 
-	static cocos2d::Scene* CreateScene();
+	static cc::Scene* CreateScene();
 	
 	// implement the "static create()" method manually
 	CREATE_FUNC(GameScene);
@@ -40,19 +39,19 @@ public:
 	virtual void update(float deltaTime) override;
 
 private:
+	void RegisterSystems();
+	void RegisterAttributeLoaders();
 	Node* InitWolrdLayer(); // Returns world layer
 	void InitUILayer();
 	void StartGameOverFadeIn(float time);
 	void SwitchToGameOverScene();
 	void DisableMouseCursor();
+	void OnAgentDestroyed(cc::EventCustom* eventData);
 	void ProcessDebugPhysicsDraw();
-	void OnPlayerHealthChanged(cocos2d::EventCustom* eventData);
-	void OnPlayerStaminaChanged(cocos2d::EventCustom* eventData);
 	void OnPlayerDisappeared();
-	void OnAgentDestroyed(cocos2d::EventCustom* eventData);
 	void ReloadGame();
 	void RegisterForEvents();
-	void InitVFXManger(cocos2d::Node* worldLayer);
+	void InitVFXManger(cc::Node* worldLayer);
 
 private:
 	static PhysicsManager*			s_physicsManager;
@@ -61,9 +60,7 @@ private:
 	VFXManager						m_vfxManager;
 	GameSpeedModifier				m_gameSpeedModifier;
 	Player*							m_player;
-	ProgressBar*					m_healthBar;
-	ProgressBar*					m_staminaBar;
-	cocos2d::ui::Text*				m_scoreText;
+	cc::ui::Text*					m_scoreText;
 	bool							m_physicsDebugEnabled;
 	float							m_timeModifier;
 };

@@ -21,20 +21,6 @@ Vector2::Vector2(const Vector2& other)
 
 }
 
-Vector2& Vector2::operator*(float scale)
-{
-	m_x *= scale;
-	m_y *= scale;
-	return *this;
-}
-
-Vector2& Vector2::operator+(const Vector2& otherVec)
-{
-	m_x += otherVec.m_x;
-	m_y += otherVec.m_y;
-	return *this;
-}
-
 Vector2 Vector2::operator+(const Vector2& otherVec) const
 {
 	return Vector2(m_x + otherVec.m_x, m_y + otherVec.m_y);
@@ -43,13 +29,6 @@ Vector2 Vector2::operator+(const Vector2& otherVec) const
 Vector2 Vector2::operator-(const Vector2& otherVec) const
 {
 	return Vector2(m_x - otherVec.m_x, m_y - otherVec.m_y);
-}
-
-Vector2& Vector2::operator-(const Vector2& otherVec)
-{
-	m_x -= otherVec.m_x;
-	m_y -= otherVec.m_y;
-	return *this;
 }
 
 Vector2& Vector2::operator=(const Vector2& otherVec)
@@ -73,17 +52,6 @@ Vector2 Vector2::operator/(float divider) const
 	}
 
 	return result;
-}
-
-Vector2& Vector2::operator/(float divider)
-{
-	if (divider > 0)
-	{
-		m_x /= divider;
-		m_y /= divider;
-	}
-
-	return *this;
 }
 
 Vector2 Vector2::GetZero()

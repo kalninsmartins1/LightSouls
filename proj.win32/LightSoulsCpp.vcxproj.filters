@@ -242,15 +242,25 @@
     <ClCompile Include="..\Classes\Core\Input\InputTypes\GameController\GameControllerInput.cpp" />
     <ClCompile Include="..\Classes\Core\Input\InputTypes\Keyboard\KeyboardInput.cpp" />
     <ClCompile Include="..\Classes\Core\Input\InputTypes\Mouse\MouseInput.cpp" />
-    <ClCompile Include="..\Classes\Core\UI\ElementConfig.cpp" />
-    <ClCompile Include="..\Classes\Core\UI\InGameIndicators\ProgressBar.cpp" />
-    <ClCompile Include="..\Classes\Core\UI\Panel\VerticalPanel.cpp" />
     <ClCompile Include="..\Classes\Core\Math\Vector2.cpp" />
-    <ClCompile Include="..\Classes\External\Adapters\UI\Panel\VerticalPanelCCImplAdapter.cpp" />
-    <ClCompile Include="..\Classes\Core\Factories\UI\ElementFactory.cpp" />
-    <ClCompile Include="..\Classes\Core\UI\Panel\IVerticalPanelImpl.cpp" />
     <ClCompile Include="..\Classes\Core\String\String.cpp" />
     <ClCompile Include="..\Classes\World\Projectiles\Projectile.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\ElementConfig.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Element.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Attributes\ImageConfigAttribute.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Attributes\TransformConfigAttribute.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Attributes\PanelConfigAttribute.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Attributes\StackPanelConfigAttribute.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Attributes\VerticalPanelConfigAttribute.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Attributes\ProgressBarAttribute.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Components\ProgressBarComponent.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\ElementComponent.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Loaders\ProgressBarAttributeLoader.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Loaders\StackPanelAttributeLoader.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Loaders\TransformAttributeLoader.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Loaders\VerticalPanelAttributeLoader.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Loaders\ElementConfigLoader.cpp" />
+    <ClCompile Include="..\Classes\Core\UI\Configs\Loaders\ImageAttributeLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -391,7 +401,6 @@
     <ClInclude Include="..\Classes\World\VFX\VFXManager.h" />
     <ClInclude Include="..\Classes\World\VFX\VFX.h" />
     <ClInclude Include="..\Classes\World\Cursor.h" />
-    <ClInclude Include="..\Classes\Core\Math\IVector2.h" />
     <ClInclude Include="..\Classes\Core\Camera\Camera.h" />
     <ClInclude Include="..\Classes\Core\Camera\CameraShake\CameraShakeTrigger.h" />
     <ClInclude Include="..\Classes\Core\Camera\Components\CameraShake.h" />
@@ -405,19 +414,29 @@
     <ClInclude Include="..\Classes\Core\Input\InputTypes\GameController\GameControllerInput.h" />
     <ClInclude Include="..\Classes\Core\Input\InputTypes\Keyboard\KeyboardInput.h" />
     <ClInclude Include="..\Classes\Core\Input\InputTypes\Mouse\MouseInput.h" />
-    <ClInclude Include="..\Classes\Core\UI\ElementConfig.h" />
     <ClInclude Include="..\Classes\Core\UI\IElement.h" />
-    <ClInclude Include="..\Classes\Core\UI\InGameIndicators\ProgressBar.h" />
-    <ClInclude Include="..\Classes\Core\UI\Panel\IPanel.h" />
-    <ClInclude Include="..\Classes\Core\UI\Panel\VerticalPanel.h" />
     <ClInclude Include="..\Classes\Core\Math\Vector2.h" />
-    <ClInclude Include="..\Classes\External\Adapters\UI\Panel\VerticalPanelCCImplAdapter.h" />
-    <ClInclude Include="..\Classes\Core\UI\Panel\IVerticalPanelImpl.h" />
-    <ClInclude Include="..\Classes\Core\Factories\UI\ElementFactory.h" />
-    <ClInclude Include="..\Classes\Core\Factories\UI\IElementFactory.h" />
     <ClInclude Include="..\Classes\Utils\XML\XMLTypes.h" />
     <ClInclude Include="..\Classes\Core\String\String.h" />
     <ClInclude Include="..\Classes\External\CocosEngine.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\ElementConfig.h" />
+    <ClInclude Include="..\Classes\Core\UI\Element.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Attributes\IConfigAttribute.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Attributes\ImageConfigAttribute.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Attributes\TransformConfigAttribute.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Attributes\PanelConfigAttribute.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Attributes\StackPanelConfigAttribute.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Attributes\VerticalPanelConfigAttribute.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Attributes\ProgressBarAttribute.h" />
+    <ClInclude Include="..\Classes\Core\UI\Components\ProgressBarComponent.h" />
+    <ClInclude Include="..\Classes\Core\UI\ElementComponent.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Loaders\ProgressBarAttributeLoader.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Loaders\StackPanelAttributeLoader.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Loaders\TransformAttributeLoader.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Loaders\VerticalPanelAttributeLoader.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Loaders\ElementConfigLoader.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Loaders\ImageAttributeLoader.h" />
+    <ClInclude Include="..\Classes\Core\UI\Configs\Loaders\IAttributeLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

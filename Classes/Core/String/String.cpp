@@ -11,7 +11,7 @@ String::String(const char* cStr)
 
 }
 
-String::String(std::string str)
+String::String(const std::string& str)
 	: m_str(str)
 {
 

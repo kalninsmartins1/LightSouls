@@ -8,8 +8,9 @@ namespace XMLConsts
 	static constexpr char* NODE_AGENT_CONFIG_LIST = "AgentConfigList";
 	static constexpr char* NODE_SPAWN_POINTS = "SpawnPoints";
 	static constexpr char* NODE_SPAWN_POINT = "SpawnPoint";
-	static constexpr char* NODE_BACKGROUND = "Background";
 	static constexpr char* NODE_FOREGROUND = "Foreground";
+	static constexpr char* NODE_CONTENT = "Content";
+	static constexpr char* NODE_EVENT = "Event";
 	static constexpr char* NODE_SPRITE = "Sprite";
 	static constexpr char* NODE_SPRITE_FRAME = "SpriteFrame";
 	static constexpr char* NODE_NORMALIZED_POSITION = "NormalizedPosition";
@@ -34,6 +35,10 @@ namespace XMLConsts
 
 	// XML UI attributes
 	static constexpr char* UI_ANIMATION_SPEED_ATTR = "animationSpeed";
+	static constexpr char* UI_EVENT_ATTR = "event";
+	static constexpr char* UI_SPACING_ATTR = "spacing";
+	static constexpr char* UI_LEFT_PADDING_ATTR = "leftPadding";
+	static constexpr char* UI_TOP_PADDING_ATTR = "topPadding";
 	static constexpr char* UI_MIN_VALUE = "minValue";
 	static constexpr char* UI_MAX_VALUE = "maxValue";
 

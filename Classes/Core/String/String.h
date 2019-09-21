@@ -12,7 +12,7 @@ class String
 public:
 	String();
 	String(const char* cStr);
-	String(std::string str);
+	String(const std::string& str);
 	
 	String&		operator+(const char* cStr);
 	String&		operator+=(const char symbol);

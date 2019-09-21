@@ -311,7 +311,7 @@ void Player::DispatchOnGiveDamageEvent() const
 
 bool Player::OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody)
 {
-	cocos2d::Node* otherNode = otherBody->getNode();
+	cc::Node* otherNode = otherBody->getNode();
 	if (otherNode != nullptr)
 	{
 		SetCollisionData(otherNode);

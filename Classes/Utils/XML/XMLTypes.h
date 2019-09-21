@@ -8,3 +8,4 @@
 #include "cocos2d/external/tinyxml2/tinyxml2.h"
 
 using XMLElement = tinyxml2::XMLElement;
+using XMLDoc = tinyxml2::XMLDocument;

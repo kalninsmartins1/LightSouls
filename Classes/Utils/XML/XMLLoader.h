@@ -56,17 +56,20 @@ public:
 	static bool InitializeGameSpeedModifier(GameSpeedModifier& speedModifier, const String& pathToXML);
 	static bool InitializeVFXManager(VFXManager& vfxManager, const String& pathToXML);
 
-	static bool InitializeUIProgressBar(ProgressBar& healthBar, const String& pathToXML);
+	static bool	LoadXMLFile(const String& pathToXML, XMLDoc& outDoc);
+	static void LoadElementConfigs(const XMLElement& xmlElement, std::vector<UI::ElementConfig>& outConfigs);
+
 	static bool LoadWorld(World& world, const String& pathToXML);
 	static bool InitializeCamera(LS::Camera& camera, const String& pathToXML);
 	static void	ReadXMLAttribute(const XMLElement* element, const String& attributeName, String& outValue);
+	static void	GetVector3FromElement(const XMLElement& element, Vector3& outResult);
+	static void	GetVector2FromElement(const XMLElement& element, Vector2& outResult);
 
 private:
 	XMLLoader();
 
 private:
 	static bool						GetAnchorPosition(const XMLElement& element, Vector2& outPos);
-	static bool						LoadXMLFile(const String& pathToXML, XMLDoc& outDoc);
 
 	static void						LoadActionTriggers(GameInput& gameInput,
 		const XMLElement* pElement, LoadInputCallback onKeyboardInput,
@@ -79,10 +82,7 @@ private:
 	static void						LoadActionButton(GameInput& gameInput, GameInputType inputType,
 		const XMLElement* element, const String& actionName, const String& xmlAttributeName);
 
-	static void						LoadUIElement(const XMLElement& element, UI::ElementConfig& outUIElement);
 	static void						LoadPhysicsMaterialFromAttributes(const XMLElement& element, cocos2d::PhysicsMaterial& outMaterial);
-	static void						GetVector3FromElement(const XMLElement& element, Vector3& outResult);
-	static void						GetVector2FromElement(const XMLElement& element, Vector2& outResult);
 	static void						CreatePhysicsBodyFromAttributes(const XMLElement& xmlElement, PhysicsBodyConfig& outConfig);
 	static void						LoadNodeComponents(cc::Node& node, const XMLElement& root);
 	static GameInputType			StrToGameInputType(const String& inputType);
