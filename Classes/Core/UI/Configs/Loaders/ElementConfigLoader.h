@@ -21,6 +21,7 @@ namespace UI
 	class ElementConfigLoader
 	{
 	public:
+		static void RemoveAllConfigLoaders();
 		static void RegisterConfigLoader(const IAttributeLoader& loader);
 		static bool LoadConfig(const String& configPath, ElementConfig& outConfig);
 

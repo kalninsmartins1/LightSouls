@@ -180,6 +180,7 @@ void GameScene::RegisterSystems()
 
 void GameScene::RegisterAttributeLoaders()
 {
+	UI::ElementConfigLoader::RemoveAllConfigLoaders();
 	UI::ElementConfigLoader::RegisterConfigLoader(UI::ImageAttributeLoader());
 	UI::ElementConfigLoader::RegisterConfigLoader(UI::TransformAttributeLoader());
 	UI::ElementConfigLoader::RegisterConfigLoader(UI::StackPanelAttributeLoader());

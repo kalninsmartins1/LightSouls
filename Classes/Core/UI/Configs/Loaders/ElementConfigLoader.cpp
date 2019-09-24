@@ -14,6 +14,11 @@ bool UI::ElementConfigLoader::Init(const String& configPath)
 	return XMLLoader::LoadXMLFile(configPath, m_doc);
 }
 
+void UI::ElementConfigLoader::RemoveAllConfigLoaders()
+{
+	s_configLoaders.clear();
+}
+
 void UI::ElementConfigLoader::RegisterConfigLoader(const IAttributeLoader& loader)
 {
 	s_configLoaders.emplace_back(loader.Clone());
