@@ -18,7 +18,7 @@ SpawnPoint::SpawnPoint(const SpawnPointConfig& config)
 	cc::EventDispatcher* dispatcher = getEventDispatcher();
 	if (dispatcher != nullptr)
 	{
-		dispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared().GetCStr(),
+		dispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared(),
 			CC_CALLBACK_1(SpawnPoint::OnAgentDisappeared, this));
 	}
 }

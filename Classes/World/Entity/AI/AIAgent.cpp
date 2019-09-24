@@ -14,9 +14,9 @@
 #include "World/Entity/CustomActions/AI/AIAvoidTargetAction.h"
 #include "cocos2d/external/tinyxml2/tinyxml2.h"
 
-String AIAgent::s_eventAgentHealthChanged = "EVENT_AGENT_HEALTH_CHANGED";
-String AIAgent::s_eventAgentDamageTaken = "EVENT_AGENT_DAMAGE_TAKEN";
-String AIAgent::s_eventAgentDisappeared = "EVENT_AGENT_DESTROYED";
+const char* AIAgent::s_eventAgentHealthChanged = "EVENT_AGENT_HEALTH_CHANGED";
+const char* AIAgent::s_eventAgentDamageTaken = "EVENT_AGENT_DAMAGE_TAKEN";
+const char* AIAgent::s_eventAgentDisappeared = "EVENT_AGENT_DESTROYED";
 
 AIAgent* AIAgent::Create(const String& pathToXML)
 {
@@ -43,7 +43,7 @@ void AIAgent::DispatchOnDisappeared() const
 	cc::EventDispatcher* eventDispatcher = getEventDispatcher();	
 	if (GetHealth() <= 0)
 	{
-		eventDispatcher->dispatchCustomEvent(s_eventAgentDisappeared.GetCStr(), &BaseEventData(GetId()));
+		eventDispatcher->dispatchCustomEvent(s_eventAgentDisappeared, &BaseEventData(GetId()));
 	}	
 }
 
@@ -176,17 +176,17 @@ AIAgent::~AIAgent()
 
 }
 
-const String& AIAgent::GetEventOnDisappeared()
+const char* AIAgent::GetEventOnDisappeared()
 {
 	return s_eventAgentDisappeared;
 }
 
-const String& AIAgent::GetEventOnHealthChanged()
+const char* AIAgent::GetEventOnHealthChanged()
 {
 	return s_eventAgentHealthChanged;
 }
 
-const String& AIAgent::GetEventOnDamageTaken()
+const char* AIAgent::GetEventOnDamageTaken()
 {
 	return s_eventAgentDamageTaken;
 }
@@ -214,11 +214,6 @@ const Vector2& AIAgent::GetBasePosition() const
 GenericAttackComponent* AIAgent::GetAttackComponent() const
 {
 	return m_attackComponent;
-}
-
-EntityType AIAgent::GetEntityType() const
-{
-	return EntityType::AIAGENT;
 }
 
 EAIState AIAgent::GetCurrentAIState() const

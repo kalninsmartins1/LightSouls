@@ -81,14 +81,14 @@ void GenericAttackComponent::CheckAffectedObjects(const Entity& attacker,
 	PhysicsManager::QuerryRect(rect, callback);
 }
 
-void GenericAttackComponent::TryToGiveDamage(cocos2d::PhysicsShape& physicsObject) const
+void GenericAttackComponent::TryToGiveDamage(cc::PhysicsShape& physicsObject) const
 {
 	Entity* hitEntity = dynamic_cast<Entity*>(physicsObject.getBody()->getNode());
 	const Entity* ownerEntity = GetOwnerEntity();
 	
 	if (hitEntity != nullptr &&
 		hitEntity->GetId() != ownerEntity->GetId() && // Ignore if hitting self	
-		hitEntity->GetEntityType() != ownerEntity->GetEntityType()) // Ignore hitting self kind
+		typeid(hitEntity) != typeid(ownerEntity)) // Ignore hitting self kind
 	{		
 		OnEntityHit(hitEntity);
 		hitEntity->TakeDamage(*ownerEntity);

@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <VFX type="Dust">
 	<Component type="AnimComponent">
-		<SpriteSheet path="res/Graphics/World/VFX/Dust/dustAnim.png" 
-			plistPath="res/Graphics/World/VFX/Dust/dustAnim.plist">
+		<SpriteSheet path="res/Graphics/World/VFX/DustHorizontal/dustAnim.png" 
+			plistPath="res/Graphics/World/VFX/DustHorizontal/dustAnim.plist">
 			
 			<Anim 	type="Idle"
 					frameNamePattern="dust%d.png"

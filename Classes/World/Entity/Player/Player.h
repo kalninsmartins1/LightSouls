@@ -14,11 +14,10 @@ public:
 	Player();
 
 public:
-	static const String& GetEventOnHealthChanged();
-	static const String& GetEventOnStaminaChanged();
-	static const String& GetEventOnGiveDamage();
-	static const String& GetEventOnPlayerDisappeared();
-	virtual EntityType	 GetEntityType() const override;
+	static const char*		GetEventOnHealthChanged();
+	static const char*		GetEventOnStaminaChanged();
+	static const char*		GetEventOnGiveDamage();
+	static const char*		GetEventOnPlayerDisappeared();
 
 	void SetDodgeStaminaConsumption(float dodgeStaminaConumption);
 	void SetDodgeSpeed(float dodgeSpeed);
@@ -37,7 +36,8 @@ protected:
 	virtual void DispatchOnDisappeared() const override;
 
 private:
-	void SetCollisionData(cocos2d::Node* otherNode);
+	const char* GetDodgeEventForDispatch() const;
+	void SetCollisionData(cc::Node* otherNode);
 
 	void StartDodging();
 	void StopDodging();
@@ -56,11 +56,13 @@ private:
 	bool InitAttackComponent();
 
 private:
-	static const String			s_eventOnPlayerHealthChanged;
-	static const String			s_eventOnPlayerStaminaChanged;
-	static const String			s_eventOnPlayerGiveDamage;
-	static const String			s_eventOnPlayerDodged;
-	static const String			s_eventOnPlayerDisappeared;
+	static const char*			s_eventOnPlayerHealthChanged;
+	static const char*			s_eventOnPlayerStaminaChanged;
+	static const char*			s_eventOnPlayerGiveDamage;
+	static const char*			s_eventOnPlayerDodgedHorizontally;
+	static const char*			s_eventOnPlayerDodgedUp;
+	static const char*			s_eventOnPlayerDodgedDown;
+	static const char*			s_eventOnPlayerDisappeared;
 	LongSwordAttackComponent*	m_attackComponent;
 	Vector2						m_lastValidMoveDirection;
 	Cursor*						m_cursor;

@@ -17,11 +17,13 @@
 #include "World/Entity/Components/Attack/LongSwordAttackComponent.h"
 #include "World/Cursor.h"
 
-const String Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
-const String Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
-const String Player::s_eventOnPlayerGiveDamage = "EVENT_ON_PLAYER_GIVE_DAMAGE";
-const String Player::s_eventOnPlayerDodged = "EVENT_ON_PLAYER_DODGED";
-const String Player::s_eventOnPlayerDisappeared = "EVENT_ON_PLAYER_DISAPPEARED";
+const char* Player::s_eventOnPlayerHealthChanged = "EVENT_ON_PLAYER_HEALTH_CHANGED";
+const char* Player::s_eventOnPlayerStaminaChanged = "EVENT_ON_PLAYER_STAMINA_CHANGED";
+const char* Player::s_eventOnPlayerGiveDamage = "EVENT_ON_PLAYER_GIVE_DAMAGE";
+const char* Player::s_eventOnPlayerDodgedHorizontally = "EVENT_ON_PLAYER_DODGED_HORIZONTAL";
+const char* Player::s_eventOnPlayerDodgedUp = "EVENT_ON_PLAYER_DODGED_UP";
+const char* Player::s_eventOnPlayerDodgedDown = "EVENT_ON_PLAYER_DODGED_DOWN";
+const char* Player::s_eventOnPlayerDisappeared = "EVENT_ON_PLAYER_DISAPPEARED";
 
 Player* Player::Create(const String& pathToXML)
 {
@@ -56,12 +58,12 @@ Player::Player()
 
 }
 
-const String& Player::GetEventOnHealthChanged()
+const char* Player::GetEventOnHealthChanged()
 {
 	return s_eventOnPlayerHealthChanged;
 }
 
-const String& Player::GetEventOnStaminaChanged()
+const char* Player::GetEventOnStaminaChanged()
 {
 	return s_eventOnPlayerStaminaChanged;
 }
@@ -139,19 +141,14 @@ void Player::setParent(Node * parent)
 	}
 }
 
-const String& Player::GetEventOnGiveDamage()
+const char* Player::GetEventOnGiveDamage()
 {
 	return s_eventOnPlayerGiveDamage;
 }
 
-const String& Player::GetEventOnPlayerDisappeared()
+const char* Player::GetEventOnPlayerDisappeared()
 {
 	return s_eventOnPlayerDisappeared;
-}
-
-EntityType Player::GetEntityType() const
-{
-	return EntityType::PLAYER;
 }
 
 void Player::SetDodgeStaminaConsumption(float dodgeStaminaConumption)
@@ -231,7 +228,7 @@ void Player::StartDodging()
 	ApplyInstantSpeed(m_dodgeSpeed);
 	
 	auto pos = getPosition();
-	DispatchEvent(s_eventOnPlayerDodged, 
+	DispatchEvent(GetDodgeEventForDispatch(),
 		&PositionEventData(GetId(), Vector2(pos.x, pos.y)));
 
 	// Consume stamina
@@ -376,8 +373,28 @@ void Player::DispatchOnDisappeared() const
 	cc::EventDispatcher* dispatcher = getEventDispatcher();
 	if (dispatcher != nullptr)
 	{
-		dispatcher->dispatchCustomEvent(s_eventOnPlayerDisappeared.GetCStr());
+		dispatcher->dispatchCustomEvent(s_eventOnPlayerDisappeared);
 	}
+}
+
+const char* Player::GetDodgeEventForDispatch() const
+{
+	auto& direction = GetMoveDirection();
+	const char* dodgeEvent;
+	if (abs(direction.GetX()) > abs(direction.GetY()))
+	{
+		dodgeEvent = s_eventOnPlayerDodgedHorizontally;
+	}
+	else if (direction.GetY() > 0)
+	{
+		dodgeEvent = s_eventOnPlayerDodgedUp;
+	}
+	else
+	{
+		dodgeEvent = s_eventOnPlayerDodgedDown;
+	}
+
+	return dodgeEvent;
 }
 
 void Player::SetCollisionData(cc::Node* otherNode)

@@ -42,11 +42,6 @@ Entity::~Entity()
 
 }
 
-EntityType Entity::GetEntityType() const
-{
-	return EntityType::NONE;
-}
-
 void Entity::UpdateSortingLayer()
 {
 	// Invert the y since higher y values should be closer
@@ -412,17 +407,17 @@ void Entity::OnGameSpeedModificationEnded()
 	m_isGameSpeedBeingModified = false;
 }
 
-void Entity::DispatchEvent(const String& eventType) const
+void Entity::DispatchEvent(const char* eventType) const
 {
 	DispatchEvent(eventType, nullptr);
 }
 
-void Entity::DispatchEvent(const String& eventType, BaseEventData* eventData) const
+void Entity::DispatchEvent(const char* eventType, BaseEventData* eventData) const
 {
 	cocos2d::EventDispatcher* eventDispatcher = getEventDispatcher();
 	if (eventDispatcher != nullptr)
 	{
-		eventDispatcher->dispatchCustomEvent(eventType.GetCStr(), eventData);
+		eventDispatcher->dispatchCustomEvent(eventType, eventData);
 	}
 }
 

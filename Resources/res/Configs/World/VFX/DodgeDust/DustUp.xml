@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<VFX type="Dust">
+	<Component type="AnimComponent">
+		<SpriteSheet path="res/Graphics/World/VFX/DustUp/dustUpAnim.png" 
+			plistPath="res/Graphics/World/VFX/DustUp/dustUpAnim.plist">
+			
+			<Anim 	type="Idle"
+					frameNamePattern="dustUp%d.png"
+					timeBetweenFrames="0.1;0.1;0.1;0.1;0.1;"
+					shouldBlur="false"
+			/>
+		</SpriteSheet>			
+	</Component>
+	
+	<Component type="VFXComponent" layer="0"/>
+</VFX>

@@ -327,16 +327,16 @@ void GameScene::RegisterForEvents()
 	EventDispatcher* eventDispatcher = getEventDispatcher();
 	if (eventDispatcher != nullptr)
 	{
-		eventDispatcher->addCustomEventListener(Player::GetEventOnPlayerDisappeared().GetCStr(),
+		eventDispatcher->addCustomEventListener(Player::GetEventOnPlayerDisappeared(),
 			CC_CALLBACK_0(GameScene::OnPlayerDisappeared, this));
-		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared().GetCStr(),
+		eventDispatcher->addCustomEventListener(AIAgent::GetEventOnDisappeared(),
 			CC_CALLBACK_1(GameScene::OnAgentDestroyed, this));
 	}
 }
 
 void GameScene::InitVFXManger(Node* worldLayer)
 {
-	m_vfxManager.Init(worldLayer, "res/Configs/World/VFX/VfxManager.xml");
+	m_vfxManager.Init(worldLayer, "res/Configs/World/VFX/VFXManager.xml");
 }
 
 void GameScene::SwitchToGameOverScene()

@@ -58,7 +58,7 @@ void StateSignaling::LoadXMLData(const XMLElement& xmlElement)
 
 void StateSignaling::OnEventReceived(const String& receivedEvent, const BaseEventData& eventData)
 {
-	if (AIAgent::GetEventOnDamageTaken() == receivedEvent)
+	if (String(AIAgent::GetEventOnDamageTaken()) == receivedEvent)
 	{
 		m_curProgress = EStateProgress::FAILED;
 	}

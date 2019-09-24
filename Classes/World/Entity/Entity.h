@@ -7,12 +7,6 @@ class AnimComponent;
 class BaseEventData;
 class String;
 
-enum class EntityType
-{
-	NONE,
-	PLAYER,
-	AIAGENT
-};
 
 class Entity: public cc::Sprite
 {
@@ -21,7 +15,6 @@ public:
 	virtual ~Entity();
 
 public:
-	virtual EntityType		GetEntityType() const;
 	float					GetCurrentMoveSpeed() const;
 	const Vector2&			GetMoveDirection() const;
 	const Vector2&			GetLookAtDirection() const;
@@ -71,8 +64,8 @@ public:
 	void			StartAttacking();
 	void			StopAttacking();
 	
-	void			DispatchEvent(const String& eventType) const;
-	void			DispatchEvent(const String& eventType, BaseEventData* eventData) const;
+	void			DispatchEvent(const char* eventType) const;
+	void			DispatchEvent(const char* eventType, BaseEventData* eventData) const;
 	void			ApplyKnockbackEffect(const Entity& attackingEntity);
 	void			ApplyInstantSpeed(float speed);
 	void			ApplyInstantSpeedInDirection(float speed, const Vector2& direction);	

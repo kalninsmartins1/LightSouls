@@ -20,15 +20,14 @@ public:
 	~AIAgent();
 
 public:	
-	static const String&	 GetEventOnDisappeared();
-	static const String&	 GetEventOnHealthChanged();
-	static const String&	 GetEventOnDamageTaken();
+	static const char*		 GetEventOnDisappeared();
+	static const char*		 GetEventOnHealthChanged();
+	static const char*		 GetEventOnDamageTaken();
 	float					 GetAttackRange() const;
 	float					 GetStoppingDistance() const;
 	const String&			 GetType() const;
 	const Vector2&			 GetBasePosition() const;
 	GenericAttackComponent*	 GetAttackComponent() const;
-	virtual EntityType		 GetEntityType() const override;
 	EAIState				 GetCurrentAIState() const;
 	bool					 IsBackgroundTaskReady() const;
 
@@ -54,9 +53,9 @@ private:
 	bool OnContactBegin(const Vector2& contactPoint, const cocos2d::PhysicsBody* otherBody);
 
 private:	
-	static String			s_eventAgentHealthChanged;
-	static String			s_eventAgentDisappeared;
-	static String			s_eventAgentDamageTaken;
+	static const char*		s_eventAgentHealthChanged;
+	static const char*		s_eventAgentDisappeared;
+	static const char*		s_eventAgentDamageTaken;
 	StateMachine			m_stateMachine;
 	GenericAttackComponent*	m_attackComponent;
 	Vector2					m_basePosition;	

@@ -1,11 +1,17 @@
 <?xml version="1.0" ?>
-<VfxManager>
-	<Event 	type="EVENT_ON_PLAYER_DODGED"			
-			path="res/Configs/World/VFX/Dust.xml"/>
+<VFXManager>
+	<Event 	type="EVENT_ON_PLAYER_DODGED_HORIZONTAL"			
+			path="res/Configs/World/VFX/DodgeDust/DustHorizontal.xml"/>
+			
+	<Event 	type="EVENT_ON_PLAYER_DODGED_DOWN"			
+			path="res/Configs/World/VFX/DodgeDust/DustDown.xml"/>
+	
+	<Event 	type="EVENT_ON_PLAYER_DODGED_UP"			
+			path="res/Configs/World/VFX/DodgeDust/DustUp.xml"/>
 	
 	<Event 	type="EVENT_ON_ENTITY_SLASHED"			
 			path="res/Configs/World/VFX/Pop.xml"/>
 			
 	<Event 	type="EVENT_ON_LONG_SWORD_ATTACK_STARTED"			
 			path="res/Configs/World/VFX/Slash.xml"/>
-</VfxManager>
+</VFXManager>
