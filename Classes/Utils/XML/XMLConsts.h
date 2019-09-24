@@ -86,6 +86,9 @@ namespace XMLConsts
 	static constexpr char* ANIM_TIME_BETWEEN_FRAMES_ATTR = "timeBetweenFrames";
 	static constexpr char* ANIM_SHOULD_BLUR = "shouldBlur";
 
+	// XML VFX attributes
+	static constexpr char* VFX_LAYER_ATTR = "layer";
+
 	// XML generic attributes
 	static constexpr char* DISTANCE = "distance";
 	static constexpr char* NAME_ATTR = "name";

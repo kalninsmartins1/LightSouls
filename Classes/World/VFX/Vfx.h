@@ -19,7 +19,8 @@ public:
 public:
 	static VFX* Create(cc::Node& container, const String& pathToXML);
 
-	void		Spawn(const Vector2& pos, float rotationAngle, const std::function<void(VFX&)>& onFinished);
+	void Spawn(const Vector2& pos, float rotationAngle, const std::function<void(VFX&)>& onFinished);
+	void SetLayer(int layer);
 
 private:
 	bool Init(cc::Node& container, const String& pathToXML);
@@ -28,4 +29,5 @@ private:
 private:	
 	AnimComponent*				m_animComp;
 	std::function<void(VFX&)>	m_finishCallback;
+	int							m_layer;
 };

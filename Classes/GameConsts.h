@@ -51,6 +51,7 @@ namespace GameConsts
 	static constexpr char* ATTACK_COMPONENT = "AttackComponent";
 	static constexpr char* RANGED_ATTACK_COMPONENT = "RangedAttackComponent";
 	static constexpr char* LONG_SWORD_ATTACK_COMPONENT = "LongSwordAttackComponent";
+	static constexpr char* VFX_COMPONENT = "VFXComponent";
 	static constexpr char* HIT_ATTACK_COMPONENT = "HitAttackComponent";
 	static constexpr char* GENERIC_ATTACK_COMPONENT = "GenericAttackComponent";
 	static constexpr char* SPRITE_COMPONENT = "SpriteComponent";

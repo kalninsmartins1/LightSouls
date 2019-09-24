@@ -24,6 +24,7 @@
 #include "World/Entity/Components/LookAtAITargetComponent.h"
 #include "World/GameSpeedModifier.h"
 #include "World/VFX/VFXManager.h"
+#include "World/VFX/VFX.h"
 #include "World/Cursor.h"
 #include "Classes/Core/UI/Configs/Loaders/ElementConfigLoader.h"
 #include "cocos2d/external/tinyxml2/tinyxml2.h"
@@ -354,6 +355,12 @@ bool XMLLoader::InitializeComponent(cc::Node& node, const XMLElement& element, c
 		LookAtAITargetComponent* lookAtComponent = LookAtAITargetComponent::create();
 		lookAtComponent->SetOwnerEntity(node);
 		node.addComponent(lookAtComponent);
+	}
+	else if (componentType == GameConsts::VFX_COMPONENT)
+	{
+		VFX& vfx = static_cast<VFX&>(node);
+		int layer = element.IntAttribute(XMLConsts::VFX_LAYER_ATTR);
+		vfx.SetLayer(layer);
 	}
 	else if (componentType == GameConsts::HIT_ATTACK_COMPONENT)
 	{

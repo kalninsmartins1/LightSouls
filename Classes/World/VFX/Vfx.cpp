@@ -7,6 +7,7 @@
 
 VFX::VFX()
 	: m_animComp(nullptr)
+	, m_layer(0)
 {
 
 }
@@ -34,7 +35,8 @@ void VFX::Spawn(const Vector2& pos, float rotationAngle, const std::function<voi
 		setVisible(true);
 		setPosition(pos.GetX(), pos.GetY());
 		setRotation(rotationAngle);
-		setLocalZOrder(abs(pos.GetY()) * GameConsts::VFX_LAYER_MULTIPLIER);
+		int dynamicLayer = abs(pos.GetY()) * GameConsts::VFX_LAYER_MULTIPLIER;
+		setLocalZOrder(dynamicLayer + m_layer);
 		m_animComp->PlayOneShotAnimation(GameConsts::ANIM_TYPE_IDLE,
 			CC_CALLBACK_0(VFX::OnFinishedAnimating, this));
 		m_finishCallback = onFinished;
@@ -43,6 +45,11 @@ void VFX::Spawn(const Vector2& pos, float rotationAngle, const std::function<voi
 	{
 		onFinished(*this);
 	}
+}
+
+void VFX::SetLayer(int layer)
+{
+	m_layer = layer;
 }
 
 bool VFX::Init(cc::Node& container, const String& pathToXML)

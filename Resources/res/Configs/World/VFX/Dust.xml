@@ -11,4 +11,6 @@
 			/>
 		</SpriteSheet>			
 	</Component>
+	
+	<Component type="VFXComponent" layer="0"/>
 </VFX>
