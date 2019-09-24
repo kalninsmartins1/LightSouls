@@ -29,7 +29,8 @@
 				secondsBetweenAttacks="0.3" 
 				comboExpireTime="0.8" 
 				attackRange="75"
-				paddingFromBody="5">
+				paddingFromBody="5"
+				hitPointOffset="50">
 	</Component>
 	
 	<Component type="AnimComponent">

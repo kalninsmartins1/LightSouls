@@ -60,7 +60,7 @@ void GenericAttackComponent::CheckAffectedObjects(const Entity& attacker,
 	float paddingFromBody, const QueryRectCallback& callback)
 {
 	// After attack finished check if we hit something	
-	const cocos2d::Size bodySize = attacker.GetPhysicsBodySizeScaled();
+	const cc::Size bodySize = attacker.GetPhysicsBodySizeScaled();
 	const float bodyWidthScaled = bodySize.width;
 
 	Vector2 rectOrgin = attacker.GetPos() + direction *

@@ -5,8 +5,9 @@
 #include "Classes/GameConsts.h"
 #include "Classes/Utils/Utils.h"
 
-const String LongSwordAttackComponent::s_eventOnSlash = "EVENT_ON_ENTITY_SLASHED";
-const String LongSwordAttackComponent::s_eventOnLongSwordAttackStarted = "EVENT_ON_LONG_SWORD_ATTACK_STARTED";
+const char* LongSwordAttackComponent::s_eventOnSlash = "EVENT_ON_ENTITY_SLASHED";
+const char* LongSwordAttackComponent::s_eventOnLongSwordAttackStarted = "EVENT_ON_LONG_SWORD_ATTACK_STARTED";
+const char* LongSwordAttackComponent::s_hitOffsetPropName = "hitPointOffset";
 
 LongSwordAttackComponent* LongSwordAttackComponent::Create(float secondsBetweenAttacks,
 	float attackRange, float paddingFromBody)
@@ -26,9 +27,19 @@ LongSwordAttackComponent* LongSwordAttackComponent::Create(float secondsBetweenA
 	return attackComponent;
 }
 
+const char* LongSwordAttackComponent::GetHitOffsetPropName()
+{
+	return s_hitOffsetPropName;
+}
+
 void LongSwordAttackComponent::SetDamageCheckDelay(const float damageCheckDelay)
 {
 	m_damageCheckDelay = damageCheckDelay;
+}
+
+void LongSwordAttackComponent::SetHitPointOffset(float hitPointOffset)
+{
+	m_hitPointOffset = hitPointOffset;
 }
 
 LongSwordAttackComponent::LongSwordAttackComponent(float secondsBetweenAttacks,
@@ -36,6 +47,7 @@ LongSwordAttackComponent::LongSwordAttackComponent(float secondsBetweenAttacks,
 	: GenericAttackComponent(secondsBetweenAttacks, attackRange)
 	, m_paddingFromBody(paddingFromBody)
 	, m_damageCheckDelay(0.0f)
+	, m_hitPointOffset(0.0f)
 	, m_lastAttackDirection(Vector2::GetZero())
 {
 
@@ -68,7 +80,6 @@ void LongSwordAttackComponent::DispatchStartAttackEvent(const Vector2& direction
 		float angle = Utils::GetSignedAngleBetweenVectors(direction, Vector2(1, 0));
 		Vector2 position = ownerEntity->GetPos() + direction * GetAttackRange();
 		TransformEventData transformData(ownerEntity->GetId(), position, angle);
-
 		ownerEntity->DispatchEvent(s_eventOnLongSwordAttackStarted, &transformData);
 	}
 }
@@ -98,8 +109,9 @@ void LongSwordAttackComponent::OnEntityHit(Entity* hitEntity) const
 	if (ownerEntity != nullptr && hitEntity != nullptr)
 	{
 		const Vector2& ownerPosition = ownerEntity->GetPos();
-		const Vector2& toHitEntity = hitEntity->GetPos() - ownerEntity->GetPos();
-		const Vector2 hitPoint = ownerPosition + (toHitEntity.GetNormalized() * GetAttackRange());
+		const Vector2& toHitEntity = (hitEntity->GetPos() - ownerEntity->GetPos()).GetNormalized();
+		float distanceToHitPoint = GetAttackRange() + m_hitPointOffset;
+		const Vector2 hitPoint = ownerPosition + (toHitEntity * distanceToHitPoint);
 
 		TransformEventData transformData(ownerEntity->GetId(), hitPoint, 0.0f);
 		ownerEntity->DispatchEvent(s_eventOnSlash, &transformData);

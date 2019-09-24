@@ -341,6 +341,7 @@ bool XMLLoader::InitializeComponent(cc::Node& node, const XMLElement& element, c
 		const float staminaConsumption = element.FloatAttribute(XMLConsts::ATTACK_STAMINA_CONSUMPTION_ATTR);
 		const float comboExpireTime = element.FloatAttribute(XMLConsts::ENTITY_COMBO_EXPIRE_TIME_ATTR);
 		const float damageDelayTime = element.FloatAttribute(XMLConsts::ATTACK_DAMAGE_CHECK_DELAY);
+		const float hitPointOffset = element.FloatAttribute(LongSwordAttackComponent::GetHitOffsetPropName());
 
 		LongSwordAttackComponent* longSwordAttack =
 			LongSwordAttackComponent::Create(secondsBetweenAttacks, attackRange,
@@ -348,6 +349,7 @@ bool XMLLoader::InitializeComponent(cc::Node& node, const XMLElement& element, c
 
 		longSwordAttack->setName(GameConsts::ATTACK_COMPONENT);
 		longSwordAttack->SetComboExpireTime(comboExpireTime);
+		longSwordAttack->SetHitPointOffset(hitPointOffset);
 		node.addComponent(longSwordAttack);
 	}
 	else if (componentType == GameConsts::AI_LOOK_AT_TARGET_COMPONENT)
