@@ -87,7 +87,7 @@
 			
 			<Anim	type="Hurt"
 					frameNamePattern="meleeHurt%d.png"					
-					timeBetweenFrames="1.0;"
+					timeBetweenFrames="0.2;0.3;"
 					shouldBlur="false"
 			/>
 			
