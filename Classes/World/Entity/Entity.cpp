@@ -96,6 +96,14 @@ void Entity::setScale(float scaleX, float scaleY)
 	SetBaseMoveSpeed(m_baseMoveSpeed * entityScale * Utils::SafeDivide(1.0f, Utils::GetScaleFactor()));
 }
 
+void Entity::SwitchPhysicsBodyEnabled(bool isEnabled)
+{
+	if (_physicsBody != nullptr)
+	{
+		_physicsBody->setEnabled(isEnabled);
+	}
+}
+
 void Entity::ResetHealth()
 {
 	m_health = m_baseHealth;
@@ -216,7 +224,7 @@ void Entity::TakeDamage(float damage)
 		m_isDisappearing = true;
 		if (!m_isGameSpeedBeingModified)
 		{
-			PlayDissapearAnim();
+			OnHealthReachedZero();
 		}
 	}
 }
@@ -349,7 +357,7 @@ void Entity::PlayDissapearAnim()
 
 void Entity::RegisterToEvents()
 {
-	cocos2d::EventDispatcher* dispatcher = getEventDispatcher();
+	cc::EventDispatcher* dispatcher = getEventDispatcher();
 	if (dispatcher != nullptr)
 	{
 		const char* modificationStartedEvent = GameSpeedModifier::GetEventOnModificationStarted().GetCStr();
@@ -359,6 +367,12 @@ void Entity::RegisterToEvents()
 		dispatcher->addCustomEventListener(modificationEndedEvent,
 			CC_CALLBACK_0(Entity::OnGameSpeedModificationEnded, this));
 	}
+}
+
+void Entity::OnHealthReachedZero()
+{
+	SwitchPhysicsBodyEnabled(false);
+	PlayDissapearAnim();
 }
 
 void Entity::Move()
@@ -402,7 +416,7 @@ void Entity::OnGameSpeedModificationEnded()
 {
 	if (m_isGameSpeedBeingModified && m_isDisappearing)
 	{
-		PlayDissapearAnim();
+		OnHealthReachedZero();
 	}
 	m_isGameSpeedBeingModified = false;
 }
@@ -414,7 +428,7 @@ void Entity::DispatchEvent(const char* eventType) const
 
 void Entity::DispatchEvent(const char* eventType, BaseEventData* eventData) const
 {
-	cocos2d::EventDispatcher* eventDispatcher = getEventDispatcher();
+	cc::EventDispatcher* eventDispatcher = getEventDispatcher();
 	if (eventDispatcher != nullptr)
 	{
 		eventDispatcher->dispatchCustomEvent(eventType, eventData);

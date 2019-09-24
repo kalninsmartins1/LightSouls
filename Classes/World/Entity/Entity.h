@@ -54,6 +54,7 @@ public:
 	void			SetPos(const Vector2& pos);
 	virtual void	setScale(float scaleX, float scaleY) override;
 
+	void			SwitchPhysicsBodyEnabled(bool isEnabled);
 	void			ResetHealth();
 	void			ResetStamina();
 	void			ResetMoveSpeed();
@@ -86,6 +87,7 @@ private:
 	void		PlayHurtAnim();
 	void		PlayDissapearAnim();
 	void		RegisterToEvents();
+	void		OnHealthReachedZero();
 
 	void		UpdateSortingLayer();
 	void		Move();	
