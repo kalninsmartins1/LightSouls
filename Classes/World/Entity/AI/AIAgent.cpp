@@ -157,6 +157,7 @@ void AIAgent::Reset()
 	PrepareForRespawn();
 	m_stateMachine.Reset();
 	SetPos(GetBasePosition());
+	SwitchPhysicsBodyEnabled(true);
 }
 
 void AIAgent::DispatchOnStaminaChangedEvent() const

@@ -6,7 +6,7 @@
 
 class AIAgent;
 
-class SpawnPoint : public cocos2d::Node
+class SpawnPoint : public cc::Node
 {
 public:
 	static SpawnPoint* Create(const SpawnPointConfig& config);

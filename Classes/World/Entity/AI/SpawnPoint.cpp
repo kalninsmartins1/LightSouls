@@ -166,7 +166,6 @@ void SpawnPoint::RespawnAgent()
 void SpawnPoint::SetAgentEnabled(int agentIndex, bool isEnabled)
 {
 	m_spawnedAgents[agentIndex]->setVisible(isEnabled);
-	m_spawnedAgents[agentIndex]->getPhysicsBody()->setEnabled(isEnabled);
 }
 
 void SpawnPoint::OnAgentDisappeared(cc::EventCustom* customEvent)
