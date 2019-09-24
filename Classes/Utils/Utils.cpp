@@ -119,6 +119,19 @@ void Utils::ParseFloatArray(const String& data, std::vector<float>& outArray)
 	}
 }
 
+void Utils::ToggleMouseCursor(bool isEnabled)
+{
+	auto* director = cc::Director::getInstance();
+	if (director != nullptr)
+	{
+		auto* gameView = director->getOpenGLView();
+		if (gameView != nullptr)
+		{
+			gameView->setCursorVisible(isEnabled);
+		}
+	}
+}
+
 Vector2 Utils::GetRandomPositionWithinCircle(const Vector2& centerPos, float radius)
 {
 	// Get random position within range

@@ -63,7 +63,8 @@ bool MainMenuScene::init()
 
 	addChild(title);
 	addChild(layout);	
-    
+	Utils::ToggleMouseCursor(true);
+
     return true;
 }
 

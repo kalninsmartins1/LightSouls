@@ -45,7 +45,6 @@ private:
 	void InitUILayer();
 	void StartGameOverFadeIn(float time);
 	void SwitchToGameOverScene();
-	void DisableMouseCursor();
 	void OnAgentDestroyed(cc::EventCustom* eventData);
 	void ProcessDebugPhysicsDraw();
 	void OnPlayerDisappeared();

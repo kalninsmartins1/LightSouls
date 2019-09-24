@@ -59,6 +59,7 @@ bool GameOverScene::init()
 	addChild(title);
 	addChild(scoreText);
 	addChild(layout);
+	Utils::ToggleMouseCursor(true);
 
     return true;
 }
