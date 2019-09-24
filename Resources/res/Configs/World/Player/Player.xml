@@ -26,7 +26,7 @@
 	<!-- "comboExpireTime" - Time before combo resets, if less than "secondsBetweenAttacks" then no combo is possible -->
 	<Component 	type="LongSwordAttackComponent"
 				damageCheckDelay="0.1"
-				secondsBetweenAttacks="0.3" 
+				secondsBetweenAttacks="1.0" 
 				comboExpireTime="0.8" 
 				attackRange="75"
 				paddingFromBody="5"

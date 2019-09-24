@@ -246,7 +246,6 @@ void Player::Attack(GenericAttackComponent& attackComponent)
 	if (!m_isDodging && attackComponent.IsReadyToAttack())
 	{
 		attackComponent.Attack(GetLookAtDirection());
-		StartAttacking();		
 	}
 }
 
@@ -345,16 +344,8 @@ void Player::ResetCollisionData()
 
 bool Player::InitAttackComponent()
 {	
-	bool isSucessfullyInitialized = false;
 	m_attackComponent = static_cast<LongSwordAttackComponent*>(getComponent(GameConsts::ATTACK_COMPONENT));
-
-	if (m_attackComponent != nullptr)
-	{
-		m_attackComponent->SetAttackFinishCallback(CC_CALLBACK_0(Entity::StopAttacking, this));
-		isSucessfullyInitialized = true;
-	}
-
-	return isSucessfullyInitialized;
+	return m_attackComponent != nullptr;
 }
 
 bool Player::InitCursor(const String& pathToXML)

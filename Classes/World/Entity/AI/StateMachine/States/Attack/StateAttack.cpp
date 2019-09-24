@@ -45,7 +45,6 @@ EStateProgress StateAttack::OnStep()
 		Vector2 toTarget = targetEntityPosition - agent.GetPos();
 		toTarget.Normalize();
 		m_attackComponent->Attack(toTarget);
-		agent.StartAttacking();
 
 		// Start attack animation
 		m_isAnimFinished = false;
@@ -91,6 +90,5 @@ void StateAttack::PlayIdleAnimation()
 void StateAttack::StopAttack()
 {
 	m_isAnimFinished = true;
-	GetAgent().StopAttacking();
 }
 

@@ -62,8 +62,6 @@ public:
 	void			ConsumeStamina(float amount);
 	void			TakeDamage(const Entity& attackingEntity);
 	void			TakeDamage(float damage);
-	void			StartAttacking();
-	void			StopAttacking();
 	
 	void			DispatchEvent(const char* eventType) const;
 	void			DispatchEvent(const char* eventType, BaseEventData* eventData) const;
@@ -104,10 +102,9 @@ private:
 	Vector2						m_pos;
 	Vector2						m_moveDirection;
 	Vector2						m_lookAtDirection;
-	cocos2d::Size				m_physicsBodyScaledSize;
+	cc::Size					m_physicsBodyScaledSize;
 
 	bool m_isRuning;
-	bool m_isAttacking;
 	bool m_isTakingDamage;
 	bool m_isDisappearing;
 	bool m_isStaminaRegenerateDelayExpired;

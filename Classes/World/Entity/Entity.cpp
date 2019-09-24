@@ -14,9 +14,8 @@ Entity::Entity()
 	, m_pos(Vector2::GetZero())
 	, m_lookAtDirection(Vector2::GetZero())
 	, m_moveDirection(Vector2::GetZero())
-	, m_physicsBodyScaledSize(cocos2d::Vec2::ZERO)
+	, m_physicsBodyScaledSize(cc::Vec2::ZERO)
 	, m_isRuning(false)
-	, m_isAttacking(false)
 	, m_isTakingDamage(false)
 	, m_isDisappearing(false)
 	, m_isStaminaRegenerateDelayExpired(true)
@@ -229,18 +228,6 @@ void Entity::TakeDamage(float damage)
 	}
 }
 
-void Entity::StartAttacking()
-{
-	SetCurrentMoveSpeed(0.0f);
-	m_isAttacking = true;
-}
-
-void Entity::StopAttacking()
-{
-	ResetMoveSpeed();
-	m_isAttacking = false;
-}
-
 void Entity::ApplyKnockbackEffect(const Entity& attackingEntity)
 {	
 	const Vector2 awayFromAttacker = (GetPos() - attackingEntity.GetPos()).GetNormalized();
@@ -310,7 +297,7 @@ void Entity::PlayHurtAnim()
 		bool isCurrentlyPlayingHurtAnim = m_animComponent->IsCurrrentlyPlayingAnim(GameConsts::ANIM_TYPE_HURT) ||
 			m_animComponent->IsCurrentlyPlayingDirAnim(GameConsts::ANIM_TYPE_HURT_DIR);
 
-		if (!m_isAttacking && !isCurrentlyPlayingHurtAnim)
+		if (!isCurrentlyPlayingHurtAnim)
 		{
 			m_isTakingDamage = true;			
 			if (m_animComponent->HasAnim(GameConsts::ANIM_TYPE_HURT))
@@ -383,7 +370,7 @@ void Entity::Move()
 		const Vector2& impulse = m_moveDirection * m_moveSpeed * m_physicsBodyForceScale;
 		_physicsBody->applyImpulse(cc::Vec2(impulse.GetX(), impulse.GetY()));
 	}	
-	else if(!m_isAttacking)
+	else
 	{
 		// Instantly stop moving
 		_physicsBody->setVelocity(cc::Vec2::ZERO);
@@ -534,7 +521,7 @@ bool Entity::IsRunning() const
 
 bool Entity::IsReadyToAttack() const
 {
-	return !m_isAttacking && !m_isTakingDamage;
+	return !m_isTakingDamage;
 }
 
 bool Entity::HasEnoughtStamina(float amount) const
