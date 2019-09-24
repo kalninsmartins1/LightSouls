@@ -24,7 +24,7 @@
 		<State  type="LineAttack"
 				onSuccess="Avoid"
 				onFailure="Avoid"
-				moveSpeed="400"
+				moveSpeed="1000"
 				arriveDistance="40"
 				damageDistance="40"/>
 				
