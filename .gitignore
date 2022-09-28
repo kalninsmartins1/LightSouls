@@ -134,3 +134,7 @@ lib/
 
 # Temporary files
 *.TMP
+
+# Graphics
+Resources/fonts*
+Resources/res/Graphics*
